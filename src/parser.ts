@@ -20,8 +20,16 @@ export function parse(tokens: Array<T.Token>): T.AST {
       return parseNumberLiteral(prevExpr);
     }
 
+    if (curTok.type === 'ident') {
+      return parseLiteral(prevExpr);
+    }
+
     if (curTok.type === 'lparen') {
       return parsePrioritizedExpr(prevExpr);
+    }
+
+    if (curTok.type === 'eq') {
+      return parseAssignmentExpr(ast.pop() as T.Expr);
     }
 
     if (['+', '-', '*', '/', '%'].indexOf(curTok.value) !== -1) {
@@ -32,6 +40,19 @@ export function parse(tokens: Array<T.Token>): T.AST {
     }
 
     ParserError(`Unhandled token type of \`${curTok.type}\``);
+  }
+
+  function parseLiteral(prevExpr?: T.Expr): T.Expr {
+    const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value };
+
+    if (prevExpr?.type === 'BinaryOpExpr') {
+      prevExpr.expr2 = result;
+      return prevExpr;
+    }
+    if (prevExpr?.type === 'PrioritizedExpr') {
+      prevExpr.expr = result;
+    }
+    return result;
   }
 
   function parseNumberLiteral(prevExpr?: T.Expr): T.Expr {
@@ -47,7 +68,19 @@ export function parse(tokens: Array<T.Token>): T.AST {
     return result;
   }
 
-  function parseBinaryOpExpr(prevExpr: T.Expr): T.BinaryOpExpr {
+  function parseAssignmentExpr(prevExpr: T.Expr): T.AssignmentExpr {
+    nextToken(); // Skip the eq token
+    const result: T.AssignmentExpr = {
+      type: 'AssignmentExpr',
+      expr1: prevExpr,
+    };
+
+    result.expr2 = parseExpr();
+
+    return result;
+  }
+
+  function parseBinaryOpExpr(prevExpr: T.Expr): T.Expr {
     let operator: T.Operator;
     switch(curTok.value) {
       case '+': operator = T.Operator.Plus; break;
@@ -75,6 +108,11 @@ export function parse(tokens: Array<T.Token>): T.AST {
         parseExpr(newNode as T.Expr);
         return newNode;
       }
+    }
+
+    if (prevExpr.type === 'AssignmentExpr') {
+      prevExpr.expr2 = parseBinaryOpExpr(prevExpr.expr2 as T.Expr);
+      return prevExpr;
     }
 
     nextToken();

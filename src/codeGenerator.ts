@@ -9,19 +9,19 @@ export function generateCode(ast: T.AST): string {
   let index = 0;
 
   function genExpr(expr: T.Expr): string {
-    if (expr.type === 'NumberLiteral') {
-      return expr.value;
+    switch (expr.type) {
+      case 'NumberLiteral':
+      case 'IdentLiteral':
+        return expr.value;
+      case 'AssignmentExpr':
+        return codeGenAssignmentExpr(expr);
+      case 'BinaryOpExpr':
+        return codeGenBinaryOpExpr(expr);
+      case 'PrioritizedExpr':
+        return codeGenPrioritizedExpr(expr);
+      default:
+        CodeGenerateError(`Unhandled expression of type \`${(expr as T.Expr).type}\``);
     }
-
-    if (expr.type === 'BinaryOpExpr') {
-      return codeGenBinaryOpExpr(expr);
-    }
-
-    if (expr.type === 'PrioritizedExpr') {
-      return codeGenPrioritizedExpr(expr);
-    }
-
-    CodeGenerateError(`Unhandled expression of type \`${(expr as T.Expr).type}\``);
   }
 
   function codeGenBinaryOpExpr(expr: T.BinaryOpExpr) {
@@ -35,6 +35,12 @@ export function generateCode(ast: T.AST): string {
     }
 
     return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;
+  }
+
+  function codeGenAssignmentExpr(expr: T.AssignmentExpr) {
+    if (expr.expr2 === undefined)
+      CodeGenerateError('Expect assignment to have expression to evaluate');
+    return `let ${genExpr(expr.expr1)} = ${genExpr(expr.expr2)}`;
   }
 
   function codeGenPrioritizedExpr(expr: T.PrioritizedExpr) {

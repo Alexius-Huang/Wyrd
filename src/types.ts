@@ -44,7 +44,9 @@ export type AST = Array<Expr>;
 
 export type Expr =
   BinaryOpExpr    |
+  AssignmentExpr  |
   PrioritizedExpr |
+  IdentLiteral    |
   NumberLiteral
 ;
 
@@ -52,6 +54,17 @@ export type NumberLiteral = {
   type: 'NumberLiteral';
   value: string;
 };
+
+export type IdentLiteral = {
+  type: 'IdentLiteral';
+  value: string;
+};
+
+export type AssignmentExpr = {
+  type: 'AssignmentExpr';
+  expr1: Expr;
+  expr2?: Expr;
+}
 
 export type PrioritizedExpr = {
   type: 'PrioritizedExpr';

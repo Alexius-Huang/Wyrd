@@ -1,6 +1,9 @@
 import { Token } from "./types";
 
 const NumberRegex = /[0-9]/;
+const LetterRegex = /[a-zA-Z]/;
+const NamingRegex = /[a-zA-Z0-9]/;
+const WhitespaceRegex = /\s/i;
 // const WhitespaceRegex = /\s/;
 const tokenMaps = new Map<string, Token>([
   ['+', { type: 'plus', value: '+' }],
@@ -35,17 +38,31 @@ const tokenMaps = new Map<string, Token>([
   ['\n',  { type: 'newline', value: '\n' }],
 ]);
 
+function LexerError(msg: string): never {
+  throw new Error(`Lexer Error: ${msg}`);
+}
+
 export function lex(code: string): Array<Token> {
   const result: Array<Token> = [];
 
   let index = 0;
+  let currentChar = code[index];
+
+  function nextChar() {
+    currentChar = code[++index];
+  }
 
   while (index < code.length) {
-    let currentChar = code[index];
+    if (WhitespaceRegex.test(currentChar)) {
+      if (currentChar === '\n')
+        result.push({ type: 'newline', value: '\n' });
+      nextChar();
+      continue;
+    }
 
     if (tokenMaps.has(currentChar)) {
       result.push(tokenMaps.get(currentChar) as Token);
-      index++;
+      nextChar();
       continue;
     }
 
@@ -54,14 +71,26 @@ export function lex(code: string): Array<Token> {
 
       do {
         parsedNumber += currentChar;
-        currentChar = code[++index];
+        nextChar();
       } while (NumberRegex.test(currentChar) && index < code.length)
 
       result.push({ type: 'number', value: parsedNumber });
       continue;
     }
 
-    index++;
+    if (LetterRegex.test(currentChar)) {
+      let parsedName = '';
+
+      do {
+        parsedName += currentChar;
+        nextChar();
+      } while (NamingRegex.test(currentChar) && currentChar !== undefined)
+    
+      result.push({ type: 'ident', value: parsedName });
+      continue;
+    }
+
+    LexerError(`Unhandled Character: \`${currentChar}\``);    
   }
 
   return result;

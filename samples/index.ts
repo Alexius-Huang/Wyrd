@@ -1,7 +1,9 @@
 import { Token, AST } from "../src/types";
 
 const filenames = [
-  './001-arithmetics-1'
+  './001-arithmetics-1',
+  './002-arithmetics-2',
+  './003-assignment',
 ];
 
 type Sample = {
