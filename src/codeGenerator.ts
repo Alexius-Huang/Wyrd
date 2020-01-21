@@ -14,19 +14,34 @@ export function generateCode(ast: T.AST): string {
     }
 
     if (expr.type === 'BinaryOpExpr') {
-      let expr2Result = '';
-      if (expr.expr2 === undefined)
-        CodeGenerateError('Expect 2nd expression in binary operation');
-      else if (expr.expr2.type === 'BinaryOpExpr') {
-        expr2Result = `(${genExpr(expr.expr2)})`;
-      } else {
-        expr2Result = genExpr(expr.expr2);
-      }
+      return codeGenBinaryOpExpr(expr);
+    }
 
-      return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;
+    if (expr.type === 'PrioritizedExpr') {
+      return codeGenPrioritizedExpr(expr);
     }
 
     CodeGenerateError(`Unhandled expression of type \`${(expr as T.Expr).type}\``);
+  }
+
+  function codeGenBinaryOpExpr(expr: T.BinaryOpExpr) {
+    let expr2Result = '';
+    if (expr.expr2 === undefined)
+      CodeGenerateError('Expect 2nd expression in binary operation');
+    else if (expr.expr2.type === 'BinaryOpExpr') {
+      expr2Result = `(${genExpr(expr.expr2)})`;
+    } else {
+      expr2Result = genExpr(expr.expr2);
+    }
+
+    return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;
+  }
+
+  function codeGenPrioritizedExpr(expr: T.PrioritizedExpr) {
+    if (expr.expr)
+      return `(${genExpr(expr.expr)})`;
+
+    return '()';  
   }
 
   while (index < ast.length) {

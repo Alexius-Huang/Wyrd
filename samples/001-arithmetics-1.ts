@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, Operator } from "../src/types";
+import { Token, AST, Operator as Op } from "../src/types";
 
 const program = `\
 1 + 2 * 3
@@ -188,13 +188,13 @@ const ast: AST = [
   },
   {
     type: 'BinaryOpExpr',
-    operator: Operator.Plus,
+    operator: Op.Plus,
     expr1: {
       type: 'BinaryOpExpr',
-      operator: Operator.Plus,
+      operator: Op.Plus,
       expr1: {
         type: 'BinaryOpExpr',
-        operator: Operator.Asterisk,
+        operator: Op.Asterisk,
         expr1: {
           type: 'NumberLiteral',
           value: '1'

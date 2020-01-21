@@ -43,13 +43,19 @@ export const enum Operator {
 export type AST = Array<Expr>;
 
 export type Expr =
-  BinaryOpExpr  |
+  BinaryOpExpr    |
+  PrioritizedExpr |
   NumberLiteral
 ;
 
 export type NumberLiteral = {
   type: 'NumberLiteral';
   value: string;
+};
+
+export type PrioritizedExpr = {
+  type: 'PrioritizedExpr';
+  expr?: Expr;
 };
 
 export type BinaryOpExpr = {
