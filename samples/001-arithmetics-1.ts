@@ -216,8 +216,18 @@ const ast: AST = [
   },
 ];
 
+const compiled = `\
+1 + (2 * 3);
+1 * 2 + 3;
+1 + (2 * 3) + 4;
+1 * 2 + (3 * 4);
+1 + (2 * 3 * 4);
+1 * 2 + 3 + 4;
+`;
+
 export {
   program,
   tokens,
   ast,
+  compiled,
 };

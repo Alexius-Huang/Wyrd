@@ -8,6 +8,7 @@ type Sample = {
   program: string;
   tokens: Array<Token>;
   ast: AST;
+  compiled: string;
 };
 
 export const samples = filenames.map(fn => import(fn) as Promise<Sample>);
