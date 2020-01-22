@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/jest",
-    "test:coverage": "./node_modules/.bin/jest --coverage",
-    "coveralls": "./node_modules/.bin/jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "test:coverage": "jest --coverage",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "keywords": [],
   "author": "",

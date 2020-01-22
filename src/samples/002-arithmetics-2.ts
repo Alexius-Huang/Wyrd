@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../src/types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 (1 + 2) * 3

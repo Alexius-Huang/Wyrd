@@ -1,5 +1,7 @@
 # Wyrd
 
+[![Build Status](https://travis-ci.org/Maxwell-Alexius/Wyrd-Lang.svg?branch=master)](https://travis-ci.org/Maxwell-Alexius/Wyrd-Lang) [![Coverage Status](https://coveralls.io/repos/github/Maxwell-Alexius/Wyrd-Lang/badge.svg?branch=master)](https://coveralls.io/github/Maxwell-Alexius/Wyrd-Lang?branch=master)
+
 **Wyrd** is a toy programmming language whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/) and follows the Functional Programming paradigm.
 
 Wyrd programming language compiles its code into JavaScript. The primary goal would be to write Front-End code and Back-End code (NodeJS) using Wyrd programming language. I may want to try writing React (or Vue) component code using Wyrd lang if possible.

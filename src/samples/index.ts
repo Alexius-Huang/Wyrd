@@ -1,4 +1,4 @@
-import { Token, AST } from "../src/types";
+import { Token, AST } from '../types';
 
 const filenames = [
   './001-arithmetics-1',

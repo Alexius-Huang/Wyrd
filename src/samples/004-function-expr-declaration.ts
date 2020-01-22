@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../src/types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
