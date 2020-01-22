@@ -13,8 +13,9 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 ## Table of Content
 - [Supported Syntax Rules](https://github.com/Maxwell-Alexius/Wyrd-Lang#supported-syntax-rules)
   - [Basic Assignment](https://github.com/Maxwell-Alexius/Wyrd-Lang#basic-assignment)
+  - [Builtin Primitives](https://github.com/Maxwell-Alexius/Wyrd-Lang#builtin-primitives)
   - [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics)
-  - [Arithmetics with Priority](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics-with-priority)
+  - [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression)
   - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
   - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
 
@@ -31,6 +32,23 @@ foo = 123
 let foo = 123;
 ```
 
+### Builtin Primitives
+**Wyrd Lang**
+```
+foo = 123
+bar = "Hello world"
+baz = True
+nothing = Null
+```
+
+**Compiled Wyrd Code**
+```
+let foo = 123;
+let bar = 'Hello world';
+let baz = true;
+let nothing = null;
+```
+
 ### Arithmetics
 **Wyrd Lang**
 ```
@@ -40,6 +58,11 @@ let foo = 123;
 1 * 2 + 3 * 4
 1 * 2 + 3 - 4
 1 + 2 / 3 * 4
+
+(1 + 2) * 3
+1 * (2 + 3)
+(1 + 2) * (3 + 4)
+(1 + (5 - 3)) * (10 / 5)
 ```
 
 **Compiled Wyrd Code**
@@ -50,23 +73,36 @@ let foo = 123;
 1 * 2 + (3 * 4);
 1 * 2 + 3 - 4;
 1 + (2 / 3 * 4);
-```
 
-### Arithmetics with Priority
-**Wyrd Lang**
-```
-(1 + 2) * 3
-1 * (2 + 3)
-(1 + 2) * (3 + 4)
-(1 + (5 - 3)) * (10 / 5)
-```
-
-**Compiled Wyrd Code**
-```js
 (1 + 2) * 3;
 1 * (2 + 3);
 (1 + 2) * (3 + 4);
 (1 + (5 - 3)) * (10 / 5);
+```
+
+### Logical Comparison and Expression
+**Wyrd Lang**
+```
+True and False or not False
+not False and True
+not (False or True) and False
+
+3 + 1 > 2
+5 * 3 < 15 - 6 * 8
+11 >= 7 + 7 or 3 <= (6 + 2) / 3
+8 / (4 * 2) > 3 and not 1 + 2 * 3 == 7 or a + b / c * d != w - x * y
+```
+
+**Compiled Wyrd Code**
+```js
+true && false || !false;
+!false && true;
+!(false || true) && false;
+
+3 + 1 > 2;
+5 * 3 < 15 - (6 * 8);
+11 >= 7 + 7 || 3 <= (6 + 2) / 3;
+8 / (4 * 2) > 3 && !1 + (2 * 3) === 7 || a + (b / c * d) !== w - (x * y);
 ```
 
 ### Function Declaration as Expression
