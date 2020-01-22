@@ -71,8 +71,8 @@ const ast: AST = [
 ];
 
 const compiled = `\
-true && false || !false;
-!false && true;
+true && false || !(false);
+!(false) && true;
 !(false || true) && false;
 `;
 

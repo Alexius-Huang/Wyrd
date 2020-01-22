@@ -58,7 +58,10 @@ export function generateCode(ast: T.AST): string {
   function codeGenNotExpr(expr: T.NotExpr) {
     if (expr.expr === undefined)
       CodeGenerateError('Expect logical Not have expression');
-    return `!${genExpr(expr.expr)}`;
+    
+    if (expr.expr.type === 'PrioritizedExpr')
+      return `!${genExpr(expr.expr)}`;
+    return `!(${genExpr(expr.expr)})`;
   }
 
   function codeGenAndOrExpr(expr: T.AndExpr | T.OrExpr) {

@@ -47,7 +47,7 @@ nothing = Null
 ```
 
 **Compiled Wyrd Code**
-```
+```js
 const foo = 123;
 const bar = 'Hello world';
 const baz = true;
@@ -100,14 +100,14 @@ not (False or True) and False
 
 **Compiled Wyrd Code**
 ```js
-true && false || !false;
-!false && true;
+true && false || !(false);
+!(false) && true;
 !(false || true) && false;
 
 3 + 1 > 2;
 5 * 3 < 15 - (6 * 8);
 11 >= 7 + 7 || 3 <= (6 + 2) / 3;
-8 / (4 * 2) > 3 && !1 + (2 * 3) === 7 || a + (b / c * d) !== w - (x * y);
+8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
 ```
 
 ### Function Declaration as Expression
