@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest"
+    "test": "./node_modules/.bin/jest",
+    "test:coverage": "./node_modules/.bin/jest --coverage",
+    "coveralls": "./node_modules/.bin/jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +14,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^24.9.0",
+    "coveralls": "^3.0.9",
     "jest": "^24.9.0",
     "ts-jest": "^24.3.0",
     "typescript": "^3.7.5"
