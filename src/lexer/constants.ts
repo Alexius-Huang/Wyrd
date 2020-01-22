@@ -1,3 +1,9 @@
+const keyvalues = new Set<string>([
+  'True',
+  'False',
+  'Null',
+]);
+
 const keywords = new Set<string>([
   'def',
   'do',
@@ -13,9 +19,15 @@ const regex = {
 
 const builtinTypes = new Set<string>([
   'Num',
+  // TODO: Implement tests for other primitive built-in types
+  // 'Str',
+  // 'Bool',
+  // 'Null',
+  // 'Void',
 ]);
 
 export {
+  keyvalues,
   keywords,
   regex,
   builtinTypes,

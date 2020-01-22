@@ -48,13 +48,31 @@ export type Expr =
   PrioritizedExpr     |
   FunctionDeclaration |
   IdentLiteral        |
-  NumberLiteral
+  NumberLiteral       |
+  StringLiteral       |
+  BooleanLiteral      |
+  NullLiteral
 ;
 
 export type NumberLiteral = {
   type: 'NumberLiteral';
   value: string;
 };
+
+export type StringLiteral = {
+  type: 'StringLiteral';
+  value: string;
+}
+
+export type BooleanLiteral = {
+  type: 'BooleanLiteral';
+  value: 'True' | 'False';
+}
+
+export type NullLiteral = {
+  type: 'NullLiteral';
+  value: 'Null';
+}
 
 export type IdentLiteral = {
   type: 'IdentLiteral';

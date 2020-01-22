@@ -1,5 +1,11 @@
 import * as T from "../types";
-import { parseLiteral, parseNumberLiteral } from './literal';
+import {
+  parseLiteral,
+  parseNumberLiteral,
+  parseStringLiteral,
+  parseBooleanLiteral,
+  parseNullLiteral,
+} from './literal';
 import { parseFunctionDeclaration } from './function';
 import { parseAssignmentExpr } from './assignment';
 import { parsePrioritizedExpr } from './prioritized';
@@ -28,6 +34,18 @@ export function parse(tokens: Array<T.Token>): T.AST {
 
     if (curTok.type === 'number') {
       return parseNumberLiteral(curTok, nextToken, prevExpr);
+    }
+
+    if (curTok.type === 'string') {
+      return parseStringLiteral(curTok, nextToken, prevExpr);
+    }
+
+    if (curTok.type === 'boolean') {
+      return parseBooleanLiteral(curTok, nextToken, prevExpr);
+    }
+
+    if (curTok.type === 'null') {
+      return parseNullLiteral(curTok, nextToken, prevExpr);
     }
 
     if (curTok.type === 'ident') {

@@ -1,6 +1,6 @@
 import { Token } from "../types";
 import tokenMap from './tokenMap';
-import { keywords, regex, builtinTypes } from './constants';
+import { keyvalues, keywords, regex, builtinTypes } from './constants';
 
 function LexerError(msg: string): never {
   throw new Error(`Lexer Error: ${msg}`);
@@ -24,6 +24,20 @@ export function lex(code: string): Array<Token> {
       if (currentChar === '\n')
         result.push({ type: 'newline', value: '\n' });
       nextChar();
+      continue;
+    }
+
+    if (currentChar === '"') {
+      nextChar();
+      let parsedString = '';
+
+      while (currentChar !== '"') {
+        parsedString += currentChar;
+        nextChar();
+      }
+
+      nextChar();
+      result.push({ type: 'string', value: parsedString });
       continue;
     }
 
@@ -63,6 +77,20 @@ export function lex(code: string): Array<Token> {
         result.push({ type: 'keyword', value: parsedName });
         continue;
       }
+      
+      if (keyvalues.has(parsedName)) {
+        if (parsedName === 'True' || parsedName === 'False') {
+          result.push({ type: 'boolean', value: parsedName });
+          continue;
+        }
+        if (parsedName === 'Null') {
+          result.push({ type: 'null', value: parsedName });
+          continue;
+        }
+
+        LexerError(`Unhandled key-value: \`${parsedName}\``);
+      }
+
       if (builtinTypes.has(parsedName)) {
         result.push({ type: 'builtin-type', value: parsedName });
         continue;

@@ -13,6 +13,12 @@ export function generateCode(ast: T.AST): string {
       case 'NumberLiteral':
       case 'IdentLiteral':
         return expr.value;
+      case 'StringLiteral':
+        return `'${expr.value}'`;
+      case 'BooleanLiteral':
+        return expr.value === 'True' ? 'true' : 'false';
+      case 'NullLiteral':
+        return 'null';
       case 'AssignmentExpr':
         return codeGenAssignmentExpr(expr);
       case 'BinaryOpExpr':
