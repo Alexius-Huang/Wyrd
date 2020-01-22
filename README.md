@@ -23,14 +23,19 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 ### Basic Assignment
 **Wyrd Lang**
 ```
-foo = 123
+foo = 1
+bar = 1 + 2 * 3 + 4
+baz = 1 + (2 - 3) * 4
 ```
 
 **Compiled Wyrd Code**
 
 ```js
-let foo = 123;
+const foo = 1;
+const bar = 1 + (2 * 3) + 4;
+const baz = 1 + ((2 - 3) * 4);
 ```
+
 
 ### Builtin Primitives
 **Wyrd Lang**
@@ -43,10 +48,10 @@ nothing = Null
 
 **Compiled Wyrd Code**
 ```
-let foo = 123;
-let bar = 'Hello world';
-let baz = true;
-let nothing = null;
+const foo = 123;
+const bar = 'Hello world';
+const baz = true;
+const nothing = null;
 ```
 
 ### Arithmetics
@@ -162,8 +167,8 @@ function addition(x, y) {
 
 function complexArithmetic(w, x, y, z) {
   if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    let a = x + (y * z);
-    let b = w - (2 / a) + 1;
+    const a = x + (y * z);
+    const b = w - (2 / a) + 1;
     return b;
   }
 

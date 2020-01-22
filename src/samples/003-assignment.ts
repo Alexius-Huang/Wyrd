@@ -125,9 +125,9 @@ const ast: AST = [
 ];
 
 const compiled = `\
-let foo = 1;
-let bar = 1 + (2 * 3) + 4;
-let baz = 1 + ((2 - 3) * 4);
+const foo = 1;
+const bar = 1 + (2 * 3) + 4;
+const baz = 1 + ((2 - 3) * 4);
 `;
 
 export {

@@ -172,8 +172,8 @@ function addition(x, y) {
 
 function complexArithmetic(w, x, y, z) {
   if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    let a = x + (y * z);
-    let b = w - (2 / a) + 1;
+    const a = x + (y * z);
+    const b = w - (2 / a) + 1;
     return b;
   }
 

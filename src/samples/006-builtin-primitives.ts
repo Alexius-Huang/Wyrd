@@ -50,10 +50,10 @@ const ast: AST = [
 ];
 
 const compiled = `\
-let foo = 123;
-let bar = 'Hello world';
-let baz = true;
-let nothing = null;
+const foo = 123;
+const bar = 'Hello world';
+const baz = true;
+const nothing = null;
 `;
 
 export {

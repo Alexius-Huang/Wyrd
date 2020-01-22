@@ -73,7 +73,7 @@ export function generateCode(ast: T.AST): string {
   function codeGenAssignmentExpr(expr: T.AssignmentExpr) {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect assignment to have expression to evaluate');
-    return `let ${genExpr(expr.expr1)} = ${genExpr(expr.expr2)}`;
+    return `const ${genExpr(expr.expr1)} = ${genExpr(expr.expr2)}`;
   }
 
   function codeGenPrioritizedExpr(expr: T.PrioritizedExpr) {
