@@ -19,6 +19,11 @@ export function generateCode(ast: T.AST): string {
         return expr.value === 'True' ? 'true' : 'false';
       case 'NullLiteral':
         return 'null';
+      case 'NotExpr':
+        return codeGenNotExpr(expr);
+      case 'AndExpr':
+      case 'OrExpr':
+        return codeGenAndOrExpr(expr);
       case 'AssignmentExpr':
         return codeGenAssignmentExpr(expr);
       case 'BinaryOpExpr':
@@ -43,6 +48,21 @@ export function generateCode(ast: T.AST): string {
     }
 
     return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;
+  }
+
+  function codeGenNotExpr(expr: T.NotExpr) {
+    if (expr.expr === undefined)
+      CodeGenerateError('Expect logical Not have expression');
+    return `!${genExpr(expr.expr)}`;
+  }
+
+  function codeGenAndOrExpr(expr: T.AndExpr | T.OrExpr) {
+    const logicType = expr.type === 'AndExpr' ? 'And' : 'Or';
+    if (expr.expr2 === undefined)
+      CodeGenerateError(`Expect logical ${logicType} have expression`);
+
+    const logicOperator = logicType === 'And' ? '&&' : '||';
+    return `${genExpr(expr.expr1)} ${logicOperator} ${genExpr(expr.expr2)}`;
   }
 
   function codeGenAssignmentExpr(expr: T.AssignmentExpr) {

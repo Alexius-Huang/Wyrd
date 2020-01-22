@@ -3,9 +3,9 @@ import { generateCode } from './codeGenerator';
 describe('Wyrd Code Generator', () => {
   it('generates compiled JavaScript code from parsed AST', async () => {
     /* Single Case */
-    const { ast, compiled } = await import('./samples/006-builtin-primitives');
-    const result = generateCode(ast);
-    expect(result).toBe(compiled);
+    // const { ast, compiled } = await import('./samples/007-logical-expression');
+    // const result = generateCode(ast);
+    // expect(result).toBe(compiled);
 
     /* All Cases */
     const { samples } = await import('./samples/index');

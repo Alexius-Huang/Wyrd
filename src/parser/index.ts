@@ -29,6 +29,20 @@ export function parse(tokens: Array<T.Token>): T.AST {
         return parseFunctionDeclaration(curTok, nextToken, parseExpr);
       }
 
+      if (curTok.value === 'not') {
+        return parseLogicalNotExpr();
+      }
+
+      if (curTok.value === 'and' || curTok.value === 'or') {
+        let resultExpr: T.Expr;
+        if (prevExpr?.type === 'PrioritizedExpr') {
+          resultExpr = parseLogicalAndOrExpr(prevExpr.expr as T.Expr);
+          return resultExpr;
+        }
+  
+        return parseLogicalAndOrExpr(ast.pop() as T.Expr);
+      }
+
       ParserError(`Unhandled keyword token with value \`${curTok.value}\``);
     }
 
@@ -84,6 +98,29 @@ export function parse(tokens: Array<T.Token>): T.AST {
     }
 
     ParserError(`Unhandled token type of \`${curTok.type}\``);
+  }
+
+  function parseLogicalNotExpr(): T.Expr {
+    nextToken();
+
+    let result: T.NotExpr = {
+      type: 'NotExpr',
+      expr: parseExpr(),
+    };
+
+    return result;
+  }
+
+  function parseLogicalAndOrExpr(prevExpr: T.Expr): T.Expr {
+    const logicType = curTok.value === 'and' ? 'AndExpr' : 'OrExpr';
+    let result: T.AndExpr | T.OrExpr = {
+      type: logicType,
+      expr1: prevExpr,
+    };
+
+    nextToken();
+    result.expr2 = parseExpr(result);
+    return result;
   }
 
   while (index < tokens.length) {

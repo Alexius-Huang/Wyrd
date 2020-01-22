@@ -44,6 +44,9 @@ export type AST = Array<Expr>;
 
 export type Expr =
   BinaryOpExpr        |
+  NotExpr             |
+  OrExpr              |
+  AndExpr             |
   AssignmentExpr      |
   PrioritizedExpr     |
   FunctionDeclaration |
@@ -96,6 +99,23 @@ export type BinaryOpExpr = {
   expr1: Expr;
   expr2?: Expr;
 };
+
+export type NotExpr = {
+  type: 'NotExpr';
+  expr?: Expr;
+}
+
+export type OrExpr = {
+  type: 'OrExpr';
+  expr1: Expr;
+  expr2?: Expr;
+}
+
+export type AndExpr = {
+  type: 'AndExpr';
+  expr1: Expr;
+  expr2?: Expr;
+}
 
 export type Argument = { ident: string; type: string };
 

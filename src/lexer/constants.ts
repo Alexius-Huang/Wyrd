@@ -8,6 +8,9 @@ const keywords = new Set<string>([
   'def',
   'do',
   'end',
+  'and',
+  'or',
+  'not'
 ]);
 
 const regex = {

@@ -6,6 +6,8 @@ const filenames = [
   './003-assignment',
   './004-function-expr-declaration',
   './005-function-block-declaration',
+  './006-builtin-primitives',
+  './007-logical-expression',
 ];
 
 type Sample = {
