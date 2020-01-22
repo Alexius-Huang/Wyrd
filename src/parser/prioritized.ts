@@ -27,6 +27,11 @@ export function parsePrioritizedExpr(
       return prevExpr;
     }
 
+    if (prevExpr.type === 'NotExpr') {
+      prevExpr.expr = result;
+      return result;
+    }
+
     ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
   }
 

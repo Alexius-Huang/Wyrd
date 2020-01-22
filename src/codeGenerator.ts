@@ -1,4 +1,5 @@
 import * as T from "./types";
+import { LogicalBinaryOperators } from './parser/constants';
 
 function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
@@ -41,10 +42,14 @@ export function generateCode(ast: T.AST): string {
     let expr2Result = '';
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect 2nd expression in binary operation');
-    else if (expr.expr2.type === 'BinaryOpExpr') {
+    else if (expr.expr2.type === 'BinaryOpExpr' && !LogicalBinaryOperators.has(expr.operator)) {
       expr2Result = `(${genExpr(expr.expr2)})`;
     } else {
       expr2Result = genExpr(expr.expr2);
+    }
+
+    if (expr.operator === T.Operator.EqEq || expr.operator === T.Operator.BangEq) {
+      return `${genExpr(expr.expr1)} ${expr.operator}= ${expr2Result}`;
     }
 
     return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;

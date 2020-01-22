@@ -42,8 +42,34 @@ export function lex(code: string): Array<Token> {
     }
 
     if (tokenMap.has(currentChar)) {
-      if (currentChar === '=' && peekChar === '>') {
-        result.push(tokenMap.get('=>') as Token);
+      if (currentChar === '=') {
+        if (peekChar === '>') {
+          result.push(tokenMap.get('=>') as Token);
+          nextChar(2);
+          continue;  
+        }
+
+        if (peekChar === '=') {
+          result.push(tokenMap.get('==') as Token);
+          nextChar(2);
+          continue;  
+        }
+      }
+
+      if (currentChar === '>' && peekChar === '=') {
+        result.push(tokenMap.get('>=') as Token);
+        nextChar(2);
+        continue;
+      }
+
+      if (currentChar === '<' && peekChar === '=') {
+        result.push(tokenMap.get('<=') as Token);
+        nextChar(2);
+        continue;
+      }
+
+      if (currentChar === '!' && peekChar === '=') {
+        result.push(tokenMap.get('!=') as Token);
         nextChar(2);
         continue;
       }

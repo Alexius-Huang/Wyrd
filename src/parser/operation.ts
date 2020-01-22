@@ -10,11 +10,17 @@ export function parseBinaryOpExpr(
 ): [T.Token, T.Expr] {
   let operator: T.Operator;
   switch(curTok.value) {
-    case '+': operator = T.Operator.Plus; break;
-    case '-': operator = T.Operator.Dash; break;
-    case '*': operator = T.Operator.Asterisk; break;
-    case '/': operator = T.Operator.Slash; break;
-    case '%': operator = T.Operator.Percent; break;
+    case '+':  operator = T.Operator.Plus;     break;
+    case '-':  operator = T.Operator.Dash;     break;
+    case '*':  operator = T.Operator.Asterisk; break;
+    case '/':  operator = T.Operator.Slash;    break;
+    case '%':  operator = T.Operator.Percent;  break;
+    case '>':  operator = T.Operator.Gt;       break;
+    case '<':  operator = T.Operator.Lt;       break;
+    case '>=': operator = T.Operator.GtEq;     break;
+    case '<=': operator = T.Operator.LtEq;     break;
+    case '==': operator = T.Operator.EqEq;     break;
+    case '!=': operator = T.Operator.BangEq;   break;
     default: ParserError(`Unhandled BinaryOpExpr Operator \`${curTok.value}\``)
   }
 
@@ -37,7 +43,16 @@ export function parseBinaryOpExpr(
     }
   }
 
-  if (prevExpr.type === 'AssignmentExpr') {
+  if (prevExpr.type === 'NotExpr') {
+    [curTok, prevExpr.expr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr.expr as T.Expr);
+    return [curTok, prevExpr];
+  }
+
+  if (
+    prevExpr.type === 'AssignmentExpr' ||
+    prevExpr.type === 'OrExpr'         ||
+    prevExpr.type === 'AndExpr'
+  ) {
     [curTok, prevExpr.expr2] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr.expr2 as T.Expr);
     return [curTok, prevExpr];
   }
@@ -58,3 +73,30 @@ export function parseBinaryOpExpr(
 
   return [curTok, parseExpr(result) as T.BinaryOpExpr];
 }
+
+// function parseLogicalAndOrExpr(
+//   curTok: T.Token,
+//   nextToken: () => T.Token,
+//   parseExpr: (prevExpr?: T.Expr) => T.Expr,
+//   prevExpr: T.Expr
+// ): [T.Token, T.Expr] {
+//   const logicType = curTok.value === 'and' ? 'AndExpr' : 'OrExpr';
+//   let result: T.AndExpr | T.OrExpr = {
+//     type: logicType,
+//     expr1: prevExpr,
+//   };
+
+//   curTok = nextToken();
+//   result.expr2 = parseExpr(result);
+//   return [curTok, result];
+// }
+
+// function parseLogicalNotExpr(
+//   curTok: T.Token,
+//   nextT
+// ): T.Expr {
+//   let result: T.NotExpr = { type: 'NotExpr' };
+//   nextToken();
+//   result.expr = parseExpr(result);
+//   return result;
+// }

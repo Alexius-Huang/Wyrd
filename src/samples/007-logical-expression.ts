@@ -3,7 +3,7 @@ import { Token, AST, Operator as Op } from '../types';
 const program = `\
 True and False or not False
 not False and True
-not (False or True)
+not (False or True) and False
 `;
 
 const tokens: Array<Token> = [
@@ -27,6 +27,8 @@ const tokens: Array<Token> = [
   { type: 'keyword', value: 'or' },
   { type: 'boolean', value: 'True' },
   { type: 'rparen', value: ')' },
+  { type: 'keyword', value: 'and' },
+  { type: 'boolean', value: 'False' },
   { type: 'newline', value: '\n' },
 ];
 
@@ -52,22 +54,26 @@ const ast: AST = [
     expr2: { type: 'BooleanLiteral', value: 'True' },
   },
   {
-    type: 'NotExpr',
-    expr: {
-      type: 'PrioritizedExpr',
+    type: 'AndExpr',
+    expr1: {
+      type: 'NotExpr',
       expr: {
-        type: 'OrExpr',
-        expr1: { type: 'BooleanLiteral', value: 'False' },
-        expr2: { type: 'BooleanLiteral', value: 'True' },
-      },
+        type: 'PrioritizedExpr',
+        expr: {
+          type: 'OrExpr',
+          expr1: { type: 'BooleanLiteral', value: 'False' },
+          expr2: { type: 'BooleanLiteral', value: 'True' },
+        },
+      },      
     },
+    expr2: { type: 'BooleanLiteral', value: 'False' }
   },
 ];
 
 const compiled = `\
 true && false || !false;
 !false && true;
-!(false || true);
+!(false || true) && false;
 `;
 
 export {

@@ -11,6 +11,7 @@ import { parseAssignmentExpr } from './assignment';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
 import { ParserError } from './error';
+import { BuiltinBinaryOperators } from './constants';
 
 export function parse(tokens: Array<T.Token>): T.AST {
   const ast: T.AST = [];
@@ -81,7 +82,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
       return resultExpr;
     }
 
-    if (['+', '-', '*', '/', '%'].indexOf(curTok.value) !== -1) {
+    if (BuiltinBinaryOperators.has(curTok.value)) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
         [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr.expr as T.Expr);
@@ -101,13 +102,9 @@ export function parse(tokens: Array<T.Token>): T.AST {
   }
 
   function parseLogicalNotExpr(): T.Expr {
+    let result: T.NotExpr = { type: 'NotExpr' };
     nextToken();
-
-    let result: T.NotExpr = {
-      type: 'NotExpr',
-      expr: parseExpr(),
-    };
-
+    result.expr = parseExpr(result);
     return result;
   }
 

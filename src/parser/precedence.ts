@@ -4,6 +4,7 @@ export const PercedenceTable = [
   [Op.Percent],
   [Op.Asterisk, Op.Slash],
   [Op.Plus, Op.Dash],
+  [Op.Gt, Op.Lt, Op.GtEq, Op.LtEq, Op.EqEq, Op.BangEq],
 ];
 
 export function compare(op1: Operator, op2: Operator): Precedence {

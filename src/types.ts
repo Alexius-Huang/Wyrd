@@ -32,8 +32,12 @@ export const enum Operator {
   // Wavy = '~',
   // Colon = ':',
   // Semicolon = ';',
-  // Gt = '>',
-  // Lt = '<',
+  Gt = '>',
+  GtEq = '>=',
+  Lt = '<',
+  LtEq = '<=',
+  EqEq = '==',
+  BangEq = '!=',
   // Caret = '^',
   // Dot = '.',
   // Comma = ',',
@@ -94,7 +98,7 @@ export type PrioritizedExpr = {
 };
 
 export type BinaryOpExpr = {
-  type: 'BinaryOpExpr';
+  type: 'BinaryOpExpr' | 'LogicalBinaryOpExpr';
   operator: Operator;
   expr1: Expr;
   expr2?: Expr;

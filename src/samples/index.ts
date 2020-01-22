@@ -8,6 +8,7 @@ const filenames = [
   './005-function-block-declaration',
   './006-builtin-primitives',
   './007-logical-expression',
+  './008-logical-comparison',
 ];
 
 type Sample = {
