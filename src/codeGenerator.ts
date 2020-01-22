@@ -96,7 +96,7 @@ ${codeGenFunctionBody(body, args, 4)}
 
     const lastIndex = result.length - 1;
     result[lastIndex] = `${result[lastIndex].slice(0, indent)}return ${result[lastIndex].slice(indent)}`;
-    return result;
+    return result.join('\n');
   }
 
   while (index < ast.length) {

@@ -38,6 +38,13 @@ export function parseFunctionDeclaration(
     parseExpr(result);
 
     return result;
+  } else if (curTok.type as string === 'keyword') {
+    if (curTok.value === 'do') {
+      parseBlock(curTok, nextToken, parseExpr, result);
+      return result;
+    }
+
+    ParserError(`Unhandled function declaration where token of keyword ${curTok.value}`);
   }
 
   ParserError(`Unhandled function declaration where token of type ${curTok.type}`)
@@ -83,3 +90,32 @@ export function parseFunctionArguments(
   return [curTok, result];
 }
 
+export function parseBlock(
+  curTok: T.Token,
+  nextToken: () => T.Token,
+  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  prevExpr: T.Expr,
+): [T.Token, T.Expr] {
+  curTok = nextToken(); // Skip keyword `do`
+
+  if (curTok.type !== 'newline')
+    ParserError(`Invalid to contain any expressions after the \`do\` keyword`);
+  curTok = nextToken(); // Skip newline
+
+  if (prevExpr.type === 'FunctionDeclaration') {
+    while (!(curTok.type === 'keyword' && curTok.value === 'end')) {
+      if (curTok.type === 'newline') {
+        curTok = nextToken();
+        continue;
+      }
+
+      parseExpr(prevExpr);
+      curTok = nextToken();
+    }
+
+    curTok = nextToken();
+    return [curTok, prevExpr];
+  }
+
+  ParserError(`Unhandled parsing block-level expression with expression of type \`${prevExpr.type}\``)
+}

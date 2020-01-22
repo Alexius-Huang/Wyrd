@@ -1,5 +1,7 @@
 const keywords = new Set<string>([
   'def',
+  'do',
+  'end',
 ]);
 
 const regex = {

@@ -23,7 +23,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
         return parseFunctionDeclaration(curTok, nextToken, parseExpr);
       }
 
-      ParserError(`Unhandled keyword token with value ${curTok.value}`);
+      ParserError(`Unhandled keyword token with value \`${curTok.value}\``);
     }
 
     if (curTok.type === 'number') {
@@ -39,13 +39,25 @@ export function parse(tokens: Array<T.Token>): T.AST {
     }
 
     if (curTok.type === 'eq') {
-      return parseAssignmentExpr(curTok, nextToken, parseExpr, ast.pop() as T.Expr);
+      let resultExpr: T.Expr;
+      if (prevExpr?.type === 'FunctionDeclaration') {
+        [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, prevExpr);
+        return resultExpr;
+      }
+
+      [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, ast.pop() as T.Expr);
+      return resultExpr;
     }
 
     if (['+', '-', '*', '/', '%'].indexOf(curTok.value) !== -1) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
         [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr.expr as T.Expr);
+        return resultExpr;
+      }
+
+      if (prevExpr?.type === 'FunctionDeclaration') {
+        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr);
         return resultExpr;
       }
 
