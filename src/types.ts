@@ -43,10 +43,11 @@ export const enum Operator {
 export type AST = Array<Expr>;
 
 export type Expr =
-  BinaryOpExpr    |
-  AssignmentExpr  |
-  PrioritizedExpr |
-  IdentLiteral    |
+  BinaryOpExpr        |
+  AssignmentExpr      |
+  PrioritizedExpr     |
+  FunctionDeclaration |
+  IdentLiteral        |
   NumberLiteral
 ;
 
@@ -77,3 +78,13 @@ export type BinaryOpExpr = {
   expr1: Expr;
   expr2?: Expr;
 };
+
+export type Argument = { ident: string; type: string };
+
+export type FunctionDeclaration = {
+  type: 'FunctionDeclaration';
+  name: string;
+  arguments: Array<Argument>;
+  outputType: string;
+  body: Array<Expr>;
+}

@@ -16,6 +16,14 @@ export function parse(tokens: Array<T.Token>): T.AST {
   }
 
   function parseExpr(prevExpr?: T.Expr): T.Expr {
+    if (curTok.type === 'keyword') {
+      if (curTok.value === 'def') {
+        return parseFunctionDeclaration();
+      }
+
+      ParserError(`Unhandled keyword token with value ${curTok.value}`);
+    }
+
     if (curTok.type === 'number') {
       return parseNumberLiteral(prevExpr);
     }
@@ -36,6 +44,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
       if (prevExpr?.type === 'PrioritizedExpr') {
         return parseBinaryOpExpr(prevExpr.expr as T.Expr);
       }
+
       return parseBinaryOpExpr(ast.pop() as T.Expr);
     }
 
@@ -52,6 +61,10 @@ export function parse(tokens: Array<T.Token>): T.AST {
     if (prevExpr?.type === 'PrioritizedExpr') {
       prevExpr.expr = result;
     }
+    if (prevExpr?.type === 'FunctionDeclaration') {
+      prevExpr.body.push(result);
+      return prevExpr;
+    }
     return result;
   }
 
@@ -64,6 +77,10 @@ export function parse(tokens: Array<T.Token>): T.AST {
     }
     if (prevExpr?.type === 'PrioritizedExpr') {
       prevExpr.expr = result;
+    }
+    if (prevExpr?.type === 'FunctionDeclaration') {
+      prevExpr.body.push(result);
+      return prevExpr;
     }
     return result;
   }
@@ -115,6 +132,12 @@ export function parse(tokens: Array<T.Token>): T.AST {
       return prevExpr;
     }
 
+    if (prevExpr.type === 'FunctionDeclaration') {
+      const parsedExpr = parseBinaryOpExpr(prevExpr.body.pop() as T.Expr);
+      prevExpr.body.push(parsedExpr);
+      return prevExpr;
+    }
+
     nextToken();
     const result: T.BinaryOpExpr = {
       type: 'BinaryOpExpr',
@@ -141,7 +164,87 @@ export function parse(tokens: Array<T.Token>): T.AST {
         return prevExpr;
       }
 
+      if (prevExpr.type === 'FunctionDeclaration') {
+        prevExpr.body.push(result);
+        return prevExpr;
+      }
+
       ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
+    }
+
+    return result;
+  }
+
+  function parseFunctionDeclaration(): T.FunctionDeclaration {
+    nextToken(); // Skip 'def' keyword
+
+    if (curTok.type !== 'ident')
+      ParserError('Function declaration should contain the name of the function');
+
+    const result: T.FunctionDeclaration = {
+      type: 'FunctionDeclaration',
+      name: curTok.value,
+      arguments: [],
+      outputType: '',
+      body: []
+    };
+    nextToken();
+
+    if (curTok.type as string === 'lparen')
+      result.arguments = parseFunctionArguments();
+
+    if (curTok.type as string !== 'colon')
+      ParserError(`Expect token of type colon before the output type of the function declaration: \`${result.name}\``);
+
+    nextToken();
+    if (curTok.type as string !== 'builtin-type')
+      ParserError(`Expect an output data-type of the function declaration \`${result.name}\``);
+    result.outputType = curTok.value;
+
+    nextToken();
+    if (curTok.type as string === 'arrow') {
+      /* Single-line function declaration expression */
+      nextToken();
+      parseExpr(result);
+
+      return result;
+    }
+
+    ParserError(`Unhandled function declaration where token of type ${curTok.type}`)
+  }
+
+  function parseFunctionArguments(): Array<T.Argument> {
+    nextToken();
+    const result: Array<T.Argument> = [];
+
+    while (true) {
+      let argument: T.Argument = { ident: '', type: '' };
+      if (curTok.type === 'ident') {
+        argument.ident = curTok.value;
+
+        nextToken();
+        if (curTok.type as string !== 'colon')
+          ParserError('Expect token next to the name of the argument is colon');
+        nextToken();
+
+        if (curTok.type as string !== 'builtin-type')
+          ParserError('Expect token next to the colon of the argument declaration is data-type');
+        argument.type = curTok.value;
+        nextToken();
+
+        result.push(argument);
+        if (curTok.type as string === 'comma') {
+          nextToken();
+          continue;
+        }
+
+        if (curTok.type as string === 'rparen') {
+          nextToken();
+          break;
+        }
+
+        ParserError('Expect token after argument declaration to be comma or right-parenthesis');
+      }
     }
 
     return result;
