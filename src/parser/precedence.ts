@@ -1,4 +1,4 @@
-import { Operator as Op, Precedence, Operator } from './types';
+import { Operator as Op, Precedence, Operator } from '../types';
 
 export const PercedenceTable = [
   [Op.Percent],
