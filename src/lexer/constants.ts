@@ -10,7 +10,10 @@ const keywords = new Set<string>([
   'end',
   'and',
   'or',
-  'not'
+  'not',
+  'if',
+  'elif',
+  'else',
 ]);
 
 const regex = {

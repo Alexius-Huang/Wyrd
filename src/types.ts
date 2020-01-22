@@ -53,6 +53,7 @@ export type Expr =
   AndExpr             |
   AssignmentExpr      |
   PrioritizedExpr     |
+  ConditionalExpr     |
   FunctionDeclaration |
   IdentLiteral        |
   NumberLiteral       |
@@ -97,8 +98,15 @@ export type PrioritizedExpr = {
   expr?: Expr;
 };
 
+export type ConditionalExpr = {
+  type: 'ConditionalExpr';
+  condition: Expr;
+  expr1: Expr;  // Condition is Truethy
+  expr2?: Expr; // Condition is Falsey
+}
+
 export type BinaryOpExpr = {
-  type: 'BinaryOpExpr' | 'LogicalBinaryOpExpr';
+  type: 'BinaryOpExpr';
   operator: Operator;
   expr1: Expr;
   expr2?: Expr;
