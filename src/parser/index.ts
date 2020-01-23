@@ -7,10 +7,11 @@ import {
   parseNullLiteral,
 } from './literal';
 import { parseFunctionDeclaration } from './function';
+import { parseConditionalExpr } from './condition';
 import { parseAssignmentExpr } from './assignment';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
-import { ParserError, ParserErrorIf } from './error';
+import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
 
 export function parse(tokens: Array<T.Token>): T.AST {
@@ -31,7 +32,9 @@ export function parse(tokens: Array<T.Token>): T.AST {
       }
 
       if (curTok.value === 'if') {
-        return parseConditionalExpr(prevExpr);
+        let resultExpr: T.ConditionalExpr;
+        [curTok, resultExpr] = parseConditionalExpr(curTok, nextToken, parseExpr);
+        return resultExpr;
       }
 
       if (curTok.value === 'not') {
@@ -109,74 +112,6 @@ export function parse(tokens: Array<T.Token>): T.AST {
     }
 
     ParserError(`Unhandled token type of \`${curTok.type}\``);
-  }
-
-  function parseConditionalExpr(prevExpr?: T.Expr): T.Expr {
-    curTok = nextToken(); // Skip 'if' | 'elif' keyword
-    let result: T.ConditionalExpr = { type: 'ConditionalExpr' };
-
-    while (curTok.type !== 'arrow' && curTok.value !== 'then') {
-      result.condition = parseExpr(result, { target: 'condition' });
-      curTok = nextToken();
-      ParserErrorIf(curTok.type === 'newline', 'Expect condition to end followed by arrow `=>` or the `then` keyword');
-    }
-
-    if (curTok.value === 'then') {
-      curTok = nextToken(); // Skip 'then' keyword      
-      ParserErrorIf(curTok.type !== 'newline', 'Expect no tokens after `then` keyword');
-    }
-
-    curTok = nextToken(); // Skip '=>' inline-control operator or skip `newline` if using `then block`
-
-    while (curTok.type !== 'newline') {
-      result.expr1 = parseExpr(result, { target: 'expr1' });
-      curTok = nextToken();
-    }
-
-    curTok = nextToken(); // Skip newline
-
-    /* Handle elif is exactly the same as the if expression */
-    if (curTok.type === 'keyword' && curTok.value === 'elif') {
-      result.expr2 = parseConditionalExpr();
-      return result;
-    }
-
-    /* Handle else expression */
-    if (curTok.type === 'keyword' && curTok.value === 'else') {
-      curTok = nextToken(); // Skip 'else' keyword
-
-      ParserErrorIf(
-        curTok.type !== 'arrow' && curTok.value !== 'then',
-        'Expect else condition to followed by arrow `=>` or the `then` keyword'
-      );
-
-      if (curTok.type === 'arrow') {
-        curTok = nextToken(); // Skip 'arrow' keyword
-
-        while (curTok.type !== 'newline') {
-          result.expr2 = parseExpr(result, { target: 'expr2' });
-          curTok = nextToken();
-        }
-      } else if (curTok.value === 'then') {
-        curTok = nextToken(); // Skip 'then' keyword
-        if (curTok.type === 'newline') {
-          curTok = nextToken(); // Skip 'newline' token
-
-          while (curTok.type !== 'newline') {
-            result.expr2 = parseExpr(result, { target: 'expr2' });
-            curTok = nextToken();
-          }
-
-          curTok = nextToken(); // Skip 'newline' token
-          ParserErrorIf(curTok.value !== 'end', 'Expect `else then` expression to followed by an `end` keyword');
-
-          curTok = nextToken(); // Skip 'end' token
-          ParserErrorIf(curTok.type !== 'newline', 'Expect no tokens after `end` keyword');
-        }
-      }
-    }
-
-    return result;
   }
 
   function parseLogicalNotExpr(): T.Expr {
