@@ -115,7 +115,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
     nextToken(); // Skip 'if' | 'elif' keyword
     let result: T.ConditionalExpr = { type: 'ConditionalExpr' };
 
-    while (curTok.type !== 'arrow') {
+    while (curTok.type !== 'arrow' && curTok.value !== 'then') {
       result.condition = parseExpr(result, { target: 'condition' });
       nextToken();
 
@@ -123,8 +123,13 @@ export function parse(tokens: Array<T.Token>): T.AST {
         ParserError('Expect condition to end followed by arrow `=>` or the `then` keyword');
     }
 
-    // TODO: Handle `then` expression case
-    nextToken(); // Skip '=>' inline-control operator
+    if (curTok.value === 'then') {
+      nextToken(); // Skip 'then' keyword
+      if (curTok.type as string !== 'newline')
+        ParserError('Expect no tokens after `then` keyword');
+    }
+
+    nextToken(); // Skip '=>' inline-control operator or skip `newline` if using `then block`
 
     while (curTok.type as string !== 'newline') {
       result.expr1 = parseExpr(result, { target: 'expr1' });
@@ -134,14 +139,18 @@ export function parse(tokens: Array<T.Token>): T.AST {
     nextToken(); // Skip newline
 
     /* Handle elif is exactly the same as the if expression */
-    if (curTok.type as string === 'keyword' && curTok.value === 'elif') {
+    if (curTok.type as string === 'keyword' && curTok.value as string === 'elif') {
       result.expr2 = parseConditionalExpr();
       return result;
     }
 
     /* Handle else expression */
-    if (curTok.type as string === 'keyword' && curTok.value === 'else') {
+    if (curTok.type as string === 'keyword' && curTok.value as string === 'else') {
       nextToken(); // Skip 'else' keyword
+
+      if (curTok.type as string !== 'arrow' && curTok.value as string !== 'then')
+        ParserError('Expect else condition to followed by arrow `=>` or the `then` keyword');
+
       if (curTok.type as string === 'arrow') {
         nextToken(); // Skip 'arrow' keyword
 
@@ -149,7 +158,25 @@ export function parse(tokens: Array<T.Token>): T.AST {
           result.expr2 = parseExpr(result, { target: 'expr2' });
           nextToken();
         }
-      } else ParserError('Expect else condition to followed by arrow `=>` or the `then` keyword')
+      } else if (curTok.value as string === 'then') {
+        nextToken(); // Skip 'then' keyword
+        if (curTok.type as string === 'newline') {
+          nextToken(); // Skip 'newline' token
+
+          while (curTok.type as string !== 'newline') {
+            result.expr2 = parseExpr(result, { target: 'expr2' });
+            nextToken();
+          }
+
+          nextToken(); // Skip 'newline' token
+          if (curTok.value as string !== 'end')
+            ParserError('Expect `else then` expression to followed by an `end` keyword');
+
+          nextToken(); // Skip 'end' token
+          if (curTok.type as string !== 'newline')
+            ParserError('Expect no tokens after `end` keyword');
+        }
+      }
     }
 
     return result;

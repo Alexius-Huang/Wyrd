@@ -14,6 +14,7 @@ const keywords = new Set<string>([
   'if',
   'elif',
   'else',
+  'then',
 ]);
 
 const regex = {
