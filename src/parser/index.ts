@@ -24,10 +24,14 @@ export function parse(tokens: Array<T.Token>): T.AST {
     return curTok;
   }
 
-  function parseExpr(prevExpr?: T.Expr): T.Expr {
+  function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     if (curTok.type === 'keyword') {
       if (curTok.value === 'def') {
         return parseFunctionDeclaration(curTok, nextToken, parseExpr);
+      }
+
+      if (curTok.value === 'if') {
+        return parseConditionalExpr(prevExpr);
       }
 
       if (curTok.value === 'not') {
@@ -94,12 +98,63 @@ export function parse(tokens: Array<T.Token>): T.AST {
         return resultExpr;
       }
 
+      if (prevExpr?.type === 'ConditionalExpr') {
+        const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
+       [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr[targetExpr] as T.Expr);
+        return resultExpr;
+      }
+
       [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, ast.pop() as T.Expr);
       return resultExpr;
     }
 
     ParserError(`Unhandled token type of \`${curTok.type}\``);
   }
+
+  function parseConditionalExpr(prevExpr?: T.Expr): T.Expr {
+    nextToken(); // Skip 'if' keyword
+    let result: T.ConditionalExpr = { type: 'ConditionalExpr' };
+
+    while (curTok.type !== 'arrow') {
+      result.condition = parseExpr(result, { target: 'condition' });
+      nextToken();
+
+      if (curTok.type === 'newline')
+        ParserError('Expect condition to end followed by arrow `=>` or the `then` keyword');
+    }
+
+    // TODO: Handle `then` expression case
+    nextToken(); // Skip '=>' inline-control operator
+
+    while (curTok.type as string !== 'newline') {
+      result.expr1 = parseExpr(result, { target: 'expr1' });
+      nextToken();
+    }
+
+    nextToken(); // Skip newline
+
+    while (true) {
+      if (curTok.type as string === 'keyword' && curTok.value === 'else') {
+        nextToken();
+        if (curTok.type as string === 'arrow') {
+          nextToken();
+
+          while (curTok.type as string !== 'newline') {
+            result.expr2 = parseExpr(result, { target: 'expr2' });
+            nextToken();
+          }
+        } else ParserError('Expect else condition to followed by arrow `=>` or the `then` keyword')
+        continue;
+      }
+
+      break;
+    }
+
+    return result;
+  }
+
+  // function parseConditionElse() {}
+  // function parseConditionElif() {}
 
   function parseLogicalNotExpr(): T.Expr {
     let result: T.NotExpr = { type: 'NotExpr' };

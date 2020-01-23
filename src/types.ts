@@ -100,8 +100,8 @@ export type PrioritizedExpr = {
 
 export type ConditionalExpr = {
   type: 'ConditionalExpr';
-  condition: Expr;
-  expr1: Expr;  // Condition is Truethy
+  condition?: Expr;
+  expr1?: Expr;  // Condition is Truethy
   expr2?: Expr; // Condition is Falsey
 }
 

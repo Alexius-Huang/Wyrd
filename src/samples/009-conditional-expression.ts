@@ -58,6 +58,21 @@ const tokens: Array<Token> = [
   { type: 'arrow', value: '=>' },
   { type: 'string', value: 'adult' },
   { type: 'newline', value: '\n' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'example1' },
+  { type: 'eq', value: '=' },
+  { type: 'keyword', value: 'if' },
+  { type: 'ident', value: 'age' },
+  { type: 'lt', value: '<' },
+  { type: 'number', value: '18' },
+  { type: 'arrow', value: '=>' },
+  { type: 'string', value: 'youngster' },
+  { type: 'newline', value: '\n' },
+  { type: 'keyword', value: 'else' },
+  { type: 'arrow', value: '=>' },
+  { type: 'string', value: 'adult' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
