@@ -6,44 +6,39 @@ else        => "adult"
 
 example1 = if age < 18 => "youngster"
            else        => "adult"
+
+example2 = if age < 18    => "youngster"
+           elif age <= 60 => "adult"
+           elif age < 100 => "elder"
+           else           => "centenarian"
 `;
 
 // TODO: Other Cases
 `\
-example2 = if age < 18 then
-             "youngster"
-           else then
-             "adult"
-           end
-
-example3 = if age < 18    => "youngster"
-           elif age <= 60 => "adult"
-           else           => "elder"
-
-example4 = if age < 18 then
+example3 = if age < 18 then
              "youngster"
            elif age <= 60 then
              "adult"
-           else then
+           elif age < 100 then
              "elder"
+           else then
+             "centenarian"
            end
 
-mixed = if age < 18 then
-          "youngster"
-        elif age <= 60 => "adult"
-        else then
-          "elder"
-        end
+mixed1 = if age < 18 then
+           "youngster"
+         elif age <= 60 => "adult"
+         elif age < 100 then
+           "elder"
+         else => "centenarian"
 
-more = if age < 12 then
-         "kids"
-       elif age <= 18 then
-         "youngster"
-       elif age <= 60 then
-         "adult"
-       else then
-         "elder"
-       end
+mixed2 = if age < 18 => "youngster"
+         elif age <= 60 then
+           "adult"
+         elif age < 100 => "elder"
+         else then
+           "centenarian"
+         end
 `;
 
 const tokens: Array<Token> = [
@@ -73,6 +68,35 @@ const tokens: Array<Token> = [
   { type: 'arrow', value: '=>' },
   { type: 'string', value: 'adult' },
   { type: 'newline', value: '\n' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'example2' },
+  { type: 'eq', value: '=' },
+  { type: 'keyword', value: 'if' },
+  { type: 'ident', value: 'age' },
+  { type: 'lt', value: '<' },
+  { type: 'number', value: '18' },
+  { type: 'arrow', value: '=>' },
+  { type: 'string', value: 'youngster' },
+  { type: 'newline', value: '\n' },
+  { type: 'keyword', value: 'elif' },
+  { type: 'ident', value: 'age' },
+  { type: 'lteq', value: '<=' },
+  { type: 'number', value: '60' },
+  { type: 'arrow', value: '=>' },
+  { type: 'string', value: 'adult' },
+  { type: 'newline', value: '\n' },
+  { type: 'keyword', value: 'elif' },
+  { type: 'ident', value: 'age' },
+  { type: 'lt', value: '<' },
+  { type: 'number', value: '100' },
+  { type: 'arrow', value: '=>' },
+  { type: 'string', value: 'elder' },
+  { type: 'newline', value: '\n' },
+  { type: 'keyword', value: 'else' },
+  { type: 'arrow', value: '=>' },
+  { type: 'string', value: 'centenarian' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
@@ -100,22 +124,56 @@ const ast: AST = [
       },
       expr1: { type: 'StringLiteral', value: 'youngster' },
       expr2: { type: 'StringLiteral', value: 'adult' },
-    },  
+    },
+  },
+  {
+    type: 'AssignmentExpr',
+    expr1: { type: 'IdentLiteral', value: 'example2' },
+    expr2: {
+      type: 'ConditionalExpr',
+      condition: {
+        type: 'BinaryOpExpr',
+        operator: Op.Lt,
+        expr1: { type: 'IdentLiteral', value: 'age' },
+        expr2: { type: 'NumberLiteral', value: '18' }
+      },
+      expr1: { type: 'StringLiteral', value: 'youngster' },
+      expr2: {
+        type: 'ConditionalExpr',
+        condition: {
+          type: 'BinaryOpExpr',
+          operator: Op.LtEq,
+          expr1: { type: 'IdentLiteral', value: 'age' },
+          expr2: { type: 'NumberLiteral', value: '60' }
+        },
+        expr1: { type: 'StringLiteral', value: 'adult' },
+        expr2: {
+          type: 'ConditionalExpr',
+          condition: {
+            type: 'BinaryOpExpr',
+            operator: Op.Lt,
+            expr1: { type: 'IdentLiteral', value: 'age' },
+            expr2: { type: 'NumberLiteral', value: '100' }
+          },
+          expr1: { type: 'StringLiteral', value: 'elder' },
+          expr2: { type: 'StringLiteral', value: 'centenarian' },
+        },
+      },
+    },
   },
 ];
 
 const compiled = `\
 age < 18 ? 'youngster' : 'adult';
 const example1 = age < 18 ? 'youngster' : 'adult';
+const example2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 `;
 
 // TODO: Other cases
 `\
-const example2 = age < 18 ? 'youngster' : 'adult';
-const example3 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : 'elder');
-const example4 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : 'elder');
-const mixed = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : 'elder');
-const more = age < 12 ? 'kids' : (age < 18 ? 'youngster' : (age <= 60 ? 'adult' : 'elder'));
+const example3 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
+const mixed1 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
+const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 `
 
 export {

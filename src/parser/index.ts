@@ -112,7 +112,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
   }
 
   function parseConditionalExpr(prevExpr?: T.Expr): T.Expr {
-    nextToken(); // Skip 'if' keyword
+    nextToken(); // Skip 'if' | 'elif' keyword
     let result: T.ConditionalExpr = { type: 'ConditionalExpr' };
 
     while (curTok.type !== 'arrow') {
@@ -133,28 +133,27 @@ export function parse(tokens: Array<T.Token>): T.AST {
 
     nextToken(); // Skip newline
 
-    while (true) {
-      if (curTok.type as string === 'keyword' && curTok.value === 'else') {
-        nextToken();
-        if (curTok.type as string === 'arrow') {
+    /* Handle elif is exactly the same as the if expression */
+    if (curTok.type as string === 'keyword' && curTok.value === 'elif') {
+      result.expr2 = parseConditionalExpr();
+      return result;
+    }
+
+    /* Handle else expression */
+    if (curTok.type as string === 'keyword' && curTok.value === 'else') {
+      nextToken(); // Skip 'else' keyword
+      if (curTok.type as string === 'arrow') {
+        nextToken(); // Skip 'arrow' keyword
+
+        while (curTok.type as string !== 'newline') {
+          result.expr2 = parseExpr(result, { target: 'expr2' });
           nextToken();
-
-          while (curTok.type as string !== 'newline') {
-            result.expr2 = parseExpr(result, { target: 'expr2' });
-            nextToken();
-          }
-        } else ParserError('Expect else condition to followed by arrow `=>` or the `then` keyword')
-        continue;
-      }
-
-      break;
+        }
+      } else ParserError('Expect else condition to followed by arrow `=>` or the `then` keyword')
     }
 
     return result;
   }
-
-  // function parseConditionElse() {}
-  // function parseConditionElif() {}
 
   function parseLogicalNotExpr(): T.Expr {
     let result: T.NotExpr = { type: 'NotExpr' };
