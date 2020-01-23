@@ -9,6 +9,7 @@ const filenames = [
   './006-builtin-primitives',
   './007-logical-expression',
   './008-logical-comparison',
+  './009-conditional-expression',
 ];
 
 type Sample = {
