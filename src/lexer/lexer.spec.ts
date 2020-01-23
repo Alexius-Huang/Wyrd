@@ -3,7 +3,7 @@ import { lex } from './index';
 describe('Wyrd Lexer', () => {
   it('lexs the code into array of tokens', async () => {
     /* Single Case */
-    // const { program, tokens } = await import('../samples/008-logical-comparison');
+    // const { program, tokens } = await import('../samples/009-conditional-expression');
     // const result = lex(program);
     // tokens.forEach(({ type, value }, i) => {
     //   expect(result[i].type).toBe(type);

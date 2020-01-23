@@ -33,6 +33,8 @@ export function generateCode(ast: T.AST): string {
         return codeGenPrioritizedExpr(expr);
       case 'FunctionDeclaration':
         return codeGenFunctionDeclaration(expr);
+      case 'ConditionalExpr':
+        return codeGenConditionalExpr(expr);
       default:
         CodeGenerateError(`Unhandled expression of type \`${(expr as T.Expr).type}\``);
     }
@@ -131,6 +133,20 @@ ${codeGenFunctionBody(body, args, 4)}
     const lastIndex = result.length - 1;
     result[lastIndex] = `${result[lastIndex].slice(0, indent)}return ${result[lastIndex].slice(indent)}`;
     return result.join('\n');
+  }
+
+  function codeGenConditionalExpr(expr: T.ConditionalExpr) {
+    const { condition, expr1, expr2 } = expr;
+    if (condition === undefined || expr1 === undefined || expr2 === undefined)
+      CodeGenerateError('Missing expressions in `ConditionExpr`');
+
+    let result = `${genExpr(condition)} ? ${genExpr(expr1)} : `;
+    if (expr2.type === 'ConditionalExpr') {
+      result += `(${codeGenConditionalExpr(expr2)})`;
+    } else {
+      result += genExpr(expr2);
+    }
+    return result;
   }
 
   while (index < ast.length) {

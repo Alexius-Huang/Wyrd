@@ -3,7 +3,7 @@ import { parse } from './index';
 describe('Wyrd Parser', () => {
   it('parses the tokens into AST', async () => {
     /* Single Case */
-    // const { tokens, ast } = await import('../samples/008-logical-comparison');
+    // const { tokens, ast } = await import('../samples/009-conditional-expression');
     // const result = parse(tokens);
 
     // for (let exprNum = 0; exprNum < result.length; exprNum++) {

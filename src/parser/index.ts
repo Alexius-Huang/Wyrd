@@ -7,6 +7,7 @@ import {
   parseNullLiteral,
 } from './literal';
 import { parseFunctionDeclaration } from './function';
+import { parseConditionalExpr } from './condition';
 import { parseAssignmentExpr } from './assignment';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
@@ -24,10 +25,16 @@ export function parse(tokens: Array<T.Token>): T.AST {
     return curTok;
   }
 
-  function parseExpr(prevExpr?: T.Expr): T.Expr {
+  function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     if (curTok.type === 'keyword') {
       if (curTok.value === 'def') {
         return parseFunctionDeclaration(curTok, nextToken, parseExpr);
+      }
+
+      if (curTok.value === 'if') {
+        let resultExpr: T.ConditionalExpr;
+        [curTok, resultExpr] = parseConditionalExpr(curTok, nextToken, parseExpr);
+        return resultExpr;
       }
 
       if (curTok.value === 'not') {
@@ -91,6 +98,12 @@ export function parse(tokens: Array<T.Token>): T.AST {
 
       if (prevExpr?.type === 'FunctionDeclaration') {
         [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr);
+        return resultExpr;
+      }
+
+      if (prevExpr?.type === 'ConditionalExpr') {
+        const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
+       [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr[targetExpr] as T.Expr);
         return resultExpr;
       }
 
