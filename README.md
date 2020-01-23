@@ -16,6 +16,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   - [Builtin Primitives](https://github.com/Maxwell-Alexius/Wyrd-Lang#builtin-primitives)
   - [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics)
   - [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression)
+  - [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression)
   - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
   - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
 
@@ -108,6 +109,56 @@ true && false || !(false);
 5 * 3 < 15 - (6 * 8);
 11 >= 7 + 7 || 3 <= (6 + 2) / 3;
 8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
+```
+
+### Conditional Expression
+**Wyrd Lang**
+```
+if age < 18 => "youngster"
+else        => "adult"
+
+example1 = if age < 18 => "youngster"
+           else        => "adult"
+
+example2 = if age < 18    => "youngster"
+           elif age <= 60 => "adult"
+           elif age < 100 => "elder"
+           else           => "centenarian"
+
+example3 = if age < 18 then
+             "youngster"
+           elif age <= 60 then
+             "adult"
+           elif age < 100 then
+             "elder"
+           else then
+             "centenarian"
+           end
+
+mixed1 = if age < 18 then
+           "youngster"
+         elif age <= 60 => "adult"
+         elif age < 100 then
+           "elder"
+         else => "centenarian"
+
+mixed2 = if age < 18 => "youngster"
+         elif age <= 60 then
+           "adult"
+         elif age < 100 => "elder"
+         else then
+           "centenarian"
+         end
+```
+
+**Compiled Wyrd Code**
+```js
+age < 18 ? 'youngster' : 'adult';
+const example1 = age < 18 ? 'youngster' : 'adult';
+const example2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
+const example3 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
+const mixed1 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
+const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 ```
 
 ### Function Declaration as Expression
