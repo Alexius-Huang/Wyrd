@@ -35,36 +35,45 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'OrExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'AndExpr',
+      returnType: 'Bool',
       expr1: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
       expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
     },
     expr2: {
       type: 'NotExpr',
+      returnType: 'Bool',
       expr: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
     },
   },
   {
     type: 'AndExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'NotExpr',
+      returnType: 'Bool',
       expr: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
     },
     expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
   },
   {
     type: 'AndExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'NotExpr',
+      returnType: 'Bool',
       expr: {
         type: 'PrioritizedExpr',
+        returnType: 'Bool',
         expr: {
           type: 'OrExpr',
+          returnType: 'Bool',
           expr1: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
           expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
         },
-      },      
+      },
     },
     expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' }
   },

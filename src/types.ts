@@ -140,18 +140,21 @@ export type BinaryOpExpr = {
 export type NotExpr = {
   type: 'NotExpr';
   expr?: Expr;
+  returnType: 'Bool';
 }
 
 export type OrExpr = {
   type: 'OrExpr';
   expr1: Expr;
   expr2?: Expr;
+  returnType: 'Bool';
 }
 
 export type AndExpr = {
   type: 'AndExpr';
   expr1: Expr;
   expr2?: Expr;
+  returnType: 'Bool';
 }
 
 export type Argument = { ident: string; type: string };

@@ -124,6 +124,7 @@ const ast: AST = [
   },
   {
     type: 'OrExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.GtEq,
@@ -148,6 +149,7 @@ const ast: AST = [
         returnType: 'Num',
         expr1: {
           type: 'PrioritizedExpr',
+          returnType: 'Num',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
@@ -162,8 +164,10 @@ const ast: AST = [
   },
   {
     type: 'OrExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'AndExpr',
+      returnType: 'Bool',
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Gt,
@@ -189,6 +193,7 @@ const ast: AST = [
       },
       expr2: {
         type: 'NotExpr',
+        returnType: 'Bool',
         expr: {
           type: 'BinaryOpExpr',
           operator: Op.EqEq,

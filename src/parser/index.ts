@@ -119,7 +119,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
   }
 
   function parseLogicalNotExpr(): T.Expr {
-    let result: T.NotExpr = { type: 'NotExpr' };
+    let result: T.NotExpr = { type: 'NotExpr', returnType: 'Bool' };
     nextToken();
     result.expr = parseExpr(result);
     return result;
@@ -130,6 +130,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
     let result: T.AndExpr | T.OrExpr = {
       type: logicType,
       expr1: prevExpr,
+      returnType: 'Bool',
     };
 
     nextToken();
