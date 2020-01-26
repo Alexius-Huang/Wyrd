@@ -118,6 +118,7 @@ export type AssignmentExpr = {
 export type PrioritizedExpr = {
   type: 'PrioritizedExpr';
   expr?: Expr;
+  returnType?: string;
 };
 
 export type ConditionalExpr = {

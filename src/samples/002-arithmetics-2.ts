@@ -60,11 +60,14 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
+    returnType: 'Num',
     expr1: {
       type: 'PrioritizedExpr',
+      returnType: 'Num',
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '1',
@@ -86,6 +89,7 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
+    returnType: 'Num',
     expr1: {
       type: 'NumberLiteral',
       value: '1',
@@ -93,9 +97,11 @@ const ast: AST = [
     },
     expr2: {
       type: 'PrioritizedExpr',
+      returnType: 'Num',
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '2',
@@ -112,8 +118,10 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
+    returnType: 'Num',
     expr1: {
       type: 'PrioritizedExpr',
+      returnType: 'Num',
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
@@ -131,6 +139,7 @@ const ast: AST = [
     },
     expr2: {
       type: 'PrioritizedExpr',
+      returnType: 'Num',
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
@@ -150,11 +159,14 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
+    returnType: 'Num',
     expr1: {
       type: 'PrioritizedExpr',
+      returnType: 'Num',
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '1',
@@ -162,9 +174,11 @@ const ast: AST = [
         },
         expr2: {
           type: 'PrioritizedExpr',
+          returnType: 'Num',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Dash,
+            returnType: 'Num',
             expr1: {
               type: 'NumberLiteral',
               value: '5',
@@ -181,9 +195,11 @@ const ast: AST = [
     },
     expr2: {
       type: 'PrioritizedExpr',
+      returnType: 'Num',
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '10',

@@ -1,5 +1,6 @@
 import * as T from '../types';
 import { ParserError } from './error';
+import { getOPActionDetail } from './helper';
 
 export function parsePrioritizedExpr(
   curTok: T.Token,
@@ -19,6 +20,13 @@ export function parsePrioritizedExpr(
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
       prevExpr.expr2 = result;
+      const opAction = getOPActionDetail(
+        prevExpr.operator,
+        prevExpr.expr2.returnType as string,
+        result.returnType as string
+      );
+
+      prevExpr.returnType = opAction.returnType;
       return prevExpr;
     }
 
@@ -35,5 +43,7 @@ export function parsePrioritizedExpr(
     ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
   }
 
+  // TODO: Remove this if every expression support returnType
+  result.returnType = (result.expr as T.BinaryOpExpr).returnType;
   return result;
 }
