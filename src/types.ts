@@ -107,6 +107,7 @@ export type NullLiteral = {
 export type IdentLiteral = {
   type: 'IdentLiteral';
   value: string;
+  returnType?: string;
 };
 
 export type AssignmentExpr = {

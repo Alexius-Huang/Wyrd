@@ -42,7 +42,8 @@ const ast: AST = [
     type: 'AssignmentExpr',
     expr1: {
       type: 'IdentLiteral',
-      value: 'foo'
+      value: 'foo',
+      returnType: 'Num',
     },
     expr2: {
       type: 'NumberLiteral',
@@ -54,14 +55,17 @@ const ast: AST = [
     type: 'AssignmentExpr',
     expr1: {
       type: 'IdentLiteral',
-      value: 'bar'
+      value: 'bar',
+      returnType: 'Num',
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
+      returnType: 'Num',
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '1',
@@ -70,6 +74,7 @@ const ast: AST = [
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
+          returnType: 'Num',
           expr1: {
             type: 'NumberLiteral',
             value: '2',
@@ -94,10 +99,12 @@ const ast: AST = [
     expr1: {
       type: 'IdentLiteral',
       value: 'baz',
+      returnType: 'Num',
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
+      returnType: 'Num',
       expr1: {
         type: 'NumberLiteral',
         value: '1',
@@ -106,11 +113,13 @@ const ast: AST = [
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
+        returnType: 'Num',
         expr1: {
           type: 'PrioritizedExpr',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Dash,
+            returnType: 'Num',
             expr1: {
               type: 'NumberLiteral',
               value: '2',

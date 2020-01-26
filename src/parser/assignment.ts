@@ -22,13 +22,18 @@ export function parseAssignmentExpr(
       expr1: prevExpr,
     };
 
-    scope.variables.set(varName, {
+    const variableInfo: T.Variable = {
       name: varName,
       isConst: true,
       type: 'Unknown',
-    });
+    };
+    scope.variables.set(varName, variableInfo);
 
     result.expr2 = parseExpr();
+
+    // TODO: Remove this when all expressions support returnType
+    prevExpr.returnType = (result.expr2 as T.NumberLiteral).returnType;
+    variableInfo.type = prevExpr.returnType;
     return [curTok, result];
   }
 

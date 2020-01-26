@@ -96,22 +96,22 @@ export function parse(tokens: Array<T.Token>): T.AST {
     if (BuiltinBinaryOperators.has(curTok.value)) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
-        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr.expr as T.Expr);
+        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr as T.Expr);
         return resultExpr;
       }
 
       if (prevExpr?.type === 'FunctionDeclaration') {
-        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr);
+        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr);
         return resultExpr;
       }
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-       [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, prevExpr[targetExpr] as T.Expr);
+       [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
         return resultExpr;
       }
 
-      [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, ast.pop() as T.Expr);
+      [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, ast.pop() as T.Expr);
       return resultExpr;
     }
 
