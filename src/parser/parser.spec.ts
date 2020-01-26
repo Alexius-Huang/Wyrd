@@ -3,8 +3,9 @@ import { parse } from './index';
 describe('Wyrd Parser', () => {
   it('parses the tokens into AST', async () => {
     /* Single Case */
-    const { tokens, ast, parseOptions } = await import('../samples/008-logical-comparison');
+    const { tokens, ast, parseOptions } = await import('../samples/009-conditional-expression');
     const result = parse(tokens, parseOptions);
+    console.log(JSON.stringify(result, undefined, 2));
 
     for (let exprNum = 0; exprNum < result.length; exprNum++) {
       expect(result[exprNum]).toMatchObject(ast[exprNum]);

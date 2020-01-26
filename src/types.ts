@@ -132,6 +132,7 @@ export type ConditionalExpr = {
   condition?: Expr;
   expr1?: Expr;  // Condition is Truethy
   expr2?: Expr; // Condition is Falsey
+  returnType: string;
 }
 
 export type BinaryOpExpr = {
