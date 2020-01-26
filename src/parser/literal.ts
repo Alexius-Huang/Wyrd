@@ -4,12 +4,25 @@ import { getOPActionDetail } from './helper';
 export function parseLiteral(
   curTok: T.Token,
   nextToken: () => T.Token,
+  scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
-  const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value };
+  const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value, returnType: 'Unknown' };
+  const varInfo = scope.variables.get(result.value);
+  if (varInfo) {
+    result.returnType = varInfo.type;
+  }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
+    const opAction = getOPActionDetail(
+      prevExpr.operator,
+      /* TODO: Remove this annotation if complete all expressions have returnType */
+      (prevExpr.expr1 as T.NumberLiteral).returnType,
+      result.returnType as string,
+    );
+
+    prevExpr.returnType = opAction.returnType;
     return prevExpr;
   }
   if (prevExpr?.type === 'PrioritizedExpr') {

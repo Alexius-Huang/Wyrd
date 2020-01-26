@@ -14,11 +14,14 @@ import { parseBinaryOpExpr } from './operation';
 import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
 
-export function parse(tokens: Array<T.Token>): T.AST {
-  const ast: T.AST = [];
+export function parse(
+  tokens: Array<T.Token>,
+  parseOptions?: T.ParseOptions,
+): T.AST {
+  const ast: T.AST = parseOptions?.ast ?? [];
   const scope: T.Scope = {
     parentScope: null,
-    variables: new Map<string, T.Variable>(),
+    variables: parseOptions?.variables ?? (new Map<string, T.Variable>()),
   };
 
   let index = 0;
@@ -75,7 +78,7 @@ export function parse(tokens: Array<T.Token>): T.AST {
     }
 
     if (curTok.type === 'ident') {
-      return parseLiteral(curTok, nextToken, prevExpr);
+      return parseLiteral(curTok, nextToken, scope, prevExpr);
     }
 
     if (curTok.type === 'lparen') {

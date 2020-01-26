@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST, Operator as Op, ParseOptions, Variable } from '../types';
 
 const program = `\
 isTrue = 3 + 1 > 2
@@ -262,9 +262,22 @@ const isTrue = 3 + 1 > 2;
 8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
 `;
 
+const parseOptions: ParseOptions = {
+  variables: new Map<string, Variable>([
+    ['a', { name: 'a', isConst: true, type: 'Num' }],
+    ['b', { name: 'b', isConst: true, type: 'Num' }],
+    ['c', { name: 'c', isConst: true, type: 'Num' }],
+    ['d', { name: 'd', isConst: true, type: 'Num' }],
+    ['w', { name: 'w', isConst: true, type: 'Num' }],
+    ['x', { name: 'x', isConst: true, type: 'Num' }],
+    ['y', { name: 'y', isConst: true, type: 'Num' }],
+  ]),
+};
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  parseOptions,
 };

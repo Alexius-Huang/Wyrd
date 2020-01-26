@@ -50,6 +50,11 @@ export type Variable = {
   type: string;
 };
 
+export type ParseOptions = {
+  ast?: AST;
+  variables?: Map<string, Variable>;
+};
+
 /* Builtin unoverridable operator actions */
 export type OPActionPair = { returnType: string };
 export type OPAction = {
