@@ -84,22 +84,26 @@ export type Expr =
 export type NumberLiteral = {
   type: 'NumberLiteral';
   value: string;
+  returnType: 'Num';
 };
 
 export type StringLiteral = {
   type: 'StringLiteral';
   value: string;
-}
+  returnType: 'Str';
+};
 
 export type BooleanLiteral = {
   type: 'BooleanLiteral';
   value: 'True' | 'False';
-}
+  returnType: 'Bool';
+};
 
 export type NullLiteral = {
   type: 'NullLiteral';
   value: 'Null';
-}
+  returnType: 'Null';
+};
 
 export type IdentLiteral = {
   type: 'IdentLiteral';

@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
 
 const program = `\
 foo = 1
@@ -46,7 +46,8 @@ const ast: AST = [
     },
     expr2: {
       type: 'NumberLiteral',
-      value: '1'
+      value: '1',
+      returnType: WP.Num,
     },
   },
   {
@@ -63,24 +64,28 @@ const ast: AST = [
         operator: Op.Plus,
         expr1: {
           type: 'NumberLiteral',
-          value: '1'
+          value: '1',
+          returnType: WP.Num,
         },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
           expr1: {
             type: 'NumberLiteral',
-            value: '2'
+            value: '2',
+            returnType: WP.Num,
           },
           expr2: {
             type: 'NumberLiteral',
-            value: '3'
+            value: '3',
+            returnType: WP.Num,
           }
         },
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '4'
+        value: '4',
+        returnType: WP.Num,
       },
     },
   },
@@ -95,7 +100,8 @@ const ast: AST = [
       operator: Op.Plus,
       expr1: {
         type: 'NumberLiteral',
-        value: '1'
+        value: '1',
+        returnType: WP.Num,
       },
       expr2: {
         type: 'BinaryOpExpr',
@@ -107,17 +113,20 @@ const ast: AST = [
             operator: Op.Dash,
             expr1: {
               type: 'NumberLiteral',
-              value: '2'
+              value: '2',
+              returnType: WP.Num,
             },
             expr2: {
               type: 'NumberLiteral',
-              value: '3'
+              value: '3',
+              returnType: WP.Num,
             }
           },  
         },
         expr2: {
           type: 'NumberLiteral',
-          value: '4'
+          value: '4',
+          returnType: WP.Num,
         },
       },
     },

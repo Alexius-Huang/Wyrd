@@ -26,7 +26,11 @@ export function parseNumberLiteral(
   nextToken: () => T.Token,
   prevExpr?: T.Expr
 ): T.Expr {
-  const result: T.NumberLiteral = { type: 'NumberLiteral', value: curTok.value };
+  const result: T.NumberLiteral = {
+    type: 'NumberLiteral',
+    value: curTok.value,
+    returnType: T.WyrdPrimitives.Num,
+  };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
@@ -47,7 +51,11 @@ export function parseStringLiteral(
   nextToken: () => T.Token,
   prevExpr?: T.Expr
 ): T.Expr {
-  const result: T.StringLiteral = { type: 'StringLiteral', value: curTok.value };
+  const result: T.StringLiteral = {
+    type: 'StringLiteral',
+    value: curTok.value,
+    returnType: T.WyrdPrimitives.Str,
+  };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
@@ -70,7 +78,8 @@ export function parseBooleanLiteral(
 ): T.Expr {
   const result: T.BooleanLiteral = {
     type: 'BooleanLiteral',
-    value: curTok.value as 'True' | 'False'
+    value: curTok.value as 'True' | 'False',
+    returnType: T.WyrdPrimitives.Bool,
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -92,7 +101,11 @@ export function parseNullLiteral(
   nextToken: () => T.Token,
   prevExpr?: T.Expr
 ): T.Expr {
-  const result: T.NullLiteral = { type: 'NullLiteral', value: 'Null' };
+  const result: T.NullLiteral = {
+    type: 'NullLiteral',
+    value: 'Null',
+    returnType: T.WyrdPrimitives.Null,
+  };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;

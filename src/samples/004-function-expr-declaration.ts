@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -136,7 +136,8 @@ const ast: AST = [
     body: [
       {
         type: 'NumberLiteral',
-        value: '666'
+        value: '666',
+        returnType: WP.Num,
       },
     ],
   },
