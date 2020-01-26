@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 foo = 123
@@ -30,22 +30,22 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     expr1: { type: 'IdentLiteral', value: 'foo' },
-    expr2: { type: 'NumberLiteral', value: '123', returnType: WP.Num }
+    expr2: { type: 'NumberLiteral', value: '123', returnType: 'Num' }
   },
   {
     type: 'AssignmentExpr',
     expr1: { type: 'IdentLiteral', value: 'bar' },
-    expr2: { type: 'StringLiteral', value: 'Hello world', returnType: WP.Str }
+    expr2: { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' }
   },
   {
     type: 'AssignmentExpr',
     expr1: { type: 'IdentLiteral', value: 'baz' },
-    expr2: { type: 'BooleanLiteral', value: 'True', returnType: WP.Bool }
+    expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' }
   },
   {
     type: 'AssignmentExpr',
     expr1: { type: 'IdentLiteral', value: 'nothing' },
-    expr2: { type: 'NullLiteral', value: 'Null', returnType: WP.Null }
+    expr2: { type: 'NullLiteral', value: 'Null', returnType: 'Null' }
   },
 ];
 

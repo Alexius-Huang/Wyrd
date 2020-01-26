@@ -25,7 +25,7 @@ export function parseAssignmentExpr(
     scope.variables.set(varName, {
       name: varName,
       isConst: true,
-      type: T.WyrdPrimitives.Unknown,
+      type: 'Unknown',
     });
 
     result.expr2 = parseExpr();

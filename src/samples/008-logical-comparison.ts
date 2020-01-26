@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 3 + 1 > 2
@@ -84,10 +84,10 @@ const ast: AST = [
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      expr1: { type: 'NumberLiteral', value: '3', returnType: WP.Num },
-      expr2: { type: 'NumberLiteral', value: '1', returnType: WP.Num }
+      expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+      expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
     },
-    expr2: { type: 'NumberLiteral', value: '2', returnType: WP.Num }
+    expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' }
   },
   {
     type: 'BinaryOpExpr',
@@ -95,18 +95,18 @@ const ast: AST = [
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
-      expr1: { type: 'NumberLiteral', value: '5', returnType: WP.Num },
-      expr2: { type: 'NumberLiteral', value: '3', returnType: WP.Num }
+      expr1: { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+      expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
-      expr1: { type: 'NumberLiteral', value: '15', returnType: WP.Num },
+      expr1: { type: 'NumberLiteral', value: '15', returnType: 'Num' },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
-        expr1: { type: 'NumberLiteral', value: '6', returnType: WP.Num },
-        expr2: { type: 'NumberLiteral', value: '8', returnType: WP.Num },
+        expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '8', returnType: 'Num' },
       },
     },
   },
@@ -115,18 +115,18 @@ const ast: AST = [
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.GtEq,
-      expr1: { type: 'NumberLiteral', value: '11', returnType: WP.Num },
+      expr1: { type: 'NumberLiteral', value: '11', returnType: 'Num' },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        expr1: { type: 'NumberLiteral', value: '7', returnType: WP.Num },
-        expr2: { type: 'NumberLiteral', value: '7', returnType: WP.Num },
+        expr1: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
       },
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.LtEq,
-      expr1: { type: 'NumberLiteral', value: '3', returnType: WP.Num },
+      expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
@@ -135,11 +135,11 @@ const ast: AST = [
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            expr1: { type: 'NumberLiteral', value: '6', returnType: WP.Num },
-            expr2: { type: 'NumberLiteral', value: '2', returnType: WP.Num },
+            expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
+            expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
           },
         },
-        expr2: { type: 'NumberLiteral', value: '3', returnType: WP.Num }, 
+        expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }, 
       },
     },
   },
@@ -153,18 +153,18 @@ const ast: AST = [
         expr1: {
           type: 'BinaryOpExpr',
           operator: Op.Slash,
-          expr1: { type: 'NumberLiteral', value: '8', returnType: WP.Num },
+          expr1: { type: 'NumberLiteral', value: '8', returnType: 'Num' },
           expr2: {
             type: 'PrioritizedExpr',
             expr: {
               type: 'BinaryOpExpr',
               operator: Op.Asterisk,
-              expr1: { type: 'NumberLiteral', value: '4', returnType: WP.Num },
-              expr2: { type: 'NumberLiteral', value: '2', returnType: WP.Num },
+              expr1: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+              expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
             },
           },
         },
-        expr2: { type: 'NumberLiteral', value: '3', returnType: WP.Num }
+        expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
       },
       expr2: {
         type: 'NotExpr',
@@ -174,15 +174,15 @@ const ast: AST = [
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            expr1: { type: 'NumberLiteral', value: '1', returnType: WP.Num },
+            expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
             expr2: {
               type: 'BinaryOpExpr',
               operator: Op.Asterisk,
-              expr1: { type: 'NumberLiteral', value: '2', returnType: WP.Num },
-              expr2: { type: 'NumberLiteral', value: '3', returnType: WP.Num }
+              expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+              expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
             },
           },
-          expr2: { type: 'NumberLiteral', value: '7', returnType: WP.Num }
+          expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' }
         },
       },
     },

@@ -1,4 +1,5 @@
 import * as T from '../types';
+import { getOPActionDetail } from './helper';
 
 export function parseLiteral(
   curTok: T.Token,
@@ -29,11 +30,19 @@ export function parseNumberLiteral(
   const result: T.NumberLiteral = {
     type: 'NumberLiteral',
     value: curTok.value,
-    returnType: T.WyrdPrimitives.Num,
+    returnType: 'Num',
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
+    const opAction = getOPActionDetail(
+      prevExpr.operator,
+      /* TODO: Remove this annotation if complete all expressions have returnType */
+      (prevExpr.expr1 as T.NumberLiteral).returnType,
+      result.returnType,
+    );
+
+    prevExpr.returnType = opAction.returnType;
     return prevExpr;
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
@@ -54,7 +63,7 @@ export function parseStringLiteral(
   const result: T.StringLiteral = {
     type: 'StringLiteral',
     value: curTok.value,
-    returnType: T.WyrdPrimitives.Str,
+    returnType: 'Str',
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -79,7 +88,7 @@ export function parseBooleanLiteral(
   const result: T.BooleanLiteral = {
     type: 'BooleanLiteral',
     value: curTok.value as 'True' | 'False',
-    returnType: T.WyrdPrimitives.Bool,
+    returnType: 'Bool',
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -104,7 +113,7 @@ export function parseNullLiteral(
   const result: T.NullLiteral = {
     type: 'NullLiteral',
     value: 'Null',
-    returnType: T.WyrdPrimitives.Null,
+    returnType: 'Null',
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {

@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 def addition(x: Num, y: Num): Num do
@@ -146,11 +146,11 @@ const ast: AST = [
             expr2: {
               type: 'BinaryOpExpr',
               operator: Op.Slash,
-              expr1: { type: 'NumberLiteral', value: '2', returnType: WP.Num },
+              expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
               expr2: { type: 'IdentLiteral', value: 'a' },
             },
           },
-          expr2: { type: 'NumberLiteral', value: '1', returnType: WP.Num }
+          expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
         },
       },
       {

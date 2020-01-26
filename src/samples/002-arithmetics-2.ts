@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 (1 + 2) * 3
@@ -68,19 +68,19 @@ const ast: AST = [
         expr1: {
           type: 'NumberLiteral',
           value: '1',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
           value: '2',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
       }
     },
     expr2: {
       type: 'NumberLiteral',
       value: '3',
-      returnType: WP.Num,
+      returnType: 'Num',
     },
   },
   {
@@ -89,7 +89,7 @@ const ast: AST = [
     expr1: {
       type: 'NumberLiteral',
       value: '1',
-      returnType: WP.Num,
+      returnType: 'Num',
     },
     expr2: {
       type: 'PrioritizedExpr',
@@ -99,12 +99,12 @@ const ast: AST = [
         expr1: {
           type: 'NumberLiteral',
           value: '2',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
           value: '3',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
       },
     },
@@ -120,12 +120,12 @@ const ast: AST = [
         expr1: {
           type: 'NumberLiteral',
           value: '1',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
           value: '2',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
       }
     },
@@ -137,12 +137,12 @@ const ast: AST = [
         expr1: {
           type: 'NumberLiteral',
           value: '3',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
           value: '4',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
       },
     },
@@ -158,7 +158,7 @@ const ast: AST = [
         expr1: {
           type: 'NumberLiteral',
           value: '1',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
         expr2: {
           type: 'PrioritizedExpr',
@@ -168,12 +168,12 @@ const ast: AST = [
             expr1: {
               type: 'NumberLiteral',
               value: '5',
-              returnType: WP.Num,
+              returnType: 'Num',
             },
             expr2: {
               type: 'NumberLiteral',
               value: '3',
-              returnType: WP.Num,
+              returnType: 'Num',
             },
           }
         }
@@ -187,12 +187,12 @@ const ast: AST = [
         expr1: {
           type: 'NumberLiteral',
           value: '10',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
           value: '5',
-          returnType: WP.Num,
+          returnType: 'Num',
         },
       }
     }

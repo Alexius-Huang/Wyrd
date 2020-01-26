@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 True and False or not False
@@ -37,21 +37,21 @@ const ast: AST = [
     type: 'OrExpr',
     expr1: {
       type: 'AndExpr',
-      expr1: { type: 'BooleanLiteral', value: 'True', returnType: WP.Bool },
-      expr2: { type: 'BooleanLiteral', value: 'False', returnType: WP.Bool },
+      expr1: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
+      expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
     },
     expr2: {
       type: 'NotExpr',
-      expr: { type: 'BooleanLiteral', value: 'False', returnType: WP.Bool },
+      expr: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
     },
   },
   {
     type: 'AndExpr',
     expr1: {
       type: 'NotExpr',
-      expr: { type: 'BooleanLiteral', value: 'False', returnType: WP.Bool },
+      expr: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
     },
-    expr2: { type: 'BooleanLiteral', value: 'True', returnType: WP.Bool },
+    expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
   },
   {
     type: 'AndExpr',
@@ -61,12 +61,12 @@ const ast: AST = [
         type: 'PrioritizedExpr',
         expr: {
           type: 'OrExpr',
-          expr1: { type: 'BooleanLiteral', value: 'False', returnType: WP.Bool },
-          expr2: { type: 'BooleanLiteral', value: 'True', returnType: WP.Bool },
+          expr1: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
+          expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
         },
       },      
     },
-    expr2: { type: 'BooleanLiteral', value: 'False', returnType: WP.Bool }
+    expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' }
   },
 ];
 

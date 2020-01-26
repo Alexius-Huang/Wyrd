@@ -44,18 +44,17 @@ export const enum Operator {
   // Underscore = '_'
 }
 
-export const enum WyrdPrimitives {
-  Num = 'Num',
-  Str = 'Str',
-  Bool = 'Bool',
-  Null = 'Null',
-  Unknown = 'Unknown',
-};
-
 export type Variable = {
   name: string;
   isConst: boolean;
-  type: WyrdPrimitives;
+  type: string;
+};
+
+/* Builtin unoverridable operator actions */
+export type OPActionPair = { returnType: string };
+export type OPAction = {
+  symbol: string; // symbol of the operator
+  actionPairs: Map<Symbol, OPActionPair>;
 };
 
 export type Scope = {
@@ -133,6 +132,7 @@ export type BinaryOpExpr = {
   operator: Operator;
   expr1: Expr;
   expr2?: Expr;
+  returnType?: string;
 };
 
 export type NotExpr = {

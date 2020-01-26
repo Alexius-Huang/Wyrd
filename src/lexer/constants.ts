@@ -26,11 +26,10 @@ const regex = {
 
 const builtinTypes = new Set<string>([
   'Num',
-  // TODO: Implement tests for other primitive built-in types
-  // 'Str',
-  // 'Bool',
-  // 'Null',
-  // 'Void',
+  'Str',
+  'Bool',
+  'Null',
+  'Void',
 ]);
 
 export {

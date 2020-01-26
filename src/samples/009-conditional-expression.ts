@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, WyrdPrimitives as WP } from '../types';
+import { Token, AST, Operator as Op } from '../types';
 
 const program = `\
 if age < 18 => "youngster"
@@ -202,10 +202,10 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Lt,
       expr1: { type: 'IdentLiteral', value: 'age' },
-      expr2: { type: 'NumberLiteral', value: '18', returnType: WP.Num }
+      expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
     },
-    expr1: { type: 'StringLiteral', value: 'youngster', returnType: WP.Str },
-    expr2: { type: 'StringLiteral', value: 'adult', returnType: WP.Str },
+    expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
+    expr2: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
   },
   {
     type: 'AssignmentExpr',
@@ -216,10 +216,10 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: WP.Num }
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: WP.Str },
-      expr2: { type: 'StringLiteral', value: 'adult', returnType: WP.Str },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
+      expr2: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
     },
   },
   {
@@ -231,28 +231,28 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: WP.Num }
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: WP.Str },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
           expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60', returnType: WP.Num }
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult', returnType: WP.Str },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
             expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100', returnType: WP.Num }
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder', returnType: WP.Str },
-          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: WP.Str },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
@@ -266,28 +266,28 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: WP.Num }
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: WP.Str },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
           expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60', returnType: WP.Num }
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult', returnType: WP.Str },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
             expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100', returnType: WP.Num }
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder', returnType: WP.Str },
-          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: WP.Str },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
@@ -301,28 +301,28 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: WP.Num }
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: WP.Str },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
           expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60', returnType: WP.Num }
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult', returnType: WP.Str },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
             expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100', returnType: WP.Num }
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder', returnType: WP.Str },
-          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: WP.Str },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
@@ -336,28 +336,28 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: WP.Num }
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: WP.Str },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
           expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60', returnType: WP.Num }
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult', returnType: WP.Str },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
             expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100', returnType: WP.Num }
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder', returnType: WP.Str },
-          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: WP.Str },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
