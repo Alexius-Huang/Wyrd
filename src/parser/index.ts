@@ -16,6 +16,10 @@ import { BuiltinBinaryOperators } from './constants';
 
 export function parse(tokens: Array<T.Token>): T.AST {
   const ast: T.AST = [];
+  const scope: T.Scope = {
+    parentScope: null,
+    variables: new Map<string, T.Variable>(),
+  };
 
   let index = 0;
   let curTok = tokens[index];
@@ -81,11 +85,11 @@ export function parse(tokens: Array<T.Token>): T.AST {
     if (curTok.type === 'eq') {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'FunctionDeclaration') {
-        [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, prevExpr);
+        [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, scope, prevExpr);
         return resultExpr;
       }
 
-      [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, ast.pop() as T.Expr);
+      [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, scope, ast.pop() as T.Expr);
       return resultExpr;
     }
 

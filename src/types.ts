@@ -44,6 +44,25 @@ export const enum Operator {
   // Underscore = '_'
 }
 
+export const enum WyrdPrimitives {
+  Num = 'Num',
+  Str = 'Str',
+  Bool = 'Bool',
+  Null = 'Null',
+  Unknown = 'Unknown',
+};
+
+export type Variable = {
+  name: string;
+  isConst: boolean;
+  type: WyrdPrimitives;
+};
+
+export type Scope = {
+  parentScope: null | Scope;
+  variables: Map<string, Variable>;
+};
+
 export type AST = Array<Expr>;
 
 export type Expr =
