@@ -5,7 +5,7 @@ import { compare } from './precedence';
 export function parseBinaryOpExpr(
   curTok: T.Token,
   nextToken: () => T.Token,
-  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr: T.Expr,
 ): [T.Token, T.Expr] {
@@ -39,7 +39,7 @@ export function parseBinaryOpExpr(
       };
 
       curTok = nextToken();
-      parseExpr(newNode as T.Expr);
+      parseExpr(newNode as T.Expr, { scope });
       return [curTok, newNode];
     }
   }
@@ -76,6 +76,8 @@ export function parseBinaryOpExpr(
     return [curTok, prevExpr];
   }
 
+  // console.log('----------------------');
+  // console.log(curTok);
   curTok = nextToken();
   const result: T.BinaryOpExpr = {
     type: 'BinaryOpExpr',
@@ -83,7 +85,12 @@ export function parseBinaryOpExpr(
     expr1: prevExpr,
   };
 
-  return [curTok, parseExpr(result) as T.BinaryOpExpr];
+  // console.log(curTok);
+  // console.log(prevExpr);
+  // console.log(result);
+  // console.log(scope);
+
+  return [curTok, parseExpr(result, { scope }) as T.BinaryOpExpr];
 }
 
 // function parseLogicalAndOrExpr(

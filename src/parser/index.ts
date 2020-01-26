@@ -18,8 +18,8 @@ export function parse(
   tokens: Array<T.Token>,
   parseOptions?: T.ParseOptions,
 ): T.AST {
-  const ast: T.AST = parseOptions?.ast ?? [];
-  const scope: T.Scope = {
+  const globalAst: T.AST = parseOptions?.ast ?? [];
+  const globalScope: T.Scope = {
     parentScope: null,
     variables: parseOptions?.variables ?? (new Map<string, T.Variable>()),
   };
@@ -33,9 +33,12 @@ export function parse(
   }
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
+    const scope: T.Scope = meta?.scope ?? globalScope;
+    const ast: T.AST = meta?.ast ?? globalAst;
+
     if (curTok.type === 'keyword') {
       if (curTok.value === 'def') {
-        return parseFunctionDeclaration(curTok, nextToken, parseExpr);
+        return parseFunctionDeclaration(curTok, nextToken, parseExpr, scope);
       }
 
       if (curTok.value === 'if') {
@@ -82,7 +85,7 @@ export function parse(
     }
 
     if (curTok.type === 'lparen') {
-      return parsePrioritizedExpr(curTok, nextToken, parseExpr, prevExpr);
+      return parsePrioritizedExpr(curTok, nextToken, parseExpr, scope, prevExpr);
     }
 
     if (curTok.type === 'eq') {
@@ -103,14 +106,14 @@ export function parse(
         return resultExpr;
       }
 
-      if (prevExpr?.type === 'FunctionDeclaration') {
-        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr);
-        return resultExpr;
-      }
+      // if (prevExpr?.type === 'FunctionDeclaration') {
+      //   [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr);
+      //   return resultExpr;
+      // }
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-       [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
+        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
         return resultExpr;
       }
 
@@ -147,9 +150,9 @@ export function parse(
       continue;
     }
 
-    ast.push(parseExpr());
+    globalAst.push(parseExpr());
     nextToken();
   }
 
-  return ast;
+  return globalAst;
 }

@@ -27,6 +27,7 @@ export function parseLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
+    prevExpr.returnType = result.returnType;
   }
   if (prevExpr?.type === 'FunctionDeclaration') {
     prevExpr.body.push(result);

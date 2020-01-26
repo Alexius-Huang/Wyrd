@@ -5,14 +5,16 @@ import { getOPActionDetail } from './helper';
 export function parsePrioritizedExpr(
   curTok: T.Token,
   nextToken: () => T.Token,
-  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
   curTok = nextToken(); // Skip the lparen token
   let result: T.PrioritizedExpr = { type: 'PrioritizedExpr' };
+  // console.log(prevExpr, scope);
 
   while (true) {
-    result.expr = parseExpr(result);
+    result.expr = parseExpr(result, { scope });
     curTok = nextToken();
     if (curTok.type === 'rparen') break;
   }

@@ -1,10 +1,11 @@
 import * as T from '../types';
-import { ParserError } from './error';
+import { ParserError, ParserErrorIf } from './error';
 
 export function parseFunctionDeclaration(
   curTok: T.Token,
   nextToken: () => T.Token,
-  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
 ): T.FunctionDeclaration {
   curTok = nextToken(); // Skip 'def' keyword
 
@@ -15,16 +16,22 @@ export function parseFunctionDeclaration(
     type: 'FunctionDeclaration',
     name: curTok.value,
     arguments: [],
-    outputType: '',
+    outputType: 'Void',
     body: []
   };
-  curTok = nextToken();
+  // TODO: Record name of the function
+  curTok = nextToken(); // Skip the function name identifier
+  
+  const functionalScope: T.Scope = {
+    parentScope: scope,
+    variables: new Map<string, T.Variable>(),
+  };
 
   if (curTok.type as string === 'lparen')
-    [curTok, result.arguments] = parseFunctionArguments(curTok, nextToken);
+    [curTok, result.arguments] = parseFunctionArguments(curTok, nextToken, functionalScope);
 
   if (curTok.type as string !== 'colon')
-    ParserError(`Expect token of type colon before the output type of the function declaration: \`${result.name}\``);
+    ParserError(`Expect token of type \`colon\` before the output type of the function declaration: \`${result.name}\``);
 
   curTok = nextToken();
   if (curTok.type as string !== 'builtin-type')
@@ -35,7 +42,13 @@ export function parseFunctionDeclaration(
   if (curTok.type as string === 'arrow') {
     /* Single-line function declaration expression */
     curTok = nextToken();
-    parseExpr(result);
+
+    ParserErrorIf(curTok.type === 'newline', `Expect function \`${result.name}\` to contain expression that returns type \`${result.outputType}\``)
+
+    while (curTok.type !== 'newline') {
+      result.body.push(parseExpr(undefined, { scope: functionalScope, ast: result.body }));
+      curTok = nextToken();
+    }
 
     return result;
   } else if (curTok.type as string === 'keyword') {
@@ -53,6 +66,7 @@ export function parseFunctionDeclaration(
 export function parseFunctionArguments(
   curTok: T.Token,
   nextToken: () => T.Token,
+  scope: T.Scope,
 ): [T.Token, Array<T.Argument>] {
   curTok = nextToken();
   const result: Array<T.Argument> = [];
@@ -72,7 +86,15 @@ export function parseFunctionArguments(
       argument.type = curTok.value;
       curTok = nextToken();
 
+      // Setting variable infos from arguments
+      // TODO: Handle duplicate argument name case
       result.push(argument);
+      scope.variables.set(argument.ident, {
+        name: argument.ident,
+        isConst: true,
+        type: argument.type,
+      });
+
       if (curTok.type as string === 'comma') {
         curTok = nextToken();
         continue;
