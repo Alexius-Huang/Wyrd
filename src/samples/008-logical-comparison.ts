@@ -1,13 +1,15 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST, Operator as Op, ParseOptions, Variable } from '../types';
 
 const program = `\
-3 + 1 > 2
+isTrue = 3 + 1 > 2
 5 * 3 < 15 - 6 * 8
 11 >= 7 + 7 or 3 <= (6 + 2) / 3
 8 / (4 * 2) > 3 and not 1 + 2 * 3 == 7 or a + b / c * d != w - x * y
 `;
 
 const tokens: Array<Token> = [
+  { type: 'ident', value: 'isTrue' },
+  { type: 'eq', value: '=' },
   { type: 'number', value: '3' },
   { type: 'plus', value: '+' },
   { type: 'number', value: '1' },
@@ -79,126 +81,157 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'BinaryOpExpr',
-    operator: Op.Gt,
-    expr1: {
+    type: 'AssignmentExpr',
+    expr1: { type: 'IdentLiteral', value: 'isTrue', returnType: 'Bool' },
+    expr2: {
       type: 'BinaryOpExpr',
-      operator: Op.Plus,
-      expr1: { type: 'NumberLiteral', value: '3' },
-      expr2: { type: 'NumberLiteral', value: '1' }
-    },
-    expr2: { type: 'NumberLiteral', value: '2' }
+      operator: Op.Gt,
+      returnType: 'Bool',
+      expr1: {
+        type: 'BinaryOpExpr',
+        operator: Op.Plus,
+        returnType: 'Num',
+        expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
+      },
+      expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' }
+    },  
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Lt,
+    returnType: 'Bool',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
-      expr1: { type: 'NumberLiteral', value: '5' },
-      expr2: { type: 'NumberLiteral', value: '3' }
+      returnType: 'Num',
+      expr1: { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+      expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
-      expr1: { type: 'NumberLiteral', value: '15' },
+      returnType: 'Num',
+      expr1: { type: 'NumberLiteral', value: '15', returnType: 'Num' },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
-        expr1: { type: 'NumberLiteral', value: '6' },
-        expr2: { type: 'NumberLiteral', value: '8' },
+        returnType: 'Num',
+        expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '8', returnType: 'Num' },
       },
     },
   },
   {
     type: 'OrExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.GtEq,
-      expr1: { type: 'NumberLiteral', value: '11' },
+      returnType: 'Bool',
+      expr1: { type: 'NumberLiteral', value: '11', returnType: 'Num' },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        expr1: { type: 'NumberLiteral', value: '7' },
-        expr2: { type: 'NumberLiteral', value: '7' },
+        returnType: 'Num',
+        expr1: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
       },
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.LtEq,
-      expr1: { type: 'NumberLiteral', value: '3' },
+      returnType: 'Bool',
+      expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
+        returnType: 'Num',
         expr1: {
           type: 'PrioritizedExpr',
+          returnType: 'Num',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            expr1: { type: 'NumberLiteral', value: '6' },
-            expr2: { type: 'NumberLiteral', value: '2' },
+            returnType: 'Num',
+            expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
+            expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
           },
         },
-        expr2: { type: 'NumberLiteral', value: '3' }, 
+        expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }, 
       },
     },
   },
   {
     type: 'OrExpr',
+    returnType: 'Bool',
     expr1: {
       type: 'AndExpr',
+      returnType: 'Bool',
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Gt,
+        returnType: 'Bool',
         expr1: {
           type: 'BinaryOpExpr',
           operator: Op.Slash,
-          expr1: { type: 'NumberLiteral', value: '8' },
+          returnType: 'Num',
+          expr1: { type: 'NumberLiteral', value: '8', returnType: 'Num' },
           expr2: {
             type: 'PrioritizedExpr',
+            returnType: 'Num',
             expr: {
               type: 'BinaryOpExpr',
               operator: Op.Asterisk,
-              expr1: { type: 'NumberLiteral', value: '4' },
-              expr2: { type: 'NumberLiteral', value: '2' },
+              returnType: 'Num',
+              expr1: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+              expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
             },
           },
         },
-        expr2: { type: 'NumberLiteral', value: '3' }
+        expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
       },
       expr2: {
         type: 'NotExpr',
+        returnType: 'Bool',
         expr: {
           type: 'BinaryOpExpr',
           operator: Op.EqEq,
+          returnType: 'Bool',
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            expr1: { type: 'NumberLiteral', value: '1' },
+            returnType: 'Num',
+            expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
             expr2: {
               type: 'BinaryOpExpr',
               operator: Op.Asterisk,
-              expr1: { type: 'NumberLiteral', value: '2' },
-              expr2: { type: 'NumberLiteral', value: '3' }
+              returnType: 'Num',
+              expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+              expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
             },
           },
-          expr2: { type: 'NumberLiteral', value: '7' }
+          expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' }
         },
       },
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.BangEq,
+      returnType: 'Bool',
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: { type: 'IdentLiteral', value: 'a' },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
+          returnType: 'Num',
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Slash,
+            returnType: 'Num',
             expr1: { type: 'IdentLiteral', value: 'b' },
             expr2: { type: 'IdentLiteral', value: 'c' },
           },
@@ -208,10 +241,12 @@ const ast: AST = [
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Dash,
+        returnType: 'Num',
         expr1: { type: 'IdentLiteral', value: 'w' },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
+          returnType: 'Num',
           expr1: { type: 'IdentLiteral', value: 'x' },
           expr2: { type: 'IdentLiteral', value: 'y' },
         },
@@ -221,15 +256,28 @@ const ast: AST = [
 ];
 
 const compiled = `\
-3 + 1 > 2;
+const isTrue = 3 + 1 > 2;
 5 * 3 < 15 - (6 * 8);
 11 >= 7 + 7 || 3 <= (6 + 2) / 3;
 8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
 `;
+
+const parseOptions: ParseOptions = {
+  variables: new Map<string, Variable>([
+    ['a', { name: 'a', isConst: true, type: 'Num' }],
+    ['b', { name: 'b', isConst: true, type: 'Num' }],
+    ['c', { name: 'c', isConst: true, type: 'Num' }],
+    ['d', { name: 'd', isConst: true, type: 'Num' }],
+    ['w', { name: 'w', isConst: true, type: 'Num' }],
+    ['x', { name: 'x', isConst: true, type: 'Num' }],
+    ['y', { name: 'y', isConst: true, type: 'Num' }],
+  ]),
+};
 
 export {
   program,
   tokens,
   ast,
   compiled,
+  parseOptions,
 };

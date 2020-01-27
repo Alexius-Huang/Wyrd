@@ -117,14 +117,9 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        expr1: {
-          type: 'IdentLiteral',
-          value: 'x'
-        },
-        expr2: {
-          type: 'IdentLiteral',
-          value: 'y'
-        }
+        returnType: 'Num',
+        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
+        expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' }
       },
     ],
   },
@@ -134,10 +129,7 @@ const ast: AST = [
     arguments: [],
     outputType: 'Num',
     body: [
-      {
-        type: 'NumberLiteral',
-        value: '666'
-      },
+      { type: 'NumberLiteral', value: '666', returnType: 'Num' },
     ],
   },
   {
@@ -154,34 +146,27 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
+        returnType: 'Num',
         expr1: {
           type: 'PrioritizedExpr',
+          returnType: 'Num',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            expr1: {
-              type: 'IdentLiteral',
-              value: 'x'
-            },
-            expr2: {
-              type: 'IdentLiteral',
-              value: 'y'
-            },
+            returnType: 'Num',
+            expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
+            expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
           },
         },
         expr2: {
           type: 'PrioritizedExpr',
+          returnType: 'Num',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Slash,
-            expr1: {
-              type: 'IdentLiteral',
-              value: 'z'
-            },
-            expr2: {
-              type: 'IdentLiteral',
-              value: 'w'
-            }
+            returnType: 'Num',
+            expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
+            expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
           },
         },
       },
@@ -201,34 +186,26 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        expr1: {
-          type: 'IdentLiteral',
-          value: 'x'
-        },
+        returnType: 'Num',
+        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
-          expr1: {
-            type: 'IdentLiteral',
-            value: 'y'
-          },
+          returnType: 'Num',
+          expr1: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
           expr2: {
             type: 'PrioritizedExpr',
+            returnType: 'Num',
             expr: {
               type: 'BinaryOpExpr',
               operator: Op.Slash,
-              expr1: {
-                type: 'IdentLiteral',
-                value: 'z'
-              },
-              expr2: {
-                type: 'IdentLiteral',
-                value: 'w'
-              }
-            }
-          }
+              returnType: 'Num',
+              expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
+              expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
+            },
+          },
         },
-      }
+      },
     ],
   },
 ];

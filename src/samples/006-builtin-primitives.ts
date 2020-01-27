@@ -29,23 +29,23 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'foo' },
-    expr2: { type: 'NumberLiteral', value: '123' }
+    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
+    expr2: { type: 'NumberLiteral', value: '123', returnType: 'Num' }
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'bar' },
-    expr2: { type: 'StringLiteral', value: 'Hello world' }
+    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Str', },
+    expr2: { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' }
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'baz' },
-    expr2: { type: 'BooleanLiteral', value: 'True' }
+    expr1: { type: 'IdentLiteral', value: 'baz', returnType: 'Bool' },
+    expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' }
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'nothing' },
-    expr2: { type: 'NullLiteral', value: 'Null' }
+    expr1: { type: 'IdentLiteral', value: 'nothing', returnType: 'Null' },
+    expr2: { type: 'NullLiteral', value: 'Null', returnType: 'Null' }
   },
 ];
 

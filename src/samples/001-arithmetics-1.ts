@@ -65,153 +65,191 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
+    returnType: 'Num',
     expr1: {
       type: 'NumberLiteral',
-      value: '1'
+      value: '1',
+      returnType: 'Num',
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
+      returnType: 'Num',
       expr1: {
         type: 'NumberLiteral',
-        value: '2'
+        value: '2',
+        returnType: 'Num',
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '3'
+        value: '3',
+        returnType: 'Num',
       },
     },
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
+    returnType: 'Num',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
+      returnType: 'Num',
       expr1: {
         type: 'NumberLiteral',
-        value: '1'
+        value: '1',
+        returnType: 'Num',
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '2'
+        value: '2',
+        returnType: 'Num',
       },
     },
     expr2: {
       type: 'NumberLiteral',
-      value: '3'
+      value: '3',
+      returnType: 'Num',
     },
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
+    returnType: 'Num',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
+      returnType: 'Num',
       expr1: {
         type: 'NumberLiteral',
-        value: '1'
+        value: '1',
+        returnType: 'Num',
       },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
-          value: '2'
+          value: '2',
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
-          value: '3'
+          value: '3',
+          returnType: 'Num',
         },
       }
     },
     expr2: {
       type: 'NumberLiteral',
-      value: '4'
+      value: '4',
+      returnType: 'Num',
     },
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
+    returnType: 'Num',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
+      returnType: 'Num',
       expr1: {
         type: 'NumberLiteral',
-        value: '1'
+        value: '1',
+        returnType: 'Num',
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '2'
+        value: '2',
+        returnType: 'Num',
       },
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
+      returnType: 'Num',
       expr1: {
         type: 'NumberLiteral',
-        value: '3'
+        value: '3',
+        returnType: 'Num',
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '4'
+        value: '4',
+        returnType: 'Num',
       },
     },
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
+    returnType: 'Num',
     expr1: {
       type: 'NumberLiteral',
-      value: '1'
+      value: '1',
+      returnType: 'Num',
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
+      returnType: 'Num',
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
-          value: '2'
+          value: '2',
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
-          value: '3'
+          value: '3',
+          returnType: 'Num',
         },
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '4'
+        value: '4',
+        returnType: 'Num',
       },
     }
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
+    returnType: 'Num',
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
+      returnType: 'Num',
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
-          value: '1'
+          value: '1',
+          returnType: 'Num',
         },
         expr2: {
           type: 'NumberLiteral',
-          value: '2'
+          value: '2',
+          returnType: 'Num',
         },  
       },
       expr2: {
         type: 'NumberLiteral',
-        value: '3'
+        value: '3',
+        returnType: 'Num',
       },
     },
     expr2: {
       type: 'NumberLiteral',
-      value: '4'
+      value: '4',
+      returnType: 'Num',
     },
   },
 ];

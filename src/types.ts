@@ -44,6 +44,29 @@ export const enum Operator {
   // Underscore = '_'
 }
 
+export type Variable = {
+  name: string;
+  isConst: boolean;
+  type: string;
+};
+
+export type ParseOptions = {
+  ast?: AST;
+  variables?: Map<string, Variable>;
+};
+
+/* Builtin unoverridable operator actions */
+export type OPActionPair = { returnType: string };
+export type OPAction = {
+  symbol: string; // symbol of the operator
+  actionPairs: Map<Symbol, OPActionPair>;
+};
+
+export type Scope = {
+  parentScope: null | Scope;
+  variables: Map<string, Variable>;
+};
+
 export type AST = Array<Expr>;
 
 export type Expr =
@@ -65,26 +88,31 @@ export type Expr =
 export type NumberLiteral = {
   type: 'NumberLiteral';
   value: string;
+  returnType: 'Num';
 };
 
 export type StringLiteral = {
   type: 'StringLiteral';
   value: string;
-}
+  returnType: 'Str';
+};
 
 export type BooleanLiteral = {
   type: 'BooleanLiteral';
   value: 'True' | 'False';
-}
+  returnType: 'Bool';
+};
 
 export type NullLiteral = {
   type: 'NullLiteral';
   value: 'Null';
-}
+  returnType: 'Null';
+};
 
 export type IdentLiteral = {
   type: 'IdentLiteral';
   value: string;
+  returnType?: string;
 };
 
 export type AssignmentExpr = {
@@ -96,6 +124,7 @@ export type AssignmentExpr = {
 export type PrioritizedExpr = {
   type: 'PrioritizedExpr';
   expr?: Expr;
+  returnType?: string;
 };
 
 export type ConditionalExpr = {
@@ -103,6 +132,7 @@ export type ConditionalExpr = {
   condition?: Expr;
   expr1?: Expr;  // Condition is Truethy
   expr2?: Expr; // Condition is Falsey
+  returnType: string;
 }
 
 export type BinaryOpExpr = {
@@ -110,23 +140,27 @@ export type BinaryOpExpr = {
   operator: Operator;
   expr1: Expr;
   expr2?: Expr;
+  returnType?: string;
 };
 
 export type NotExpr = {
   type: 'NotExpr';
   expr?: Expr;
+  returnType: 'Bool';
 }
 
 export type OrExpr = {
   type: 'OrExpr';
   expr1: Expr;
   expr2?: Expr;
+  returnType: 'Bool';
 }
 
 export type AndExpr = {
   type: 'AndExpr';
   expr1: Expr;
   expr2?: Expr;
+  returnType: 'Bool';
 }
 
 export type Argument = { ident: string; type: string };

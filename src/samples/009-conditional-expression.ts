@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST, Operator as Op, ParseOptions, Variable } from '../types';
 
 const program = `\
 if age < 18 => "youngster"
@@ -198,166 +198,194 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'ConditionalExpr',
+    returnType: 'Str',
     condition: {
       type: 'BinaryOpExpr',
       operator: Op.Lt,
-      expr1: { type: 'IdentLiteral', value: 'age' },
-      expr2: { type: 'NumberLiteral', value: '18' }
+      returnType: 'Bool',
+      expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+      expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
     },
-    expr1: { type: 'StringLiteral', value: 'youngster' },
-    expr2: { type: 'StringLiteral', value: 'adult' },
+    expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
+    expr2: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'example1' },
+    expr1: { type: 'IdentLiteral', value: 'example1', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
+      returnType: 'Str',
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18' }
+        returnType: 'Bool',
+        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster' },
-      expr2: { type: 'StringLiteral', value: 'adult' },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
+      expr2: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
     },
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'example2' },
+    expr1: { type: 'IdentLiteral', value: 'example2', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
+      returnType: 'Str',
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18' }
+        returnType: 'Bool',
+        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster' },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
+        returnType: 'Str',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
-          expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60' }
+          returnType: 'Bool',
+          expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult' },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
+          returnType: 'Str',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
-            expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100' }
+            returnType: 'Bool',
+            expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder' },
-          expr2: { type: 'StringLiteral', value: 'centenarian' },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'example3' },
+    expr1: { type: 'IdentLiteral', value: 'example3', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
+      returnType: 'Str',
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18' }
+        returnType: 'Bool',
+        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster' },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
+        returnType: 'Str',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
-          expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60' }
+          returnType: 'Bool',
+          expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult' },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
+          returnType: 'Str',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
-            expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100' }
+            returnType: 'Bool',
+            expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder' },
-          expr2: { type: 'StringLiteral', value: 'centenarian' },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'mixed1' },
+    expr1: { type: 'IdentLiteral', value: 'mixed1', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
+      returnType: 'Str',
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18' }
+        returnType: 'Bool',
+        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster' },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
+        returnType: 'Str',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
-          expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60' }
+          returnType: 'Bool',
+          expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult' },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
+          returnType: 'Str',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
-            expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100' }
+            returnType: 'Bool',
+            expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder' },
-          expr2: { type: 'StringLiteral', value: 'centenarian' },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
   },
   {
     type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'mixed2' },
+    expr1: { type: 'IdentLiteral', value: 'mixed2', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
+      returnType: 'Str',
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        expr1: { type: 'IdentLiteral', value: 'age' },
-        expr2: { type: 'NumberLiteral', value: '18' }
+        returnType: 'Bool',
+        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
       },
-      expr1: { type: 'StringLiteral', value: 'youngster' },
+      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
       expr2: {
         type: 'ConditionalExpr',
+        returnType: 'Str',
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
-          expr1: { type: 'IdentLiteral', value: 'age' },
-          expr2: { type: 'NumberLiteral', value: '60' }
+          returnType: 'Bool',
+          expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
         },
-        expr1: { type: 'StringLiteral', value: 'adult' },
+        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
         expr2: {
           type: 'ConditionalExpr',
+          returnType: 'Str',
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
-            expr1: { type: 'IdentLiteral', value: 'age' },
-            expr2: { type: 'NumberLiteral', value: '100' }
+            returnType: 'Bool',
+            expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
+            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
           },
-          expr1: { type: 'StringLiteral', value: 'elder' },
-          expr2: { type: 'StringLiteral', value: 'centenarian' },
+          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
+          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
         },
       },
     },
@@ -373,9 +401,16 @@ const mixed1 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 `;
 
+const parseOptions: ParseOptions = {
+  variables: new Map<string, Variable>([
+    ['age', { name: 'age', isConst: true, type: 'Num' }],
+  ]),
+};
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  parseOptions,
 };

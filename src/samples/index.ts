@@ -1,4 +1,4 @@
-import { Token, AST } from '../types';
+import { Token, AST, ParseOptions } from '../types';
 
 const filenames = [
   './001-arithmetics-1',
@@ -17,6 +17,8 @@ type Sample = {
   tokens: Array<Token>;
   ast: AST;
   compiled: string;
+
+  parseOptions?: ParseOptions;
 };
 
 export const samples = filenames.map(fn => import(fn) as Promise<Sample>);

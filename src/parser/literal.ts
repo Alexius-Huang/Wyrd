@@ -1,22 +1,33 @@
 import * as T from '../types';
+import { getOPActionDetail } from './helper';
 
 export function parseLiteral(
   curTok: T.Token,
   nextToken: () => T.Token,
+  scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
-  const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value };
+  const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value, returnType: 'Unknown' };
+  const varInfo = scope.variables.get(result.value);
+  if (varInfo) {
+    result.returnType = varInfo.type;
+  }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
+    const opAction = getOPActionDetail(
+      prevExpr.operator,
+      /* TODO: Remove this annotation if complete all expressions have returnType */
+      (prevExpr.expr1 as T.NumberLiteral).returnType,
+      result.returnType as string,
+    );
+
+    prevExpr.returnType = opAction.returnType;
     return prevExpr;
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
+    prevExpr.returnType = result.returnType;
   }
   return result;
 }
@@ -26,18 +37,27 @@ export function parseNumberLiteral(
   nextToken: () => T.Token,
   prevExpr?: T.Expr
 ): T.Expr {
-  const result: T.NumberLiteral = { type: 'NumberLiteral', value: curTok.value };
+  const result: T.NumberLiteral = {
+    type: 'NumberLiteral',
+    value: curTok.value,
+    returnType: 'Num',
+  };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
+    const opAction = getOPActionDetail(
+      prevExpr.operator,
+      /* TODO: Remove this annotation if complete all expressions have returnType */
+      (prevExpr.expr1 as T.NumberLiteral).returnType,
+      result.returnType,
+    );
+
+    prevExpr.returnType = opAction.returnType;
     return prevExpr;
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
+    prevExpr.returnType = result.returnType;
   }
   return result;
 }
@@ -47,7 +67,11 @@ export function parseStringLiteral(
   nextToken: () => T.Token,
   prevExpr?: T.Expr
 ): T.Expr {
-  const result: T.StringLiteral = { type: 'StringLiteral', value: curTok.value };
+  const result: T.StringLiteral = {
+    type: 'StringLiteral',
+    value: curTok.value,
+    returnType: 'Str',
+  };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
@@ -55,10 +79,7 @@ export function parseStringLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
+    prevExpr.returnType = result.returnType;
   }
   return result;
 }
@@ -70,7 +91,8 @@ export function parseBooleanLiteral(
 ): T.Expr {
   const result: T.BooleanLiteral = {
     type: 'BooleanLiteral',
-    value: curTok.value as 'True' | 'False'
+    value: curTok.value as 'True' | 'False',
+    returnType: 'Bool',
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -79,10 +101,7 @@ export function parseBooleanLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
+    prevExpr.returnType = result.returnType;
   }
   return result;
 }
@@ -92,7 +111,11 @@ export function parseNullLiteral(
   nextToken: () => T.Token,
   prevExpr?: T.Expr
 ): T.Expr {
-  const result: T.NullLiteral = { type: 'NullLiteral', value: 'Null' };
+  const result: T.NullLiteral = {
+    type: 'NullLiteral',
+    value: 'Null',
+    returnType: 'Null',
+  };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
@@ -100,10 +123,7 @@ export function parseNullLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
+    prevExpr.returnType = result.returnType;
   }
   return result;
 }

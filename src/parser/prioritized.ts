@@ -1,17 +1,19 @@
 import * as T from '../types';
 import { ParserError } from './error';
+import { getOPActionDetail } from './helper';
 
 export function parsePrioritizedExpr(
   curTok: T.Token,
   nextToken: () => T.Token,
-  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
   curTok = nextToken(); // Skip the lparen token
   let result: T.PrioritizedExpr = { type: 'PrioritizedExpr' };
 
   while (true) {
-    result.expr = parseExpr(result);
+    result.expr = parseExpr(result, { scope });
     curTok = nextToken();
     if (curTok.type === 'rparen') break;
   }
@@ -19,11 +21,13 @@ export function parsePrioritizedExpr(
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
       prevExpr.expr2 = result;
-      return prevExpr;
-    }
+      const opAction = getOPActionDetail(
+        prevExpr.operator,
+        prevExpr.expr2.returnType as string,
+        result.returnType as string
+      );
 
-    if (prevExpr.type === 'FunctionDeclaration') {
-      prevExpr.body.push(result);
+      prevExpr.returnType = opAction.returnType;
       return prevExpr;
     }
 
@@ -35,5 +39,7 @@ export function parsePrioritizedExpr(
     ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
   }
 
+  // TODO: Remove this if every expression support returnType
+  result.returnType = (result.expr as T.BinaryOpExpr).returnType;
   return result;
 }
