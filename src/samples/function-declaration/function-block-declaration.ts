@@ -160,21 +160,13 @@ const ast: AST = [
 
 const compiled = `\
 function addition(x, y) {
-  if (typeof x === 'number' && typeof y === 'number') {
-    return x + y;
-  }
-
-  throw new Error('Wrong Parameter Type in function \`addition\`');
+  return x + y;
 }
 
 function complexArithmetic(w, x, y, z) {
-  if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    const a = x + (y * z);
-    const b = w - (2 / a) + 1;
-    return b;
-  }
-
-  throw new Error('Wrong Parameter Type in function \`complexArithmetic\`');
+  const a = x + (y * z);
+  const b = w - (2 / a) + 1;
+  return b;
 }
 
 `;
