@@ -53,7 +53,7 @@ export function parseFunctionDeclaration(
     return result;
   } else if (curTok.type as string === 'keyword') {
     if (curTok.value === 'do') {
-      parseBlock(curTok, nextToken, parseExpr, result);
+      parseBlock(curTok, nextToken, parseExpr, functionalScope, result);
       return result;
     }
 
@@ -115,13 +115,13 @@ export function parseFunctionArguments(
 export function parseBlock(
   curTok: T.Token,
   nextToken: () => T.Token,
-  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
   prevExpr: T.Expr,
 ): [T.Token, T.Expr] {
   curTok = nextToken(); // Skip keyword `do`
 
-  if (curTok.type !== 'newline')
-    ParserError(`Invalid to contain any expressions after the \`do\` keyword`);
+  ParserErrorIf(curTok.type !== 'newline', 'Invalid to contain any expressions after the `do` keyword');
   curTok = nextToken(); // Skip newline
 
   if (prevExpr.type === 'FunctionDeclaration') {
@@ -131,7 +131,7 @@ export function parseBlock(
         continue;
       }
 
-      parseExpr(prevExpr);
+      prevExpr.body.push(parseExpr(undefined, { scope, ast: prevExpr.body }));
       curTok = nextToken();
     }
 

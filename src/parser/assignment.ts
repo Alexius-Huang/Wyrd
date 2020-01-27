@@ -4,7 +4,7 @@ import { ParserError, ParserErrorIf } from './error';
 export function parseAssignmentExpr(
   curTok: T.Token,
   nextToken: () => T.Token,
-  parseExpr: (prevExpr?: T.Expr) => T.Expr,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr: T.Expr,
 ): [T.Token, T.Expr] {
@@ -29,7 +29,7 @@ export function parseAssignmentExpr(
     };
     scope.variables.set(varName, variableInfo);
 
-    result.expr2 = parseExpr();
+    result.expr2 = parseExpr(undefined, { scope });
 
     // TODO: Remove this when all expressions support returnType
     prevExpr.returnType = (result.expr2 as T.NumberLiteral).returnType;

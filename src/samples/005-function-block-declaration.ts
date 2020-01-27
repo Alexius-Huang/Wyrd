@@ -34,8 +34,8 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'keyword', value: 'end' },
   { type: 'newline', value: '\n' },
-
   { type: 'newline', value: '\n' },
+
   { type: 'keyword', value: 'def' },
   { type: 'ident', value: 'complexArithmetic' },
   { type: 'lparen', value: '(' },
@@ -96,14 +96,9 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        expr1: {
-          type: 'IdentLiteral',
-          value: 'x'
-        },
-        expr2: {
-          type: 'IdentLiteral',
-          value: 'y'
-        }
+        returnType: 'Num',
+        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
+        expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' }
       },
     ],
   },
@@ -120,43 +115,45 @@ const ast: AST = [
     body: [
       {
         type: 'AssignmentExpr',
-        expr1: { type: 'IdentLiteral', value: 'a' },
+        expr1: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          expr1: { type: 'IdentLiteral', value: 'x' },
+          returnType: 'Num',
+          expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
           expr2: {
             type: 'BinaryOpExpr',
             operator: Op.Asterisk,
-            expr1: { type: 'IdentLiteral', value: 'y' },
-            expr2: { type: 'IdentLiteral', value: 'z' }
+            returnType: 'Num',
+            expr1: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
+            expr2: { type: 'IdentLiteral', value: 'z', returnType: 'Num' }
           },
         },
       },
       {
         type: 'AssignmentExpr',
-        expr1: { type: 'IdentLiteral', value: 'b' },
+        expr1: { type: 'IdentLiteral', value: 'b', returnType: 'Num' },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
+          returnType: 'Num',
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Dash,
-            expr1: { type: 'IdentLiteral', value: 'w' },
+            returnType: 'Num',
+            expr1: { type: 'IdentLiteral', value: 'w', returnType: 'Num' },
             expr2: {
               type: 'BinaryOpExpr',
               operator: Op.Slash,
+              returnType: 'Num',
               expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-              expr2: { type: 'IdentLiteral', value: 'a' },
+              expr2: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
             },
           },
           expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
         },
       },
-      {
-        type: 'IdentLiteral',
-        value: 'b'
-      },
+      { type: 'IdentLiteral', value: 'b', returnType: 'Num' },
     ],
   },
 ];

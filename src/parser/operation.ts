@@ -76,19 +76,12 @@ export function parseBinaryOpExpr(
     return [curTok, prevExpr];
   }
 
-  // console.log('----------------------');
-  // console.log(curTok);
   curTok = nextToken();
   const result: T.BinaryOpExpr = {
     type: 'BinaryOpExpr',
     operator,
     expr1: prevExpr,
   };
-
-  // console.log(curTok);
-  // console.log(prevExpr);
-  // console.log(result);
-  // console.log(scope);
 
   return [curTok, parseExpr(result, { scope }) as T.BinaryOpExpr];
 }

@@ -11,7 +11,6 @@ export function parsePrioritizedExpr(
 ): T.Expr {
   curTok = nextToken(); // Skip the lparen token
   let result: T.PrioritizedExpr = { type: 'PrioritizedExpr' };
-  // console.log(prevExpr, scope);
 
   while (true) {
     result.expr = parseExpr(result, { scope });
