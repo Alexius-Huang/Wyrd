@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST, Operator as Op } from '../../types';
 
 const program = `\
 foo = 1
