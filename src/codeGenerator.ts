@@ -104,17 +104,9 @@ ${codeGenFunctionBody(body, [], 2)}
 }`;
     }
 
-    const argumentGuard = args
-      .map(({ ident, type }) => `typeof ${ident} === '${codeGenBuiltinType(type)}'`)
-      .join(' && ');
-
     return `\
 function ${name}(${codeGenArguments(args)}) {
-  if (${argumentGuard}) {
-${codeGenFunctionBody(body, args, 4)}
-  }
-
-  throw new Error('Wrong Parameter Type in function \`${name}\`');
+${codeGenFunctionBody(body, args, 2)}
 }`;
   }
 

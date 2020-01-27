@@ -212,11 +212,7 @@ const ast: AST = [
 
 const compiled = `\
 function addition(x, y) {
-  if (typeof x === 'number' && typeof y === 'number') {
-    return x + y;
-  }
-
-  throw new Error('Wrong Parameter Type in function \`addition\`');
+  return x + y;
 }
 
 function devilNumber() {
@@ -224,19 +220,11 @@ function devilNumber() {
 }
 
 function complexArithmetic(w, x, y, z) {
-  if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    return (x + y) * (z / w);
-  }
-
-  throw new Error('Wrong Parameter Type in function \`complexArithmetic\`');
+  return (x + y) * (z / w);
 }
 
 function complexArithmetic2(w, x, y, z) {
-  if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    return x + (y * (z / w));
-  }
-
-  throw new Error('Wrong Parameter Type in function \`complexArithmetic2\`');
+  return x + (y * (z / w));
 }
 
 `;
