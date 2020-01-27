@@ -50,11 +50,12 @@ export type Variable = {
   type: string;
 };
 
+export type FunctionPatternInfo = { returnType: string };
 export type FunctionPattern = {
   name: string;
-  patterns: Set<Symbol>;
+  patterns: Map<Symbol, FunctionPatternInfo>;
   // For instance:
-  // Symbol.for('Num.Str.Num') means two parameter with first argument as Num and second argument as Str and return as Num
+  // Symbol.for('Num.Str') means two parameter with first argument as Num and second argument as Str
 };
 
 export type ParseOptions = {

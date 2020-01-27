@@ -82,7 +82,7 @@ export function parse(
     }
 
     if (curTok.type === 'ident') {
-      return parseLiteral(curTok, nextToken, scope, prevExpr);
+      return parseLiteral(curTok, nextToken, parseExpr, scope, prevExpr);
     }
 
     if (curTok.type === 'lparen') {

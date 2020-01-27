@@ -91,9 +91,33 @@ complex(1 + (2 * 3), 4 / 5 - 6);
 
 const parseOptions: ParseOptions = {
   functions: new Map<string, FunctionPattern>([
-    ['print', { name: 'print', patterns: new Set([Symbol.for('Str.Null')]) }],
-    ['addition', { name: 'addition', patterns: new Set([Symbol.for('Num.Num.Num')]) }],
-    ['complex', { name: 'complex', patterns: new Set([Symbol.for('Num.Num.Num')]) }],
+    [
+      'print',
+      {
+        name: 'print',
+        patterns: new Map([
+          [Symbol.for('Str'), { returnType: 'Null' }]
+        ]),
+      }
+    ],
+    [
+      'addition',
+      {
+        name: 'addition',
+        patterns: new Map([
+          [Symbol.for('Num.Num'), { returnType: 'Num' }]
+        ]),
+      }
+    ],
+    [
+      'complex',
+      {
+        name: 'complex',
+        patterns: new Map([
+          [Symbol.for('Num.Num'), { returnType: 'Num' }]
+        ]),
+      }
+    ],
   ]),
 };
 

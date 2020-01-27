@@ -1,16 +1,22 @@
 import * as T from '../types';
 import { getOPActionDetail } from './helper';
+import { parseFunctionInvokeExpr } from './function-invocation';
 
 export function parseLiteral(
   curTok: T.Token,
   nextToken: () => T.Token,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
   const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value, returnType: 'Unknown' };
-  const varInfo = scope.variables.get(result.value);
-  if (varInfo) {
+  const { variables, functions } = scope;
+
+  if (variables.has(result.value)) {
+    const varInfo = variables.get(result.value) as T.Variable;
     result.returnType = varInfo.type;
+  } else if (functions.has(result.value)) {
+    return parseFunctionInvokeExpr(curTok, nextToken, parseExpr, scope, prevExpr);
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
