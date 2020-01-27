@@ -65,15 +65,28 @@ const ast: AST = [
           expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' },  
         },
       },
+      {
+        type: 'BinaryOpExpr',
+        operator: Op.Dash,
+        returnType: 'Num',
+        expr1: {
+          type: 'BinaryOpExpr',
+          operator: Op.Slash,
+          returnType: 'Num',
+          expr1: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+          expr2: { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+        },
+        expr2: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
+      },
     ],
     returnType: 'Num',
   },
 ];
 
 const compiled = `\
-print("Hello");
+print('Hello');
 addition(2, 3);
-complex(1 + (2 * 3), (4 / 5) - 6);
+complex(1 + (2 * 3), 4 / 5 - 6);
 `;
 
 const parseOptions: ParseOptions = {

@@ -33,6 +33,8 @@ export function generateCode(ast: T.AST): string {
         return codeGenPrioritizedExpr(expr);
       case 'FunctionDeclaration':
         return codeGenFunctionDeclaration(expr);
+      case 'FunctionInvokeExpr':
+        return codeGenFunctionInvokeExpr(expr);
       case 'ConditionalExpr':
         return codeGenConditionalExpr(expr);
       default:
@@ -119,6 +121,11 @@ ${codeGenFunctionBody(body, args, 2)}
     const lastIndex = result.length - 1;
     result[lastIndex] = `${result[lastIndex].slice(0, indent)}return ${result[lastIndex].slice(indent)}`;
     return result.join('\n');
+  }
+
+  function codeGenFunctionInvokeExpr(expr: T.FunctionInvokeExpr) {
+    const { name, params } = expr;
+    return `${name}(${params.map(genExpr).join(', ')})`;
   }
 
   function codeGenConditionalExpr(expr: T.ConditionalExpr) {
