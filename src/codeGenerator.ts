@@ -88,12 +88,6 @@ export function generateCode(ast: T.AST): string {
     return '()';  
   }
 
-  function codeGenBuiltinType(type: string): string {
-    if (type === 'Num') return 'number';
-
-    CodeGenerateError(`Unhandled builtin-type \`${type}\``)
-  }
-
   function codeGenFunctionDeclaration(expr: T.FunctionDeclaration) {
     const { name, arguments: args, body } = expr;
 
