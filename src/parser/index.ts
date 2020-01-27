@@ -22,6 +22,7 @@ export function parse(
   const globalScope: T.Scope = {
     parentScope: null,
     variables: parseOptions?.variables ?? (new Map<string, T.Variable>()),
+    functions: parseOptions?.functions ?? (new Map<string, T.FunctionPattern>()),
   };
 
   let index = 0;
