@@ -172,11 +172,7 @@ def complexArithmetic(w: Num, x: Num, y: Num, z: Num): Num => (x + y) * (z / w)
 **Compiled Wyrd Code**
 ```js
 function addition(x, y) {
-  if (typeof x === 'number' && typeof y === 'number') {
-    return x + y;
-  }
-
-  throw new Error('Wrong Parameter Type in function \`addition\`');
+  return x + y;
 }
 
 function devilNumber() {
@@ -184,11 +180,7 @@ function devilNumber() {
 }
 
 function complexArithmetic(w, x, y, z) {
-  if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    return (x + y) * (z / w);
-  }
-
-  throw new Error('Wrong Parameter Type in function \`complexArithmetic\`');
+  return (x + y) * (z / w);
 }
 ```
 
@@ -209,21 +201,13 @@ end
 **Compiled Wyrd Code**
 ```js
 function addition(x, y) {
-  if (typeof x === 'number' && typeof y === 'number') {
-    return x + y;
-  }
-
-  throw new Error('Wrong Parameter Type in function \`addition\`');
+  return x + y;
 }
 
 function complexArithmetic(w, x, y, z) {
-  if (typeof w === 'number' && typeof x === 'number' && typeof y === 'number' && typeof z === 'number') {
-    const a = x + (y * z);
-    const b = w - (2 / a) + 1;
-    return b;
-  }
-
-  throw new Error('Wrong Parameter Type in function \`complexArithmetic\`');
+  const a = x + (y * z);
+  const b = w - (2 / a) + 1;
+  return b;
 }
 ```
 
