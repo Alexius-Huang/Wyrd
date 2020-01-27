@@ -90,11 +90,6 @@ export function parse(
 
     if (curTok.type === 'eq') {
       let resultExpr: T.Expr;
-      if (prevExpr?.type === 'FunctionDeclaration') {
-        [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, scope, prevExpr);
-        return resultExpr;
-      }
-
       [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, scope, ast.pop() as T.Expr);
       return resultExpr;
     }
@@ -105,11 +100,6 @@ export function parse(
         [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr as T.Expr);
         return resultExpr;
       }
-
-      // if (prevExpr?.type === 'FunctionDeclaration') {
-      //   [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr);
-      //   return resultExpr;
-      // }
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');

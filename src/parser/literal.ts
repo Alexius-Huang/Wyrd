@@ -29,10 +29,6 @@ export function parseLiteral(
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
   }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
-  }
   return result;
 }
 
@@ -63,10 +59,6 @@ export function parseNumberLiteral(
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
   }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
-  }
   return result;
 }
 
@@ -88,10 +80,6 @@ export function parseStringLiteral(
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
   }
   return result;
 }
@@ -115,10 +103,6 @@ export function parseBooleanLiteral(
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
   }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
-  }
   return result;
 }
 
@@ -140,10 +124,6 @@ export function parseNullLiteral(
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
-  }
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    prevExpr.body.push(result);
-    return prevExpr;
   }
   return result;
 }

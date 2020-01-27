@@ -31,11 +31,6 @@ export function parsePrioritizedExpr(
       return prevExpr;
     }
 
-    if (prevExpr.type === 'FunctionDeclaration') {
-      prevExpr.body.push(result);
-      return prevExpr;
-    }
-
     if (prevExpr.type === 'NotExpr') {
       prevExpr.expr = result;
       return result;

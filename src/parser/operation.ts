@@ -69,13 +69,6 @@ export function parseBinaryOpExpr(
     return [curTok, prevExpr];
   }
 
-  if (prevExpr.type === 'FunctionDeclaration') {
-    let parsedExpr: T.Expr;
-    [curTok, parsedExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.body.pop() as T.Expr);
-    prevExpr.body.push(parsedExpr);
-    return [curTok, prevExpr];
-  }
-
   curTok = nextToken();
   const result: T.BinaryOpExpr = {
     type: 'BinaryOpExpr',

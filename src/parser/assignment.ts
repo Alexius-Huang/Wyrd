@@ -37,17 +37,5 @@ export function parseAssignmentExpr(
     return [curTok, result];
   }
 
-  /* Varaible declared in function */
-  if (prevExpr?.type === 'FunctionDeclaration') {
-    const result: T.AssignmentExpr = {
-      type: 'AssignmentExpr',
-      expr1: prevExpr.body.pop() as T.Expr,
-    };
-
-    result.expr2 = parseExpr(result);
-    prevExpr.body.push(result);
-    return [curTok, prevExpr];
-  }
-
   ParserError(`Unhandled expression of type \`${prevExpr.type}\``)
 }
