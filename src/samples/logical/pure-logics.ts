@@ -1,9 +1,8 @@
-import { Token, AST, Operator as Op } from '../types';
+import { Token, AST } from '../../types';
 
 const program = `\
 True and False or not False
 not False and True
-not (False or True) and False
 `;
 
 const tokens: Array<Token> = [
@@ -19,16 +18,6 @@ const tokens: Array<Token> = [
   { type: 'boolean', value: 'False' },
   { type: 'keyword', value: 'and' },
   { type: 'boolean', value: 'True' },
-  { type: 'newline', value: '\n' },
-
-  { type: 'keyword', value: 'not' },
-  { type: 'lparen', value: '(' },
-  { type: 'boolean', value: 'False' },
-  { type: 'keyword', value: 'or' },
-  { type: 'boolean', value: 'True' },
-  { type: 'rparen', value: ')' },
-  { type: 'keyword', value: 'and' },
-  { type: 'boolean', value: 'False' },
   { type: 'newline', value: '\n' },
 ];
 
@@ -58,31 +47,11 @@ const ast: AST = [
     },
     expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
   },
-  {
-    type: 'AndExpr',
-    returnType: 'Bool',
-    expr1: {
-      type: 'NotExpr',
-      returnType: 'Bool',
-      expr: {
-        type: 'PrioritizedExpr',
-        returnType: 'Bool',
-        expr: {
-          type: 'OrExpr',
-          returnType: 'Bool',
-          expr1: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
-          expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
-        },
-      },
-    },
-    expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' }
-  },
 ];
 
 const compiled = `\
 true && false || !(false);
 !(false) && true;
-!(false || true) && false;
 `;
 
 export {

@@ -1,15 +1,13 @@
-import { Token, AST, Operator as Op, ParseOptions, Variable } from '../types';
+import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
 
 const program = `\
-isTrue = 3 + 1 > 2
+3 + 1 > 2
 5 * 3 < 15 - 6 * 8
 11 >= 7 + 7 or 3 <= (6 + 2) / 3
 8 / (4 * 2) > 3 and not 1 + 2 * 3 == 7 or a + b / c * d != w - x * y
 `;
 
 const tokens: Array<Token> = [
-  { type: 'ident', value: 'isTrue' },
-  { type: 'eq', value: '=' },
   { type: 'number', value: '3' },
   { type: 'plus', value: '+' },
   { type: 'number', value: '1' },
@@ -81,21 +79,17 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
-    expr1: { type: 'IdentLiteral', value: 'isTrue', returnType: 'Bool' },
-    expr2: {
+    type: 'BinaryOpExpr',
+    operator: Op.Gt,
+    returnType: 'Bool',
+    expr1: {
       type: 'BinaryOpExpr',
-      operator: Op.Gt,
-      returnType: 'Bool',
-      expr1: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
-      },
-      expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' }
-    },  
+      operator: Op.Plus,
+      returnType: 'Num',
+      expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+      expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
+    },
+    expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' }
   },
   {
     type: 'BinaryOpExpr',
@@ -256,7 +250,7 @@ const ast: AST = [
 ];
 
 const compiled = `\
-const isTrue = 3 + 1 > 2;
+3 + 1 > 2;
 5 * 3 < 15 - (6 * 8);
 11 >= 7 + 7 || 3 <= (6 + 2) / 3;
 8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
