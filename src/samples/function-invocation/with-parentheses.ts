@@ -1,4 +1,5 @@
-import { Token, AST, Operator as Op, ParseOptions, FunctionPattern } from '../../types';
+import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { createFunctionPatterns } from '../helper';
 
 const program = `\
 funcA("Hello world")
@@ -343,70 +344,14 @@ funcF(1, 2 + (3 * (4 / 5))) / (6 - 7);
 `;
 
 const parseOptions: ParseOptions = {
-  functions: new Map<string, FunctionPattern>([
-    [
-      'funcA',
-      {
-        name: 'funcA',
-        patterns: new Map([
-          [Symbol.for('Str'), { returnType: 'Null' }]
-        ]),
-      }
-    ],
-    [
-      'funcB',
-      {
-        name: 'funcB',
-        patterns: new Map([
-          [Symbol.for('Num.Num.Num'), { returnType: 'Null' }]
-        ]),
-      }
-    ],
-    [
-      'funcC',
-      {
-        name: 'funcC',
-        patterns: new Map([
-          [Symbol.for('Num.Num.Num'), { returnType: 'Null' }]
-        ]),
-      }
-    ],
-    [
-      'funcD',
-      {
-        name: 'funcD',
-        patterns: new Map([
-          [Symbol.for('Num.Num.Num'), { returnType: 'Num' }]
-        ]),
-      }
-    ],
-    [
-      'funcE',
-      {
-        name: 'funcE',
-        patterns: new Map([
-          [Symbol.for('Num.Num'), { returnType: 'Num' }]
-        ]),
-      }
-    ],
-    [
-      'funcF',
-      {
-        name: 'funcF',
-        patterns: new Map([
-          [Symbol.for('Num.Num'), { returnType: 'Num' }]
-        ]),
-      }
-    ],
-    [
-      'funcG',
-      {
-        name: 'funcG',
-        patterns: new Map([
-          [Symbol.for('Num.Num'), { returnType: 'Num' }]
-        ]),
-      }
-    ],
+  functions: createFunctionPatterns([
+    ['funcA', [['Str', 'Null']]],
+    ['funcB', [['Num.Num.Num', 'Null']]],
+    ['funcC', [['Num.Num.Num', 'Null']]],
+    ['funcD', [['Num.Num.Num', 'Num']]],
+    ['funcE', [['Num.Num', 'Num']]],
+    ['funcF', [['Num.Num', 'Num']]],
+    ['funcG', [['Num.Num', 'Num']]],
   ]),
 };
 

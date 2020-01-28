@@ -4,6 +4,7 @@ import { ParserErrorIf } from './error';
 export function parseFunctionInvokeExpr(
   curTok: T.Token,
   nextToken: () => T.Token,
+  currentToken: () => T.Token,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
@@ -39,8 +40,16 @@ export function parseFunctionInvokeExpr(
         curTok = nextToken();
         break ParseParameter;
       }
-      parameterExpr.push(parseExpr(undefined, { scope, ast: parameterExpr }));
-      curTok = nextToken();
+      const expr = parseExpr(undefined, { scope, ast: parameterExpr });
+      parameterExpr.push(expr);
+
+      if (expr.type !== 'FunctionInvokeExpr')
+        curTok = nextToken();
+      else
+        // If the previous expression is function invoke expression
+        // It'll end with either comma or newline already, so we need to update the current token
+        // TODO: After implement token tracter, this may be able to refactor
+        curTok = currentToken();
     }
   }
 

@@ -5,6 +5,7 @@ import { parseFunctionInvokeExpr } from './function-invocation';
 export function parseLiteral(
   curTok: T.Token,
   nextToken: () => T.Token,
+  currentToken: () => T.Token,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
@@ -20,7 +21,7 @@ export function parseLiteral(
     const varInfo = variables.get(result.value) as T.Variable;
     result.returnType = varInfo.type;
   } else if (functions.has(result.value)) {
-    result = parseFunctionInvokeExpr(curTok, nextToken, parseExpr, scope, prevExpr);
+    result = parseFunctionInvokeExpr(curTok, nextToken, currentToken, parseExpr, scope, prevExpr);
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {

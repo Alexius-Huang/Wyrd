@@ -8,4 +8,10 @@ describe('Function Invocation', () => {
   describe('With Parentheses Nested Parameters', () => {
     FundamentalCompileTest('function-invocation/with-parentheses');
   });
+
+  describe('Nested Invocation', () => {
+    describe('Basic Invocation', () => {
+      FundamentalCompileTest('function-invocation/nested-invocation/basic-invocation');
+    });
+  });
 });

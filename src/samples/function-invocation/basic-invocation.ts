@@ -1,4 +1,5 @@
-import { Token, AST, Operator as Op, ParseOptions, FunctionPattern } from '../../types';
+import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { createFunctionPatterns } from '../helper';
 
 const program = `\
 print "Hello"
@@ -90,34 +91,10 @@ complex(1 + (2 * 3), 4 / 5 - 6);
 `;
 
 const parseOptions: ParseOptions = {
-  functions: new Map<string, FunctionPattern>([
-    [
-      'print',
-      {
-        name: 'print',
-        patterns: new Map([
-          [Symbol.for('Str'), { returnType: 'Null' }]
-        ]),
-      }
-    ],
-    [
-      'addition',
-      {
-        name: 'addition',
-        patterns: new Map([
-          [Symbol.for('Num.Num'), { returnType: 'Num' }]
-        ]),
-      }
-    ],
-    [
-      'complex',
-      {
-        name: 'complex',
-        patterns: new Map([
-          [Symbol.for('Num.Num'), { returnType: 'Num' }]
-        ]),
-      }
-    ],
+  functions: createFunctionPatterns([
+    ['print', [['Str', 'Null']]],
+    ['addition', [['Num.Num', 'Num']]],
+    ['complex', [['Num.Num', 'Num']]],
   ]),
 };
 

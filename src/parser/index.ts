@@ -33,6 +33,11 @@ export function parse(
     return curTok;
   }
 
+  // TODO: Implement token tracker
+  function currentToken(): T.Token {
+    return curTok;
+  }
+
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: T.Scope = meta?.scope ?? globalScope;
     const ast: T.AST = meta?.ast ?? globalAst;
@@ -82,7 +87,7 @@ export function parse(
     }
 
     if (curTok.type === 'ident') {
-      return parseLiteral(curTok, nextToken, parseExpr, scope, prevExpr);
+      return parseLiteral(curTok, nextToken, currentToken, parseExpr, scope, prevExpr);
     }
 
     if (curTok.type === 'lparen') {
