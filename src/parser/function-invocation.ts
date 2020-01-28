@@ -7,7 +7,7 @@ export function parseFunctionInvokeExpr(
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
-): T.Expr {
+): T.FunctionInvokeExpr {
   const { functions } = scope;
   const { name, patterns } = functions.get(curTok.value) as T.FunctionPattern;
 
@@ -20,13 +20,17 @@ export function parseFunctionInvokeExpr(
 
   curTok = nextToken(); // Skip the name of the function
 
+  const hasParenthesesNested = curTok.type === 'lparen';
+  if (hasParenthesesNested)
+    curTok = nextToken(); // Skip the left parentheses
+
   ParserErrorIf(curTok.type === 'comma', `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
   ParseParameters: while (true) {
     let parameterExpr: T.AST = [];
 
     /* Parsing parameters */
     ParseParameter: while (true) {
-      if (curTok.type === 'newline') {
+      if (curTok.type === 'newline' || (hasParenthesesNested && curTok.type === 'rparen')) {
         result.params.push(parameterExpr[0]);
         break ParseParameters;
       }

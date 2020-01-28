@@ -9,14 +9,18 @@ export function parseLiteral(
   scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
-  const result: T.IdentLiteral = { type: 'IdentLiteral', value: curTok.value, returnType: 'Unknown' };
+  let result: T.IdentLiteral | T.FunctionInvokeExpr = {
+    type: 'IdentLiteral',
+    value: curTok.value,
+    returnType: 'Unknown',
+  };
   const { variables, functions } = scope;
 
   if (variables.has(result.value)) {
     const varInfo = variables.get(result.value) as T.Variable;
     result.returnType = varInfo.type;
   } else if (functions.has(result.value)) {
-    return parseFunctionInvokeExpr(curTok, nextToken, parseExpr, scope, prevExpr);
+    result = parseFunctionInvokeExpr(curTok, nextToken, parseExpr, scope, prevExpr);
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
