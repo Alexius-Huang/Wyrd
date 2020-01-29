@@ -19,6 +19,10 @@ export default class TokenTracker {
     return this.current.type === type;
   }
 
+  public isNot(type: string): boolean {
+    return this.current.type !== type;
+  }
+
   public peekIs(type: string): boolean {
     if (!this.hasNext()) return false;
     return (this.peek as T.Token).type === type;

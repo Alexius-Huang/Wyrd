@@ -1,26 +1,26 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
 import { ParserError, ParserErrorIf } from './error';
 
 export function parseFunctionDeclaration(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
 ): T.FunctionDeclaration {
-  curTok = nextToken(); // Skip 'def' keyword
+  tt.next(); // Skip 'def' keyword
 
-  if (curTok.type !== 'ident')
+  if (tt.isNot('ident'))
     ParserError('Function declaration should contain the name of the function');
 
   const result: T.FunctionDeclaration = {
     type: 'FunctionDeclaration',
-    name: curTok.value,
+    name: tt.current.value,
     arguments: [],
     outputType: 'Void',
     body: []
   };
   // TODO: Record name of the function
-  curTok = nextToken(); // Skip the function name identifier
+  tt.next(); // Skip the function name identifier
   
   const functionalScope: T.Scope = {
     parentScope: scope,
@@ -28,64 +28,63 @@ export function parseFunctionDeclaration(
     functions: new Map<string, T.FunctionPattern>(),
   };
 
-  if (curTok.type as string === 'lparen')
-    [curTok, result.arguments] = parseFunctionArguments(curTok, nextToken, functionalScope);
+  if (tt.is('lparen'))
+    result.arguments = parseFunctionArguments(tt, functionalScope);
 
-  if (curTok.type as string !== 'colon')
+  if (tt.isNot('colon'))
     ParserError(`Expect token of type \`colon\` before the output type of the function declaration: \`${result.name}\``);
 
-  curTok = nextToken();
-  if (curTok.type as string !== 'builtin-type')
+  tt.next();
+  if (tt.isNot('builtin-type'))
     ParserError(`Expect an output data-type of the function declaration \`${result.name}\``);
-  result.outputType = curTok.value;
+  result.outputType = tt.current.value;
 
-  curTok = nextToken();
-  if (curTok.type as string === 'arrow') {
+  tt.next();
+  if (tt.is('arrow')) {
     /* Single-line function declaration expression */
-    curTok = nextToken();
+    tt.next();
 
-    ParserErrorIf(curTok.type === 'newline', `Expect function \`${result.name}\` to contain expression that returns type \`${result.outputType}\``)
+    ParserErrorIf(tt.is('newline'), `Expect function \`${result.name}\` to contain expression that returns type \`${result.outputType}\``)
 
-    while (curTok.type !== 'newline') {
+    while (tt.isNot('newline')) {
       result.body.push(parseExpr(undefined, { scope: functionalScope, ast: result.body }));
-      curTok = nextToken();
+      tt.next();
     }
 
     return result;
-  } else if (curTok.type as string === 'keyword') {
-    if (curTok.value === 'do') {
-      parseBlock(curTok, nextToken, parseExpr, functionalScope, result);
+  } else if (tt.is('keyword')) {
+    if (tt.current.value === 'do') {
+      parseBlock(tt, parseExpr, functionalScope, result);
       return result;
     }
 
-    ParserError(`Unhandled function declaration where token of keyword ${curTok.value}`);
+    ParserError(`Unhandled function declaration where token of keyword ${tt.current.value}`);
   }
 
-  ParserError(`Unhandled function declaration where token of type ${curTok.type}`)
+  ParserError(`Unhandled function declaration where token of type ${tt.current.type}`)
 }
 
 export function parseFunctionArguments(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   scope: T.Scope,
-): [T.Token, Array<T.Argument>] {
-  curTok = nextToken();
+): Array<T.Argument> {
+  tt.next();
   const result: Array<T.Argument> = [];
 
   while (true) {
     let argument: T.Argument = { ident: '', type: '' };
-    if (curTok.type === 'ident') {
-      argument.ident = curTok.value;
+    if (tt.is('ident')) {
+      argument.ident = tt.current.value;
 
-      curTok = nextToken();
-      if (curTok.type as string !== 'colon')
+      tt.next();
+      if (tt.isNot('colon'))
         ParserError('Expect token next to the name of the argument is colon');
-      curTok = nextToken();
+      tt.next();
 
-      if (curTok.type as string !== 'builtin-type')
+      if (tt.isNot('builtin-type'))
         ParserError('Expect token next to the colon of the argument declaration is data-type');
-      argument.type = curTok.value;
-      curTok = nextToken();
+      argument.type = tt.current.value;
+      tt.next();
 
       // Setting variable infos from arguments
       // TODO: Handle duplicate argument name case
@@ -96,13 +95,13 @@ export function parseFunctionArguments(
         type: argument.type,
       });
 
-      if (curTok.type as string === 'comma') {
-        curTok = nextToken();
+      if (tt.is('comma')) {
+        tt.next();
         continue;
       }
 
-      if (curTok.type as string === 'rparen') {
-        curTok = nextToken();
+      if (tt.is('rparen')) {
+        tt.next();
         break;
       }
 
@@ -110,34 +109,33 @@ export function parseFunctionArguments(
     }
   }
 
-  return [curTok, result];
+  return result;
 }
 
 export function parseBlock(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr: T.Expr,
-): [T.Token, T.Expr] {
-  curTok = nextToken(); // Skip keyword `do`
+): T.Expr {
+  tt.next(); // Skip keyword `do`
 
-  ParserErrorIf(curTok.type !== 'newline', 'Invalid to contain any expressions after the `do` keyword');
-  curTok = nextToken(); // Skip newline
+  ParserErrorIf(tt.isNot('newline'), 'Invalid to contain any expressions after the `do` keyword');
+  tt.next(); // Skip newline
 
   if (prevExpr.type === 'FunctionDeclaration') {
-    while (!(curTok.type === 'keyword' && curTok.value === 'end')) {
-      if (curTok.type === 'newline') {
-        curTok = nextToken();
+    while (!(tt.is('keyword') && tt.current.value === 'end')) {
+      if (tt.is('newline')) {
+        tt.next();
         continue;
       }
 
       prevExpr.body.push(parseExpr(undefined, { scope, ast: prevExpr.body }));
-      curTok = nextToken();
+      tt.next();
     }
 
-    curTok = nextToken();
-    return [curTok, prevExpr];
+    tt.next();
+    return prevExpr;
   }
 
   ParserError(`Unhandled parsing block-level expression with expression of type \`${prevExpr.type}\``)

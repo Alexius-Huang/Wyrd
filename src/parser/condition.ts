@@ -1,21 +1,21 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
 import { ParserErrorIf } from './error';
 
 export function parseConditionalExpr(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr: T.Expr, meta?: any) => T.Expr,
 
   /* Locked Type means there is already a if condition expression before */
   lockedType?: string,
-): [T.Token, T.ConditionalExpr] {
-  curTok = nextToken(); // Skip 'if' | 'elif' keyword
+): T.ConditionalExpr {
+  tt.next(); // Skip 'if' | 'elif' keyword
   let result: T.ConditionalExpr = { type: 'ConditionalExpr', returnType: lockedType ?? 'Unknown' };
 
-  while (curTok.type !== 'arrow' && curTok.value !== 'then') {
+  while (tt.isNot('arrow') && tt.current.value !== 'then') {
     result.condition = parseExpr(result, { target: 'condition' });
-    curTok = nextToken();
-    ParserErrorIf(curTok.type === 'newline', 'Expect condition to end followed by arrow `=>` or the `then` keyword');
+    tt.next();
+    ParserErrorIf(tt.is('newline'), 'Expect condition to end followed by arrow `=>` or the `then` keyword');
   }
 
   ParserErrorIf(result.condition === undefined, 'Expect to resolve a condition');
@@ -27,16 +27,16 @@ export function parseConditionalExpr(
     `Expect conditional expression's condition should return \`Bool\` type, instead got: \`${condReturnedType}\``,
   );
 
-  if (curTok.value === 'then') {
-    curTok = nextToken(); // Skip 'then' keyword      
-    ParserErrorIf(curTok.type !== 'newline', 'Expect no tokens after `then` keyword');
+  if (tt.current.value === 'then') {
+    tt.next(); // Skip 'then' keyword      
+    ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `then` keyword');
   }
 
-  curTok = nextToken(); // Skip '=>' inline-control operator or skip `newline` if using `then block`
+  tt.next(); // Skip '=>' inline-control operator or skip `newline` if using `then block`
 
-  while (curTok.type !== 'newline') {
+  while (!tt.is('newline')) {
     result.expr1 = parseExpr(result, { target: 'expr1' });
-    curTok = nextToken();
+    tt.next();
   }
 
   // TODO: Remove annotation when support returnType
@@ -49,45 +49,45 @@ export function parseConditionalExpr(
     );
   }
 
-  curTok = nextToken(); // Skip newline
+  tt.next(); // Skip newline
 
   /* Handle elif is exactly the same as the if expression */
-  if (curTok.type === 'keyword' && curTok.value === 'elif') {
-    [curTok, result.expr2] = parseConditionalExpr(curTok, nextToken, parseExpr, result.returnType);
-    return [curTok, result];
+  if (tt.is('keyword') && tt.current.value === 'elif') {
+    result.expr2 = parseConditionalExpr(tt, parseExpr, result.returnType);
+    return result;
   }
 
   /* Handle else expression */
-  if (curTok.type === 'keyword' && curTok.value === 'else') {
-    curTok = nextToken(); // Skip 'else' keyword
+  if (tt.is('keyword') && tt.current.value === 'else') {
+    tt.next(); // Skip 'else' keyword
 
     ParserErrorIf(
-      curTok.type !== 'arrow' && curTok.value !== 'then',
+      tt.isNot('arrow') && tt.current.value as string !== 'then',
       'Expect else condition to followed by arrow `=>` or the `then` keyword'
     );
 
-    if (curTok.type === 'arrow') {
-      curTok = nextToken(); // Skip 'arrow' keyword
+    if (tt.is('arrow')) {
+      tt.next(); // Skip 'arrow' keyword
 
-      while (curTok.type !== 'newline') {
+      while (tt.isNot('newline')) {
         result.expr2 = parseExpr(result, { target: 'expr2' });
-        curTok = nextToken();
+        tt.next();
       }
-    } else if (curTok.value === 'then') {
-      curTok = nextToken(); // Skip 'then' keyword
-      if (curTok.type === 'newline') {
-        curTok = nextToken(); // Skip 'newline' token
+    } else if (tt.current.value as string === 'then') {
+      tt.next(); // Skip 'then' keyword
+      if (tt.is('newline')) {
+        tt.next(); // Skip 'newline' token
 
-        while (curTok.type !== 'newline') {
+        while (tt.isNot('newline')) {
           result.expr2 = parseExpr(result, { target: 'expr2' });
-          curTok = nextToken();
+          tt.next();
         }
 
-        curTok = nextToken(); // Skip 'newline' token
-        ParserErrorIf(curTok.value !== 'end', 'Expect `else then` expression to followed by an `end` keyword');
+        tt.next(); // Skip 'newline' token
+        ParserErrorIf(tt.current.value as string !== 'end', 'Expect `else then` expression to followed by an `end` keyword');
 
-        curTok = nextToken(); // Skip 'end' token
-        ParserErrorIf(curTok.type !== 'newline', 'Expect no tokens after `end` keyword');
+        tt.next(); // Skip 'end' token
+        ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `end` keyword');
       }
     }
   }
@@ -97,5 +97,5 @@ export function parseConditionalExpr(
     `Expect values returned from different condition branch to be the same`
   );
 
-  return [curTok, result];
+  return result;
 }

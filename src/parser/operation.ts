@@ -1,16 +1,16 @@
 import * as T from '../types';
 import { ParserError } from './error';
 import { compare } from './precedence';
+import TokenTracker from './TokenTracker';
 
 export function parseBinaryOpExpr(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr: T.Expr,
-): [T.Token, T.Expr] {
+): T.Expr {
   let operator: T.Operator;
-  switch(curTok.value) {
+  switch(tt.current.value) {
     case '+':  operator = T.Operator.Plus;     break;
     case '-':  operator = T.Operator.Dash;     break;
     case '*':  operator = T.Operator.Asterisk; break;
@@ -22,15 +22,15 @@ export function parseBinaryOpExpr(
     case '<=': operator = T.Operator.LtEq;     break;
     case '==': operator = T.Operator.EqEq;     break;
     case '!=': operator = T.Operator.BangEq;   break;
-    default: ParserError(`Unhandled BinaryOpExpr Operator \`${curTok.value}\``)
+    default: ParserError(`Unhandled BinaryOpExpr Operator \`${tt.current.value}\``)
   }
 
   if (prevExpr.type === 'BinaryOpExpr') {
     const precedence = compare(prevExpr.operator, operator);
 
     if (precedence === -1) /* Low level */ {
-      [curTok, prevExpr.expr2] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr2 as T.Expr);
-      return [curTok, prevExpr];
+      prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2 as T.Expr);
+      return prevExpr;
     } else /* Eq or higher level */ {
       const newNode: T.BinaryOpExpr = {
         type: 'BinaryOpExpr',
@@ -38,14 +38,14 @@ export function parseBinaryOpExpr(
         expr1: prevExpr as T.Expr,
       };
 
-      curTok = nextToken();
+      tt.next();
       parseExpr(newNode as T.Expr, { scope });
-      return [curTok, newNode];
+      return newNode;
     }
   }
 
   if (prevExpr.type === 'AssignmentExpr') {
-    [curTok, prevExpr.expr2] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr2 as T.Expr);
+    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2 as T.Expr);
     if (prevExpr.expr1.type === 'IdentLiteral') {
       // TODO: Remove annotation when supporting all expressions with return type
       prevExpr.expr1.returnType = (prevExpr.expr2 as any).returnType;
@@ -53,30 +53,30 @@ export function parseBinaryOpExpr(
       const variableInfo = scope.variables.get(varName) as T.Variable;
       variableInfo.type = prevExpr.expr1.returnType as string;
 
-      return [curTok, prevExpr];
+      return prevExpr;
     }
 
     ParserError('Unhandled assignment expression parsing other than assigning to variable');
   }
 
   if (prevExpr.type === 'NotExpr') {
-    [curTok, prevExpr.expr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr as T.Expr);
-    return [curTok, prevExpr];
+    prevExpr.expr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr as T.Expr);
+    return prevExpr;
   }
 
   if (prevExpr.type === 'OrExpr' || prevExpr.type === 'AndExpr') {
-    [curTok, prevExpr.expr2] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr2 as T.Expr);
-    return [curTok, prevExpr];
+    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2 as T.Expr);
+    return prevExpr;
   }
 
-  curTok = nextToken();
+  tt.next();
   const result: T.BinaryOpExpr = {
     type: 'BinaryOpExpr',
     operator,
     expr1: prevExpr,
   };
 
-  return [curTok, parseExpr(result, { scope }) as T.BinaryOpExpr];
+  return parseExpr(result, { scope }) as T.BinaryOpExpr;
 }
 
 // function parseLogicalAndOrExpr(
@@ -91,9 +91,9 @@ export function parseBinaryOpExpr(
 //     expr1: prevExpr,
 //   };
 
-//   curTok = nextToken();
+//   tt.next();
 //   result.expr2 = parseExpr(result);
-//   return [curTok, result];
+//   return result];
 // }
 
 // function parseLogicalNotExpr(

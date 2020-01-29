@@ -89,6 +89,29 @@ describe('Token Tracker', () => {
       });
     });
 
+    describe('TokenTracker#isNot', () => {
+      it('checks the type of the current token and returns the boolean result', () => {
+        expect(tt.isNot('number')).toBe(true);
+        expect(tt.isNot('ident')).toBe(false);
+        tt.next();
+  
+        expect(tt.isNot('eq')).toBe(false);
+        tt.next();
+  
+        expect(tt.isNot('eq')).toBe(true);
+        expect(tt.isNot('number')).toBe(false);
+  
+        tt.next();
+        expect(tt.isNot('ident')).toBe(true);
+        expect(tt.isNot('number')).toBe(true);
+        expect(tt.isNot('plus')).toBe(false);
+  
+        tt.next();
+        expect(tt.isNot('string')).toBe(true);
+        expect(tt.isNot('number')).toBe(false);
+      });
+    });
+
     describe('TokenTracker#peekIs', () => {
       it('checks the type of the peeked token', () => {
         expect(tt.peekIs('ident')).toBe(false);
