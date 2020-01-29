@@ -3,8 +3,15 @@ import { parse } from '../parser/index';
 import { generateCode } from '../codeGenerator';
 import * as T from '../types';
 
-export function FundamentalCompileTest(name: string) {
+export function FundamentalCompileTest(
+  name: string,
+  options?: {
+    debugParser?: boolean;
+    focusedASTIndex?: number;
+  },
+) {
   const path = `../samples/${name}`;
+  const debugParser = options?.debugParser ?? false;
 
   let program: string, tokens: Array<T.Token>, ast: T.AST, compiled: string, parseOptions: T.ParseOptions | undefined;
   beforeAll(async () => {
@@ -27,6 +34,10 @@ export function FundamentalCompileTest(name: string) {
 
   it('parses the tokens into AST correctly', () => {
     const result: T.AST = parse(tokens, parseOptions);
+    if (debugParser) {
+      const index = options?.focusedASTIndex ?? 0;
+      console.log(JSON.stringify(result[index], undefined, 2));
+    }
     expect(result).toMatchObject(ast);
   });
 

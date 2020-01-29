@@ -50,9 +50,18 @@ export type Variable = {
   type: string;
 };
 
+export type FunctionPatternInfo = { returnType: string };
+export type FunctionPattern = {
+  name: string;
+  patterns: Map<Symbol, FunctionPatternInfo>;
+  // For instance:
+  // Symbol.for('Num.Str') means two parameter with first argument as Num and second argument as Str
+};
+
 export type ParseOptions = {
   ast?: AST;
   variables?: Map<string, Variable>;
+  functions?: Map<string, FunctionPattern>;
 };
 
 /* Builtin unoverridable operator actions */
@@ -65,6 +74,7 @@ export type OPAction = {
 export type Scope = {
   parentScope: null | Scope;
   variables: Map<string, Variable>;
+  functions: Map<string, FunctionPattern>;
 };
 
 export type AST = Array<Expr>;
@@ -78,6 +88,7 @@ export type Expr =
   PrioritizedExpr     |
   ConditionalExpr     |
   FunctionDeclaration |
+  FunctionInvokeExpr  |
   IdentLiteral        |
   NumberLiteral       |
   StringLiteral       |
@@ -147,21 +158,21 @@ export type NotExpr = {
   type: 'NotExpr';
   expr?: Expr;
   returnType: 'Bool';
-}
+};
 
 export type OrExpr = {
   type: 'OrExpr';
   expr1: Expr;
   expr2?: Expr;
   returnType: 'Bool';
-}
+};
 
 export type AndExpr = {
   type: 'AndExpr';
   expr1: Expr;
   expr2?: Expr;
   returnType: 'Bool';
-}
+};
 
 export type Argument = { ident: string; type: string };
 
@@ -171,4 +182,11 @@ export type FunctionDeclaration = {
   arguments: Array<Argument>;
   outputType: string;
   body: Array<Expr>;
-}
+};
+
+export type FunctionInvokeExpr = {
+  type: 'FunctionInvokeExpr';
+  name: string;
+  params: Array<Expr>;
+  returnType: string;
+};

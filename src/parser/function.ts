@@ -25,6 +25,7 @@ export function parseFunctionDeclaration(
   const functionalScope: T.Scope = {
     parentScope: scope,
     variables: new Map<string, T.Variable>(),
+    functions: new Map<string, T.FunctionPattern>(),
   };
 
   if (curTok.type as string === 'lparen')

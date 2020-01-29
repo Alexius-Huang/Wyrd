@@ -22,6 +22,7 @@ export function parse(
   const globalScope: T.Scope = {
     parentScope: null,
     variables: parseOptions?.variables ?? (new Map<string, T.Variable>()),
+    functions: parseOptions?.functions ?? (new Map<string, T.FunctionPattern>()),
   };
 
   let index = 0;
@@ -29,6 +30,11 @@ export function parse(
 
   function nextToken(): T.Token {
     curTok = tokens[++index];
+    return curTok;
+  }
+
+  // TODO: Implement token tracker
+  function currentToken(): T.Token {
     return curTok;
   }
 
@@ -81,7 +87,7 @@ export function parse(
     }
 
     if (curTok.type === 'ident') {
-      return parseLiteral(curTok, nextToken, scope, prevExpr);
+      return parseLiteral(curTok, nextToken, currentToken, parseExpr, scope, prevExpr);
     }
 
     if (curTok.type === 'lparen') {
