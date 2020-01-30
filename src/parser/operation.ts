@@ -2,6 +2,7 @@ import * as T from '../types';
 import { ParserError } from './error';
 import { compare } from './precedence';
 import TokenTracker from './TokenTracker';
+import { EmptyExpression } from './constants';
 
 export function parseBinaryOpExpr(
   tt: TokenTracker,
@@ -29,29 +30,30 @@ export function parseBinaryOpExpr(
     const precedence = compare(prevExpr.operator, operator);
 
     if (precedence === -1) /* Low level */ {
-      prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2 as T.Expr);
+      prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
       return prevExpr;
     } else /* Eq or higher level */ {
       const newNode: T.BinaryOpExpr = {
         type: 'BinaryOpExpr',
         operator,
-        expr1: prevExpr as T.Expr,
+        expr1: prevExpr,
+        expr2: EmptyExpression,
+        returnType: 'Invalid',
       };
 
       tt.next();
-      parseExpr(newNode as T.Expr, { scope });
+      parseExpr(newNode, { scope });
       return newNode;
     }
   }
 
   if (prevExpr.type === 'AssignmentExpr') {
-    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2 as T.Expr);
+    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     if (prevExpr.expr1.type === 'IdentLiteral') {
-      // TODO: Remove annotation when supporting all expressions with return type
-      prevExpr.expr1.returnType = (prevExpr.expr2 as any).returnType;
+      prevExpr.expr1.returnType = prevExpr.expr2.returnType;
       const varName = prevExpr.expr1.value;
       const variableInfo = scope.variables.get(varName) as T.Variable;
-      variableInfo.type = prevExpr.expr1.returnType as string;
+      variableInfo.type = prevExpr.expr1.returnType;
 
       return prevExpr;
     }
@@ -60,12 +62,12 @@ export function parseBinaryOpExpr(
   }
 
   if (prevExpr.type === 'NotExpr') {
-    prevExpr.expr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr as T.Expr);
+    prevExpr.expr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
     return prevExpr;
   }
 
   if (prevExpr.type === 'OrExpr' || prevExpr.type === 'AndExpr') {
-    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2 as T.Expr);
+    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     return prevExpr;
   }
 
@@ -74,9 +76,11 @@ export function parseBinaryOpExpr(
     type: 'BinaryOpExpr',
     operator,
     expr1: prevExpr,
+    expr2: EmptyExpression,
+    returnType: 'Invalid',
   };
 
-  return parseExpr(result, { scope }) as T.BinaryOpExpr;
+  return parseExpr(result, { scope });
 }
 
 // function parseLogicalAndOrExpr(

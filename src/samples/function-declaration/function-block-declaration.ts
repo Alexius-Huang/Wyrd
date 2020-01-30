@@ -86,6 +86,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'FunctionDeclaration',
+    returnType: 'Void',
     name: 'addition',
     arguments: [
       { ident: 'x', type: 'Num' },
@@ -104,6 +105,7 @@ const ast: AST = [
   },
   {
     type: 'FunctionDeclaration',
+    returnType: 'Void',
     name: 'complexArithmetic',
     arguments: [
       { ident: 'w', type: 'Num' },
@@ -115,6 +117,7 @@ const ast: AST = [
     body: [
       {
         type: 'AssignmentExpr',
+        returnType: 'Void',
         expr1: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
         expr2: {
           type: 'BinaryOpExpr',
@@ -132,6 +135,7 @@ const ast: AST = [
       },
       {
         type: 'AssignmentExpr',
+        returnType: 'Void',
         expr1: { type: 'IdentLiteral', value: 'b', returnType: 'Num' },
         expr2: {
           type: 'BinaryOpExpr',

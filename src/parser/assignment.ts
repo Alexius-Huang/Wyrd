@@ -1,6 +1,7 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
 import { ParserError, ParserErrorIf } from './error';
+import { EmptyExpression } from './constants';
 
 export function parseAssignmentExpr(
   tt: TokenTracker,
@@ -21,6 +22,8 @@ export function parseAssignmentExpr(
     const result: T.AssignmentExpr = {
       type: 'AssignmentExpr',
       expr1: prevExpr,
+      expr2: EmptyExpression,
+      returnType: 'Void',
     };
 
     const variableInfo: T.Variable = {
@@ -32,8 +35,7 @@ export function parseAssignmentExpr(
 
     result.expr2 = parseExpr(undefined, { scope });
 
-    // TODO: Remove this when all expressions support returnType
-    prevExpr.returnType = (result.expr2 as T.NumberLiteral).returnType;
+    prevExpr.returnType = result.expr2.returnType;
     variableInfo.type = prevExpr.returnType;
     return result;
   }

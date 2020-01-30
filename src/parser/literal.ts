@@ -27,9 +27,8 @@ export function parseLiteral(
     prevExpr.expr2 = result;
     const opAction = getOPActionDetail(
       prevExpr.operator,
-      /* TODO: Remove this annotation if complete all expressions have returnType */
-      (prevExpr.expr1 as T.NumberLiteral).returnType,
-      result.returnType as string,
+      prevExpr.expr1.returnType,
+      result.returnType,
     );
 
     prevExpr.returnType = opAction.returnType;
@@ -56,8 +55,7 @@ export function parseNumberLiteral(
     prevExpr.expr2 = result;
     const opAction = getOPActionDetail(
       prevExpr.operator,
-      /* TODO: Remove this annotation if complete all expressions have returnType */
-      (prevExpr.expr1 as T.NumberLiteral).returnType,
+      prevExpr.expr1.returnType,
       result.returnType,
     );
 

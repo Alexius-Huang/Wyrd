@@ -1,4 +1,6 @@
-import { OPAction, OPActionPair } from "../types";
+import { OPAction, OPActionPair, EmptyExpr } from "../types";
+
+export const EmptyExpression: EmptyExpr = { type: 'EmptyExpr', returnType: 'Invalid' };
 
 export const BuiltinBinaryOperators = new Set<string>([
   '+',

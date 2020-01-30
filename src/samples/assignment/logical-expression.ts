@@ -18,6 +18,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'isTrue', returnType: 'Bool' },
     expr2: {
       type: 'BinaryOpExpr',

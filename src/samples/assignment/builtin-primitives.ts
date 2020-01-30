@@ -29,21 +29,25 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
     expr2: { type: 'NumberLiteral', value: '123', returnType: 'Num' }
   },
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Str', },
     expr2: { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' }
   },
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'baz', returnType: 'Bool' },
     expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' }
   },
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'nothing', returnType: 'Null' },
     expr2: { type: 'NullLiteral', value: 'Null', returnType: 'Null' }
   },

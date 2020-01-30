@@ -85,6 +85,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'mixed1', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
@@ -126,6 +127,7 @@ const ast: AST = [
   },
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'mixed2', returnType: 'Str' },
     expr2: {
       type: 'ConditionalExpr',
