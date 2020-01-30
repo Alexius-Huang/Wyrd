@@ -38,7 +38,7 @@ export function generateCode(ast: T.AST): string {
       case 'ConditionalExpr':
         return codeGenConditionalExpr(expr);
       default:
-        CodeGenerateError(`Unhandled expression of type \`${(expr as T.Expr).type}\``);
+        CodeGenerateError(`Unhandled expression of type \`${(expr).type}\``);
     }
   }
 
@@ -114,7 +114,7 @@ ${codeGenFunctionBody(body, args, 2)}
     let i = 0;
     const result: Array<string> = [];
     while (i < body.length) {
-      result.push(`${' '.repeat(indent)}${genExpr(body[i] as T.Expr)};`);
+      result.push(`${' '.repeat(indent)}${genExpr(body[i])};`);
       i += 1;
     }
 

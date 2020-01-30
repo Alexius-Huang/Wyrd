@@ -10,10 +10,11 @@ import {
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './condition';
 import { parseAssignmentExpr } from './assignment';
+import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
 import { ParserError } from './error';
-import { BuiltinBinaryOperators, EmptyExpression } from './constants';
+import { BuiltinBinaryOperators } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -43,17 +44,17 @@ export function parse(
       }
 
       if (tt.valueIs('not')) {
-        return parseLogicalNotExpr();
+        return parseLogicalNotExpr(tt, parseExpr,);
       }
 
       if (tt.valueIsOneOf('and', 'or')) {
         let resultExpr: T.Expr;
         if (prevExpr?.type === 'PrioritizedExpr') {
-          resultExpr = parseLogicalAndOrExpr(prevExpr.expr as T.Expr);
+          resultExpr = parseLogicalAndOrExpr(tt, parseExpr, prevExpr.expr);
           return resultExpr;
         }
   
-        return parseLogicalAndOrExpr(ast.pop() as T.Expr);
+        return parseLogicalAndOrExpr(tt, parseExpr, ast.pop() as T.Expr);
       }
 
       ParserError(`Unhandled keyword token with value \`${tt.value}\``);
@@ -92,13 +93,13 @@ export function parse(
     if (BuiltinBinaryOperators.has(tt.value)) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
-        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr as T.Expr);
+        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
         return resultExpr;
       }
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
+        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr]);
         return resultExpr;
       }
 
@@ -107,31 +108,6 @@ export function parse(
     }
 
     ParserError(`Unhandled token type of \`${tt.type}\``);
-  }
-
-  function parseLogicalNotExpr(): T.Expr {
-    let result: T.NotExpr = {
-      type: 'NotExpr',
-      expr: EmptyExpression,
-      returnType: 'Bool',
-    };
-    tt.next();
-    result.expr = parseExpr(result);
-    return result;
-  }
-
-  function parseLogicalAndOrExpr(prevExpr: T.Expr): T.Expr {
-    const logicType = tt.valueIs('and') ? 'AndExpr' : 'OrExpr';
-    let result: T.AndExpr | T.OrExpr = {
-      type: logicType,
-      expr1: prevExpr,
-      expr2: EmptyExpression,
-      returnType: 'Bool',
-    };
-
-    tt.next();
-    result.expr2 = parseExpr(result);
-    return result;
   }
 
   while (true) {

@@ -82,30 +82,3 @@ export function parseBinaryOpExpr(
 
   return parseExpr(result, { scope });
 }
-
-// function parseLogicalAndOrExpr(
-//   curTok: T.Token,
-//   nextToken: () => T.Token,
-//   parseExpr: (prevExpr?: T.Expr) => T.Expr,
-//   prevExpr: T.Expr
-// ): [T.Token, T.Expr] {
-//   const logicType = curTok.value === 'and' ? 'AndExpr' : 'OrExpr';
-//   let result: T.AndExpr | T.OrExpr = {
-//     type: logicType,
-//     expr1: prevExpr,
-//   };
-
-//   tt.next();
-//   result.expr2 = parseExpr(result);
-//   return result];
-// }
-
-// function parseLogicalNotExpr(
-//   curTok: T.Token,
-//   nextT
-// ): T.Expr {
-//   let result: T.NotExpr = { type: 'NotExpr' };
-//   nextToken();
-//   result.expr = parseExpr(result);
-//   return result;
-// }
