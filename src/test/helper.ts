@@ -1,6 +1,7 @@
 import { lex } from '../lexer/index';
 import { parse } from '../parser/index';
 import { generateCode } from '../codeGenerator';
+import { compile } from '../index';
 import * as T from '../types';
 
 export function FundamentalCompileTest(
@@ -45,4 +46,11 @@ export function FundamentalCompileTest(
     const result = generateCode(ast);
     expect(result).toBe(compiled);
   });
+
+  if (!debugParser) {
+    it('compiles the Wyrd program into JavaScript code correctly', () => {
+      const result = compile(program, { parseOptions });
+      expect(result).toBe(compiled);
+    });  
+  }
 }
