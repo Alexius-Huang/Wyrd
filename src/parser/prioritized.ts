@@ -19,17 +19,12 @@ export function parsePrioritizedExpr(
 
   while (tt.isNotOneOf('rparen', 'comma')) {
     result.expr = parseExpr(result, { scope });
-    if (result.expr.type === 'FunctionInvokeExpr' && tt.is('rparen')) break;
     tt.next();
   }
 
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
-      if (result.expr.type !== 'FunctionInvokeExpr') {
-        prevExpr.expr2 = result;
-      } else {
-        prevExpr.expr2 = result.expr;
-      }
+      prevExpr.expr2 = result;
 
       const opAction = getOPActionDetail(
         prevExpr.operator,
@@ -42,12 +37,7 @@ export function parsePrioritizedExpr(
     }
 
     if (prevExpr.type === 'NotExpr') {
-      if (result.expr.type !== 'FunctionInvokeExpr') {
-        prevExpr.expr = result;
-      } else {
-        prevExpr.expr = result.expr;
-      }
-
+      prevExpr.expr = result;
       return result;
     }
 

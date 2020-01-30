@@ -19,27 +19,18 @@ export function parseFunctionInvokeExpr(
   };
 
   tt.next(); // Skip the name of the function
+  
+  ParserErrorIf(tt.isNot('lparen'), `Expect function \`${name}\` invocation should follow with token \`lparen\``);
 
-  const hasParenthesesNested = tt.is('lparen');
-  if (hasParenthesesNested)
-    tt.next(); // Skip the left parentheses
+  tt.next(); // Skip the left parentheses
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
-
-  const prevExprIsPrioritized = prevExpr?.type === 'PrioritizedExpr';
-
   while (true) {
     let parameterExpr: T.Expr;
-    parameterExpr = parseFunctionParameter(
-      tt, parseExpr, scope,
-      hasParenthesesNested || prevExprIsPrioritized
-    );
+    parameterExpr = parseFunctionParameter(tt, parseExpr, scope);
     result.params.push(parameterExpr);
 
-    if (prevExprIsPrioritized && tt.is('rparen')) break;
-    if (hasParenthesesNested && tt.is('rparen')) break;
-    if (tt.is('newline')) break;
-
+    if (tt.isOneOf('rparen', 'newline')) break;
     tt.next();
   }
 
@@ -63,21 +54,14 @@ function parseFunctionParameter(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
-  haltByRParen: boolean,
 ): T.Expr {
   const parameterExpr: T.AST = [];
   let expr: T.Expr | undefined;
 
-  while (tt.isNotOneOf('newline', 'comma')) {
+  while (tt.isNotOneOf('newline', 'comma', 'rparen')) {
     expr = parseExpr(expr, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
-
-    // TODO: Provide proper description about this line
-    //       In abstract, whenever occur line breaks or comma, the argument is parsed complete
-    if (tt.isOneOf('newline', 'comma')) break;
-
     tt.next();
-    if (haltByRParen && tt.is('rparen')) break;
   }
 
   let [result] = parameterExpr;
