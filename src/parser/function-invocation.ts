@@ -66,15 +66,12 @@ function parseFunctionParameter(
     const expr = parseExpr(undefined, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
 
+    // If the previous expression is function invoke expression
+    // It'll end with either comma or newline already, so we don't need to do anything
     if (expr.type !== 'FunctionInvokeExpr') {
       tt.next();
 
       if (hasParenthesesNested && tt.is('rparen')) break;
-    } else {
-      // If the previous expression is function invoke expression
-      // It'll end with either comma or newline already, so we need to update the current token
-      // TODO: After implement token tracter, this may be able to refactor
-      // curTok = currentToken();
     }
   }
 
