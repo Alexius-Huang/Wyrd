@@ -1,6 +1,7 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
 import { ParserErrorIf } from './error';
+import { EmptyExpression } from './constants';
 
 export function parseConditionalExpr(
   tt: TokenTracker,
@@ -10,7 +11,13 @@ export function parseConditionalExpr(
   lockedType?: string,
 ): T.ConditionalExpr {
   tt.next(); // Skip 'if' | 'elif' keyword
-  let result: T.ConditionalExpr = { type: 'ConditionalExpr', returnType: lockedType ?? 'Unknown' };
+  let result: T.ConditionalExpr = {
+    type: 'ConditionalExpr',
+    condition: EmptyExpression,
+    expr1: EmptyExpression,
+    expr2: EmptyExpression,
+    returnType: lockedType ?? 'Unknown'
+  };
 
   while (tt.isNot('arrow') && tt.valueIsNot('then')) {
     result.condition = parseExpr(result, { target: 'condition' });
@@ -20,8 +27,7 @@ export function parseConditionalExpr(
 
   ParserErrorIf(result.condition === undefined, 'Expect to resolve a condition');
 
-  // TODO: Change annotation to T.Expr when support all return type
-  const condReturnedType = (result.condition as T.BinaryOpExpr).returnType;
+  const condReturnedType = result.condition.returnType;
   ParserErrorIf(
      condReturnedType !== 'Bool',
     `Expect conditional expression's condition should return \`Bool\` type, instead got: \`${condReturnedType}\``,
@@ -39,12 +45,11 @@ export function parseConditionalExpr(
     tt.next();
   }
 
-  // TODO: Remove annotation when support returnType
   if (lockedType === undefined) {
-    result.returnType = (result.expr1 as T.StringLiteral).returnType;
+    result.returnType = result.expr1.returnType;
   } else {
     ParserErrorIf(
-      (result.expr1 as T.StringLiteral).returnType !== result.returnType,
+      result.expr1.returnType !== result.returnType,
       `Expect values returned from different condition branch to be the same`
     );
   }
@@ -93,7 +98,7 @@ export function parseConditionalExpr(
   }
 
   ParserErrorIf(
-    (result.expr2 as T.StringLiteral).returnType !== result.returnType,
+    result.expr2.returnType !== result.returnType,
     `Expect values returned from different condition branch to be the same`
   );
 

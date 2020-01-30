@@ -17,7 +17,8 @@ export function parseFunctionDeclaration(
     name: tt.value,
     arguments: [],
     outputType: 'Void',
-    body: []
+    body: [],
+    returnType: 'Void',
   };
   // TODO: Record name of the function
   tt.next(); // Skip the function name identifier

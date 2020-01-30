@@ -13,7 +13,7 @@ import { parseAssignmentExpr } from './assignment';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
 import { ParserError } from './error';
-import { BuiltinBinaryOperators } from './constants';
+import { BuiltinBinaryOperators, EmptyExpression } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -110,7 +110,11 @@ export function parse(
   }
 
   function parseLogicalNotExpr(): T.Expr {
-    let result: T.NotExpr = { type: 'NotExpr', returnType: 'Bool' };
+    let result: T.NotExpr = {
+      type: 'NotExpr',
+      expr: EmptyExpression,
+      returnType: 'Bool',
+    };
     tt.next();
     result.expr = parseExpr(result);
     return result;
@@ -121,6 +125,7 @@ export function parse(
     let result: T.AndExpr | T.OrExpr = {
       type: logicType,
       expr1: prevExpr,
+      expr2: EmptyExpression,
       returnType: 'Bool',
     };
 

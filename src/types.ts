@@ -80,6 +80,7 @@ export type Scope = {
 export type AST = Array<Expr>;
 
 export type Expr =
+  EmptyExpr           |
   BinaryOpExpr        |
   NotExpr             |
   OrExpr              |
@@ -95,6 +96,11 @@ export type Expr =
   BooleanLiteral      |
   NullLiteral
 ;
+
+export type EmptyExpr = {
+  type: 'EmptyExpr';
+  returnType: 'Invalid';
+};
 
 export type NumberLiteral = {
   type: 'NumberLiteral';
@@ -123,26 +129,27 @@ export type NullLiteral = {
 export type IdentLiteral = {
   type: 'IdentLiteral';
   value: string;
-  returnType?: string;
+  returnType: string;
 };
 
 export type AssignmentExpr = {
   type: 'AssignmentExpr';
   expr1: Expr;
-  expr2?: Expr;
+  expr2: Expr;
+  returnType: 'Void';
 }
 
 export type PrioritizedExpr = {
   type: 'PrioritizedExpr';
-  expr?: Expr;
-  returnType?: string;
+  expr: Expr;
+  returnType: string;
 };
 
 export type ConditionalExpr = {
   type: 'ConditionalExpr';
-  condition?: Expr;
-  expr1?: Expr;  // Condition is Truethy
-  expr2?: Expr; // Condition is Falsey
+  condition: Expr;
+  expr1: Expr;  // Condition is Truethy
+  expr2: Expr; // Condition is Falsey
   returnType: string;
 }
 
@@ -150,27 +157,27 @@ export type BinaryOpExpr = {
   type: 'BinaryOpExpr';
   operator: Operator;
   expr1: Expr;
-  expr2?: Expr;
-  returnType?: string;
+  expr2: Expr;
+  returnType: string;
 };
 
 export type NotExpr = {
   type: 'NotExpr';
-  expr?: Expr;
+  expr: Expr;
   returnType: 'Bool';
 };
 
 export type OrExpr = {
   type: 'OrExpr';
   expr1: Expr;
-  expr2?: Expr;
+  expr2: Expr;
   returnType: 'Bool';
 };
 
 export type AndExpr = {
   type: 'AndExpr';
   expr1: Expr;
-  expr2?: Expr;
+  expr2: Expr;
   returnType: 'Bool';
 };
 
@@ -182,6 +189,7 @@ export type FunctionDeclaration = {
   arguments: Array<Argument>;
   outputType: string;
   body: Array<Expr>;
+  returnType: 'Void';
 };
 
 export type FunctionInvokeExpr = {
