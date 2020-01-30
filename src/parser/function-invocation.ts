@@ -66,9 +66,10 @@ function parseFunctionParameter(
   haltByRParen: boolean,
 ): T.Expr {
   const parameterExpr: T.AST = [];
+  let expr: T.Expr | undefined;
 
   while (tt.isNotOneOf('newline', 'comma')) {
-    const expr = parseExpr(undefined, { scope, ast: parameterExpr });
+    expr = parseExpr(expr, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
 
     // TODO: Provide proper description about this line

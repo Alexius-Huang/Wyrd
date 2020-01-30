@@ -19,9 +19,9 @@ export function parsePrioritizedExpr(
 
   while (tt.isNotOneOf('rparen', 'comma')) {
     result.expr = parseExpr(result, { scope });
+    if (result.expr.type === 'FunctionInvokeExpr' && tt.is('rparen')) break;
     tt.next();
   }
-
 
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
