@@ -93,13 +93,13 @@ export function parse(
     if (BuiltinBinaryOperators.has(tt.value)) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
-        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr as T.Expr);
+        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
         return resultExpr;
       }
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
+        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr]);
         return resultExpr;
       }
 
