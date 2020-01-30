@@ -211,5 +211,28 @@ function complexArithmetic(w, x, y, z) {
 }
 ```
 
+### Function Invocation
+**Wyrd Code**
+```
+funcA("Hello world")
+funcB(1, 2, 3)
+funcC(1, 2, funcD(3, 4), 5)
+funcE(1, funcF(2, 3, funcG(4)), 5)
+funcI(1, (funcJ(2, 3) + 4) * funcK(5))
+funcL(1 / (funcM(2, 3) - 4), 5)
+funcN((1 - funcO(2) * 3) / 4, funcP(5))
+```
+
+**Compiled Wyrd Code**
+```js
+funcA('Hello world');
+funcB(1, 2, 3);
+funcC(1, 2, funcD(3, 4), 5);
+funcE(1, funcF(2, 3, funcG(4)), 5);
+funcI(1, (funcJ(2, 3) + 4) * funcK(5));
+funcL(1 / (funcM(2, 3) - 4), 5);
+funcN((1 - (funcO(2) * 3)) / 4, funcP(5));
+```
+
 ## Maintainers
 - [Maxwell-Alexius](https://github.com/Maxwell-Alexius)
