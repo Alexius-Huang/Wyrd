@@ -13,5 +13,13 @@ describe('Function Invocation', () => {
     describe('Basic Invocation', () => {
       FundamentalCompileTest('function-invocation/nested-invocation/basic-invocation');
     });
+
+    describe('With Parentheses', () => {
+      FundamentalCompileTest('function-invocation/nested-invocation/with-parentheses');
+    });
+
+    describe('With Prioritization', () => {
+      FundamentalCompileTest('function-invocation/nested-invocation/with-prioritization');
+    });
   });
 });

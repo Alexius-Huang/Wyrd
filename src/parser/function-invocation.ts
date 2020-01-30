@@ -25,20 +25,26 @@ export function parseFunctionInvokeExpr(
     tt.next(); // Skip the left parentheses
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
+
+  const prevExprIsPrioritized = prevExpr?.type === 'PrioritizedExpr';
+
   while (true) {
     let parameterExpr: T.Expr;
-    parameterExpr = parseFunctionParameter(tt, parseExpr, scope, hasParenthesesNested);
+    parameterExpr = parseFunctionParameter(
+      tt, parseExpr, scope,
+      hasParenthesesNested || prevExprIsPrioritized
+    );
     result.params.push(parameterExpr);
 
+    if (prevExprIsPrioritized && tt.is('rparen')) break;
     if (hasParenthesesNested && tt.is('rparen')) break;
     if (tt.is('newline')) break;
 
     tt.next();
   }
 
-  // TODO: remove type annotation when all expression support return type
   const inputParamsTypePattern = result.params
-    .map(expr => (expr as T.NumberLiteral).returnType)
+    .map(expr => expr.returnType)
     .join('.');
   const inputParamsTypeSymbol = Symbol.for(inputParamsTypePattern);
 
@@ -57,23 +63,23 @@ function parseFunctionParameter(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
-  hasParenthesesNested: boolean,
+  haltByRParen: boolean,
 ): T.Expr {
   const parameterExpr: T.AST = [];
+  let expr: T.Expr | undefined;
 
   while (tt.isNotOneOf('newline', 'comma')) {
-
-    const expr = parseExpr(undefined, { scope, ast: parameterExpr });
+    expr = parseExpr(expr, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
 
-    // If the previous expression is function invoke expression
-    // It'll end with either comma or newline already, so we don't need to do anything
-    if (expr.type !== 'FunctionInvokeExpr') {
-      tt.next();
+    // TODO: Provide proper description about this line
+    //       In abstract, whenever occur line breaks or comma, the argument is parsed complete
+    if (tt.isOneOf('newline', 'comma')) break;
 
-      if (hasParenthesesNested && tt.is('rparen')) break;
-    }
+    tt.next();
+    if (haltByRParen && tt.is('rparen')) break;
   }
 
-  return parameterExpr[0];
+  let [result] = parameterExpr;
+  return result;
 }

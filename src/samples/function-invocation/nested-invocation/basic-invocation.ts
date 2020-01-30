@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, ParseOptions, FunctionPattern } from '../../../types';
+import { Token, AST, Operator as Op, ParseOptions } from '../../../types';
 import { createFunctionPatterns } from '../../helper';
 
 const program = `\
@@ -6,7 +6,9 @@ funcA 1, funcB 2, 3, 4, 5
 funcC 1, 2, funcD 3, 4, 5
 funcE 1, funcF 2, 3, funcG 4, 5
 funcH funcI 1, 2, funcJ 3, 4, funcK 5
-`;
+funcL 1 * funcM 2 + 3 * funcN 4, 5 
+`;`
+`
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'funcA' },
@@ -61,6 +63,20 @@ const tokens: Array<Token> = [
   { type: 'number', value: '4' },
   { type: 'comma', value: ',' },
   { type: 'ident', value: 'funcK' },
+  { type: 'number', value: '5' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'funcL' },
+  { type: 'number', value: '1' },
+  { type: 'asterisk', value: '*' },
+  { type: 'ident', value: 'funcM' },
+  { type: 'number', value: '2' },
+  { type: 'plus', value: '+' },
+  { type: 'number', value: '3' },
+  { type: 'asterisk', value: '*' },
+  { type: 'ident', value: 'funcN' },
+  { type: 'number', value: '4' },
+  { type: 'comma', value: ',' },
   { type: 'number', value: '5' },
   { type: 'newline', value: '\n' },
 ];
@@ -163,6 +179,47 @@ const ast: AST = [
     ],
     returnType: 'Num',
   },
+  {
+    type: 'FunctionInvokeExpr',
+    name: 'funcL',
+    params: [
+      {
+        type: 'BinaryOpExpr',
+        operator: Op.Asterisk,
+        returnType: 'Num',
+        expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+        expr2: {
+          type: 'FunctionInvokeExpr',
+          name: 'funcM',
+          params: [
+            {
+              type: 'BinaryOpExpr',
+              operator: Op.Plus,
+              returnType: 'Num',
+              expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+              expr2: {
+                type: 'BinaryOpExpr',
+                operator: Op.Asterisk,
+                returnType: 'Num',
+                expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+                expr2: {
+                  type: 'FunctionInvokeExpr',
+                  name: 'funcN',
+                  params: [
+                    { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+                    { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+                  ],
+                  returnType: 'Num',
+                },
+              },
+            },
+          ],
+          returnType: 'Num',
+        }
+      }
+    ],
+    returnType: 'Num',
+  }
 ];
 
 const compiled = `\
@@ -170,6 +227,7 @@ funcA(1, funcB(2, 3, 4, 5));
 funcC(1, 2, funcD(3, 4, 5));
 funcE(1, funcF(2, 3, funcG(4, 5)));
 funcH(funcI(1, 2, funcJ(3, 4, funcK(5))));
+funcL(1 * funcM(2 + (3 * funcN(4, 5))));
 `;
 
 const parseOptions: ParseOptions = {
@@ -185,6 +243,9 @@ const parseOptions: ParseOptions = {
     ['funcI', [['Num.Num.Num', 'Num']]],
     ['funcJ', [['Num.Num.Num', 'Num']]],
     ['funcK', [['Num', 'Num']]],
+    ['funcL', [['Num', 'Num']]],
+    ['funcM', [['Num', 'Num']]],
+    ['funcN', [['Num.Num', 'Num']]],
   ]),
 };
 
