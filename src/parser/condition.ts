@@ -12,7 +12,7 @@ export function parseConditionalExpr(
   tt.next(); // Skip 'if' | 'elif' keyword
   let result: T.ConditionalExpr = { type: 'ConditionalExpr', returnType: lockedType ?? 'Unknown' };
 
-  while (tt.isNot('arrow') && tt.current.value !== 'then') {
+  while (tt.isNot('arrow') && tt.valueIsNot('then')) {
     result.condition = parseExpr(result, { target: 'condition' });
     tt.next();
     ParserErrorIf(tt.is('newline'), 'Expect condition to end followed by arrow `=>` or the `then` keyword');
@@ -27,14 +27,14 @@ export function parseConditionalExpr(
     `Expect conditional expression's condition should return \`Bool\` type, instead got: \`${condReturnedType}\``,
   );
 
-  if (tt.current.value === 'then') {
+  if (tt.valueIs('then')) {
     tt.next(); // Skip 'then' keyword      
     ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `then` keyword');
   }
 
   tt.next(); // Skip '=>' inline-control operator or skip `newline` if using `then block`
 
-  while (!tt.is('newline')) {
+  while (tt.isNot('newline')) {
     result.expr1 = parseExpr(result, { target: 'expr1' });
     tt.next();
   }
@@ -52,17 +52,17 @@ export function parseConditionalExpr(
   tt.next(); // Skip newline
 
   /* Handle elif is exactly the same as the if expression */
-  if (tt.is('keyword') && tt.current.value === 'elif') {
+  if (tt.is('keyword') && tt.valueIs('elif')) {
     result.expr2 = parseConditionalExpr(tt, parseExpr, result.returnType);
     return result;
   }
 
   /* Handle else expression */
-  if (tt.is('keyword') && tt.current.value === 'else') {
+  if (tt.is('keyword') && tt.valueIs('else')) {
     tt.next(); // Skip 'else' keyword
 
     ParserErrorIf(
-      tt.isNot('arrow') && tt.current.value as string !== 'then',
+      tt.isNot('arrow') && tt.valueIsNot('then'),
       'Expect else condition to followed by arrow `=>` or the `then` keyword'
     );
 
@@ -73,7 +73,7 @@ export function parseConditionalExpr(
         result.expr2 = parseExpr(result, { target: 'expr2' });
         tt.next();
       }
-    } else if (tt.current.value as string === 'then') {
+    } else if (tt.valueIs('then')) {
       tt.next(); // Skip 'then' keyword
       if (tt.is('newline')) {
         tt.next(); // Skip 'newline' token
@@ -84,7 +84,7 @@ export function parseConditionalExpr(
         }
 
         tt.next(); // Skip 'newline' token
-        ParserErrorIf(tt.current.value as string !== 'end', 'Expect `else then` expression to followed by an `end` keyword');
+        ParserErrorIf(tt.valueIsNot('end'), 'Expect `else then` expression to followed by an `end` keyword');
 
         tt.next(); // Skip 'end' token
         ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `end` keyword');

@@ -14,7 +14,7 @@ export function parseFunctionDeclaration(
 
   const result: T.FunctionDeclaration = {
     type: 'FunctionDeclaration',
-    name: tt.current.value,
+    name: tt.value,
     arguments: [],
     outputType: 'Void',
     body: []
@@ -37,7 +37,7 @@ export function parseFunctionDeclaration(
   tt.next();
   if (tt.isNot('builtin-type'))
     ParserError(`Expect an output data-type of the function declaration \`${result.name}\``);
-  result.outputType = tt.current.value;
+  result.outputType = tt.value;
 
   tt.next();
   if (tt.is('arrow')) {
@@ -53,15 +53,15 @@ export function parseFunctionDeclaration(
 
     return result;
   } else if (tt.is('keyword')) {
-    if (tt.current.value === 'do') {
+    if (tt.valueIs('do')) {
       parseBlock(tt, parseExpr, functionalScope, result);
       return result;
     }
 
-    ParserError(`Unhandled function declaration where token of keyword ${tt.current.value}`);
+    ParserError(`Unhandled function declaration where token of keyword ${tt.value}`);
   }
 
-  ParserError(`Unhandled function declaration where token of type ${tt.current.type}`)
+  ParserError(`Unhandled function declaration where token of type ${tt.type}`)
 }
 
 export function parseFunctionArguments(
@@ -74,7 +74,7 @@ export function parseFunctionArguments(
   while (true) {
     let argument: T.Argument = { ident: '', type: '' };
     if (tt.is('ident')) {
-      argument.ident = tt.current.value;
+      argument.ident = tt.value;
 
       tt.next();
       if (tt.isNot('colon'))
@@ -83,7 +83,7 @@ export function parseFunctionArguments(
 
       if (tt.isNot('builtin-type'))
         ParserError('Expect token next to the colon of the argument declaration is data-type');
-      argument.type = tt.current.value;
+      argument.type = tt.value;
       tt.next();
 
       // Setting variable infos from arguments
@@ -124,7 +124,7 @@ export function parseBlock(
   tt.next(); // Skip newline
 
   if (prevExpr.type === 'FunctionDeclaration') {
-    while (!(tt.is('keyword') && tt.current.value === 'end')) {
+    while (!(tt.is('keyword') && tt.valueIs('end'))) {
       if (tt.is('newline')) {
         tt.next();
         continue;

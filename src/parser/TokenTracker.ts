@@ -5,6 +5,8 @@ export default class TokenTracker {
   constructor(public readonly tokens: Array<T.Token>) {}
 
   get current(): T.Token { return this.tokens[this.index]; }
+  get type(): string { return this.current.type; }
+  get value(): string { return this.current.value; }
   get peek(): T.Token | null { return this.tokens[this.index + 1] ?? null }
 
   public next(): T.Token {
@@ -19,8 +21,32 @@ export default class TokenTracker {
     return this.current.type === type;
   }
 
+  public valueIs(value: string): boolean {
+    return this.current.value === value;
+  }
+
   public isNot(type: string): boolean {
     return this.current.type !== type;
+  }
+
+  public valueIsNot(value: string): boolean {
+    return this.current.value !== value;
+  }
+
+  public isOneOf(...types: Array<string>): boolean {
+    return types.indexOf(this.current.type) !== -1;
+  }
+
+  public valueIsOneOf(...values: Array<string>): boolean {
+    return values.indexOf(this.current.value) !== -1;
+  }
+
+  public isNotOneOf(...types: Array<string>): boolean {
+    return !this.isOneOf(...types);
+  }
+
+  public valueIsNotOneOf(...values: Array<string>): boolean {
+    return !this.valueIsOneOf(...values);
   }
 
   public peekIs(type: string): boolean {

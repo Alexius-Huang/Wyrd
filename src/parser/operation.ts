@@ -10,7 +10,7 @@ export function parseBinaryOpExpr(
   prevExpr: T.Expr,
 ): T.Expr {
   let operator: T.Operator;
-  switch(tt.current.value) {
+  switch(tt.value) {
     case '+':  operator = T.Operator.Plus;     break;
     case '-':  operator = T.Operator.Dash;     break;
     case '*':  operator = T.Operator.Asterisk; break;
@@ -22,7 +22,7 @@ export function parseBinaryOpExpr(
     case '<=': operator = T.Operator.LtEq;     break;
     case '==': operator = T.Operator.EqEq;     break;
     case '!=': operator = T.Operator.BangEq;   break;
-    default: ParserError(`Unhandled BinaryOpExpr Operator \`${tt.current.value}\``)
+    default: ParserError(`Unhandled BinaryOpExpr Operator \`${tt.value}\``)
   }
 
   if (prevExpr.type === 'BinaryOpExpr') {

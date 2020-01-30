@@ -9,7 +9,7 @@ export function parseFunctionInvokeExpr(
   prevExpr?: T.Expr,
 ): T.FunctionInvokeExpr {
   const { functions } = scope;
-  const { name, patterns } = functions.get(tt.current.value) as T.FunctionPattern;
+  const { name, patterns } = functions.get(tt.value) as T.FunctionPattern;
 
   const result: T.FunctionInvokeExpr = {
     type: 'FunctionInvokeExpr',
@@ -61,7 +61,7 @@ function parseFunctionParameter(
 ): T.Expr {
   const parameterExpr: T.AST = [];
 
-  while (tt.isNot('newline') && tt.isNot('comma')) {
+  while (tt.isNotOneOf('newline', 'comma')) {
 
     const expr = parseExpr(undefined, { scope, ast: parameterExpr });
     parameterExpr.push(expr);

@@ -32,21 +32,21 @@ export function parse(
     const ast: T.AST = meta?.ast ?? globalAst;
 
     if (tt.is('keyword')) {
-      if (tt.current.value === 'def') {
+      if (tt.valueIs('def')) {
         return parseFunctionDeclaration(tt, parseExpr, scope);
       }
 
-      if (tt.current.value === 'if') {
+      if (tt.valueIs('if')) {
         let resultExpr: T.ConditionalExpr;
         resultExpr = parseConditionalExpr(tt, parseExpr);
         return resultExpr;
       }
 
-      if (tt.current.value === 'not') {
+      if (tt.valueIs('not')) {
         return parseLogicalNotExpr();
       }
 
-      if (tt.current.value === 'and' || tt.current.value === 'or') {
+      if (tt.valueIsOneOf('and', 'or')) {
         let resultExpr: T.Expr;
         if (prevExpr?.type === 'PrioritizedExpr') {
           resultExpr = parseLogicalAndOrExpr(prevExpr.expr as T.Expr);
@@ -56,7 +56,7 @@ export function parse(
         return parseLogicalAndOrExpr(ast.pop() as T.Expr);
       }
 
-      ParserError(`Unhandled keyword token with value \`${tt.current.value}\``);
+      ParserError(`Unhandled keyword token with value \`${tt.value}\``);
     }
 
     if (tt.is('number')) {
@@ -89,7 +89,7 @@ export function parse(
       return resultExpr;
     }
 
-    if (BuiltinBinaryOperators.has(tt.current.value)) {
+    if (BuiltinBinaryOperators.has(tt.value)) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
         resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr as T.Expr);
@@ -106,7 +106,7 @@ export function parse(
       return resultExpr;
     }
 
-    ParserError(`Unhandled token type of \`${tt.current.type}\``);
+    ParserError(`Unhandled token type of \`${tt.type}\``);
   }
 
   function parseLogicalNotExpr(): T.Expr {
@@ -117,7 +117,7 @@ export function parse(
   }
 
   function parseLogicalAndOrExpr(prevExpr: T.Expr): T.Expr {
-    const logicType = tt.current.value === 'and' ? 'AndExpr' : 'OrExpr';
+    const logicType = tt.valueIs('and') ? 'AndExpr' : 'OrExpr';
     let result: T.AndExpr | T.OrExpr = {
       type: logicType,
       expr1: prevExpr,

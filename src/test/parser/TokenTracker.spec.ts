@@ -28,7 +28,29 @@ describe('Token Tracker', () => {
         expect(tt.current).toMatchObject({ type: 'ident', value: 'foo' });
       });
     });
-    
+
+    describe('TokenTracker#type', () => {
+      it('returns the current token\'s property `type`', () => {
+        const types = ['ident', 'eq', 'number', 'plus', 'number'];
+        for (let i = 0; i < tokens.length - 1; i += 1) {
+          expect(tt.type).toBe(types[i]);
+          tt.next();
+        }
+        expect(tt.type).toBe(types[types.length - 1]);
+      });
+    });
+
+    describe('TokenTracker#value', () => {
+      it('returns the current token\'s property `value`', () => {
+        const values = ['foo', '=', '1', '+', '2'];
+        for (let i = 0; i < tokens.length - 1; i += 1) {
+          expect(tt.value).toBe(values[i]);
+          tt.next();
+        }
+        expect(tt.value).toBe(values[values.length - 1]);
+      });
+    });
+
     describe('TokenTracker#peek', () => {
       it('returns the tracked down next token', () => {
         expect(tt.peek).toMatchObject({ type: 'eq', value: '=' });
@@ -89,6 +111,29 @@ describe('Token Tracker', () => {
       });
     });
 
+    describe('TokenTracker#valueIs', () => {
+      it('checks the value of the current token and returns the boolean result', () => {
+        expect(tt.valueIs('1')).toBe(false);
+        expect(tt.valueIs('foo')).toBe(true);
+
+        tt.next();
+        expect(tt.valueIs('=')).toBe(true);
+
+        tt.next();
+        expect(tt.valueIs('=')).toBe(false);
+        expect(tt.valueIs('1')).toBe(true);
+  
+        tt.next();
+        expect(tt.valueIs('foo')).toBe(false);
+        expect(tt.valueIs('2')).toBe(false);
+        expect(tt.valueIs('+')).toBe(true);
+  
+        tt.next();
+        expect(tt.valueIs('foo')).toBe(false);
+        expect(tt.valueIs('2')).toBe(true);
+      });
+    });
+
     describe('TokenTracker#isNot', () => {
       it('checks the type of the current token and returns the boolean result', () => {
         expect(tt.isNot('number')).toBe(true);
@@ -109,6 +154,59 @@ describe('Token Tracker', () => {
         tt.next();
         expect(tt.isNot('string')).toBe(true);
         expect(tt.isNot('number')).toBe(false);
+      });
+    });
+
+    describe('TokenTracker#valueIsNot', () => {
+      it('checks the value of the current token and returns the boolean result', () => {
+        expect(tt.valueIsNot('1')).toBe(true);
+        expect(tt.valueIsNot('foo')).toBe(false);
+
+        tt.next();  
+        expect(tt.valueIsNot('=')).toBe(false);
+
+        tt.next();
+        expect(tt.valueIsNot('=')).toBe(true);
+        expect(tt.valueIsNot('1')).toBe(false);
+  
+        tt.next();
+        expect(tt.valueIsNot('foo')).toBe(true);
+        expect(tt.valueIsNot('2')).toBe(true);
+        expect(tt.valueIsNot('+')).toBe(false);
+  
+        tt.next();
+        expect(tt.valueIsNot('foo')).toBe(true);
+        expect(tt.valueIsNot('2')).toBe(false);
+      });
+    });
+
+    describe('TokenTracker#isOneOf', () => {
+      it('checks the type of the current token is one of the specified input and returns the boolean result', () => {
+        expect(tt.isOneOf('ident', 'number', 'eq')).toBe(true);
+        expect(tt.isOneOf('number', 'plus', 'eq')).toBe(false);
+      });
+    });
+
+    describe('TokenTracker#isNotOneOf', () => {
+      it('checks the type of the current token is not one of the specified input and returns the boolean result', () => {
+        expect(tt.isNotOneOf('ident', 'number', 'eq')).toBe(false);
+        expect(tt.isNotOneOf('number', 'plus', 'eq')).toBe(true);
+      });
+    });
+
+    describe('TokenTracker#valueIsOneOf', () => {
+      it('checks the value of the current token is one of the specified input and returns the boolean result', () => {
+        tt.next();
+        expect(tt.valueIsOneOf('+', '-', '*', '/', '=')).toBe(true);
+        expect(tt.valueIsOneOf('+', '-', '*', '/')).toBe(false);
+      });
+    });
+
+    describe('TokenTracker#valueIsNotOneOf', () => {
+      it('checks the value of the current token is not one of the specified input and returns the boolean result', () => {
+        tt.next();
+        expect(tt.valueIsNotOneOf('+', '-', '*', '/', '=')).toBe(false);
+        expect(tt.valueIsNotOneOf('+', '-', '*', '/')).toBe(true);
       });
     });
 

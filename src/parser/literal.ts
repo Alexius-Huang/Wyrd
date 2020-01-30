@@ -11,7 +11,7 @@ export function parseLiteral(
 ): T.Expr {
   let result: T.IdentLiteral | T.FunctionInvokeExpr = {
     type: 'IdentLiteral',
-    value: tt.current.value,
+    value: tt.value,
     returnType: 'Unknown',
   };
   const { variables, functions } = scope;
@@ -48,7 +48,7 @@ export function parseNumberLiteral(
 ): T.Expr {
   const result: T.NumberLiteral = {
     type: 'NumberLiteral',
-    value: tt.current.value,
+    value: tt.value,
     returnType: 'Num',
   };
 
@@ -77,7 +77,7 @@ export function parseStringLiteral(
 ): T.Expr {
   const result: T.StringLiteral = {
     type: 'StringLiteral',
-    value: tt.current.value,
+    value: tt.value,
     returnType: 'Str',
   };
 
@@ -98,7 +98,7 @@ export function parseBooleanLiteral(
 ): T.Expr {
   const result: T.BooleanLiteral = {
     type: 'BooleanLiteral',
-    value: tt.current.value as 'True' | 'False',
+    value: tt.value as 'True' | 'False',
     returnType: 'Bool',
   };
 
