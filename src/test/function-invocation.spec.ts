@@ -8,4 +8,8 @@ describe('Function Invocation', () => {
   describe('Nested Invocation', () => {
     FundamentalCompileTest('function-invocation/nested-invocation');
   });
+
+  describe('With Prioritization', () => {
+    FundamentalCompileTest('function-invocation/with-prioritization');
+  });
 });

@@ -59,7 +59,7 @@ function parseFunctionParameter(
   let expr: T.Expr | undefined;
 
   while (tt.isNotOneOf('newline', 'comma', 'rparen')) {
-    expr = parseExpr(expr, { scope, ast: parameterExpr });
+    expr = parseExpr(undefined, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
     tt.next();
   }
