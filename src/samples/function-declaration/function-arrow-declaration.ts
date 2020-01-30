@@ -108,6 +108,7 @@ const ast: AST = [
   {
     type: 'FunctionDeclaration',
     name: 'addition',
+    returnType: 'Void',
     arguments: [
       { ident: 'x', type: 'Num' },
       { ident: 'y', type: 'Num' }
@@ -125,6 +126,7 @@ const ast: AST = [
   },
   {
     type: 'FunctionDeclaration',
+    returnType: 'Void',
     name: 'devilNumber',
     arguments: [],
     outputType: 'Num',
@@ -134,6 +136,7 @@ const ast: AST = [
   },
   {
     type: 'FunctionDeclaration',
+    returnType: 'Void',
     name: 'complexArithmetic',
     arguments: [
       { ident: 'w', type: 'Num' },
@@ -174,6 +177,7 @@ const ast: AST = [
   },
   {
     type: 'FunctionDeclaration',
+    returnType: 'Void',
     name: 'complexArithmetic2',
     arguments: [
       { ident: 'w', type: 'Num' },

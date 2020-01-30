@@ -125,6 +125,7 @@ const ast: AST = [
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '1',
@@ -143,6 +144,7 @@ const ast: AST = [
       expr: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
+        returnType: 'Num',
         expr1: {
           type: 'NumberLiteral',
           value: '3',

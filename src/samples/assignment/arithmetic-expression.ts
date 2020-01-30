@@ -40,6 +40,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: {
       type: 'IdentLiteral',
       value: 'foo',
@@ -53,6 +54,7 @@ const ast: AST = [
   },
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: {
       type: 'IdentLiteral',
       value: 'bar',
@@ -96,6 +98,7 @@ const ast: AST = [
   },
   {
     type: 'AssignmentExpr',
+    returnType: 'Void',
     expr1: {
       type: 'IdentLiteral',
       value: 'baz',
@@ -116,6 +119,7 @@ const ast: AST = [
         returnType: 'Num',
         expr1: {
           type: 'PrioritizedExpr',
+          returnType: 'Num',
           expr: {
             type: 'BinaryOpExpr',
             operator: Op.Dash,
