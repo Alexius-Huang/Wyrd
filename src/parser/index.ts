@@ -21,11 +21,11 @@ export function parse(
   parseOptions?: T.ParseOptions,
 ): T.AST {
   const tt = new TokenTracker(tokens);
-  const globalAst: T.AST = parseOptions?.ast ?? [];
+  const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
   const globalScope: T.Scope = {
     parentScope: null,
-    variables: parseOptions?.variables ?? (new Map<string, T.Variable>()),
-    functions: parseOptions?.functions ?? (new Map<string, T.FunctionPattern>()),
+    variables: new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
+    functions: new Map<string, T.FunctionPattern>(parseOptions?.functions ?? new Map()),
   };
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
