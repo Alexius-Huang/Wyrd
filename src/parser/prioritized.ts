@@ -17,14 +17,20 @@ export function parsePrioritizedExpr(
     returnType: 'Invalid',
   };
 
-  while (tt.isNot('rparen')) {
+  while (tt.isNotOneOf('rparen', 'comma')) {
     result.expr = parseExpr(result, { scope });
     tt.next();
   }
 
+
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
-      prevExpr.expr2 = result;
+      if (result.expr.type !== 'FunctionInvokeExpr') {
+        prevExpr.expr2 = result;
+      } else {
+        prevExpr.expr2 = result.expr;
+      }
+
       const opAction = getOPActionDetail(
         prevExpr.operator,
         prevExpr.expr2.returnType,
@@ -36,12 +42,20 @@ export function parsePrioritizedExpr(
     }
 
     if (prevExpr.type === 'NotExpr') {
-      prevExpr.expr = result;
+      if (result.expr.type !== 'FunctionInvokeExpr') {
+        prevExpr.expr = result;
+      } else {
+        prevExpr.expr = result.expr;
+      }
+
       return result;
     }
 
     ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
   }
+
+  if (result.expr.type === 'FunctionInvokeExpr')
+    return result.expr;
 
   result.returnType = result.expr.returnType;
   return result;

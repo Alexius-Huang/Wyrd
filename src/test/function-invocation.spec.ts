@@ -17,5 +17,9 @@ describe('Function Invocation', () => {
     describe('With Parentheses', () => {
       FundamentalCompileTest('function-invocation/nested-invocation/with-parentheses');
     });
+
+    describe('With Prioritization', () => {
+      FundamentalCompileTest('function-invocation/nested-invocation/with-prioritization');
+    });
   });
 });
