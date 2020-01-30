@@ -1,18 +1,17 @@
 import * as T from '../types';
 import { getOPActionDetail } from './helper';
 import { parseFunctionInvokeExpr } from './function-invocation';
+import TokenTracker from './TokenTracker';
 
 export function parseLiteral(
-  curTok: T.Token,
-  nextToken: () => T.Token,
-  currentToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
   let result: T.IdentLiteral | T.FunctionInvokeExpr = {
     type: 'IdentLiteral',
-    value: curTok.value,
+    value: tt.value,
     returnType: 'Unknown',
   };
   const { variables, functions } = scope;
@@ -21,7 +20,7 @@ export function parseLiteral(
     const varInfo = variables.get(result.value) as T.Variable;
     result.returnType = varInfo.type;
   } else if (functions.has(result.value)) {
-    result = parseFunctionInvokeExpr(curTok, nextToken, currentToken, parseExpr, scope, prevExpr);
+    result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -44,13 +43,12 @@ export function parseLiteral(
 }
 
 export function parseNumberLiteral(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
   const result: T.NumberLiteral = {
     type: 'NumberLiteral',
-    value: curTok.value,
+    value: tt.value,
     returnType: 'Num',
   };
 
@@ -74,13 +72,12 @@ export function parseNumberLiteral(
 }
 
 export function parseStringLiteral(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
   const result: T.StringLiteral = {
     type: 'StringLiteral',
-    value: curTok.value,
+    value: tt.value,
     returnType: 'Str',
   };
 
@@ -96,13 +93,12 @@ export function parseStringLiteral(
 }
 
 export function parseBooleanLiteral(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
   const result: T.BooleanLiteral = {
     type: 'BooleanLiteral',
-    value: curTok.value as 'True' | 'False',
+    value: tt.value as 'True' | 'False',
     returnType: 'Bool',
   };
 
@@ -118,8 +114,7 @@ export function parseBooleanLiteral(
 }
 
 export function parseNullLiteral(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
   const result: T.NullLiteral = {

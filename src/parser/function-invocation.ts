@@ -1,16 +1,15 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
 import { ParserErrorIf } from './error';
 
 export function parseFunctionInvokeExpr(
-  curTok: T.Token,
-  nextToken: () => T.Token,
-  currentToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.FunctionInvokeExpr {
   const { functions } = scope;
-  const { name, patterns } = functions.get(curTok.value) as T.FunctionPattern;
+  const { name, patterns } = functions.get(tt.value) as T.FunctionPattern;
 
   const result: T.FunctionInvokeExpr = {
     type: 'FunctionInvokeExpr',
@@ -19,22 +18,22 @@ export function parseFunctionInvokeExpr(
     returnType: 'Unknown',
   };
 
-  curTok = nextToken(); // Skip the name of the function
+  tt.next(); // Skip the name of the function
 
-  const hasParenthesesNested = curTok.type === 'lparen';
+  const hasParenthesesNested = tt.is('lparen');
   if (hasParenthesesNested)
-    curTok = nextToken(); // Skip the left parentheses
+    tt.next(); // Skip the left parentheses
 
-  ParserErrorIf(curTok.type === 'comma', `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
+  ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
   while (true) {
     let parameterExpr: T.Expr;
-    [curTok, parameterExpr] = parseFunctionParameter(curTok, nextToken, currentToken, parseExpr, scope, hasParenthesesNested);
+    parameterExpr = parseFunctionParameter(tt, parseExpr, scope, hasParenthesesNested);
     result.params.push(parameterExpr);
 
-    if (hasParenthesesNested && curTok.type === 'rparen') break;
-    if (curTok.type === 'newline') break;
+    if (hasParenthesesNested && tt.is('rparen')) break;
+    if (tt.is('newline')) break;
 
-    curTok = nextToken();
+    tt.next();
   }
 
   // TODO: remove type annotation when all expression support return type
@@ -55,31 +54,26 @@ export function parseFunctionInvokeExpr(
 }
 
 function parseFunctionParameter(
-  curTok: T.Token,
-  nextToken: () => T.Token,
-  currentToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   hasParenthesesNested: boolean,
-): [T.Token, T.Expr] {
+): T.Expr {
   const parameterExpr: T.AST = [];
 
-  while (!(curTok.type === 'newline' || curTok.type === 'comma')) {
+  while (tt.isNotOneOf('newline', 'comma')) {
 
     const expr = parseExpr(undefined, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
 
+    // If the previous expression is function invoke expression
+    // It'll end with either comma or newline already, so we don't need to do anything
     if (expr.type !== 'FunctionInvokeExpr') {
-      curTok = nextToken();
+      tt.next();
 
-      if (hasParenthesesNested && curTok.type === 'rparen') break;
-    } else {
-      // If the previous expression is function invoke expression
-      // It'll end with either comma or newline already, so we need to update the current token
-      // TODO: After implement token tracter, this may be able to refactor
-      curTok = currentToken();
+      if (hasParenthesesNested && tt.is('rparen')) break;
     }
   }
 
-  return [curTok, parameterExpr[0]];
+  return parameterExpr[0];
 }

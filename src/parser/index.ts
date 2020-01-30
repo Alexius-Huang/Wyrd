@@ -1,4 +1,5 @@
 import * as T from "../types";
+import TokenTracker from './TokenTracker';
 import {
   parseLiteral,
   parseNumberLiteral,
@@ -18,6 +19,7 @@ export function parse(
   tokens: Array<T.Token>,
   parseOptions?: T.ParseOptions,
 ): T.AST {
+  const tt = new TokenTracker(tokens);
   const globalAst: T.AST = parseOptions?.ast ?? [];
   const globalScope: T.Scope = {
     parentScope: null,
@@ -25,39 +27,26 @@ export function parse(
     functions: parseOptions?.functions ?? (new Map<string, T.FunctionPattern>()),
   };
 
-  let index = 0;
-  let curTok = tokens[index];
-
-  function nextToken(): T.Token {
-    curTok = tokens[++index];
-    return curTok;
-  }
-
-  // TODO: Implement token tracker
-  function currentToken(): T.Token {
-    return curTok;
-  }
-
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: T.Scope = meta?.scope ?? globalScope;
     const ast: T.AST = meta?.ast ?? globalAst;
 
-    if (curTok.type === 'keyword') {
-      if (curTok.value === 'def') {
-        return parseFunctionDeclaration(curTok, nextToken, parseExpr, scope);
+    if (tt.is('keyword')) {
+      if (tt.valueIs('def')) {
+        return parseFunctionDeclaration(tt, parseExpr, scope);
       }
 
-      if (curTok.value === 'if') {
+      if (tt.valueIs('if')) {
         let resultExpr: T.ConditionalExpr;
-        [curTok, resultExpr] = parseConditionalExpr(curTok, nextToken, parseExpr);
+        resultExpr = parseConditionalExpr(tt, parseExpr);
         return resultExpr;
       }
 
-      if (curTok.value === 'not') {
+      if (tt.valueIs('not')) {
         return parseLogicalNotExpr();
       }
 
-      if (curTok.value === 'and' || curTok.value === 'or') {
+      if (tt.valueIsOneOf('and', 'or')) {
         let resultExpr: T.Expr;
         if (prevExpr?.type === 'PrioritizedExpr') {
           resultExpr = parseLogicalAndOrExpr(prevExpr.expr as T.Expr);
@@ -67,87 +56,89 @@ export function parse(
         return parseLogicalAndOrExpr(ast.pop() as T.Expr);
       }
 
-      ParserError(`Unhandled keyword token with value \`${curTok.value}\``);
+      ParserError(`Unhandled keyword token with value \`${tt.value}\``);
     }
 
-    if (curTok.type === 'number') {
-      return parseNumberLiteral(curTok, nextToken, prevExpr);
+    if (tt.is('number')) {
+      return parseNumberLiteral(tt, prevExpr);
     }
 
-    if (curTok.type === 'string') {
-      return parseStringLiteral(curTok, nextToken, prevExpr);
+    if (tt.is('string')) {
+      return parseStringLiteral(tt, prevExpr);
     }
 
-    if (curTok.type === 'boolean') {
-      return parseBooleanLiteral(curTok, nextToken, prevExpr);
+    if (tt.is('boolean')) {
+      return parseBooleanLiteral(tt, prevExpr);
     }
 
-    if (curTok.type === 'null') {
-      return parseNullLiteral(curTok, nextToken, prevExpr);
+    if (tt.is('null')) {
+      return parseNullLiteral(tt, prevExpr);
     }
 
-    if (curTok.type === 'ident') {
-      return parseLiteral(curTok, nextToken, currentToken, parseExpr, scope, prevExpr);
+    if (tt.is('ident')) {
+      return parseLiteral(tt, parseExpr, scope, prevExpr);
     }
 
-    if (curTok.type === 'lparen') {
-      return parsePrioritizedExpr(curTok, nextToken, parseExpr, scope, prevExpr);
+    if (tt.is('lparen')) {
+      return parsePrioritizedExpr(tt, parseExpr, scope, prevExpr);
     }
 
-    if (curTok.type === 'eq') {
+    if (tt.is('eq')) {
       let resultExpr: T.Expr;
-      [curTok, resultExpr] = parseAssignmentExpr(curTok, nextToken, parseExpr, scope, ast.pop() as T.Expr);
+      resultExpr = parseAssignmentExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
       return resultExpr;
     }
 
-    if (BuiltinBinaryOperators.has(curTok.value)) {
+    if (BuiltinBinaryOperators.has(tt.value)) {
       let resultExpr: T.Expr;
       if (prevExpr?.type === 'PrioritizedExpr') {
-        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr.expr as T.Expr);
+        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr as T.Expr);
         return resultExpr;
       }
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-        [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
+        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr] as T.Expr);
         return resultExpr;
       }
 
-      [curTok, resultExpr] = parseBinaryOpExpr(curTok, nextToken, parseExpr, scope, ast.pop() as T.Expr);
+      resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
       return resultExpr;
     }
 
-    ParserError(`Unhandled token type of \`${curTok.type}\``);
+    ParserError(`Unhandled token type of \`${tt.type}\``);
   }
 
   function parseLogicalNotExpr(): T.Expr {
     let result: T.NotExpr = { type: 'NotExpr', returnType: 'Bool' };
-    nextToken();
+    tt.next();
     result.expr = parseExpr(result);
     return result;
   }
 
   function parseLogicalAndOrExpr(prevExpr: T.Expr): T.Expr {
-    const logicType = curTok.value === 'and' ? 'AndExpr' : 'OrExpr';
+    const logicType = tt.valueIs('and') ? 'AndExpr' : 'OrExpr';
     let result: T.AndExpr | T.OrExpr = {
       type: logicType,
       expr1: prevExpr,
       returnType: 'Bool',
     };
 
-    nextToken();
+    tt.next();
     result.expr2 = parseExpr(result);
     return result;
   }
 
-  while (index < tokens.length) {
-    if (curTok.type === 'newline') {
-      nextToken();
+  while (true) {
+    if (tt.is('newline')) {
+      if (!tt.hasNext()) break;
+      tt.next();
       continue;
     }
 
     globalAst.push(parseExpr());
-    nextToken();
+    if (!tt.hasNext()) break;
+    tt.next();
   }
 
   return globalAst;

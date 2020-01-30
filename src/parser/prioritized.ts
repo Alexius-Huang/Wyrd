@@ -1,21 +1,21 @@
 import * as T from '../types';
 import { ParserError } from './error';
 import { getOPActionDetail } from './helper';
+import TokenTracker from './TokenTracker';
 
 export function parsePrioritizedExpr(
-  curTok: T.Token,
-  nextToken: () => T.Token,
+  tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: T.Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
-  curTok = nextToken(); // Skip the lparen token
+  tt.next(); // Skip the lparen token
   let result: T.PrioritizedExpr = { type: 'PrioritizedExpr' };
 
   while (true) {
     result.expr = parseExpr(result, { scope });
-    curTok = nextToken();
-    if (curTok.type === 'rparen') break;
+    tt.next();
+    if (tt.is('rparen')) break;
   }
 
   if (prevExpr !== undefined) {
