@@ -36,9 +36,8 @@ export function parseFunctionInvokeExpr(
     tt.next();
   }
 
-  // TODO: remove type annotation when all expression support return type
   const inputParamsTypePattern = result.params
-    .map(expr => (expr as T.NumberLiteral).returnType)
+    .map(expr => expr.returnType)
     .join('.');
   const inputParamsTypeSymbol = Symbol.for(inputParamsTypePattern);
 
@@ -62,17 +61,15 @@ function parseFunctionParameter(
   const parameterExpr: T.AST = [];
 
   while (tt.isNotOneOf('newline', 'comma')) {
-
     const expr = parseExpr(undefined, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
 
-    // If the previous expression is function invoke expression
-    // It'll end with either comma or newline already, so we don't need to do anything
-    if (expr.type !== 'FunctionInvokeExpr') {
-      tt.next();
+    // TODO: Provide proper description about this line
+    //       In abstract, whenever occur line breaks, the argument is parsed complete
+    if (tt.is('newline')) break;
 
-      if (hasParenthesesNested && tt.is('rparen')) break;
-    }
+    tt.next();
+    if (hasParenthesesNested && tt.is('rparen')) break;
   }
 
   return parameterExpr[0];

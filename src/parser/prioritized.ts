@@ -17,10 +17,9 @@ export function parsePrioritizedExpr(
     returnType: 'Invalid',
   };
 
-  while (true) {
+  while (tt.isNot('rparen')) {
     result.expr = parseExpr(result, { scope });
     tt.next();
-    if (tt.is('rparen')) break;
   }
 
   if (prevExpr !== undefined) {

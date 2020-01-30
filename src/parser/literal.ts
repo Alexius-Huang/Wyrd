@@ -34,10 +34,12 @@ export function parseLiteral(
     prevExpr.returnType = opAction.returnType;
     return prevExpr;
   }
+
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
   }
+
   return result;
 }
 
