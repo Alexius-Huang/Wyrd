@@ -145,7 +145,7 @@ export type AssignmentExpr = {
   expr1: Expr;
   expr2: Expr;
   returnType: 'Void';
-}
+};
 
 export type PrioritizedExpr = {
   type: 'PrioritizedExpr';
@@ -159,7 +159,7 @@ export type ConditionalExpr = {
   expr1: Expr;  // Condition is Truethy
   expr2: Expr; // Condition is Falsey
   returnType: string;
-}
+};
 
 export type BinaryOpExpr = {
   type: 'BinaryOpExpr';
