@@ -1,12 +1,7 @@
 import * as T from "../types";
 import TokenTracker from './TokenTracker';
 import { parseIdentifier } from './identifier';
-import {
-  parseNumberLiteral,
-  parseStringLiteral,
-  parseBooleanLiteral,
-  parseNullLiteral,
-} from './primitive-literals';
+import { parsePrimitive } from './primitive-literals';
 import { parseListLiteral } from './composite-literals';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './condition';
@@ -61,28 +56,16 @@ export function parse(
       ParserError(`Unhandled keyword token with value \`${tt.value}\``);
     }
 
-    if (tt.is('number')) {
-      return parseNumberLiteral(tt, prevExpr);
-    }
-
-    if (tt.is('string')) {
-      return parseStringLiteral(tt, prevExpr);
-    }
-
-    if (tt.is('boolean')) {
-      return parseBooleanLiteral(tt, prevExpr);
-    }
-
-    if (tt.is('null')) {
-      return parseNullLiteral(tt, prevExpr);
-    }
-
-    if (tt.is('lbracket')) {
-      return parseListLiteral(tt, parseExpr, scope, prevExpr);
+    if (tt.isOneOf('number', 'string', 'boolean', 'null')) {
+      return parsePrimitive(tt, prevExpr);
     }
 
     if (tt.is('ident')) {
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
+    }
+
+    if (tt.is('lbracket')) {
+      return parseListLiteral(tt, parseExpr, scope, prevExpr);
     }
 
     if (tt.is('lparen')) {

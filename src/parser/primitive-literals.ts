@@ -2,7 +2,7 @@ import * as T from '../types';
 import { getOPActionDetail } from './helper';
 import TokenTracker from './TokenTracker';
 
-export function parseNumberLiteral(
+function parseNumberLiteral(
   tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
@@ -30,7 +30,7 @@ export function parseNumberLiteral(
   return result;
 }
 
-export function parseStringLiteral(
+function parseStringLiteral(
   tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
@@ -51,7 +51,7 @@ export function parseStringLiteral(
   return result;
 }
 
-export function parseBooleanLiteral(
+function parseBooleanLiteral(
   tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
@@ -72,7 +72,7 @@ export function parseBooleanLiteral(
   return result;
 }
 
-export function parseNullLiteral(
+function parseNullLiteral(
   tt: TokenTracker,
   prevExpr?: T.Expr
 ): T.Expr {
@@ -91,4 +91,20 @@ export function parseNullLiteral(
     prevExpr.returnType = result.returnType;
   }
   return result;
+}
+
+const primitiveMapParsingFunctions = new Map([
+  ['number', parseNumberLiteral],
+  ['string', parseStringLiteral],
+  ['boolean', parseBooleanLiteral],
+  ['null', parseNullLiteral],
+]);
+
+export function parsePrimitive(
+  tt: TokenTracker,
+  prevExpr?: T.Expr,
+) {
+  const func = primitiveMapParsingFunctions.get(tt.type) as
+    (tt: TokenTracker, prevExpr?: T.Expr) => T.Expr;
+  return func(tt, prevExpr);
 }
