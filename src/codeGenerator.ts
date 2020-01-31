@@ -20,6 +20,8 @@ export function generateCode(ast: T.AST): string {
         return expr.value === 'True' ? 'true' : 'false';
       case 'NullLiteral':
         return 'null';
+      case 'ListLiteral':
+        return codeGenListLiteral(expr);
       case 'NotExpr':
         return codeGenNotExpr(expr);
       case 'AndExpr':
@@ -40,6 +42,11 @@ export function generateCode(ast: T.AST): string {
       default:
         CodeGenerateError(`Unhandled expression of type \`${(expr).type}\``);
     }
+  }
+
+  function codeGenListLiteral(expr: T.ListLiteral) {
+    const { values } = expr;
+    return `[${values.map(genExpr).join(', ')}]`;
   }
 
   function codeGenBinaryOpExpr(expr: T.BinaryOpExpr) {

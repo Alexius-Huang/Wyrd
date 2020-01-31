@@ -94,7 +94,8 @@ export type Expr =
   NumberLiteral       |
   StringLiteral       |
   BooleanLiteral      |
-  NullLiteral
+  NullLiteral         |
+  ListLiteral
 ;
 
 export type EmptyExpr = {
@@ -124,6 +125,13 @@ export type NullLiteral = {
   type: 'NullLiteral';
   value: 'Null';
   returnType: 'Null';
+};
+
+export type ListLiteral = {
+  type: 'ListLiteral';
+  values: Array<Expr>;
+  elementType: string;
+  returnType: string;
 };
 
 export type IdentLiteral = {

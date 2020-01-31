@@ -2,6 +2,7 @@ import * as T from '../types';
 import { getOPActionDetail } from './helper';
 import { parseFunctionInvokeExpr } from './function-invocation';
 import TokenTracker from './TokenTracker';
+import { ParserErrorIf } from './error';
 
 export function parseLiteral(
   tt: TokenTracker,
@@ -131,5 +132,40 @@ export function parseNullLiteral(
     prevExpr.expr = result;
     prevExpr.returnType = result.returnType;
   }
+  return result;
+}
+
+export function parseListLiteral(
+  tt: TokenTracker,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
+  prevExpr?: T.Expr,
+): T.Expr {
+  tt.next(); // Skip lbracket
+  const result: T.ListLiteral = {
+    type: 'ListLiteral',
+    values: [],
+    elementType: 'Invalid',
+    returnType: 'Invalid',
+  };
+
+  // Fetch the first element
+  const el = parseExpr(undefined, { scope });
+  result.values.push(el);
+  result.elementType = el.returnType;
+  result.returnType = `List[${el.returnType}]`;
+  tt.next();
+
+  // Fetch the rest of the elements until meet `rbracket` token
+  while (tt.isNot('rbracket')) {
+    const el = parseExpr(undefined, { scope });
+    ParserErrorIf(
+      el.returnType !== result.elementType,
+      `Expect List to contain of type \`${result.elementType}\`, instead mixed with type \`${el.returnType}\``
+    );
+    result.values.push(el);
+    tt.next();
+  }
+
   return result;
 }

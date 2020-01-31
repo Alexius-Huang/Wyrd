@@ -6,6 +6,7 @@ import {
   parseStringLiteral,
   parseBooleanLiteral,
   parseNullLiteral,
+  parseListLiteral,
 } from './literal';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './condition';
@@ -74,6 +75,10 @@ export function parse(
 
     if (tt.is('null')) {
       return parseNullLiteral(tt, prevExpr);
+    }
+
+    if (tt.is('lbracket')) {
+      return parseListLiteral(tt, parseExpr, scope, prevExpr);
     }
 
     if (tt.is('ident')) {
