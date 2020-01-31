@@ -15,6 +15,9 @@ def funcB(x: Num, y: Num, z: Num): Num do
   bar = foo * z - x
   bar
 end
+
+funcA(1, 2)
+funcB(1 + 2 * 3, 4 / 5 - 6, 7 + funcA(8, 9 + 10 * 11) / 12)
 `;
 
 const compiled = `\
@@ -30,6 +33,8 @@ function funcB(x, y, z) {
   return bar;
 }
 
+funcA(1, 2);
+funcB(1 + (2 * 3), 4 / 5 - 6, 7 + (funcA(8, 9 + (10 * 11)) / 12));
 `;
 
 export { program, compiled };
