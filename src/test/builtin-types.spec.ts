@@ -10,6 +10,10 @@ describe('Builtin Types', () => {
     describe('List', () => {
       FundamentalCompileTest('builtin-types/list/literal');
 
+      describe('With Multidimension', () => {
+        FundamentalCompileTest('builtin-types/list/multidimension');
+      });
+
       describe('With Prioritization', () => {
         FundamentalCompileTest('builtin-types/list/with-prioritization');
       });
