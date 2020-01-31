@@ -20,7 +20,9 @@ export function parseFunctionDeclaration(
     body: [],
     returnType: 'Void',
   };
-  // TODO: Record name of the function
+
+  /* TODO: Handle situation of function re-declaration */
+
   tt.next(); // Skip the function name identifier
   
   const functionalScope: T.Scope = {
@@ -40,9 +42,28 @@ export function parseFunctionDeclaration(
     ParserError(`Expect an output data-type of the function declaration \`${result.name}\``);
   result.outputType = tt.value;
 
+  /* Setup a new available pattern for function invocation */
+  const pattern: T.FunctionPattern = {
+    name: result.name,
+    patterns: new Map<Symbol, T.FunctionPatternInfo>(),
+  };
+
+  const inputTypePattern = Symbol.for(result.arguments.map(({ type }) => type).join('.'));
+  pattern.patterns.set(inputTypePattern, { returnType: result.outputType });
+  scope.functions.set(result.name, pattern);  
+
+  /* Parsing the function declartion expression */
   tt.next();
-  if (tt.is('arrow')) {
-    /* Single-line function declaration expression */
+  const isArrow = tt.is('arrow');
+  const isDoBlock = tt.is('keyword') && tt.valueIs('do');
+
+  ParserErrorIf(
+    ! (isArrow || isDoBlock),
+    `Unhandled function declaration where token of type \`${tt.type}\` and value \`${tt.value}\``
+  );
+
+  /* Single-line function declaration expression */
+  if (isArrow) {
     tt.next();
 
     ParserErrorIf(tt.is('newline'), `Expect function \`${result.name}\` to contain expression that returns type \`${result.outputType}\``)
@@ -51,18 +72,13 @@ export function parseFunctionDeclaration(
       result.body.push(parseExpr(undefined, { scope: functionalScope, ast: result.body }));
       tt.next();
     }
-
-    return result;
-  } else if (tt.is('keyword')) {
-    if (tt.valueIs('do')) {
-      parseBlock(tt, parseExpr, functionalScope, result);
-      return result;
-    }
-
-    ParserError(`Unhandled function declaration where token of keyword ${tt.value}`);
+  }
+  /* Block-level function declaration expression */
+  else if (isDoBlock) {
+    parseBlock(tt, parseExpr, functionalScope, result);
   }
 
-  ParserError(`Unhandled function declaration where token of type ${tt.type}`)
+  return result;
 }
 
 export function parseFunctionArguments(
