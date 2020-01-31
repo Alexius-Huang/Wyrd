@@ -1,13 +1,13 @@
 import * as T from "../types";
 import TokenTracker from './TokenTracker';
+import { parseIdentifier } from './identifier';
 import {
-  parseLiteral,
   parseNumberLiteral,
   parseStringLiteral,
   parseBooleanLiteral,
   parseNullLiteral,
-  parseListLiteral,
-} from './literal';
+} from './primitive-literals';
+import { parseListLiteral } from './composite-literals';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './condition';
 import { parseAssignmentExpr } from './assignment';
@@ -82,7 +82,7 @@ export function parse(
     }
 
     if (tt.is('ident')) {
-      return parseLiteral(tt, parseExpr, scope, prevExpr);
+      return parseIdentifier(tt, parseExpr, scope, prevExpr);
     }
 
     if (tt.is('lparen')) {
