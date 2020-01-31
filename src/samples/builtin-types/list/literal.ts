@@ -1,4 +1,4 @@
-import { Token, AST } from '../../types';
+import { Token, AST } from '../../../types';
 
 const program = `\
 [1 2 3 4 5]
