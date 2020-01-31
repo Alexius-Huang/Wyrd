@@ -14,11 +14,13 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 - [Supported Syntax Rules](https://github.com/Maxwell-Alexius/Wyrd-Lang#supported-syntax-rules)
   - [Basic Assignment](https://github.com/Maxwell-Alexius/Wyrd-Lang#basic-assignment)
   - [Builtin Primitives](https://github.com/Maxwell-Alexius/Wyrd-Lang#builtin-primitives)
+  - [Lists](https://github.com/Maxwell-Alexius/Wyrd-Lang#lists)
   - [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics)
   - [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression)
   - [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression)
   - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
   - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
+  - [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
 
 ## Supported Syntax Rules
 ### Basic Assignment
@@ -37,6 +39,30 @@ const bar = 1 + (2 * 3) + 4;
 const baz = 1 + ((2 - 3) * 4);
 ```
 
+### Lists
+**Wyrd Lang**
+```
+[1 2 3 4 5]
+["Hello world" "Wyrd" "Lang" "is" "Awesome"]
+[[1 2 3] [4 5 6] [7 8 9]]
+[1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]
+
+def addition(x: Num, y: Num): Num => x + y
+[1 addition(2, 3 + 4 * 5) 6 addition(7 / 8 - 9, 10)]
+```
+
+**Compiled Wyrd Code**
+```js
+[1, 2, 3, 4, 5];
+['Hello world', 'Wyrd', 'Lang', 'is', 'Awesome'];
+[[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+[1, 2 + (3 * 4), 5 / (6 - 7), 8, 9, 10];
+function addition(x, y) {
+  return x + y;
+}
+
+[1, addition(2, 3 + (4 * 5)), 6, addition(7 / 8 - 9, 10)];
+```
 
 ### Builtin Primitives
 **Wyrd Lang**
