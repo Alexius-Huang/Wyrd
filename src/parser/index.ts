@@ -29,83 +29,58 @@ export function parse(
     const ast: T.AST = meta?.ast ?? globalAst;
 
     if (tt.is('keyword')) {
-      if (tt.valueIs('def')) {
+      if (tt.valueIs('def'))
         return parseFunctionDeclaration(tt, parseExpr, scope);
-      }
 
-      if (tt.valueIs('if')) {
-        let resultExpr: T.ConditionalExpr;
-        resultExpr = parseConditionalExpr(tt, parseExpr);
-        return resultExpr;
-      }
+      if (tt.valueIs('if'))
+        return parseConditionalExpr(tt, parseExpr);
 
-      if (tt.valueIs('not')) {
-        return parseLogicalNotExpr(tt, parseExpr,);
-      }
+      if (tt.valueIs('not'))
+        return parseLogicalNotExpr(tt, parseExpr);
 
       if (tt.valueIsOneOf('and', 'or')) {
-        let resultExpr: T.Expr;
-        if (prevExpr?.type === 'PrioritizedExpr') {
-          resultExpr = parseLogicalAndOrExpr(tt, parseExpr, prevExpr.expr);
-          return resultExpr;
-        }
-  
+        if (prevExpr?.type === 'PrioritizedExpr')
+          return parseLogicalAndOrExpr(tt, parseExpr, prevExpr.expr);  
         return parseLogicalAndOrExpr(tt, parseExpr, ast.pop() as T.Expr);
       }
 
       ParserError(`Unhandled keyword token with value \`${tt.value}\``);
     }
 
-    if (tt.isOneOf('number', 'string', 'boolean', 'null')) {
+    if (tt.isOneOf('number', 'string', 'boolean', 'null'))
       return parsePrimitive(tt, prevExpr);
-    }
 
-    if (tt.is('ident')) {
+    if (tt.is('ident'))
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
-    }
 
-    if (tt.is('lbracket')) {
+    if (tt.is('lbracket'))
       return parseListLiteral(tt, parseExpr, scope, prevExpr);
-    }
 
-    if (tt.is('lparen')) {
+    if (tt.is('lparen'))
       return parsePrioritizedExpr(tt, parseExpr, scope, prevExpr);
-    }
 
-    if (tt.is('eq')) {
-      let resultExpr: T.Expr;
-      resultExpr = parseAssignmentExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
-      return resultExpr;
-    }
+    if (tt.is('eq'))
+      return parseAssignmentExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
 
     if (BuiltinBinaryOperators.has(tt.value)) {
-      let resultExpr: T.Expr;
-      if (prevExpr?.type === 'PrioritizedExpr') {
-        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
-        return resultExpr;
-      }
+      if (prevExpr?.type === 'PrioritizedExpr')
+        return parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
 
       if (prevExpr?.type === 'ConditionalExpr') {
         const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-        resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr]);
-        return resultExpr;
+        return parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr]);
       }
 
-      resultExpr = parseBinaryOpExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
-      return resultExpr;
+      return parseBinaryOpExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
     }
 
     ParserError(`Unhandled token type of \`${tt.type}\``);
   }
 
   while (true) {
-    if (tt.is('newline')) {
-      if (!tt.hasNext()) break;
-      tt.next();
-      continue;
-    }
-
-    globalAst.push(parseExpr());
+    if (tt.isNot('newline'))
+      globalAst.push(parseExpr());
+    
     if (!tt.hasNext()) break;
     tt.next();
   }
