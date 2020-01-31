@@ -27,9 +27,11 @@ export function parseFunctionDeclaration(
   
   const functionalScope: T.Scope = {
     parentScope: scope,
+    childScopes: new Map<string, T.Scope>(),
     variables: new Map<string, T.Variable>(),
     functions: new Map<string, T.FunctionPattern>(),
   };
+  scope.childScopes.set(result.name, functionalScope);
 
   if (tt.is('lparen'))
     result.arguments = parseFunctionArguments(tt, functionalScope);

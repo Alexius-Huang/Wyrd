@@ -20,6 +20,7 @@ export function parse(
   const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
   const globalScope: T.Scope = {
     parentScope: null,
+    childScopes: new Map<string, T.Scope>(),
     variables: new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
     functions: new Map<string, T.FunctionPattern>(parseOptions?.functions ?? new Map()),
   };
