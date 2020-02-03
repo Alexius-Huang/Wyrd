@@ -1,4 +1,4 @@
-import { compile } from '../../index';
+import { compile } from '../..';
 
 describe('Compiler', () => {
   it('compiles the sample program successfully', async () => {

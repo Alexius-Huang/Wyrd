@@ -1,7 +1,7 @@
-import { lex } from '../lexer/index';
-import { parse } from '../parser/index';
-import { generateCode } from '../codeGenerator';
-import { compile } from '../index';
+import { lex } from '../lexer';
+import { parse } from '../parser';
+import { generateCode } from '../code-generator';
+import { compile } from '..';
 import * as T from '../types';
 
 export function FundamentalCompileTest(

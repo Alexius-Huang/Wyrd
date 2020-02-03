@@ -23,5 +23,6 @@ function perform(name, sample: string) {
 describe('Compiler Option: Minification', () => {
   describe('Arithmetics', () => {
     perform('basic arithmetic expressions', 'arithmetics/pure-expression');
+    perform('with prioritized expression', 'arithmetics/with-prioritization');
   });
 });

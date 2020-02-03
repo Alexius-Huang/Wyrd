@@ -1,6 +1,6 @@
-import { lex } from './lexer/index';
-import { parse } from './parser/index';
-import { generateCode } from './codeGenerator';
+import { lex } from './lexer';
+import { parse } from './parser';
+import { generateCode } from './code-generator';
 import * as T from './types';
 
 export function compile(
