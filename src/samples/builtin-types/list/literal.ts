@@ -108,9 +108,12 @@ const compiled = `\
 [null, null, null, null, null];
 `;
 
+const minified = '[1,2,3,4,5];[\'Hello world\',\'Wyrd\',\'Lang\',\'is\',\'Awesome\'];[true,false,false,true,true,false,true];[null,null,null,null,null];';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

@@ -123,9 +123,12 @@ let bar = 1 + (2 * 3) - 4;
 bar = 1 * foo + (bar / 2);
 `;
 
+const minified = 'let foo=123;foo=456;foo=1*2-(3/4);let bar=1+(2*3)-4;bar=1*foo+(bar/2);';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

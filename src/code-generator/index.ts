@@ -14,6 +14,7 @@ export function generateCode(
   let result = '';
   let index = 0;
   const minify = option?.minify ?? false;
+  const commaDelimiter = minify ? ',' : ', ';
 
   function genExpr(expr: T.Expr): string {
     switch (expr.type) {
@@ -56,7 +57,7 @@ export function generateCode(
 
   function codeGenListLiteral(expr: T.ListLiteral) {
     const { values } = expr;
-    return `[${values.map(genExpr).join(', ')}]`;
+    return `[${values.map(genExpr).join(commaDelimiter)}]`;
   }
 
   function codeGenBinaryOpExpr(expr: T.BinaryOpExpr) {
@@ -70,6 +71,8 @@ export function generateCode(
     }
 
     if (expr.operator === T.Operator.EqEq || expr.operator === T.Operator.BangEq) {
+      if (minify)
+        return `${genExpr(expr.expr1)}${expr.operator}=${expr2Result}`;
       return `${genExpr(expr.expr1)} ${expr.operator}= ${expr2Result}`;
     }
 
@@ -93,32 +96,40 @@ export function generateCode(
       CodeGenerateError(`Expect logical ${logicType} have expression`);
 
     const logicOperator = logicType === 'And' ? '&&' : '||';
+
+    if (minify)
+      return `${genExpr(expr.expr1)}${logicOperator}${genExpr(expr.expr2)}`;
     return `${genExpr(expr.expr1)} ${logicOperator} ${genExpr(expr.expr2)}`;
   }
 
   function codeGenAssignmentExpr(expr: T.AssignmentExpr) {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect assignment to have expression to evaluate');
+    if (minify)
+      return `const ${genExpr(expr.expr1)}=${genExpr(expr.expr2)}`;
     return `const ${genExpr(expr.expr1)} = ${genExpr(expr.expr2)}`;
   }
 
   function codeGenVarDeclaration(expr: T.VarDeclaration) {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect mutable variable declaration to have expression to evaluate');
+    if (minify)
+      return `let ${expr.expr1.value}=${genExpr(expr.expr2)}`;
     return `let ${expr.expr1.value} = ${genExpr(expr.expr2)}`;
   }
 
   function codeGenVarAssignmentExpr(expr: T.VarAssignmentExpr) {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect mutable variable assignment expression to have expression to evaluate');
+    if (minify)
+      return `${expr.expr1.value}=${genExpr(expr.expr2)}`;
     return `${expr.expr1.value} = ${genExpr(expr.expr2)}`;
   }
 
   function codeGenPrioritizedExpr(expr: T.PrioritizedExpr) {
     if (expr.expr)
       return `(${genExpr(expr.expr)})`;
-
-    return '()';  
+    return '()';
   }
 
   function codeGenFunctionDeclaration(expr: T.FunctionDeclaration) {
@@ -138,7 +149,7 @@ ${codeGenFunctionBody(body, args, 2)}
   }
 
   function codeGenArguments(args: Array<T.Argument>) {
-    return args.map(({ ident }) => ident).join(', ');
+    return args.map(({ ident }) => ident).join(commaDelimiter);
   }
 
   function codeGenFunctionBody(body: Array<T.Expr>, args: Array<T.Argument>, indent = 2) {
@@ -156,7 +167,7 @@ ${codeGenFunctionBody(body, args, 2)}
 
   function codeGenFunctionInvokeExpr(expr: T.FunctionInvokeExpr) {
     const { name, params } = expr;
-    return `${name}(${params.map(genExpr).join(', ')})`;
+    return `${name}(${params.map(genExpr).join(commaDelimiter)})`;
   }
 
   function codeGenConditionalExpr(expr: T.ConditionalExpr) {
@@ -164,7 +175,13 @@ ${codeGenFunctionBody(body, args, 2)}
     if (condition === undefined || expr1 === undefined || expr2 === undefined)
       CodeGenerateError('Missing expressions in `ConditionExpr`');
 
-    let result = `${genExpr(condition)} ? ${genExpr(expr1)} : `;
+    let result: string;
+    if (minify) {
+      result = `${genExpr(condition)}?${genExpr(expr1)}:`;
+    } else {
+      result = `${genExpr(condition)} ? ${genExpr(expr1)} : `;
+    }
+
     if (expr2.type === 'ConditionalExpr') {
       result += `(${codeGenConditionalExpr(expr2)})`;
     } else {

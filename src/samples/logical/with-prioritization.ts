@@ -39,9 +39,12 @@ const compiled = `\
 !(false || true) && false;
 `;
 
+const minified = '!(false||true)&&false;';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

@@ -195,6 +195,8 @@ const compiled = `\
 8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
 `;
 
+const minified = '3+1>2;5*3<15-(6*8);11>=7+7||3<=(6+2)/3;8/(4*2)>3&&!(1+(2*3)===7)||a+(b/c*d)!==w-(x*y);';
+
 const parseOptions: ParseOptions = {
   variables: new Map<string, Variable>([
     ['a', { name: 'a', isConst: true, type: 'Num' }],
@@ -213,4 +215,5 @@ export {
   ast,
   compiled,
   parseOptions,
+  minified,
 };

@@ -70,9 +70,12 @@ const compiled = `\
 [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 `;
 
+const minified = '[[1,2,3],[4,5,6],[7,8,9]];';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };
