@@ -1,4 +1,4 @@
-import { FundamentalCompileTest } from './helper';
+import { FundamentalCompileTest } from '../helper';
 
 describe('Functions', () => {
   describe('Function Declaration', () => {

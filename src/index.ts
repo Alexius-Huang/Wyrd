@@ -12,7 +12,9 @@ export function compile(
 ): string {
   const tokens = lex(code);
   const ast = parse(tokens, options?.parseOptions);
-  const result = generateCode(ast);
+
+  const minify = options?.minify ?? false;
+  const result = generateCode(ast, { minify });
 
   return result;
 }

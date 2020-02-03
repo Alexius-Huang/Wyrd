@@ -1,5 +1,5 @@
-import { FundamentalCompileTest } from './helper';
-import { compile } from '..';
+import { FundamentalCompileTest } from '../helper';
+import { compile } from '../..';
 
 describe('Assignment Expression', () => {
   describe('Basic Assignment', () => {

@@ -1,5 +1,5 @@
-import { FundamentalCompileTest } from './helper';
-import { compile } from '../index';
+import { FundamentalCompileTest } from '../helper';
+import { compile } from '../../index';
 
 describe('Builtin Types', () => {
   describe('Primitives', () => {

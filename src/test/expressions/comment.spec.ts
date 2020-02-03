@@ -1,4 +1,4 @@
-import { FundamentalCompileTest } from './helper';
+import { FundamentalCompileTest } from '../helper';
 
 describe('Comment', () => {
   describe('Singleline Comment', () => {

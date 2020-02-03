@@ -5,9 +5,15 @@ function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
 }
 
-export function generateCode(ast: T.AST): string {
+export function generateCode(
+  ast: T.AST,
+  option?: {
+    minify?: boolean;
+  },
+): string {
   let result = '';
   let index = 0;
+  const minify = option?.minify ?? false;
 
   function genExpr(expr: T.Expr): string {
     switch (expr.type) {
@@ -67,6 +73,8 @@ export function generateCode(ast: T.AST): string {
       return `${genExpr(expr.expr1)} ${expr.operator}= ${expr2Result}`;
     }
 
+    if (minify)
+      return `${genExpr(expr.expr1)}${expr.operator}${expr2Result}`;
     return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;
   }
 
@@ -165,16 +173,24 @@ ${codeGenFunctionBody(body, args, 2)}
     return result;
   }
 
-  while (index < ast.length) {
-    const expr = ast[index];
-    result += `${genExpr(expr)}`;
-
-    if (result[result.length - 1] === '}')
-      result += '\n\n';
-    else
-      result += ';\n';
-
-    index++;
+  if (minify) {
+    while (index < ast.length) {
+      const expr = ast[index];
+      result += `${genExpr(expr)};`;
+      index++;
+    }
+  } else {
+    while (index < ast.length) {
+      const expr = ast[index];
+      result += `${genExpr(expr)}`;
+  
+      if (result[result.length - 1] === '}')
+        result += '\n\n';
+      else
+        result += ';\n';
+  
+      index++;
+    }
   }
 
   return result;
