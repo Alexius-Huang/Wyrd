@@ -57,9 +57,9 @@ export function prioritize(expr: T.Expr): T.PrioritizedExpr {
 }
 
 export function Arithmetic(
-  num1: number,
+  operand1: number | string | T.Expr,
   op: '+' | '-' | '*' | '/' | '%',
-  num2: number,
+  operand2: number | string | T.Expr,
 ): T.BinaryOpExpr {
   let operator: T.Operator;
   switch (op) {
@@ -70,11 +70,27 @@ export function Arithmetic(
     case '%': operator = T.Operator.Percent;  break;
   }
 
+  let expr1: T.Expr, expr2: T.Expr;
+
+  if (typeof operand1 === 'number')
+    expr1 = NumberLiteral(operand1.toString());
+  else if (typeof operand1 === 'string')
+    expr1 = { type: 'IdentLiteral', value: operand1, returnType: 'Num' };
+  else
+    expr1 = operand1;
+
+  if (typeof operand2 === 'number')
+    expr2 = NumberLiteral(operand2.toString());
+  else if (typeof operand2 === 'string')
+    expr2 = { type: 'IdentLiteral', value: operand2, returnType: 'Num' };
+  else
+    expr2 = operand2;
+
   return {
     type: 'BinaryOpExpr',
     operator,
     returnType: 'Num',
-    expr1: NumberLiteral(num1.toString()),
-    expr2: NumberLiteral(num2.toString()),
+    expr1,
+    expr2,
   };
 }

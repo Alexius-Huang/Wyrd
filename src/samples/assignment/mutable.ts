@@ -109,20 +109,8 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: {
-        type: 'BinaryOpExpr',
-        operator: Op.Asterisk,
-        returnType: 'Num',
-        expr1: NumberLiteral('1'),
-        expr2: { type: 'IdentLiteral', value: 'foo', returnType: 'Num' },
-      },
-      expr2: {
-        type: 'BinaryOpExpr',
-        operator: Op.Slash,
-        returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
-        expr2: NumberLiteral('2'),
-      },
+      expr1: Arithmetic(1, '*', 'foo'),
+      expr2: Arithmetic('bar', '/', 2),
     },
   },
 ];

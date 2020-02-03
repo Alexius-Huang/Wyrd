@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns } from '../helper';
+import { createFunctionPatterns, Arithmetic } from '../helper';
 import { NumberLiteral } from '../helper';
 
 const program = `\
@@ -47,13 +47,7 @@ const ast: AST = [
     ],
     outputType: 'Num',
     body: [
-      {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
-        expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' }
-      },
+      Arithmetic('x', '+', 'y'),
     ],
   },
   {
