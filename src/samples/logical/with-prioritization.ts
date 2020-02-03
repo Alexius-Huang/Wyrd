@@ -1,4 +1,5 @@
 import { Token, AST } from '../../types';
+import { BooleanLiteral, prioritize } from '../helper';
 
 const program = `\
 not (False or True) and False
@@ -23,18 +24,14 @@ const ast: AST = [
     expr1: {
       type: 'NotExpr',
       returnType: 'Bool',
-      expr: {
-        type: 'PrioritizedExpr',
+      expr: prioritize({
+        type: 'OrExpr',
         returnType: 'Bool',
-        expr: {
-          type: 'OrExpr',
-          returnType: 'Bool',
-          expr1: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
-          expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
-        },
-      },
+        expr1: BooleanLiteral(false),
+        expr2: BooleanLiteral(true),
+      }),
     },
-    expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' }
+    expr2: BooleanLiteral(false)
   },
 ];
 

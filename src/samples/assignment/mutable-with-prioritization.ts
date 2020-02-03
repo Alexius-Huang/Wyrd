@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
 
 const program = `\
 mutable foo = (1 + 2) * 3
@@ -53,83 +54,49 @@ const ast: AST = [
   {
     type: 'VarDeclaration',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
+    expr1: Var('foo', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
       returnType: 'Num',
-      expr1: {
-        type: 'PrioritizedExpr',
-        returnType: 'Num',
-        expr: {
-          type: 'BinaryOpExpr',
-          operator: Op.Plus,
-          returnType: 'Num',
-          expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-          expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-        },
-      },
-      expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+      expr1: prioritize(Arithmetic(1, '+', 2)),
+      expr2: NumberLiteral('3'),
     },
   },
   {
     type: 'VarDeclaration',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
+    expr1: Var('bar', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+      expr1: NumberLiteral('1'),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-        expr2: {
-          type: 'PrioritizedExpr',
-          returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Dash,
-            returnType: 'Num',
-            expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-            expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
-          },
-        },
+        expr1: NumberLiteral('2'),
+        expr2: prioritize(Arithmetic(3, '-', 4)),
       },
     },
   },
   {
     type: 'VarAssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
+    expr1: Var('bar', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-      expr2: {
-        type: 'PrioritizedExpr',
+      expr1: NumberLiteral('1'),
+      expr2: prioritize({
+        type: 'BinaryOpExpr',
+        operator: Op.Slash,
         returnType: 'Num',
-        expr: {
-          type: 'BinaryOpExpr',
-          operator: Op.Slash,
-          returnType: 'Num',
-          expr1: {
-            type: 'PrioritizedExpr',
-            returnType: 'Num',
-            expr: {
-              type: 'BinaryOpExpr',
-              operator: Op.Plus,
-              returnType: 'Num',
-              expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
-              expr2: { type: 'IdentLiteral', value: 'bar', returnType: 'Num', },
-            },
-          },
-          expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-        },
-      },
+        expr1: prioritize(Arithmetic('foo', '+', 'bar')),
+        expr2: NumberLiteral('2'),
+      }),
     },
   },
 ];

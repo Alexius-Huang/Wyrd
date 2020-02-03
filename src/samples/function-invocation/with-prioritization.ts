@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns } from '../helper';
+import { createFunctionPatterns, prioritize } from '../helper';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 funcA(1, (funcB(2, 3) + 4) * funcC(5))
@@ -77,35 +78,31 @@ const ast: AST = [
     type: 'FunctionInvokeExpr',
     name: 'funcA',
     params: [
-      { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+      NumberLiteral('1'),
       {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: {
-          type: 'PrioritizedExpr',
+        expr1: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Plus,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Plus,
+          expr1: {
+            type: 'FunctionInvokeExpr',
+            name: 'funcB',
+            params: [
+              NumberLiteral('2'),
+              NumberLiteral('3')
+            ],
             returnType: 'Num',
-            expr1: {
-              type: 'FunctionInvokeExpr',
-              name: 'funcB',
-              params: [
-                { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-                { type: 'NumberLiteral', value: '3', returnType: 'Num' }
-              ],
-              returnType: 'Num',
-            },
-            expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
           },
-        },
+          expr2: NumberLiteral('4'),
+        }),
         expr2: {
           type: 'FunctionInvokeExpr',
           name: 'funcC',
           params: [
-            { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+            NumberLiteral('5'),
           ],
           returnType: 'Num'
         },
@@ -121,28 +118,24 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-        expr2: {
-          type: 'PrioritizedExpr',
+        expr1: NumberLiteral('1'),
+        expr2: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Dash,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Dash,
+          expr1: {
+            type: 'FunctionInvokeExpr',
+            name: 'funcE',
+            params: [
+              NumberLiteral('2'),
+              NumberLiteral('3'),
+            ],
             returnType: 'Num',
-            expr1: {
-              type: 'FunctionInvokeExpr',
-              name: 'funcE',
-              params: [
-                { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-                { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-              ],
-              returnType: 'Num',
-            },
-            expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
           },
-        },
+          expr2: NumberLiteral('4'),
+        }),
       },
-      { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+      NumberLiteral('5'),
     ],
     returnType: 'Num',
   },
@@ -154,37 +147,33 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: {
-          type: 'PrioritizedExpr',
+        expr1: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Dash,
           returnType: 'Num',
-          expr: {
+          expr1: NumberLiteral('1'),
+          expr2: {
             type: 'BinaryOpExpr',
-            operator: Op.Dash,
+            operator: Op.Asterisk,
             returnType: 'Num',
-            expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-            expr2: {
-              type: 'BinaryOpExpr',
-              operator: Op.Asterisk,
+            expr1: {
+              type: 'FunctionInvokeExpr',
+              name: 'funcG',
+              params: [
+                NumberLiteral('2'),
+              ],
               returnType: 'Num',
-              expr1: {
-                type: 'FunctionInvokeExpr',
-                name: 'funcG',
-                params: [
-                  { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-                ],
-                returnType: 'Num',
-              },
-              expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
             },
+            expr2: NumberLiteral('3'),
           },
-        },
-        expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+        }),
+        expr2: NumberLiteral('4'),
       },
       {
         type: 'FunctionInvokeExpr',
         name: 'funcH',
         params: [
-          { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+          NumberLiteral('5'),
         ],
         returnType: 'Num',
       },

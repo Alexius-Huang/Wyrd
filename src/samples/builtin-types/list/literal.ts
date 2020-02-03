@@ -1,4 +1,5 @@
 import { Token, AST } from '../../../types';
+import * as helper from '../../helper';
 
 const program = `\
 [1 2 3 4 5]
@@ -51,11 +52,11 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '4', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+      helper.NumberLiteral('1'),
+      helper.NumberLiteral('2'),
+      helper.NumberLiteral('3'),
+      helper.NumberLiteral('4'),
+      helper.NumberLiteral('5'),
     ],
     elementType: 'Num',
     returnType: 'List[Num]',
@@ -63,11 +64,11 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' },
-      { type: 'StringLiteral', value: 'Wyrd', returnType: 'Str' },
-      { type: 'StringLiteral', value: 'Lang', returnType: 'Str' },
-      { type: 'StringLiteral', value: 'is', returnType: 'Str' },
-      { type: 'StringLiteral', value: 'Awesome', returnType: 'Str' },
+      helper.StringLiteral('Hello world'),
+      helper.StringLiteral('Wyrd'),
+      helper.StringLiteral('Lang'),
+      helper.StringLiteral('is'),
+      helper.StringLiteral('Awesome'),
     ],
     elementType: 'Str',
     returnType: 'List[Str]',
@@ -75,13 +76,13 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
-      { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
-      { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
-      { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
-      { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
-      { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
-      { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
+      helper.BooleanLiteral(true),
+      helper.BooleanLiteral(false),
+      helper.BooleanLiteral(false),
+      helper.BooleanLiteral(true),
+      helper.BooleanLiteral(true),
+      helper.BooleanLiteral(false),
+      helper.BooleanLiteral(true),
     ],
     elementType: 'Bool',
     returnType: 'List[Bool]',
@@ -89,11 +90,11 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
-      { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
-      { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
-      { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
-      { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
+      helper.NullLiteral(),
+      helper.NullLiteral(),
+      helper.NullLiteral(),
+      helper.NullLiteral(),
+      helper.NullLiteral(),
     ],
     elementType: 'Null',
     returnType: 'List[Null]',

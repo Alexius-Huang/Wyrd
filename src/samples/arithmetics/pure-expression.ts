@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral, Arithmetic } from '../helper';
 
 const program = `\
 1 + 2 * 3
@@ -66,51 +67,15 @@ const ast: AST = [
     type: 'BinaryOpExpr',
     operator: Op.Plus,
     returnType: 'Num',
-    expr1: {
-      type: 'NumberLiteral',
-      value: '1',
-      returnType: 'Num',
-    },
-    expr2: {
-      type: 'BinaryOpExpr',
-      operator: Op.Asterisk,
-      returnType: 'Num',
-      expr1: {
-        type: 'NumberLiteral',
-        value: '2',
-        returnType: 'Num',
-      },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '3',
-        returnType: 'Num',
-      },
-    },
+    expr1: NumberLiteral('1'),
+    expr2: Arithmetic(2, '*', 3),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
     returnType: 'Num',
-    expr1: {
-      type: 'BinaryOpExpr',
-      operator: Op.Asterisk,
-      returnType: 'Num',
-      expr1: {
-        type: 'NumberLiteral',
-        value: '1',
-        returnType: 'Num',
-      },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '2',
-        returnType: 'Num',
-      },
-    },
-    expr2: {
-      type: 'NumberLiteral',
-      value: '3',
-      returnType: 'Num',
-    },
+    expr1: Arithmetic(1, '*', 2),
+    expr2: NumberLiteral('3'),
   },
   {
     type: 'BinaryOpExpr',
@@ -120,101 +85,29 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: {
-        type: 'NumberLiteral',
-        value: '1',
-        returnType: 'Num',
-      },
-      expr2: {
-        type: 'BinaryOpExpr',
-        operator: Op.Asterisk,
-        returnType: 'Num',
-        expr1: {
-          type: 'NumberLiteral',
-          value: '2',
-          returnType: 'Num',
-        },
-        expr2: {
-          type: 'NumberLiteral',
-          value: '3',
-          returnType: 'Num',
-        },
-      }
+      expr1: NumberLiteral('1'),
+      expr2: Arithmetic(2, '*', 3),
     },
-    expr2: {
-      type: 'NumberLiteral',
-      value: '4',
-      returnType: 'Num',
-    },
+    expr2: NumberLiteral('4'),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
     returnType: 'Num',
-    expr1: {
-      type: 'BinaryOpExpr',
-      operator: Op.Asterisk,
-      returnType: 'Num',
-      expr1: {
-        type: 'NumberLiteral',
-        value: '1',
-        returnType: 'Num',
-      },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '2',
-        returnType: 'Num',
-      },
-    },
-    expr2: {
-      type: 'BinaryOpExpr',
-      operator: Op.Asterisk,
-      returnType: 'Num',
-      expr1: {
-        type: 'NumberLiteral',
-        value: '3',
-        returnType: 'Num',
-      },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '4',
-        returnType: 'Num',
-      },
-    },
+    expr1: Arithmetic(1, '*', 2),
+    expr2: Arithmetic(3, '*', 4),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Plus,
     returnType: 'Num',
-    expr1: {
-      type: 'NumberLiteral',
-      value: '1',
-      returnType: 'Num',
-    },
+    expr1: NumberLiteral('1'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
       returnType: 'Num',
-      expr1: {
-        type: 'BinaryOpExpr',
-        operator: Op.Asterisk,
-        returnType: 'Num',
-        expr1: {
-          type: 'NumberLiteral',
-          value: '2',
-          returnType: 'Num',
-        },
-        expr2: {
-          type: 'NumberLiteral',
-          value: '3',
-          returnType: 'Num',
-        },
-      },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '4',
-        returnType: 'Num',
-      },
+      expr1: Arithmetic(2, '*', 3),
+      expr2: NumberLiteral('4'),
     }
   },
   {
@@ -225,32 +118,10 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: {
-        type: 'BinaryOpExpr',
-        operator: Op.Asterisk,
-        returnType: 'Num',
-        expr1: {
-          type: 'NumberLiteral',
-          value: '1',
-          returnType: 'Num',
-        },
-        expr2: {
-          type: 'NumberLiteral',
-          value: '2',
-          returnType: 'Num',
-        },  
-      },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '3',
-        returnType: 'Num',
-      },
+      expr1: Arithmetic(1, '*', 2),
+      expr2: NumberLiteral('3'),
     },
-    expr2: {
-      type: 'NumberLiteral',
-      value: '4',
-      returnType: 'Num',
-    },
+    expr2: NumberLiteral('4'),
   },
 ];
 

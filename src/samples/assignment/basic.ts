@@ -1,4 +1,5 @@
 import { Token, AST } from '../../types';
+import * as helper from '../helper';
 
 const program = `\
 foo = 123
@@ -45,39 +46,39 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num' },
-    expr2: { type: 'NumberLiteral', value: '123', returnType: 'Num' }
+    expr1: helper.Var('foo', 'Num'),
+    expr2: helper.NumberLiteral('123'),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Str' },
-    expr2: { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' }
+    expr1: helper.Var('bar', 'Str'),
+    expr2: helper.StringLiteral('Hello world'),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'baz', returnType: 'Bool' },
-    expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' }
+    expr1: helper.Var('baz', 'Bool'),
+    expr2: helper.BooleanLiteral(true),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'nothing', returnType: 'Null' },
-    expr2: { type: 'NullLiteral', value: 'Null', returnType: 'Null' }
+    expr1: helper.Var('nothing', 'Null'),
+    expr2: helper.NullLiteral(),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'list', returnType: 'List[Num]' },
+    expr1: helper.Var('list', 'List[Num]'),
     expr2: {
       type: 'ListLiteral',
       values: [
-        { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-        { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-        { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-        { type: 'NumberLiteral', value: '4', returnType: 'Num' },
-        { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+        helper.NumberLiteral('1'),
+        helper.NumberLiteral('2'),
+        helper.NumberLiteral('3'),
+        helper.NumberLiteral('4'),
+        helper.NumberLiteral('5'),
       ],
       elementType: 'Num',
       returnType: 'List[Num]',

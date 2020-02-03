@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
+import { NumberLiteral, StringLiteral, Var } from '../helper';
 
 const program = `\
 mixed1 = if age < 18 then
@@ -94,10 +95,10 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         returnType: 'Bool',
-        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
+        expr1: Var('age', 'Num'),
+        expr2: NumberLiteral('18')
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
+      expr1: StringLiteral('youngster'),
       expr2: {
         type: 'ConditionalExpr',
         returnType: 'Str',
@@ -105,10 +106,10 @@ const ast: AST = [
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
           returnType: 'Bool',
-          expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
-          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
+          expr1: Var('age', 'Num'),
+          expr2: NumberLiteral('60')
         },
-        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
+        expr1: StringLiteral('adult'),
         expr2: {
           type: 'ConditionalExpr',
           returnType: 'Str',
@@ -116,11 +117,11 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Lt,
             returnType: 'Bool',
-            expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
-            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
+            expr1: Var('age', 'Num'),
+            expr2: NumberLiteral('100')
           },
-          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
-          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
+          expr1: StringLiteral('elder'),
+          expr2: StringLiteral('centenarian'),
         },
       },
     },
@@ -136,10 +137,10 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Lt,
         returnType: 'Bool',
-        expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '18', returnType: 'Num' }
+        expr1: Var('age', 'Num'),
+        expr2: NumberLiteral('18')
       },
-      expr1: { type: 'StringLiteral', value: 'youngster', returnType: 'Str' },
+      expr1: StringLiteral('youngster'),
       expr2: {
         type: 'ConditionalExpr',
         returnType: 'Str',
@@ -147,10 +148,10 @@ const ast: AST = [
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
           returnType: 'Bool',
-          expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
-          expr2: { type: 'NumberLiteral', value: '60', returnType: 'Num' }
+          expr1: Var('age', 'Num'),
+          expr2: NumberLiteral('60')
         },
-        expr1: { type: 'StringLiteral', value: 'adult', returnType: 'Str' },
+        expr1: StringLiteral('adult'),
         expr2: {
           type: 'ConditionalExpr',
           returnType: 'Str',
@@ -158,11 +159,11 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Lt,
             returnType: 'Bool',
-            expr1: { type: 'IdentLiteral', value: 'age', returnType: 'Num' },
-            expr2: { type: 'NumberLiteral', value: '100', returnType: 'Num' }
+            expr1: Var('age', 'Num'),
+            expr2: NumberLiteral('100')
           },
-          expr1: { type: 'StringLiteral', value: 'elder', returnType: 'Str' },
-          expr2: { type: 'StringLiteral', value: 'centenarian', returnType: 'Str' },
+          expr1: StringLiteral('elder'),
+          expr2: StringLiteral('centenarian'),
         },
       },
     },
