@@ -13,6 +13,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 ## Table of Content
 - [Supported Syntax Rules](https://github.com/Maxwell-Alexius/Wyrd-Lang#supported-syntax-rules)
   - [Basic Assignment](https://github.com/Maxwell-Alexius/Wyrd-Lang#basic-assignment)
+  - [Mutable Variable Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#mutable-variable-declaration)
   - [Builtin Primitives](https://github.com/Maxwell-Alexius/Wyrd-Lang#builtin-primitives)
   - [Lists](https://github.com/Maxwell-Alexius/Wyrd-Lang#lists)
   - [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics)
@@ -21,6 +22,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
   - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
   - [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
+  - [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment)
 
 ## Supported Syntax Rules
 ### Basic Assignment
@@ -37,6 +39,38 @@ baz = 1 + (2 - 3) * 4
 const foo = 1;
 const bar = 1 + (2 * 3) + 4;
 const baz = 1 + ((2 - 3) * 4);
+```
+
+### Mutable Variable Declaration
+**Wyrd Lang**
+```
+mutable foo = 123
+mutable bar = 456
+foo = 1 + bar * 2 - foo
+```
+
+**Compiled Wyrd Code**
+```js
+let foo = 123;
+let bar = 456;
+foo = 1 + (bar * 2) - foo;
+```
+
+### Builtin Primitives
+**Wyrd Lang**
+```
+foo = 123
+bar = "Hello world"
+baz = True
+nothing = Null
+```
+
+**Compiled Wyrd Code**
+```js
+const foo = 123;
+const bar = 'Hello world';
+const baz = true;
+const nothing = null;
 ```
 
 ### Lists
@@ -62,23 +96,6 @@ function addition(x, y) {
 }
 
 [1, addition(2, 3 + (4 * 5)), 6, addition(7 / 8 - 9, 10)];
-```
-
-### Builtin Primitives
-**Wyrd Lang**
-```
-foo = 123
-bar = "Hello world"
-baz = True
-nothing = Null
-```
-
-**Compiled Wyrd Code**
-```js
-const foo = 123;
-const bar = 'Hello world';
-const baz = true;
-const nothing = null;
 ```
 
 ### Arithmetics
@@ -258,6 +275,24 @@ funcE(1, funcF(2, 3, funcG(4)), 5);
 funcI(1, (funcJ(2, 3) + 4) * funcK(5));
 funcL(1 / (funcM(2, 3) - 4), 5);
 funcN((1 - (funcO(2) * 3)) / 4, funcP(5));
+```
+
+### Comment
+**Wyrd Code**
+```
+foo = 123 # Singleline comment
+
+##
+Multiline comment
+##
+
+bar = ## Comment between expression ## 456
+```
+
+**Compiled Wyrd Code**
+```js
+const foo = 123;
+const bar = 456;
 ```
 
 ## Maintainers

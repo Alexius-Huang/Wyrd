@@ -27,6 +27,7 @@ export function lex(code: string): Array<Token> {
       continue;
     }
 
+    /* String Lexing */
     if (currentChar === '"') {
       nextChar();
       let parsedString = '';
@@ -38,6 +39,32 @@ export function lex(code: string): Array<Token> {
 
       nextChar();
       result.push({ type: 'string', value: parsedString });
+      continue;
+    }
+
+    /* Comment Lexing */
+    if (currentChar === '#') {
+      nextChar();
+      let cond: () => boolean = () => currentChar as string !== '\n';
+      let isMultilineComment = false;
+
+      if (currentChar === '#') {
+        nextChar();
+        isMultilineComment = true;
+        cond = () => !(currentChar === '#' && peekChar === '#');
+      }
+
+      // let parsedComment = '';
+      while (cond()) {
+        // parsedComment += currentChar;
+        nextChar();
+      }
+
+      if (isMultilineComment)
+        nextChar(2); // Skip the double '#' token
+
+      // TODO: Add an compiler option for retain comment, which is `skipComment: false`
+      // result.push({ type: 'comment', value: parsedComment });
       continue;
     }
 
