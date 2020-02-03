@@ -14,7 +14,12 @@ export function FundamentalCompileTest(
   const path = `../samples/${name}`;
   const debugParser = options?.debugParser ?? false;
 
-  let program: string, tokens: Array<T.Token>, ast: T.AST, compiled: string, parseOptions: T.ParseOptions | undefined;
+  let program: string;
+  let tokens: Array<T.Token>;
+  let ast: T.AST;
+  let compiled: string;
+  let parseOptions: T.ParseOptions | undefined;
+  let minified: string | undefined;
   beforeAll(async () => {
     const testCase = await import(path);
     program = testCase.program;
@@ -22,6 +27,8 @@ export function FundamentalCompileTest(
     ast = testCase.ast;
     compiled = testCase.compiled;
     parseOptions = testCase.parseOptions;
+
+    minified = testCase.minified;
   });
 
   it('lexes the program into tokens correctly', () => {
@@ -51,6 +58,16 @@ export function FundamentalCompileTest(
     it('compiles the Wyrd program into JavaScript code correctly', () => {
       const result = compile(program, { parseOptions });
       expect(result).toBe(compiled);
-    });  
+    });
+  }
+
+  const minifiedTestCase = 'compiles code and minifies it correctly';
+  if (minified) {
+    it(minifiedTestCase, () => {
+      const result = compile(program, { minify: true });
+      expect(result).toBe(minified);
+    });
+  } else {
+    it.todo(minifiedTestCase);
   }
 }

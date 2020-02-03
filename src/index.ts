@@ -7,6 +7,7 @@ export function compile(
   code: string,
   options?: {
     parseOptions?: T.ParseOptions,
+    minify?: boolean,
   },
 ): string {
   const tokens = lex(code);
