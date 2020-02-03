@@ -47,6 +47,15 @@ export function parseBinaryOpExpr(
     }
   }
 
+  if (prevExpr.type === 'VarDeclaration' || prevExpr.type === 'VarAssignmentExpr') {
+    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
+    prevExpr.expr1.returnType = prevExpr.expr2.returnType;
+    const varName = prevExpr.expr1.value;
+    const variableInfo = scope.variables.get(varName) as T.Variable;
+    variableInfo.type = prevExpr.expr1.returnType;
+    return prevExpr;
+  }
+
   if (prevExpr.type === 'AssignmentExpr') {
     prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     if (prevExpr.expr1.type === 'IdentLiteral') {

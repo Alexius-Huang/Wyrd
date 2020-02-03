@@ -73,6 +73,7 @@ export type OPAction = {
 
 export type Scope = {
   parentScope: null | Scope;
+  childScopes: Map<string, Scope>;
   variables: Map<string, Variable>;
   functions: Map<string, FunctionPattern>;
 };
@@ -85,6 +86,8 @@ export type Expr =
   NotExpr             |
   OrExpr              |
   AndExpr             |
+  VarDeclaration      |
+  VarAssignmentExpr   |
   AssignmentExpr      |
   PrioritizedExpr     |
   ConditionalExpr     |
@@ -140,12 +143,26 @@ export type IdentLiteral = {
   returnType: string;
 };
 
+export type VarDeclaration = {
+  type: 'VarDeclaration';
+  expr1: IdentLiteral;
+  expr2: Expr;
+  returnType: 'Void';
+};
+
+export type VarAssignmentExpr = {
+  type: 'VarAssignmentExpr';
+  expr1: IdentLiteral;
+  expr2: Expr;
+  returnType: 'Void';
+}
+
 export type AssignmentExpr = {
   type: 'AssignmentExpr';
   expr1: Expr;
   expr2: Expr;
   returnType: 'Void';
-}
+};
 
 export type PrioritizedExpr = {
   type: 'PrioritizedExpr';
@@ -159,7 +176,7 @@ export type ConditionalExpr = {
   expr1: Expr;  // Condition is Truethy
   expr2: Expr; // Condition is Falsey
   returnType: string;
-}
+};
 
 export type BinaryOpExpr = {
   type: 'BinaryOpExpr';

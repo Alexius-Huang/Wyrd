@@ -15,6 +15,7 @@ const keywords = new Set<string>([
   'elif',
   'else',
   'then',
+  'mutable',
 ]);
 
 const regex = {
