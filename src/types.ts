@@ -86,6 +86,8 @@ export type Expr =
   NotExpr             |
   OrExpr              |
   AndExpr             |
+  VarDeclaration      |
+  VarAssignmentExpr   |
   AssignmentExpr      |
   PrioritizedExpr     |
   ConditionalExpr     |
@@ -140,6 +142,20 @@ export type IdentLiteral = {
   value: string;
   returnType: string;
 };
+
+export type VarDeclaration = {
+  type: 'VarDeclaration';
+  expr1: IdentLiteral;
+  expr2: Expr;
+  returnType: 'Void';
+};
+
+export type VarAssignmentExpr = {
+  type: 'VarAssignmentExpr';
+  expr1: IdentLiteral;
+  expr2: Expr;
+  returnType: 'Void';
+}
 
 export type AssignmentExpr = {
   type: 'AssignmentExpr';

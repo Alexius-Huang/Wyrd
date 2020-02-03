@@ -1,7 +1,5 @@
 import { FundamentalCompileTest } from './helper';
-import { lex } from '../lexer/index';
-import { parse } from '../parser/index';
-import * as T from '../types';
+import { compile } from '..';
 
 describe('Assignment Expression', () => {
   describe('Basic Assignment', () => {
@@ -19,15 +17,20 @@ describe('Assignment Expression', () => {
       it('Throws error when reassigning new value to a constant', () => {
         const program = `\nfoo = 123\nfoo = 456\n`;
   
-        const tokens: Array<T.Token> = lex(program);
-        expect(() => {
-          parse(tokens);
-        }).toThrow('Constant `foo` cannot be reassigned');      
+        expect(() => compile(program))
+          .toThrow('Constant `foo` cannot be reassigned');      
       });
     });
   });
 
-  // describe('Mutable Assignment', () => {
-  //   FundamentalCompileTest('assignment/mutable');
-  // });
+  describe('Mutable Var Declaration & Assignment', () => {
+    FundamentalCompileTest('assignment/mutable');
+
+    it('throws error when assign with wrong type of value', () => {
+      const program = `\nmutable foo = 123\nfoo = "Hello world"\n`;
+
+      expect(() => compile(program))
+        .toThrow('Parser: Expect mutable variable `foo` to assign value of type `Num`, instead got: `Str`');
+    });
+  });
 });

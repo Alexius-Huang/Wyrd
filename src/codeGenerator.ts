@@ -29,6 +29,10 @@ export function generateCode(ast: T.AST): string {
         return codeGenAndOrExpr(expr);
       case 'AssignmentExpr':
         return codeGenAssignmentExpr(expr);
+      case 'VarDeclaration':
+        return codeGenVarDeclaration(expr);
+      case 'VarAssignmentExpr':
+        return codeGenVarAssignmentExpr(expr);
       case 'BinaryOpExpr':
         return codeGenBinaryOpExpr(expr);
       case 'PrioritizedExpr':
@@ -88,6 +92,18 @@ export function generateCode(ast: T.AST): string {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect assignment to have expression to evaluate');
     return `const ${genExpr(expr.expr1)} = ${genExpr(expr.expr2)}`;
+  }
+
+  function codeGenVarDeclaration(expr: T.VarDeclaration) {
+    if (expr.expr2 === undefined)
+      CodeGenerateError('Expect mutable variable declaration to have expression to evaluate');
+    return `let ${expr.expr1.value} = ${genExpr(expr.expr2)}`;
+  }
+
+  function codeGenVarAssignmentExpr(expr: T.VarAssignmentExpr) {
+    if (expr.expr2 === undefined)
+      CodeGenerateError('Expect mutable variable assignment expression to have expression to evaluate');
+    return `${expr.expr1.value} = ${genExpr(expr.expr2)}`;
   }
 
   function codeGenPrioritizedExpr(expr: T.PrioritizedExpr) {

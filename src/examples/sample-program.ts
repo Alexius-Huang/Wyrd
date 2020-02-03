@@ -1,10 +1,13 @@
 const program = `\
-age = 1 + 2 * 3 + 4
+mutable age = 1 + 2 * 3 + 4
+adultBound = 18
+elderBound = 60
+centenarianBound = 100
 
-stage = if age <= 18 => "Teenager"
-        elif age < 60 then
+stage = if age <= adultBound => "Teenager"
+        elif age < elderBound then
           "Adult"
-        elif age < 100 => "Elder"
+        elif age < centenarianBound => "Elder"
         else then
           "Centenarian"
         end
@@ -21,8 +24,11 @@ funcB(1 + 2 * 3, 4 / 5 - 6, 7 + funcA(8, 9 + 10 * 11) / 12)
 `;
 
 const compiled = `\
-const age = 1 + (2 * 3) + 4;
-const stage = age <= 18 ? 'Teenager' : (age < 60 ? 'Adult' : (age < 100 ? 'Elder' : 'Centenarian'));
+let age = 1 + (2 * 3) + 4;
+const adultBound = 18;
+const elderBound = 60;
+const centenarianBound = 100;
+const stage = age <= adultBound ? 'Teenager' : (age < elderBound ? 'Adult' : (age < centenarianBound ? 'Elder' : 'Centenarian'));
 function funcA(x, y) {
   return x + y;
 }
