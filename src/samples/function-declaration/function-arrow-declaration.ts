@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -131,7 +132,7 @@ const ast: AST = [
     arguments: [],
     outputType: 'Num',
     body: [
-      { type: 'NumberLiteral', value: '666', returnType: 'Num' },
+      NumberLiteral('666'),
     ],
   },
   {

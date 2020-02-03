@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../../types';
+import { NumberLiteral } from '../../helper';
 
 const program = `\
 [1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]
@@ -36,25 +37,25 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+      NumberLiteral('1'),
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+        expr1: NumberLiteral('2'),
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
           returnType: 'Num',
-          expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-          expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+          expr1: NumberLiteral('3'),
+          expr2: NumberLiteral('4'),
         },
       },
       {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '5', returnType: 'Num' },
+        expr1: NumberLiteral('5'),
         expr2: {
           type: 'PrioritizedExpr',
           returnType: 'Num',
@@ -62,14 +63,14 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Dash,
             returnType: 'Num',
-            expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
-            expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
+            expr1: NumberLiteral('6'),
+            expr2: NumberLiteral('7'),
           },
         },
       },
-      { type: 'NumberLiteral', value: '8', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '9', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '10', returnType: 'Num' },
+      NumberLiteral('8'),
+      NumberLiteral('9'),
+      NumberLiteral('10'),
     ],
     elementType: 'Num',
     returnType: 'List[Num]',

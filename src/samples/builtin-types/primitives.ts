@@ -21,7 +21,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   { type: 'NumberLiteral', value: '123', returnType: 'Num' },
   { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' },
-  { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
+  { type: 'BooleanLiteral', value: 'True', returnType: 'Bool', },
   { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
 ];
 

@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 def addition(x: Num, y: Num): Num do
@@ -150,11 +151,11 @@ const ast: AST = [
               type: 'BinaryOpExpr',
               operator: Op.Slash,
               returnType: 'Num',
-              expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+              expr1: NumberLiteral('2'),
               expr2: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
             },
           },
-          expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
+          expr2: NumberLiteral('1'),
         },
       },
       { type: 'IdentLiteral', value: 'b', returnType: 'Num' },

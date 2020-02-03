@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 mutable foo = 123
@@ -62,13 +63,13 @@ const ast: AST = [
     type: 'VarDeclaration',
     returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
-    expr2: { type: 'NumberLiteral', value: '123', returnType: 'Num' },
+    expr2: NumberLiteral('123'),
   },
   {
     type: 'VarAssignmentExpr',
     returnType: 'Void',
     expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
-    expr2: { type: 'NumberLiteral', value: '456', returnType: 'Num' },
+    expr2: NumberLiteral('456'),
   },
   {
     type: 'VarAssignmentExpr',
@@ -82,15 +83,15 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+        expr1: NumberLiteral('1'),
+        expr2: NumberLiteral('2'),
       },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+        expr1: NumberLiteral('3'),
+        expr2: NumberLiteral('4'),
       },
     },
   },
@@ -106,16 +107,16 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+        expr1: NumberLiteral('1'),
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
           returnType: 'Num',
-          expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-          expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+          expr1: NumberLiteral('2'),
+          expr2: NumberLiteral('3'),
         },
       },
-      expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' }
+      expr2: NumberLiteral('4')
     },
   },
   {
@@ -130,7 +131,7 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+        expr1: NumberLiteral('1'),
         expr2: { type: 'IdentLiteral', value: 'foo', returnType: 'Num' },
       },
       expr2: {
@@ -138,7 +139,7 @@ const ast: AST = [
         operator: Op.Slash,
         returnType: 'Num',
         expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+        expr2: NumberLiteral('2'),
       },
     },
   },

@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
 import { createFunctionPatterns } from '../helper';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -59,8 +60,8 @@ const ast: AST = [
     type: 'FunctionInvokeExpr',
     name: 'addition',
     params: [
-      { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-      { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+      NumberLiteral('1'),
+      NumberLiteral('2'),
     ],
     returnType: 'Num',
   },

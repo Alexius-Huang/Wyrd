@@ -1,4 +1,5 @@
 import { Token, AST } from '../../types';
+import { BooleanLiteral } from '../helper';
 
 const program = `\
 True and False or not False
@@ -28,13 +29,13 @@ const ast: AST = [
     expr1: {
       type: 'AndExpr',
       returnType: 'Bool',
-      expr1: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
-      expr2: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
+      expr1: BooleanLiteral(true),
+      expr2: BooleanLiteral(false),
     },
     expr2: {
       type: 'NotExpr',
       returnType: 'Bool',
-      expr: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
+      expr: BooleanLiteral(false),
     },
   },
   {
@@ -43,9 +44,9 @@ const ast: AST = [
     expr1: {
       type: 'NotExpr',
       returnType: 'Bool',
-      expr: { type: 'BooleanLiteral', value: 'False', returnType: 'Bool' },
+      expr: BooleanLiteral(false),
     },
-    expr2: { type: 'BooleanLiteral', value: 'True', returnType: 'Bool' },
+    expr2: BooleanLiteral(true),
   },
 ];
 

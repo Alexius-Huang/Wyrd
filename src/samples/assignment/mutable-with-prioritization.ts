@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import * as helper from '../helper';
 
 const program = `\
 mutable foo = (1 + 2) * 3
@@ -65,11 +66,11 @@ const ast: AST = [
           type: 'BinaryOpExpr',
           operator: Op.Plus,
           returnType: 'Num',
-          expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-          expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+          expr1: helper.NumberLiteral('1'),
+          expr2: helper.NumberLiteral('2'),
         },
       },
-      expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+      expr2: helper.NumberLiteral('3'),
     },
   },
   {
@@ -80,12 +81,12 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+      expr1: helper.NumberLiteral('1'),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+        expr1: helper.NumberLiteral('2'),
         expr2: {
           type: 'PrioritizedExpr',
           returnType: 'Num',
@@ -93,8 +94,8 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Dash,
             returnType: 'Num',
-            expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-            expr2: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
+            expr1: helper.NumberLiteral('3'),
+            expr2: helper.NumberLiteral('4'),
           },
         },
       },
@@ -108,7 +109,7 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+      expr1: helper.NumberLiteral('1'),
       expr2: {
         type: 'PrioritizedExpr',
         returnType: 'Num',
@@ -127,7 +128,7 @@ const ast: AST = [
               expr2: { type: 'IdentLiteral', value: 'bar', returnType: 'Num', },
             },
           },
-          expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+          expr2: helper.NumberLiteral('2'),
         },
       },
     },

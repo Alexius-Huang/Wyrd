@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 isTrue = 3 + 1 > 2
@@ -28,10 +29,10 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
+        expr1: NumberLiteral('3'),
+        expr2: NumberLiteral('1'),
       },
-      expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' }
+      expr2: NumberLiteral('2'),
     },  
   },
 ];

@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 foo = 1
@@ -46,11 +47,7 @@ const ast: AST = [
       value: 'foo',
       returnType: 'Num',
     },
-    expr2: {
-      type: 'NumberLiteral',
-      value: '1',
-      returnType: 'Num',
-    },
+    expr2: NumberLiteral('1'),
   },
   {
     type: 'AssignmentExpr',
@@ -68,32 +65,16 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: {
-          type: 'NumberLiteral',
-          value: '1',
-          returnType: 'Num',
-        },
+        expr1: NumberLiteral('1'),
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
           returnType: 'Num',
-          expr1: {
-            type: 'NumberLiteral',
-            value: '2',
-            returnType: 'Num',
-          },
-          expr2: {
-            type: 'NumberLiteral',
-            value: '3',
-            returnType: 'Num',
-          }
+          expr1: NumberLiteral('2'),
+          expr2: NumberLiteral('3'),
         },
       },
-      expr2: {
-        type: 'NumberLiteral',
-        value: '4',
-        returnType: 'Num',
-      },
+      expr2: NumberLiteral('4'),
     },
   },
   {
@@ -108,11 +89,7 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: {
-        type: 'NumberLiteral',
-        value: '1',
-        returnType: 'Num',
-      },
+      expr1: NumberLiteral('1'),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
@@ -124,23 +101,11 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Dash,
             returnType: 'Num',
-            expr1: {
-              type: 'NumberLiteral',
-              value: '2',
-              returnType: 'Num',
-            },
-            expr2: {
-              type: 'NumberLiteral',
-              value: '3',
-              returnType: 'Num',
-            }
+            expr1: NumberLiteral('2'),
+            expr2: NumberLiteral('3'),
           },  
         },
-        expr2: {
-          type: 'NumberLiteral',
-          value: '4',
-          returnType: 'Num',
-        },
+        expr2: NumberLiteral('4'),
       },
     },
   },

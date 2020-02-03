@@ -1,4 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
+import { NumberLiteral } from '../helper';
 
 const program = `\
 3 + 1 > 2
@@ -86,10 +87,10 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
-      expr2: { type: 'NumberLiteral', value: '1', returnType: 'Num' }
+      expr1: NumberLiteral('3'),
+      expr2: NumberLiteral('1')
     },
-    expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' }
+    expr2: NumberLiteral('2')
   },
   {
     type: 'BinaryOpExpr',
@@ -99,20 +100,20 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '5', returnType: 'Num' },
-      expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
+      expr1: NumberLiteral('5'),
+      expr2: NumberLiteral('3')
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
       returnType: 'Num',
-      expr1: { type: 'NumberLiteral', value: '15', returnType: 'Num' },
+      expr1: NumberLiteral('15'),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '8', returnType: 'Num' },
+        expr1: NumberLiteral('6'),
+        expr2: NumberLiteral('8'),
       },
     },
   },
@@ -123,20 +124,20 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.GtEq,
       returnType: 'Bool',
-      expr1: { type: 'NumberLiteral', value: '11', returnType: 'Num' },
+      expr1: NumberLiteral('11'),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
-        expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' },
+        expr1: NumberLiteral('7'),
+        expr2: NumberLiteral('7'),
       },
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.LtEq,
       returnType: 'Bool',
-      expr1: { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+      expr1: NumberLiteral('3'),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
@@ -148,11 +149,11 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Plus,
             returnType: 'Num',
-            expr1: { type: 'NumberLiteral', value: '6', returnType: 'Num' },
-            expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+            expr1: NumberLiteral('6'),
+            expr2: NumberLiteral('2'),
           },
         },
-        expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }, 
+        expr2: NumberLiteral('3'), 
       },
     },
   },
@@ -170,7 +171,7 @@ const ast: AST = [
           type: 'BinaryOpExpr',
           operator: Op.Slash,
           returnType: 'Num',
-          expr1: { type: 'NumberLiteral', value: '8', returnType: 'Num' },
+          expr1: NumberLiteral('8'),
           expr2: {
             type: 'PrioritizedExpr',
             returnType: 'Num',
@@ -178,12 +179,12 @@ const ast: AST = [
               type: 'BinaryOpExpr',
               operator: Op.Asterisk,
               returnType: 'Num',
-              expr1: { type: 'NumberLiteral', value: '4', returnType: 'Num' },
-              expr2: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
+              expr1: NumberLiteral('4'),
+              expr2: NumberLiteral('2'),
             },
           },
         },
-        expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
+        expr2: NumberLiteral('3')
       },
       expr2: {
         type: 'NotExpr',
@@ -196,16 +197,16 @@ const ast: AST = [
             type: 'BinaryOpExpr',
             operator: Op.Plus,
             returnType: 'Num',
-            expr1: { type: 'NumberLiteral', value: '1', returnType: 'Num' },
+            expr1: NumberLiteral('1'),
             expr2: {
               type: 'BinaryOpExpr',
               operator: Op.Asterisk,
               returnType: 'Num',
-              expr1: { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-              expr2: { type: 'NumberLiteral', value: '3', returnType: 'Num' }
+              expr1: NumberLiteral('2'),
+              expr2: NumberLiteral('3')
             },
           },
-          expr2: { type: 'NumberLiteral', value: '7', returnType: 'Num' }
+          expr2: NumberLiteral('7')
         },
       },
     },

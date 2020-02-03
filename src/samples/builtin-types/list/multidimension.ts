@@ -1,4 +1,5 @@
 import { Token, AST } from '../../../types';
+import { NumberLiteral } from '../../helper';
 
 const program = `\
 [[1 2 3] [4 5 6] [7 8 9]]
@@ -32,9 +33,9 @@ const ast: AST = [
       {
         type: 'ListLiteral',
         values: [
-          { type: 'NumberLiteral', value: '1', returnType: 'Num' },
-          { type: 'NumberLiteral', value: '2', returnType: 'Num' },
-          { type: 'NumberLiteral', value: '3', returnType: 'Num' },
+          NumberLiteral('1'),
+          NumberLiteral('2'),
+          NumberLiteral('3'),
         ],
         elementType: 'Num',
         returnType: 'List[Num]',
@@ -42,9 +43,9 @@ const ast: AST = [
       {
         type: 'ListLiteral',
         values: [
-          { type: 'NumberLiteral', value: '4', returnType: 'Num' },
-          { type: 'NumberLiteral', value: '5', returnType: 'Num' },
-          { type: 'NumberLiteral', value: '6', returnType: 'Num' },
+          NumberLiteral('4'),
+          NumberLiteral('5'),
+          NumberLiteral('6'),
         ],
         elementType: 'Num',
         returnType: 'List[Num]',
@@ -52,9 +53,9 @@ const ast: AST = [
       {
         type: 'ListLiteral',
         values: [
-          { type: 'NumberLiteral', value: '7', returnType: 'Num' },
-          { type: 'NumberLiteral', value: '8', returnType: 'Num' },
-          { type: 'NumberLiteral', value: '9', returnType: 'Num' },
+          NumberLiteral('7'),
+          NumberLiteral('8'),
+          NumberLiteral('9'),
         ],
         elementType: 'Num',
         returnType: 'List[Num]',
