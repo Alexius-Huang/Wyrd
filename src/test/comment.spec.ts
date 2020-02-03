@@ -7,5 +7,9 @@ describe('Comment', () => {
 
   describe('Multiline Comment', () => {
     FundamentalCompileTest('comment/multiline-comment');
+
+    describe('Multiline in Expression', () => {
+      FundamentalCompileTest('comment/multiline-in-expr');
+    });
   });
 });

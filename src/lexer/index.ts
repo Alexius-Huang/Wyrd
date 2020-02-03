@@ -51,7 +51,7 @@ export function lex(code: string): Array<Token> {
       if (currentChar === '#') {
         nextChar();
         isMultilineComment = true;
-        cond = () => currentChar !== '#' && peekChar !== '#';
+        cond = () => !(currentChar === '#' && peekChar === '#');
       }
 
       // let parsedComment = '';
