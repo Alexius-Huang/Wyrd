@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
-import { NumberLiteral } from '../helper';
+import { NumberLiteral, prioritize } from '../helper';
 
 const program = `\
 3 + 1 > 2
@@ -142,17 +142,13 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: {
-          type: 'PrioritizedExpr',
+        expr1: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Plus,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Plus,
-            returnType: 'Num',
-            expr1: NumberLiteral('6'),
-            expr2: NumberLiteral('2'),
-          },
-        },
+          expr1: NumberLiteral('6'),
+          expr2: NumberLiteral('2'),
+        }),
         expr2: NumberLiteral('3'), 
       },
     },
@@ -172,17 +168,13 @@ const ast: AST = [
           operator: Op.Slash,
           returnType: 'Num',
           expr1: NumberLiteral('8'),
-          expr2: {
-            type: 'PrioritizedExpr',
+          expr2: prioritize({
+            type: 'BinaryOpExpr',
+            operator: Op.Asterisk,
             returnType: 'Num',
-            expr: {
-              type: 'BinaryOpExpr',
-              operator: Op.Asterisk,
-              returnType: 'Num',
-              expr1: NumberLiteral('4'),
-              expr2: NumberLiteral('2'),
-            },
-          },
+            expr1: NumberLiteral('4'),
+            expr2: NumberLiteral('2'),
+          }),
         },
         expr2: NumberLiteral('3')
       },

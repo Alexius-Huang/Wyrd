@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral } from '../helper';
+import { NumberLiteral, prioritize } from '../helper';
 
 const program = `\
 foo = 1
@@ -94,17 +94,13 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: {
-          type: 'PrioritizedExpr',
+        expr1: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Dash,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Dash,
-            returnType: 'Num',
-            expr1: NumberLiteral('2'),
-            expr2: NumberLiteral('3'),
-          },  
-        },
+          expr1: NumberLiteral('2'),
+          expr2: NumberLiteral('3'),
+        }),
         expr2: NumberLiteral('4'),
       },
     },

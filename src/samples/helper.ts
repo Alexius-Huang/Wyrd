@@ -47,3 +47,11 @@ export function BooleanLiteral(bool: boolean): T.BooleanLiteral {
 export function NullLiteral(): T.NullLiteral {
   return { type: 'NullLiteral', value: 'Null', returnType: 'Null' };
 }
+
+export function prioritize(expr: T.Expr): T.PrioritizedExpr {
+  return {
+    type: 'PrioritizedExpr',
+    returnType: expr.returnType,
+    expr,
+  };
+}

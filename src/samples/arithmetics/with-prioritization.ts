@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral } from '../helper';
+import { NumberLiteral, prioritize } from '../helper';
 
 const program = `\
 (1 + 2) * 3
@@ -62,17 +62,13 @@ const ast: AST = [
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
     returnType: 'Num',
-    expr1: {
-      type: 'PrioritizedExpr',
+    expr1: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Plus,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: NumberLiteral('1'),
-        expr2: NumberLiteral('2'),
-      },
-    },
+      expr1: NumberLiteral('1'),
+      expr2: NumberLiteral('2'),
+    }),
     expr2: NumberLiteral('3'),
   },
   {
@@ -80,81 +76,61 @@ const ast: AST = [
     operator: Op.Asterisk,
     returnType: 'Num',
     expr1: NumberLiteral('1'),
-    expr2: {
-      type: 'PrioritizedExpr',
+    expr2: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Plus,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: NumberLiteral('2'),
-        expr2: NumberLiteral('3'),
-      },
-    },
+      expr1: NumberLiteral('2'),
+      expr2: NumberLiteral('3'),
+    }),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
     returnType: 'Num',
-    expr1: {
-      type: 'PrioritizedExpr',
+    expr1: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Plus,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: NumberLiteral('1'),
-        expr2: NumberLiteral('2'),
-      },
-    },
-    expr2: {
-      type: 'PrioritizedExpr',
+      expr1: NumberLiteral('1'),
+      expr2: NumberLiteral('2'),
+    }),
+    expr2: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Plus,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: NumberLiteral('3'),
-        expr2: NumberLiteral('4'),
-      },
-    },
+      expr1: NumberLiteral('3'),
+      expr2: NumberLiteral('4'),
+    }),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Asterisk,
     returnType: 'Num',
-    expr1: {
-      type: 'PrioritizedExpr',
+    expr1: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Plus,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
+      expr1: NumberLiteral('1'),
+      expr2: {
+        type: 'PrioritizedExpr',
         returnType: 'Num',
-        expr1: NumberLiteral('1'),
-        expr2: {
-          type: 'PrioritizedExpr',
+        expr: {
+          type: 'BinaryOpExpr',
+          operator: Op.Dash,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Dash,
-            returnType: 'Num',
-            expr1: NumberLiteral('5'),
-            expr2: NumberLiteral('3'),
-          },
+          expr1: NumberLiteral('5'),
+          expr2: NumberLiteral('3'),
         },
       },
-    },
-    expr2: {
-      type: 'PrioritizedExpr',
+    }),
+    expr2: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Slash,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Slash,
-        returnType: 'Num',
-        expr1: NumberLiteral('10'),
-        expr2: NumberLiteral('5'),
-      },
-    },
+      expr1: NumberLiteral('10'),
+      expr2: NumberLiteral('5'),
+    }),
   },
 ];
 

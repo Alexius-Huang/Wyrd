@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral } from '../helper';
+import { NumberLiteral, prioritize } from '../helper';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -151,28 +151,20 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: {
-          type: 'PrioritizedExpr',
+        expr1: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Plus,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Plus,
-            returnType: 'Num',
-            expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
-            expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
-          },
-        },
-        expr2: {
-          type: 'PrioritizedExpr',
+          expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
+          expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
+        }),
+        expr2: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Slash,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Slash,
-            returnType: 'Num',
-            expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
-            expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
-          },
-        },
+          expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
+          expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
+        }),
       },
     ],
   },
@@ -198,17 +190,13 @@ const ast: AST = [
           operator: Op.Asterisk,
           returnType: 'Num',
           expr1: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
-          expr2: {
-            type: 'PrioritizedExpr',
+          expr2: prioritize({
+            type: 'BinaryOpExpr',
+            operator: Op.Slash,
             returnType: 'Num',
-            expr: {
-              type: 'BinaryOpExpr',
-              operator: Op.Slash,
-              returnType: 'Num',
-              expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
-              expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
-            },
-          },
+            expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
+            expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
+          }),
         },
       },
     ],

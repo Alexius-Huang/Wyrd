@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../../types';
-import { NumberLiteral } from '../../helper';
+import { NumberLiteral, prioritize } from '../../helper';
 
 const program = `\
 [1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]
@@ -56,17 +56,13 @@ const ast: AST = [
         operator: Op.Slash,
         returnType: 'Num',
         expr1: NumberLiteral('5'),
-        expr2: {
-          type: 'PrioritizedExpr',
+        expr2: prioritize({
+          type: 'BinaryOpExpr',
+          operator: Op.Dash,
           returnType: 'Num',
-          expr: {
-            type: 'BinaryOpExpr',
-            operator: Op.Dash,
-            returnType: 'Num',
-            expr1: NumberLiteral('6'),
-            expr2: NumberLiteral('7'),
-          },
-        },
+          expr1: NumberLiteral('6'),
+          expr2: NumberLiteral('7'),
+        }),
       },
       NumberLiteral('8'),
       NumberLiteral('9'),

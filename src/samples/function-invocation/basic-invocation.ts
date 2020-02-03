@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns } from '../helper';
+import { createFunctionPatterns, prioritize } from '../helper';
 import { NumberLiteral, StringLiteral } from '../helper';
 
 const program = `\
@@ -269,33 +269,25 @@ const ast: AST = [
             operator: Op.Asterisk,
             returnType: 'Num',
             expr1: NumberLiteral('3'),
-            expr2: {
-              type: 'PrioritizedExpr',
+            expr2: prioritize({
+              type: 'BinaryOpExpr',
+              operator: Op.Slash,
               returnType: 'Num',
-              expr: {
-                type: 'BinaryOpExpr',
-                operator: Op.Slash,
-                returnType: 'Num',
-                expr1: NumberLiteral('4'),
-                expr2: NumberLiteral('5'),                
-              },
-            },
+              expr1: NumberLiteral('4'),
+              expr2: NumberLiteral('5'),                
+            }),
           },
         },
       ],
       returnType: 'Num',
     },
-    expr2: {
-      type: 'PrioritizedExpr',
+    expr2: prioritize({
+      type: 'BinaryOpExpr',
+      operator: Op.Dash,
       returnType: 'Num',
-      expr: {
-        type: 'BinaryOpExpr',
-        operator: Op.Dash,
-        returnType: 'Num',
-        expr1: NumberLiteral('6'),
-        expr2: NumberLiteral('7'),
-      },
-    },
+      expr1: NumberLiteral('6'),
+      expr2: NumberLiteral('7'),
+    }),
   },
   {
     type: 'BinaryOpExpr',
