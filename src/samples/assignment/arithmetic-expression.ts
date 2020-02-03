@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, prioritize } from '../helper';
+import { NumberLiteral, prioritize, Arithmetic } from '../helper';
 
 const program = `\
 foo = 1
@@ -42,21 +42,13 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: {
-      type: 'IdentLiteral',
-      value: 'foo',
-      returnType: 'Num',
-    },
+    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num' },
     expr2: NumberLiteral('1'),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: {
-      type: 'IdentLiteral',
-      value: 'bar',
-      returnType: 'Num',
-    },
+    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
@@ -66,13 +58,7 @@ const ast: AST = [
         operator: Op.Plus,
         returnType: 'Num',
         expr1: NumberLiteral('1'),
-        expr2: {
-          type: 'BinaryOpExpr',
-          operator: Op.Asterisk,
-          returnType: 'Num',
-          expr1: NumberLiteral('2'),
-          expr2: NumberLiteral('3'),
-        },
+        expr2: Arithmetic(2, '*', 3),
       },
       expr2: NumberLiteral('4'),
     },
@@ -80,11 +66,7 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: {
-      type: 'IdentLiteral',
-      value: 'baz',
-      returnType: 'Num',
-    },
+    expr1: { type: 'IdentLiteral', value: 'baz', returnType: 'Num' },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
@@ -94,13 +76,7 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: prioritize({
-          type: 'BinaryOpExpr',
-          operator: Op.Dash,
-          returnType: 'Num',
-          expr1: NumberLiteral('2'),
-          expr2: NumberLiteral('3'),
-        }),
+        expr1: prioritize(Arithmetic(2, '-', 3)),
         expr2: NumberLiteral('4'),
       },
     },

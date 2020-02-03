@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
-import { NumberLiteral, prioritize } from '../helper';
+import { NumberLiteral, prioritize, Arithmetic } from '../helper';
 
 const program = `\
 3 + 1 > 2
@@ -83,38 +83,20 @@ const ast: AST = [
     type: 'BinaryOpExpr',
     operator: Op.Gt,
     returnType: 'Bool',
-    expr1: {
-      type: 'BinaryOpExpr',
-      operator: Op.Plus,
-      returnType: 'Num',
-      expr1: NumberLiteral('3'),
-      expr2: NumberLiteral('1')
-    },
+    expr1: Arithmetic(3, '+', 1),
     expr2: NumberLiteral('2')
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Lt,
     returnType: 'Bool',
-    expr1: {
-      type: 'BinaryOpExpr',
-      operator: Op.Asterisk,
-      returnType: 'Num',
-      expr1: NumberLiteral('5'),
-      expr2: NumberLiteral('3')
-    },
+    expr1: Arithmetic(5, '*', 3),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
       returnType: 'Num',
       expr1: NumberLiteral('15'),
-      expr2: {
-        type: 'BinaryOpExpr',
-        operator: Op.Asterisk,
-        returnType: 'Num',
-        expr1: NumberLiteral('6'),
-        expr2: NumberLiteral('8'),
-      },
+      expr2: Arithmetic(6, '*', 8),
     },
   },
   {
@@ -125,13 +107,7 @@ const ast: AST = [
       operator: Op.GtEq,
       returnType: 'Bool',
       expr1: NumberLiteral('11'),
-      expr2: {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: NumberLiteral('7'),
-        expr2: NumberLiteral('7'),
-      },
+      expr2: Arithmetic(7, '+', 7),
     },
     expr2: {
       type: 'BinaryOpExpr',
@@ -142,13 +118,7 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: prioritize({
-          type: 'BinaryOpExpr',
-          operator: Op.Plus,
-          returnType: 'Num',
-          expr1: NumberLiteral('6'),
-          expr2: NumberLiteral('2'),
-        }),
+        expr1: prioritize(Arithmetic(6, '+', 2)),
         expr2: NumberLiteral('3'), 
       },
     },
@@ -168,13 +138,7 @@ const ast: AST = [
           operator: Op.Slash,
           returnType: 'Num',
           expr1: NumberLiteral('8'),
-          expr2: prioritize({
-            type: 'BinaryOpExpr',
-            operator: Op.Asterisk,
-            returnType: 'Num',
-            expr1: NumberLiteral('4'),
-            expr2: NumberLiteral('2'),
-          }),
+          expr2: prioritize(Arithmetic(4, '*', 2)),
         },
         expr2: NumberLiteral('3')
       },
@@ -190,13 +154,7 @@ const ast: AST = [
             operator: Op.Plus,
             returnType: 'Num',
             expr1: NumberLiteral('1'),
-            expr2: {
-              type: 'BinaryOpExpr',
-              operator: Op.Asterisk,
-              returnType: 'Num',
-              expr1: NumberLiteral('2'),
-              expr2: NumberLiteral('3')
-            },
+            expr2: Arithmetic(2, '*', 3),
           },
           expr2: NumberLiteral('7')
         },

@@ -55,3 +55,26 @@ export function prioritize(expr: T.Expr): T.PrioritizedExpr {
     expr,
   };
 }
+
+export function Arithmetic(
+  num1: number,
+  op: '+' | '-' | '*' | '/' | '%',
+  num2: number,
+): T.BinaryOpExpr {
+  let operator: T.Operator;
+  switch (op) {
+    case '+': operator = T.Operator.Plus;     break;
+    case '-': operator = T.Operator.Dash;     break;
+    case '*': operator = T.Operator.Asterisk; break;
+    case '/': operator = T.Operator.Slash;    break;
+    case '%': operator = T.Operator.Percent;  break;
+  }
+
+  return {
+    type: 'BinaryOpExpr',
+    operator,
+    returnType: 'Num',
+    expr1: NumberLiteral(num1.toString()),
+    expr2: NumberLiteral(num2.toString()),
+  };
+}

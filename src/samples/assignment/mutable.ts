@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral } from '../helper';
+import { NumberLiteral, Arithmetic } from '../helper';
 
 const program = `\
 mutable foo = 123
@@ -79,20 +79,8 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Dash,
       returnType: 'Num',
-      expr1: {
-        type: 'BinaryOpExpr',
-        operator: Op.Asterisk,
-        returnType: 'Num',
-        expr1: NumberLiteral('1'),
-        expr2: NumberLiteral('2'),
-      },
-      expr2: {
-        type: 'BinaryOpExpr',
-        operator: Op.Slash,
-        returnType: 'Num',
-        expr1: NumberLiteral('3'),
-        expr2: NumberLiteral('4'),
-      },
+      expr1: Arithmetic(1, '*', 2),
+      expr2: Arithmetic(3, '/', 4),
     },
   },
   {
@@ -108,13 +96,7 @@ const ast: AST = [
         operator: Op.Plus,
         returnType: 'Num',
         expr1: NumberLiteral('1'),
-        expr2: {
-          type: 'BinaryOpExpr',
-          operator: Op.Asterisk,
-          returnType: 'Num',
-          expr1: NumberLiteral('2'),
-          expr2: NumberLiteral('3'),
-        },
+        expr2: Arithmetic(2, '*', 3),
       },
       expr2: NumberLiteral('4')
     },
