@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, prioritize, Arithmetic } from '../helper';
+import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
 
 const program = `\
 foo = 1
@@ -42,13 +42,13 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num' },
+    expr1: Var('foo', 'Num'),
     expr2: NumberLiteral('1'),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
+    expr1: Var('bar', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
@@ -66,7 +66,7 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'baz', returnType: 'Num' },
+    expr1: Var('baz', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,

@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral } from '../helper';
+import { NumberLiteral, Arithmetic } from '../helper';
 
 const program = `\
 def addition(x: Num, y: Num): Num do
@@ -95,13 +95,7 @@ const ast: AST = [
     ],
     outputType: 'Num',
     body: [
-      {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
-        expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' }
-      },
+      Arithmetic('x', '+', 'y'),
     ],
   },
   {
@@ -125,13 +119,7 @@ const ast: AST = [
           operator: Op.Plus,
           returnType: 'Num',
           expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
-          expr2: {
-            type: 'BinaryOpExpr',
-            operator: Op.Asterisk,
-            returnType: 'Num',
-            expr1: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
-            expr2: { type: 'IdentLiteral', value: 'z', returnType: 'Num' }
-          },
+          expr2: Arithmetic('y', '*', 'z'),
         },
       },
       {
@@ -147,13 +135,7 @@ const ast: AST = [
             operator: Op.Dash,
             returnType: 'Num',
             expr1: { type: 'IdentLiteral', value: 'w', returnType: 'Num' },
-            expr2: {
-              type: 'BinaryOpExpr',
-              operator: Op.Slash,
-              returnType: 'Num',
-              expr1: NumberLiteral('2'),
-              expr2: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
-            },
+            expr2: Arithmetic(2, '/', 'a'),
           },
           expr2: NumberLiteral('1'),
         },

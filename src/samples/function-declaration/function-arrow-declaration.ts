@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, prioritize } from '../helper';
+import { NumberLiteral, prioritize, Arithmetic } from '../helper';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -116,13 +116,7 @@ const ast: AST = [
     ],
     outputType: 'Num',
     body: [
-      {
-        type: 'BinaryOpExpr',
-        operator: Op.Plus,
-        returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
-        expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' }
-      },
+      Arithmetic('x', '+', 'y'),
     ],
   },
   {
@@ -151,20 +145,8 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
         returnType: 'Num',
-        expr1: prioritize({
-          type: 'BinaryOpExpr',
-          operator: Op.Plus,
-          returnType: 'Num',
-          expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
-          expr2: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
-        }),
-        expr2: prioritize({
-          type: 'BinaryOpExpr',
-          operator: Op.Slash,
-          returnType: 'Num',
-          expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
-          expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
-        }),
+        expr1: prioritize(Arithmetic('x', '+', 'y')),
+        expr2: prioritize(Arithmetic('z', '/', 'w')),
       },
     ],
   },
@@ -190,13 +172,7 @@ const ast: AST = [
           operator: Op.Asterisk,
           returnType: 'Num',
           expr1: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
-          expr2: prioritize({
-            type: 'BinaryOpExpr',
-            operator: Op.Slash,
-            returnType: 'Num',
-            expr1: { type: 'IdentLiteral', value: 'z', returnType: 'Num' },
-            expr2: { type: 'IdentLiteral', value: 'w', returnType: 'Num' }
-          }),
+          expr2: prioritize(Arithmetic('z', '/', 'w')),
         },
       },
     ],

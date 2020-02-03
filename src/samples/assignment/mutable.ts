@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, Arithmetic } from '../helper';
+import { NumberLiteral, Arithmetic, Var } from '../helper';
 
 const program = `\
 mutable foo = 123
@@ -62,19 +62,19 @@ const ast: AST = [
   {
     type: 'VarDeclaration',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
+    expr1: Var('foo', 'Num'),
     expr2: NumberLiteral('123'),
   },
   {
     type: 'VarAssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
+    expr1: Var('foo', 'Num'),
     expr2: NumberLiteral('456'),
   },
   {
     type: 'VarAssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num', },
+    expr1: Var('foo', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
@@ -86,7 +86,7 @@ const ast: AST = [
   {
     type: 'VarDeclaration',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
+    expr1: Var('bar', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
@@ -104,7 +104,7 @@ const ast: AST = [
   {
     type: 'VarAssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Num' },
+    expr1: Var('bar', 'Num'),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,

@@ -46,31 +46,31 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'foo', returnType: 'Num' },
+    expr1: helper.Var('foo', 'Num'),
     expr2: helper.NumberLiteral('123'),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'bar', returnType: 'Str' },
+    expr1: helper.Var('bar', 'Str'),
     expr2: helper.StringLiteral('Hello world'),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'baz', returnType: 'Bool' },
+    expr1: helper.Var('baz', 'Bool'),
     expr2: helper.BooleanLiteral(true),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'nothing', returnType: 'Null' },
+    expr1: helper.Var('nothing', 'Null'),
     expr2: helper.NullLiteral(),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'list', returnType: 'List[Num]' },
+    expr1: helper.Var('list', 'List[Num]'),
     expr2: {
       type: 'ListLiteral',
       values: [

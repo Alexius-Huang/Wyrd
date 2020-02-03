@@ -32,6 +32,10 @@ export function createFunctionPattern(
   return result;
 }
 
+export function Var(name: string, type: string): T.IdentLiteral {
+  return { type: 'IdentLiteral', value: name, returnType: type };
+}
+
 export function NumberLiteral(value: string): T.NumberLiteral {
   return { type: 'NumberLiteral', value, returnType: 'Num' };
 }

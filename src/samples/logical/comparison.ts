@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
-import { NumberLiteral, prioritize, Arithmetic } from '../helper';
+import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
 
 const program = `\
 3 + 1 > 2
@@ -168,20 +168,20 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
+        expr1: Var('a', 'Num'),
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
           returnType: 'Num',
           expr1: Arithmetic('b', '/', 'c'),
-          expr2: { type: 'IdentLiteral', value: 'd', returnType: 'Num' },
+          expr2: Var('d', 'Num'),
         },
       },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Dash,
         returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'w', returnType: 'Num' },
+        expr1: Var('w', 'Num'),
         expr2: Arithmetic('x', '*', 'y'),
       },
     },
