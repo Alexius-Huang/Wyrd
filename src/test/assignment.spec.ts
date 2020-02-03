@@ -26,6 +26,10 @@ describe('Assignment Expression', () => {
   describe('Mutable Var Declaration & Assignment', () => {
     FundamentalCompileTest('assignment/mutable');
 
+    describe('With Prioritization', () => {
+      FundamentalCompileTest('assignment/mutable-with-prioritization');
+    });
+
     it('throws error when assign with wrong type of value', () => {
       const program = `\nmutable foo = 123\nfoo = "Hello world"\n`;
 
