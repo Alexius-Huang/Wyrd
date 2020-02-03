@@ -21,7 +21,6 @@ const tokenMaps = new Map<string, Token>([
   ['?', { type: 'question', value: '?' }],
   ['!', { type: 'bang', value: '!' }],
   ['!=', { type: 'bangeq', value: '!=' }],
-  ['#', { type: 'sharp', value: '#' }],
   ['$', { type: 'dollar', value: '$' }],
   ['@', { type: 'at', value: '@' }],
   ['~', { type: 'wavy', value: '~' }],
@@ -36,6 +35,9 @@ const tokenMaps = new Map<string, Token>([
   [',', { type: 'comma', value: ',' }],
   ['_', { type: 'underscore', value: '_' }],
   ['\n',  { type: 'newline', value: '\n' }],
+
+  // Sharp is used as comment in Wyrd-Lang, so it is inactive
+  // ['#', { type: 'sharp', value: '#' }],
 ]);
 
 export default tokenMaps;
