@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { ParserError } from './error';
+import { ParserError, ParserErrorIf } from './error';
 import { compare } from './precedence';
 import TokenTracker from './TokenTracker';
 import { EmptyExpression } from './constants';
@@ -10,6 +10,11 @@ export function parseBinaryOpExpr(
   scope: T.Scope,
   prevExpr: T.Expr,
 ): T.Expr {
+  ParserErrorIf(
+    prevExpr.type === 'IdentLiteral' && prevExpr.returnType === 'Invalid',
+    `Using the unidentified token \`${(prevExpr as T.IdentLiteral).value}\``,
+  );
+
   let operator: T.Operator;
   switch(tt.value) {
     case '+':  operator = T.Operator.Plus;     break;
