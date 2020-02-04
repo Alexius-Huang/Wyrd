@@ -70,6 +70,7 @@ describe('Compiler Option: Minification', () => {
   describe('Function Declaration', () => {
     perform('function arrow declaration', 'function-declaration/function-arrow-declaration');
     perform('function block expression declaration', 'function-declaration/function-block-declaration');
+    perform('uses variables from parent scope', 'function-declaration/using-vars-from-parent-scope');
   });
 
   describe('Function Invocation', () => {
