@@ -1,10 +1,16 @@
-import { Token, AST } from '../../types';
+import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Var, Arithmetic } from '../helper';
 
 const program = `\
 mutable something = 1
 def addSomething(x: Num): Num => x + something
 something = 2
+
+def complexArithmetics(x: Num, y: Num): Num do
+  a = x + y
+  b = a * something + y
+  b
+end
 `;
 
 const tokens: Array<Token> = [
@@ -33,6 +39,41 @@ const tokens: Array<Token> = [
   { type: 'eq', value: '=' },
   { type: 'number', value: '2' },
   { type: 'newline', value: '\n' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'keyword', value: 'def' },
+  { type: 'ident', value: 'complexArithmetics' },
+  { type: 'lparen', value: '(' },
+  { type: 'ident', value: 'x' },
+  { type: 'colon', value: ':' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'comma', value: ',' },
+  { type: 'ident', value: 'y' },
+  { type: 'colon', value: ':' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'rparen', value: ')' },
+  { type: 'colon', value: ':' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'keyword', value: 'do' },
+  { type: 'newline', value: '\n' },
+  { type: 'ident', value: 'a' },
+  { type: 'eq', value: '=' },
+  { type: 'ident', value: 'x' },
+  { type: 'plus', value: '+' },
+  { type: 'ident', value: 'y' },
+  { type: 'newline', value: '\n' },
+  { type: 'ident', value: 'b' },
+  { type: 'eq', value: '=' },
+  { type: 'ident', value: 'a' },
+  { type: 'asterisk', value: '*' },
+  { type: 'ident', value: 'something' },
+  { type: 'plus', value: '+' },
+  { type: 'ident', value: 'y' },
+  { type: 'newline', value: '\n' },
+  { type: 'ident', value: 'b' },
+  { type: 'newline', value: '\n' },
+  { type: 'keyword', value: 'end' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
@@ -60,6 +101,37 @@ const ast: AST = [
     expr1: Var('something', 'Num'),
     expr2: NumberLiteral('2'),
   },
+  {
+    type: 'FunctionDeclaration',
+    name: 'complexArithmetics',
+    arguments: [
+      { ident: 'x', type: 'Num' },
+      { ident: 'y', type: 'Num' },
+    ],
+    outputType: 'Num',
+    body: [
+      {
+        type: 'AssignmentExpr',
+        returnType: 'Void',
+        expr1: Var('a', 'Num'),
+        expr2: Arithmetic('x', '+', 'y'),
+      },
+      {
+        type: 'AssignmentExpr',
+        returnType: 'Void',
+        expr1: Var('b', 'Num'),
+        expr2: {
+          type: 'BinaryOpExpr',
+          operator: Op.Plus,
+          returnType: 'Num',
+          expr1: Arithmetic('a', '*', 'something'),
+          expr2: Var('y', 'Num'),
+        },
+      },
+      Var('b', 'Num'),
+    ],
+    returnType: 'Void',
+  }
 ];
 
 const compiled = `\
@@ -69,9 +141,15 @@ function addSomething(x) {
 }
 
 something = 2;
+function complexArithmetics(x, y) {
+  const a = x + y;
+  const b = a * something + y;
+  return b;
+}
+
 `;
 
-const minified = 'let something=1;function addSomething(x){return x+something;}something=2;';
+const minified = 'let something=1;function addSomething(x){return x+something;}something=2;function complexArithmetics(x,y){const a=x+y;const b=a*something+y;return b;}';
 
 export {
   program,
