@@ -158,9 +158,12 @@ function complexArithmetic(w, x, y, z) {
 
 `;
 
+const minified = 'function addition(x,y){return x+y;}function complexArithmetic(w,x,y,z){const a=x+(y*z);const b=w-(2/a)+1;return b;}';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

@@ -50,7 +50,7 @@ describe('Compiler Option: Minification', () => {
     describe('List', () => {
       perform('list literals', 'builtin-types/list/literal');
       perform('multidimensional list', 'builtin-types/list/multidimension');
-      todo('list with function invocation');
+      perform('list with function invocation', 'builtin-types/list/with-function-invocation');
       perform('list with prioritization expressions', 'builtin-types/list/with-prioritization');
     });
   });
@@ -68,14 +68,14 @@ describe('Compiler Option: Minification', () => {
   });
 
   describe('Function Declaration', () => {
-    todo('function arrow declaration');
-    todo('function block expression declaration');
+    perform('function arrow declaration', 'function-declaration/function-arrow-declaration');
+    perform('function block expression declaration', 'function-declaration/function-block-declaration');
   });
 
   describe('Function Invocation', () => {
     perform('basic function invocation', 'function-invocation/basic-invocation');
     perform('nested function invocation', 'function-invocation/nested-invocation');
     perform('function invocation with prioritization', 'function-invocation/with-prioritization');
-    todo('declare function before function invocation');
+    perform('declare function before function invocation', 'function-invocation/declare-before-invoke');
   });
 });

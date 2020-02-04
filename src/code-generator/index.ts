@@ -136,12 +136,16 @@ export function generateCode(
     const { name, arguments: args, body } = expr;
 
     if (args.length === 0) {
+      if (minify)
+        return `function ${name}(){${codeGenFunctionBody(body, [])}}`;
       return `\
 function ${name}() {
 ${codeGenFunctionBody(body, [], 2)}
 }`;
     }
 
+    if (minify)
+      return `function ${name}(${codeGenArguments(args)}){${codeGenFunctionBody(body, args)}}`;
     return `\
 function ${name}(${codeGenArguments(args)}) {
 ${codeGenFunctionBody(body, args, 2)}
@@ -155,6 +159,17 @@ ${codeGenFunctionBody(body, args, 2)}
   function codeGenFunctionBody(body: Array<T.Expr>, args: Array<T.Argument>, indent = 2) {
     let i = 0;
     const result: Array<string> = [];
+    if (minify) {
+      while (i < body.length) {
+        result.push(`${genExpr(body[i])};`);
+        i += 1;
+      }
+  
+      const lastIndex = result.length - 1;
+      result[lastIndex] = `return ${result[lastIndex]}`;
+      return result.join('');
+    }
+
     while (i < body.length) {
       result.push(`${' '.repeat(indent)}${genExpr(body[i])};`);
       i += 1;
@@ -193,7 +208,9 @@ ${codeGenFunctionBody(body, args, 2)}
   if (minify) {
     while (index < ast.length) {
       const expr = ast[index];
-      result += `${genExpr(expr)};`;
+      result += `${genExpr(expr)}`;
+      if (result[result.length - 1] !== '}')
+        result += ';';
       index++;
     }
   } else {

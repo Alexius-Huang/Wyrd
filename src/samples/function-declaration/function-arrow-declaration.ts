@@ -198,9 +198,12 @@ function complexArithmetic2(w, x, y, z) {
 
 `;
 
+const minified = 'function addition(x,y){return x+y;}function devilNumber(){return 666;}function complexArithmetic(w,x,y,z){return (x+y)*(z/w);}function complexArithmetic2(w,x,y,z){return x+(y*(z/w));}';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

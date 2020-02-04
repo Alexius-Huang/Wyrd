@@ -116,9 +116,12 @@ function addition(x, y) {
 [1, addition(2, 3 + (4 * 5)), 6, addition(7 / 8 - 9, 10)];
 `;
 
+const minified = 'function addition(x,y){return x+y;}[1,addition(2,3+(4*5)),6,addition(7/8-9,10)];';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };
