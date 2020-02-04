@@ -1,7 +1,7 @@
-import { lex } from '../lexer/index';
-import { parse } from '../parser/index';
-import { generateCode } from '../codeGenerator';
-import { compile } from '../index';
+import { lex } from '../lexer';
+import { parse } from '../parser';
+import { generateCode } from '../code-generator';
+import { compile } from '..';
 import * as T from '../types';
 
 export function FundamentalCompileTest(
@@ -14,7 +14,11 @@ export function FundamentalCompileTest(
   const path = `../samples/${name}`;
   const debugParser = options?.debugParser ?? false;
 
-  let program: string, tokens: Array<T.Token>, ast: T.AST, compiled: string, parseOptions: T.ParseOptions | undefined;
+  let program: string;
+  let tokens: Array<T.Token>;
+  let ast: T.AST;
+  let compiled: string;
+  let parseOptions: T.ParseOptions | undefined;
   beforeAll(async () => {
     const testCase = await import(path);
     program = testCase.program;
@@ -51,6 +55,6 @@ export function FundamentalCompileTest(
     it('compiles the Wyrd program into JavaScript code correctly', () => {
       const result = compile(program, { parseOptions });
       expect(result).toBe(compiled);
-    });  
+    });
   }
 }

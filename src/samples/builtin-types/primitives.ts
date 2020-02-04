@@ -32,9 +32,12 @@ true;
 null;
 `;
 
+const minified = '123;\'Hello world\';true;null;';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

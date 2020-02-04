@@ -41,9 +41,12 @@ const foo = 123;
 const baz = 789;
 `;
 
+const minified = 'const foo=123;const baz=789;';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

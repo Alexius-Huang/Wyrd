@@ -69,6 +69,8 @@ function addition(x, y) {
 addition(1, 2);
 `;
 
+const minified = 'function addition(x,y){return x+y;}addition(1,2);';
+
 const parseOptions: ParseOptions = {
   functions: createFunctionPatterns([
   ]),
@@ -80,4 +82,5 @@ export {
   ast,
   compiled,
   parseOptions,
+  minified,
 };

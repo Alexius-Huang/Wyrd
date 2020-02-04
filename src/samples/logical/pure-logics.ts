@@ -55,9 +55,12 @@ true && false || !(false);
 !(false) && true;
 `;
 
+const minified = 'true&&false||!(false);!(false)&&true;'
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

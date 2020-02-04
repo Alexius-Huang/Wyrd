@@ -1,0 +1,28 @@
+import { Token, AST } from 'REFERENCE_TO_TYPE_DEFINITION/types';
+
+const program = `\
+"Hello world"
+`;
+
+const tokens: Array<Token> = [
+  { type: 'string', value: 'Hello world' },
+  { type: 'newline', value: '\n' },
+];
+
+const ast: AST = [
+  { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' },
+];
+
+const compiled = `\
+'Hello world';
+`;
+
+const minified = '\'Hello world\';';
+
+export {
+  program,
+  tokens,
+  ast,
+  compiled,
+  minified,
+};

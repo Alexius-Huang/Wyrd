@@ -107,9 +107,12 @@ let bar = 1 + (2 * (3 - 4));
 bar = 1 * ((foo + bar) / 2);
 `;
 
+const minified = 'let foo=(1+2)*3;let bar=1+(2*(3-4));bar=1*((foo+bar)/2);';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

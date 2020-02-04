@@ -175,6 +175,8 @@ const mixed1 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 `;
 
+const minified = 'const mixed1=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));const mixed2=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));';
+
 const parseOptions: ParseOptions = {
   variables: new Map<string, Variable>([
     ['age', { name: 'age', isConst: true, type: 'Num' }],
@@ -187,4 +189,5 @@ export {
   ast,
   compiled,
   parseOptions,
+  minified,
 };

@@ -89,9 +89,12 @@ const bar = 1 + (2 * 3) + 4;
 const baz = 1 + ((2 - 3) * 4);
 `;
 
+const minified = 'const foo=1;const bar=1+(2*3)+4;const baz=1+((2-3)*4);';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

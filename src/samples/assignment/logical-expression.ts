@@ -35,9 +35,12 @@ const compiled = `\
 const isTrue = 3 + 1 > 2;
 `;
 
+const minified = 'const isTrue=3+1>2;';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

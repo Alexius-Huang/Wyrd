@@ -101,9 +101,12 @@ const compiled = `\
 (1 + (5 - 3)) * (10 / 5);
 `;
 
+const minified = '(1+2)*3;1*(2+3);(1+2)*(3+4);(1+(5-3))*(10/5);';
+
 export {
   program,
   tokens,
   ast,
   compiled,
+  minified,
 };

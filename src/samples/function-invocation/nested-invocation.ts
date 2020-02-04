@@ -273,6 +273,8 @@ funcH(funcI(1) + (2 * funcJ(3, 4)), funcK(5));
 funcL(funcM(1) * 2 + (3 * funcN(4)) - 5);
 `;
 
+const minified = 'funcA(1,funcB(2,3,4,5));funcC(1,2,funcD(3,4),5);funcE(1,funcF(2,3,funcG(4)),5);funcH(funcI(1)+(2*funcJ(3,4)),funcK(5));funcL(funcM(1)*2+(3*funcN(4))-5);';
+
 const parseOptions: ParseOptions = {
   functions: createFunctionPatterns([
     ['funcA', [['Num.Num', 'Num']]],
@@ -298,4 +300,5 @@ export {
   ast,
   compiled,
   parseOptions,
+  minified,
 };
