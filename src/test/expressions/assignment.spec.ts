@@ -18,7 +18,7 @@ describe('Assignment Expression', () => {
         const program = `\nfoo = 123\nfoo = 456\n`;
   
         expect(() => compile(program))
-          .toThrow('Constant `foo` cannot be reassigned');      
+          .toThrow('ParserError: Constant `foo` cannot be reassigned');      
       });
     });
   });
@@ -34,7 +34,7 @@ describe('Assignment Expression', () => {
       const program = `\nmutable foo = 123\nfoo = "Hello world"\n`;
 
       expect(() => compile(program))
-        .toThrow('Parser: Expect mutable variable `foo` to assign value of type `Num`, instead got: `Str`');
+        .toThrow('ParserError: Expect mutable variable `foo` to assign value of type `Num`, instead got: `Str`');
     });
   });
 });
