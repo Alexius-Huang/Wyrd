@@ -16,12 +16,26 @@ export function parseIdentifier(
     value: tokenName,
     returnType: 'Invalid',
   };
-  const { variables, functions } = scope;
+  const { functions } = scope;
 
-  if (variables.has(tokenName)) {
-    const varInfo = variables.get(tokenName) as T.Variable;
-    result.returnType = varInfo.type;
-  } else if (functions.has(tokenName)) {
+  /* Find the variable through scope chain */
+  // TODO: Refactor Scope, maybe use a class to represent scopes and functions
+  //       and let finding variables and functions become member methods
+  let varInfo: T.Variable | undefined;
+  let currentScope = scope;
+  while (true) {
+    const { variables: v } = currentScope;
+    if (v.has(tokenName)) {
+      varInfo = v.get(tokenName) as T.Variable;
+      result.returnType = varInfo.type;
+      break;
+    }
+
+    if (currentScope.parentScope === null) break;
+    currentScope = currentScope.parentScope;
+  }
+
+  if (varInfo === undefined && functions.has(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   }
 

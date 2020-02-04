@@ -9,6 +9,10 @@ describe('Functions', () => {
     describe('Function-Block Declaration', () => {
       FundamentalCompileTest('function-declaration/function-block-declaration');
     });
+
+    describe('Function Declaration Using Variables in Parent Level Scope', () => {
+      FundamentalCompileTest('function-declaration/using-vars-from-parent-scope', { debugParser: true });
+    });
   });
   
   describe('Function Invocation', () => {
