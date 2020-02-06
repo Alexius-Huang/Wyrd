@@ -200,6 +200,10 @@ ${codeGenFunctionBody(body, args, 2)}
       if (directMethodMapping.has(name)) {
         const mappedName = directMethodMapping.get(name) as string;
         const args = params.map(genExpr).join(commaDelimiter);
+        
+        /* Chained Method no need for parentheses surrounded */
+        if (receiver.type === 'MethodInvokeExpr')
+          return `${genExpr(receiver)}.${mappedName}(${args})`;
         return `(${genExpr(receiver)}).${mappedName}(${args})`;
       }
     }
