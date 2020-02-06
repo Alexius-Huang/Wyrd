@@ -3,7 +3,7 @@ import { compile } from '../..';
 
 describe('Method Invocation', () => {
   describe('Direct Method Mapping', () => {
-    FundamentalCompileTest('builtin-methods/direct-method-mapping');
+    FundamentalCompileTest('method-invocation/direct-method-mapping');
 
     it('throws error when passing unmatched pattern of input', () => {
       const program1 = `\n"Test".repeat("3")`;
