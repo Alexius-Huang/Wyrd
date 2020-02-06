@@ -227,7 +227,6 @@ export type FunctionInvokeExpr = {
 
 export type MethodPattern = { name: string; inputPattern: string; returnType: string };
 export type MethodMappedInfo = { name: string; argCount: number };
-export type DirectMethodMap = Map<string, MethodMappedInfo>;
 export type MethodInvokeExpr = {
   type: 'MethodInvokeExpr';
   name: string;

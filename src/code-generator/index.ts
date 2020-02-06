@@ -1,6 +1,6 @@
 import * as T from '../types';
 import { LogicalBinaryOperators } from '../parser/constants';
-import { StrMethodsDirectMap } from './method-direct-map';
+import { MethodsDirectMap } from './method-direct-map';
 
 function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
@@ -195,14 +195,10 @@ ${codeGenFunctionBody(body, args, 2)}
 
     if (primitives.has(receiver.returnType)) {
       const type = receiver.returnType;
+      const directMethodMapping = MethodsDirectMap.get(type) as Map<string, string>;
 
-      /* Check if maps directly to builtin methods in JavaScript */
-      // TODO: Extend to other primitive types
-      if (StrMethodsDirectMap.has(name)) {
-        const { name: mappedName, argCount } = StrMethodsDirectMap.get(name) as T.MethodMappedInfo;
-        if (argCount !== params.length)
-          CodeGenerateError(`Expect ${type}.${name} to have ${argCount} params, got: ${params.length}`);
-
+      if (directMethodMapping.has(name)) {
+        const mappedName = directMethodMapping.get(name) as string;
         const args = params.map(genExpr).join(commaDelimiter);
         return `(${genExpr(receiver)}).${mappedName}(${args})`;
       }
