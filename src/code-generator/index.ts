@@ -1,6 +1,6 @@
 import * as T from '../types';
 import { LogicalBinaryOperators } from '../parser/constants';
-import { MethodsDirectMap } from './method-direct-map';
+import { MethodsDirectMap } from './constants';
 
 function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
