@@ -23,4 +23,8 @@ describe('Method Invocation', () => {
   describe('Chained Method Invocation', () => {
     FundamentalCompileTest('method-invocation/chained');
   });
+
+  describe('Method Invocation as Parameters', () => {
+    FundamentalCompileTest('method-invocation/as-params');
+  });
 });
