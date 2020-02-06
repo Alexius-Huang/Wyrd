@@ -83,5 +83,7 @@ describe('Compiler Option: Minification', () => {
   describe('Method Invocation', () => {
     perform('method invocation with direct method mapping', 'method-invocation/direct-method-mapping');
     perform('expression invoke method expression', 'method-invocation/expr-invoke-method');
+    perform('chained method invocation', 'method-invocation/chained');
+    perform('method invocation as parameters', 'method-invocation/as-params');
   });
 });

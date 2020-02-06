@@ -19,4 +19,12 @@ describe('Method Invocation', () => {
   describe('Expression then Invokes Method', () => {
     FundamentalCompileTest('method-invocation/expr-invoke-method');
   });
+
+  describe('Chained Method Invocation', () => {
+    FundamentalCompileTest('method-invocation/chained');
+  });
+
+  describe('Method Invocation as Parameters', () => {
+    FundamentalCompileTest('method-invocation/as-params');
+  });
 });

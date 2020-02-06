@@ -147,9 +147,16 @@ export const BuiltinOPActions = new Map<string, OPAction>([
 ]);
 
 export const BuiltinStrMethods = new Map<string, MethodPattern>([
-  ['upcase', { name: 'upcase', inputPattern: '', returnType: 'Str' }],
-  ['repeat', { name: 'repeat', inputPattern: 'Num', returnType: 'Str' }],
-  ['toStr', { name: 'toStr', inputPattern: '', returnType: 'Str' }],
+  ['upcase',   { name: 'upcase',   inputPattern: '',        returnType: 'Str'       }],
+  ['downcase', { name: 'downcase', inputPattern: '',        returnType: 'Str'       }],
+  ['repeat',   { name: 'repeat',   inputPattern: 'Num',     returnType: 'Str'       }],
+  ['toStr',    { name: 'toStr',    inputPattern: '',        returnType: 'Str'       }],
+  ['at',       { name: 'at',       inputPattern: 'Num',     returnType: 'Str'       }],
+  ['concat',   { name: 'concat',   inputPattern: 'Str',     returnType: 'Str'       }],
+  ['indexOf',  { name: 'indexOf',  inputPattern: 'Str',     returnType: 'Num'       }],
+  ['split',    { name: 'split',    inputPattern: 'Str',     returnType: 'List[Str]' }],
+  ['rest',     { name: 'rest',     inputPattern: 'Num',     returnType: 'Str'       }],
+  ['between',  { name: 'between',  inputPattern: 'Num.Num', returnType: 'Str'       }],
 ]);
 
 export const BuiltinNumMethods = new Map<string, MethodPattern>([

@@ -214,6 +214,12 @@ const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 "Hello world".repeat(3)
 "Wyrd Lang is Awesome".upcase()
 (1 + 2 * 3).toStr()
+
+# Chained Invocation
+"Hello".concat(" world").concat(", Wyrd-Lang!")
+
+# Invocation as Parameter
+"Hello".concat(" world".concat(", Wyrd-Lang!"))
 ```
 
 **Compiled Wyrd Code**
@@ -221,6 +227,8 @@ const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 ('Hello world').repeat(3);
 ('Wyrd Lang is Aweseom').toUpperCase();
 (1 + (2 * 3)).toString();
+('Hello').concat(' world').concat(' , Wyrd-Lang!');
+('Hello').concat((' world').concat(' , Wyrd-Lang!'));
 ```
 
 ### Function Declaration as Expression

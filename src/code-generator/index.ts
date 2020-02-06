@@ -1,6 +1,6 @@
 import * as T from '../types';
 import { LogicalBinaryOperators } from '../parser/constants';
-import { MethodsDirectMap } from './method-direct-map';
+import { MethodsDirectMap } from './constants';
 
 function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
@@ -200,6 +200,10 @@ ${codeGenFunctionBody(body, args, 2)}
       if (directMethodMapping.has(name)) {
         const mappedName = directMethodMapping.get(name) as string;
         const args = params.map(genExpr).join(commaDelimiter);
+        
+        /* Chained Method no need for parentheses surrounded */
+        if (receiver.type === 'MethodInvokeExpr')
+          return `${genExpr(receiver)}.${mappedName}(${args})`;
         return `(${genExpr(receiver)}).${mappedName}(${args})`;
       }
     }
