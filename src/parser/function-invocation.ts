@@ -25,13 +25,17 @@ export function parseFunctionInvokeExpr(
   tt.next(); // Skip the left parentheses
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
-  while (true) {
-    let parameterExpr: T.Expr;
-    parameterExpr = parseFunctionParameter(tt, parseExpr, scope);
-    result.params.push(parameterExpr);
 
-    if (tt.isOneOf('rparen', 'newline')) break;
-    tt.next();
+  // TODO: should be refactored as parseFunctionParameters?
+  if (tt.isNot('rparen')) {
+    while (true) {
+      let parameterExpr: T.Expr;
+      parameterExpr = parseFunctionParameter(tt, parseExpr, scope);
+      result.params.push(parameterExpr);
+
+      if (tt.isOneOf('rparen', 'newline')) break;
+      tt.next();
+    }
   }
 
   const inputParamsTypePattern = result.params

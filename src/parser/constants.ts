@@ -1,5 +1,6 @@
-import { OPAction, OPActionPair, EmptyExpr } from "../types";
+import { OPAction, OPActionPair, EmptyExpr, MethodPattern } from "../types";
 
+export const Primitives = new Set(['Num', 'Str', 'Bool']);
 export const EmptyExpression: EmptyExpr = { type: 'EmptyExpr', returnType: 'Invalid' };
 
 export const BuiltinBinaryOperators = new Set<string>([
@@ -143,4 +144,13 @@ export const BuiltinOPActions = new Map<string, OPAction>([
       ]),
     },
   ],
+]);
+
+export const BuiltinStrMethods = new Map<string, MethodPattern>([
+  ['upcase', { name: 'upcase', inputPattern: '', returnType: 'Str' }],
+  ['repeat', { name: 'repeat', inputPattern: 'Num', returnType: 'Str' }],
+]);
+
+export const BuiltinPrimitiveMethods = new Map([
+  ['Str', BuiltinStrMethods],
 ]);

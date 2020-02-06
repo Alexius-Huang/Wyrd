@@ -93,6 +93,7 @@ export type Expr =
   ConditionalExpr     |
   FunctionDeclaration |
   FunctionInvokeExpr  |
+  MethodInvokeExpr    |
   IdentLiteral        |
   NumberLiteral       |
   StringLiteral       |
@@ -220,6 +221,17 @@ export type FunctionDeclaration = {
 export type FunctionInvokeExpr = {
   type: 'FunctionInvokeExpr';
   name: string;
+  params: Array<Expr>;
+  returnType: string;
+};
+
+export type MethodPattern = { name: string; inputPattern: string; returnType: string };
+export type MethodMappedInfo = { name: string; argCount: number };
+export type DirectMethodMap = Map<string, MethodMappedInfo>;
+export type MethodInvokeExpr = {
+  type: 'MethodInvokeExpr';
+  name: string;
+  receiver: Expr;
   params: Array<Expr>;
   returnType: string;
 };
