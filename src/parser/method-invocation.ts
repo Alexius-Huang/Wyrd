@@ -22,6 +22,10 @@ export function parseMethodInvokeExpr(
     returnType: 'Invalid',
   };
 
+  // Strip down the prioritized layer since the receiver will always be a single node
+  if (result.receiver.type === 'PrioritizedExpr')
+    result.receiver = result.receiver.expr;
+
   const receiverType = prevExpr.returnType;
 
   // TODO: Currently only support primitive type of data, future support

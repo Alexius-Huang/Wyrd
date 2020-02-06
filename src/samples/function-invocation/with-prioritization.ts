@@ -78,7 +78,7 @@ const ast: AST = [
     type: 'FunctionInvokeExpr',
     name: 'funcA',
     params: [
-      NumberLiteral('1'),
+      NumberLiteral(1),
       {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
@@ -91,18 +91,18 @@ const ast: AST = [
             type: 'FunctionInvokeExpr',
             name: 'funcB',
             params: [
-              NumberLiteral('2'),
-              NumberLiteral('3')
+              NumberLiteral(2),
+              NumberLiteral(3)
             ],
             returnType: 'Num',
           },
-          expr2: NumberLiteral('4'),
+          expr2: NumberLiteral(4),
         }),
         expr2: {
           type: 'FunctionInvokeExpr',
           name: 'funcC',
           params: [
-            NumberLiteral('5'),
+            NumberLiteral(5),
           ],
           returnType: 'Num'
         },
@@ -118,7 +118,7 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Slash,
         returnType: 'Num',
-        expr1: NumberLiteral('1'),
+        expr1: NumberLiteral(1),
         expr2: prioritize({
           type: 'BinaryOpExpr',
           operator: Op.Dash,
@@ -127,15 +127,15 @@ const ast: AST = [
             type: 'FunctionInvokeExpr',
             name: 'funcE',
             params: [
-              NumberLiteral('2'),
-              NumberLiteral('3'),
+              NumberLiteral(2),
+              NumberLiteral(3),
             ],
             returnType: 'Num',
           },
-          expr2: NumberLiteral('4'),
+          expr2: NumberLiteral(4),
         }),
       },
-      NumberLiteral('5'),
+      NumberLiteral(5),
     ],
     returnType: 'Num',
   },
@@ -151,7 +151,7 @@ const ast: AST = [
           type: 'BinaryOpExpr',
           operator: Op.Dash,
           returnType: 'Num',
-          expr1: NumberLiteral('1'),
+          expr1: NumberLiteral(1),
           expr2: {
             type: 'BinaryOpExpr',
             operator: Op.Asterisk,
@@ -160,20 +160,20 @@ const ast: AST = [
               type: 'FunctionInvokeExpr',
               name: 'funcG',
               params: [
-                NumberLiteral('2'),
+                NumberLiteral(2),
               ],
               returnType: 'Num',
             },
-            expr2: NumberLiteral('3'),
+            expr2: NumberLiteral(3),
           },
         }),
-        expr2: NumberLiteral('4'),
+        expr2: NumberLiteral(4),
       },
       {
         type: 'FunctionInvokeExpr',
         name: 'funcH',
         params: [
-          NumberLiteral('5'),
+          NumberLiteral(5),
         ],
         returnType: 'Num',
       },

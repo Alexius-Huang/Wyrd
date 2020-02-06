@@ -47,7 +47,7 @@ const ast: AST = [
     type: 'AssignmentExpr',
     returnType: 'Void',
     expr1: helper.Var('foo', 'Num'),
-    expr2: helper.NumberLiteral('123'),
+    expr2: helper.NumberLiteral(123),
   },
   {
     type: 'AssignmentExpr',
@@ -74,11 +74,11 @@ const ast: AST = [
     expr2: {
       type: 'ListLiteral',
       values: [
-        helper.NumberLiteral('1'),
-        helper.NumberLiteral('2'),
-        helper.NumberLiteral('3'),
-        helper.NumberLiteral('4'),
-        helper.NumberLiteral('5'),
+        helper.NumberLiteral(1),
+        helper.NumberLiteral(2),
+        helper.NumberLiteral(3),
+        helper.NumberLiteral(4),
+        helper.NumberLiteral(5),
       ],
       elementType: 'Num',
       returnType: 'List[Num]',

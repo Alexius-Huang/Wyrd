@@ -26,13 +26,13 @@ const ast: AST = [
     type: 'AssignmentExpr',
     returnType: 'Void',
     expr1: Var('foo', 'Num'),
-    expr2: NumberLiteral('123'),
+    expr2: NumberLiteral(123),
   },
   {
     type: 'AssignmentExpr',
     returnType: 'Void',
     expr1: Var('baz', 'Num'),
-    expr2: NumberLiteral('789'),
+    expr2: NumberLiteral(789),
   },
 ];
 

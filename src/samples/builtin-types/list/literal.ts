@@ -52,11 +52,11 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      helper.NumberLiteral('1'),
-      helper.NumberLiteral('2'),
-      helper.NumberLiteral('3'),
-      helper.NumberLiteral('4'),
-      helper.NumberLiteral('5'),
+      helper.NumberLiteral(1),
+      helper.NumberLiteral(2),
+      helper.NumberLiteral(3),
+      helper.NumberLiteral(4),
+      helper.NumberLiteral(5),
     ],
     elementType: 'Num',
     returnType: 'List[Num]',

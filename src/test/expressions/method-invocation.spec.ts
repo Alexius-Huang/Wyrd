@@ -15,4 +15,8 @@ describe('Method Invocation', () => {
         .toThrowError('ParserError: Expect Str.repeat to receive input pattern of `Num`, instead got: `Num.Num`');
       });
   });
+
+  describe('Expression then Invokes Method', () => {
+    FundamentalCompileTest('method-invocation/expr-invoke-method');
+  });
 });

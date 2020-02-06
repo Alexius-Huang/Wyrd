@@ -36,8 +36,8 @@ export function Var(name: string, type: string): T.IdentLiteral {
   return { type: 'IdentLiteral', value: name, returnType: type };
 }
 
-export function NumberLiteral(value: string): T.NumberLiteral {
-  return { type: 'NumberLiteral', value, returnType: 'Num' };
+export function NumberLiteral(value: number): T.NumberLiteral {
+  return { type: 'NumberLiteral', value: value.toString(), returnType: 'Num' };
 }
 
 export function StringLiteral(value: string): T.StringLiteral {
@@ -77,14 +77,14 @@ export function Arithmetic(
   let expr1: T.Expr, expr2: T.Expr;
 
   if (typeof operand1 === 'number')
-    expr1 = NumberLiteral(operand1.toString());
+    expr1 = NumberLiteral(operand1);
   else if (typeof operand1 === 'string')
     expr1 = { type: 'IdentLiteral', value: operand1, returnType: 'Num' };
   else
     expr1 = operand1;
 
   if (typeof operand2 === 'number')
-    expr2 = NumberLiteral(operand2.toString());
+    expr2 = NumberLiteral(operand2);
   else if (typeof operand2 === 'string')
     expr2 = { type: 'IdentLiteral', value: operand2, returnType: 'Num' };
   else

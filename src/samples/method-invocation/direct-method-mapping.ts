@@ -36,7 +36,7 @@ const ast: AST = [
     name: 'repeat',
     receiver: StringLiteral('Hello world'),
     params: [
-      NumberLiteral('3'),
+      NumberLiteral(3),
     ],
     returnType: 'Str',
   },

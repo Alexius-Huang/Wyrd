@@ -70,23 +70,23 @@ const ast: AST = [
   {
     type: 'ListLiteral',
     values: [
-      NumberLiteral('1'),
+      NumberLiteral(1),
       {
         type: 'FunctionInvokeExpr',
         name: 'addition',
         params: [
-          NumberLiteral('2'),
+          NumberLiteral(2),
           {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
             returnType: 'Num',
-            expr1: NumberLiteral('3'),
+            expr1: NumberLiteral(3),
             expr2: Arithmetic(4, '*', 5),
           },
         ],
         returnType: 'Num',
       },
-      NumberLiteral('6'),
+      NumberLiteral(6),
       {
         type: 'FunctionInvokeExpr',
         name: 'addition',
@@ -96,9 +96,9 @@ const ast: AST = [
             operator: Op.Dash,
             returnType: 'Num',
             expr1: Arithmetic(7, '/', 8),
-            expr2: NumberLiteral('9'),
+            expr2: NumberLiteral(9),
           },
-          NumberLiteral('10'),
+          NumberLiteral(10),
         ],
         returnType: 'Num',
       },

@@ -54,8 +54,8 @@ const ast: AST = [
     type: 'FunctionInvokeExpr',
     name: 'addition',
     params: [
-      NumberLiteral('1'),
-      NumberLiteral('2'),
+      NumberLiteral(1),
+      NumberLiteral(2),
     ],
     returnType: 'Num',
   },

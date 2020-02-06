@@ -81,7 +81,7 @@ const ast: AST = [
     type: 'VarDeclaration',
     returnType: 'Void',
     expr1: Var('something', 'Num'),
-    expr2: NumberLiteral('1')
+    expr2: NumberLiteral(1)
   },
   {
     type: 'FunctionDeclaration',
@@ -99,7 +99,7 @@ const ast: AST = [
     type: 'VarAssignmentExpr',
     returnType: 'Void',
     expr1: Var('something', 'Num'),
-    expr2: NumberLiteral('2'),
+    expr2: NumberLiteral(2),
   },
   {
     type: 'FunctionDeclaration',
