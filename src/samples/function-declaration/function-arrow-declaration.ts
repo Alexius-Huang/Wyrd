@@ -126,7 +126,7 @@ const ast: AST = [
     arguments: [],
     outputType: 'Num',
     body: [
-      NumberLiteral('666'),
+      NumberLiteral(666),
     ],
   },
   {

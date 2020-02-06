@@ -33,9 +33,9 @@ const ast: AST = [
       {
         type: 'ListLiteral',
         values: [
-          NumberLiteral('1'),
-          NumberLiteral('2'),
-          NumberLiteral('3'),
+          NumberLiteral(1),
+          NumberLiteral(2),
+          NumberLiteral(3),
         ],
         elementType: 'Num',
         returnType: 'List[Num]',
@@ -43,9 +43,9 @@ const ast: AST = [
       {
         type: 'ListLiteral',
         values: [
-          NumberLiteral('4'),
-          NumberLiteral('5'),
-          NumberLiteral('6'),
+          NumberLiteral(4),
+          NumberLiteral(5),
+          NumberLiteral(6),
         ],
         elementType: 'Num',
         returnType: 'List[Num]',
@@ -53,9 +53,9 @@ const ast: AST = [
       {
         type: 'ListLiteral',
         values: [
-          NumberLiteral('7'),
-          NumberLiteral('8'),
-          NumberLiteral('9'),
+          NumberLiteral(7),
+          NumberLiteral(8),
+          NumberLiteral(9),
         ],
         elementType: 'Num',
         returnType: 'List[Num]',

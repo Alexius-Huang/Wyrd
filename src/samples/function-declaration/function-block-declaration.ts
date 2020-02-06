@@ -137,7 +137,7 @@ const ast: AST = [
             expr1: { type: 'IdentLiteral', value: 'w', returnType: 'Num' },
             expr2: Arithmetic(2, '/', 'a'),
           },
-          expr2: NumberLiteral('1'),
+          expr2: NumberLiteral(1),
         },
       },
       { type: 'IdentLiteral', value: 'b', returnType: 'Num' },

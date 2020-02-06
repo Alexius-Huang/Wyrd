@@ -67,7 +67,7 @@ const ast: AST = [
     type: 'BinaryOpExpr',
     operator: Op.Plus,
     returnType: 'Num',
-    expr1: NumberLiteral('1'),
+    expr1: NumberLiteral(1),
     expr2: Arithmetic(2, '*', 3),
   },
   {
@@ -75,7 +75,7 @@ const ast: AST = [
     operator: Op.Plus,
     returnType: 'Num',
     expr1: Arithmetic(1, '*', 2),
-    expr2: NumberLiteral('3'),
+    expr2: NumberLiteral(3),
   },
   {
     type: 'BinaryOpExpr',
@@ -85,10 +85,10 @@ const ast: AST = [
       type: 'BinaryOpExpr',
       operator: Op.Plus,
       returnType: 'Num',
-      expr1: NumberLiteral('1'),
+      expr1: NumberLiteral(1),
       expr2: Arithmetic(2, '*', 3),
     },
-    expr2: NumberLiteral('4'),
+    expr2: NumberLiteral(4),
   },
   {
     type: 'BinaryOpExpr',
@@ -101,13 +101,13 @@ const ast: AST = [
     type: 'BinaryOpExpr',
     operator: Op.Plus,
     returnType: 'Num',
-    expr1: NumberLiteral('1'),
+    expr1: NumberLiteral(1),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
       returnType: 'Num',
       expr1: Arithmetic(2, '*', 3),
-      expr2: NumberLiteral('4'),
+      expr2: NumberLiteral(4),
     }
   },
   {
@@ -119,9 +119,9 @@ const ast: AST = [
       operator: Op.Plus,
       returnType: 'Num',
       expr1: Arithmetic(1, '*', 2),
-      expr2: NumberLiteral('3'),
+      expr2: NumberLiteral(3),
     },
-    expr2: NumberLiteral('4'),
+    expr2: NumberLiteral(4),
   },
 ];
 

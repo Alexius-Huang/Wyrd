@@ -79,4 +79,9 @@ describe('Compiler Option: Minification', () => {
     perform('function invocation with prioritization', 'function-invocation/with-prioritization');
     perform('declare function before function invocation', 'function-invocation/declare-before-invoke');
   });
+
+  describe('Method Invocation', () => {
+    perform('method invocation with direct method mapping', 'method-invocation/direct-method-mapping');
+    perform('expression invoke method expression', 'method-invocation/expr-invoke-method');
+  });
 });

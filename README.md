@@ -19,6 +19,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   - [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics)
   - [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression)
   - [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression)
+  - [[WIP] Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation)
   - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
   - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
   - [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
@@ -202,6 +203,24 @@ const example2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'e
 const example3 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 const mixed1 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
 const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
+```
+
+### Method Invocation
+**[WIP]**
+
+**Wyrd Lang**
+```
+# Builtin Methods for Primitives
+"Hello world".repeat(3)
+"Wyrd Lang is Awesome".upcase()
+(1 + 2 * 3).toStr()
+```
+
+**Compiled Wyrd Code**
+```js
+('Hello world').repeat(3);
+('Wyrd Lang is Aweseom').toUpperCase();
+(1 + (2 * 3)).toString();
 ```
 
 ### Function Declaration as Expression

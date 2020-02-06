@@ -63,13 +63,13 @@ const ast: AST = [
     type: 'VarDeclaration',
     returnType: 'Void',
     expr1: Var('foo', 'Num'),
-    expr2: NumberLiteral('123'),
+    expr2: NumberLiteral(123),
   },
   {
     type: 'VarAssignmentExpr',
     returnType: 'Void',
     expr1: Var('foo', 'Num'),
-    expr2: NumberLiteral('456'),
+    expr2: NumberLiteral(456),
   },
   {
     type: 'VarAssignmentExpr',
@@ -95,10 +95,10 @@ const ast: AST = [
         type: 'BinaryOpExpr',
         operator: Op.Plus,
         returnType: 'Num',
-        expr1: NumberLiteral('1'),
+        expr1: NumberLiteral(1),
         expr2: Arithmetic(2, '*', 3),
       },
-      expr2: NumberLiteral('4')
+      expr2: NumberLiteral(4)
     },
   },
   {

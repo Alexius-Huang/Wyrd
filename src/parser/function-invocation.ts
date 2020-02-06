@@ -25,14 +25,9 @@ export function parseFunctionInvokeExpr(
   tt.next(); // Skip the left parentheses
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
-  while (true) {
-    let parameterExpr: T.Expr;
-    parameterExpr = parseFunctionParameter(tt, parseExpr, scope);
-    result.params.push(parameterExpr);
 
-    if (tt.isOneOf('rparen', 'newline')) break;
-    tt.next();
-  }
+  if (tt.isNot('rparen'))
+    result.params = parseFunctionParameters(tt, parseExpr, scope);
 
   const inputParamsTypePattern = result.params
     .map(expr => expr.returnType)
@@ -48,6 +43,25 @@ export function parseFunctionInvokeExpr(
   result.returnType = patternInfo.returnType;
 
   return result;
+}
+
+function parseFunctionParameters(
+  tt: TokenTracker,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
+): Array<T.Expr> {
+  const params: Array<T.Expr> = [];
+
+  while (true) {
+    let parameterExpr: T.Expr;
+    parameterExpr = parseFunctionParameter(tt, parseExpr, scope);
+    params.push(parameterExpr);
+
+    if (tt.isOneOf('rparen', 'newline')) break;
+    tt.next();
+  }
+
+  return params;
 }
 
 function parseFunctionParameter(

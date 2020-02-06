@@ -26,7 +26,7 @@ const ast: AST = [
       operator: Op.Gt,
       returnType: 'Bool',
       expr1: Arithmetic(3, '+', 1),
-      expr2: NumberLiteral('2'),
+      expr2: NumberLiteral(2),
     },  
   },
 ];

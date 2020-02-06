@@ -1,5 +1,6 @@
 import * as T from '../types';
 import { LogicalBinaryOperators } from '../parser/constants';
+import { MethodsDirectMap } from './method-direct-map';
 
 function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
@@ -48,6 +49,8 @@ export function generateCode(
         return codeGenFunctionDeclaration(expr);
       case 'FunctionInvokeExpr':
         return codeGenFunctionInvokeExpr(expr);
+      case 'MethodInvokeExpr':
+        return codeGenMethodInvokeExpr(expr);
       case 'ConditionalExpr':
         return codeGenConditionalExpr(expr);
       default:
@@ -183,6 +186,25 @@ ${codeGenFunctionBody(body, args, 2)}
   function codeGenFunctionInvokeExpr(expr: T.FunctionInvokeExpr) {
     const { name, params } = expr;
     return `${name}(${params.map(genExpr).join(commaDelimiter)})`;
+  }
+
+  // TODO: Refactor code generator
+  const primitives = new Set(['Num', 'Str', 'Bool']);
+  function codeGenMethodInvokeExpr(expr: T.MethodInvokeExpr): string {
+    const { name, receiver, params } = expr;
+
+    if (primitives.has(receiver.returnType)) {
+      const type = receiver.returnType;
+      const directMethodMapping = MethodsDirectMap.get(type) as Map<string, string>;
+
+      if (directMethodMapping.has(name)) {
+        const mappedName = directMethodMapping.get(name) as string;
+        const args = params.map(genExpr).join(commaDelimiter);
+        return `(${genExpr(receiver)}).${mappedName}(${args})`;
+      }
+    }
+
+    CodeGenerateError('Unhandled method invocation expression code generation');
   }
 
   function codeGenConditionalExpr(expr: T.ConditionalExpr) {
