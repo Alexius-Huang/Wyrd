@@ -32,7 +32,6 @@ export function parseMethodInvokeExpr(
   if (builtinMethods.has(name)) {
     builtinMethodPattern = builtinMethods.get(name) as T.MethodPattern;
     isBuiltinMethod = true;
-    // result.returnType = returnType;
   } else {
     ParserError('Unhandled method invocation');
   }
@@ -45,18 +44,10 @@ export function parseMethodInvokeExpr(
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
 
-  if (tt.isNot('rparen')) {
-    // TODO: should be refactored as parseMethodInvokeParameters?
-    while (true) {
-      let parameterExpr: T.Expr;
-      parameterExpr = parseMethodInvokeParameter(tt, parseExpr, scope);
-      result.params.push(parameterExpr);
+  if (tt.isNot('rparen'))
+    result.params = parseMethodInvokeParameters(tt, parseExpr, scope);
 
-      if (tt.isOneOf('rparen', 'newline')) break;
-      tt.next();
-    }
-  }
-
+  /* Input pattern validation */
   const inputParamsTypePattern = result.params
     .map(expr => expr.returnType)
     .join('.');
@@ -72,6 +63,25 @@ export function parseMethodInvokeExpr(
   }
 
   return result;
+}
+
+function parseMethodInvokeParameters(
+  tt: TokenTracker,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
+): Array<T.Expr> {
+  const params: Array<T.Expr> = [];
+
+  while (true) {
+    let parameterExpr: T.Expr;
+    parameterExpr = parseMethodInvokeParameter(tt, parseExpr, scope);
+    params.push(parameterExpr);
+
+    if (tt.isOneOf('rparen', 'newline')) break;
+    tt.next();
+  }
+
+  return params;
 }
 
 function parseMethodInvokeParameter(
