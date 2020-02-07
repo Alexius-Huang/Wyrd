@@ -2,6 +2,7 @@ import * as T from "../types";
 import TokenTracker from './TokenTracker';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
+import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration } from './function';
@@ -55,6 +56,9 @@ export function parse(
 
     if (tt.isOneOf('number', 'string', 'boolean', 'null'))
       return parsePrimitive(tt, prevExpr);
+
+    if (tt.is('builtin-type'))
+      return parseTypeLiteral(tt, parseExpr, scope);
 
     if (tt.is('ident'))
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
