@@ -99,7 +99,8 @@ export type Expr =
   StringLiteral       |
   BooleanLiteral      |
   NullLiteral         |
-  ListLiteral
+  ListLiteral         |
+  TypeLiteral
 ;
 
 export type EmptyExpr = {
@@ -142,6 +143,12 @@ export type IdentLiteral = {
   type: 'IdentLiteral';
   value: string;
   returnType: string;
+};
+
+export type TypeLiteral = {
+  type: 'TypeLiteral';
+  value: string;
+  returnType: 'Void';
 };
 
 export type VarDeclaration = {

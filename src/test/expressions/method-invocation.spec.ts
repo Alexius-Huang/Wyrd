@@ -27,4 +27,20 @@ describe('Method Invocation', () => {
   describe('Method Invocation as Parameters', () => {
     FundamentalCompileTest('method-invocation/as-params');
   });
+
+  describe('Builtin-Type Method Invocation', () => {
+    FundamentalCompileTest('method-invocation/builtin-type-invocation', { debugParser: true });
+
+    it('throws error when passing no receiver parameter', () => {
+      const program = `\nStr.upcase()`;
+      expect(() => compile(program))
+        .toThrowError('ParserError: Expect `Str.upcase` to have parameter as receiver of type `Str`');
+    });
+
+    it('throws error when passing wrong type of receiver paramter', () => {
+      const program = `\nStr.upcase(123)`;
+      expect(() => compile(program))
+        .toThrowError('ParserError: Expect `Str.upcase` to have receiver of type `Str`, instead got `Num`');
+    });
+  });
 });
