@@ -1,6 +1,7 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
 import Scope from './Scope';
+import Variable from './Scope.Variable';
 import { getOPActionDetail } from './helper';
 import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf } from './error';
@@ -21,7 +22,7 @@ export function parseIdentifier(
   /* Find the variable through scope chain */
   // TODO: Refactor Scope, maybe use a class to represent scopes and functions
   //       and let finding variables and functions become member methods
-  let varInfo: T.Variable | undefined;
+  let varInfo: Variable | undefined;
   let currentScope = scope;
   while (true) {
     if (currentScope.hasVariable(tokenName)) {

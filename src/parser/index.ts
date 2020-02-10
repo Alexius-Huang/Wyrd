@@ -1,7 +1,7 @@
 import * as T from "../types";
 import TokenTracker from './TokenTracker';
 import Scope from './Scope';
-import FunctionObject from "./FunctionObject";
+import FunctionObject from "./Scope.FunctionObject";
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';

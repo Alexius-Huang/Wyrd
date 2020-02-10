@@ -1,4 +1,4 @@
-import { Token, AST, ParseOptions } from '../../types';
+import { Token, AST } from '../../types';
 import { Arithmetic } from '../helper';
 import { NumberLiteral } from '../helper';
 

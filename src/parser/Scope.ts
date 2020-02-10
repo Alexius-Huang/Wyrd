@@ -1,5 +1,5 @@
-import * as T from '../types';
-import FunctionObject from './FunctionObject';
+import FunctionObject from './Scope.FunctionObject';
+import Variable from './Scope.Variable';
 import { ParserError } from './error';
 
 export default class Scope {
@@ -7,7 +7,7 @@ export default class Scope {
   public children: Map<string, Scope> = new Map();
 
   constructor(
-    public variables: Map<string, T.Variable> = new Map(),
+    public variables: Map<string, Variable> = new Map(),
     public functions: Map<string, FunctionObject> = new Map(),
   ) {}
 
@@ -15,7 +15,7 @@ export default class Scope {
     return this.variables.has(name);
   }
 
-  public getVariable(name: string): T.Variable {
+  public getVariable(name: string): Variable {
     const varInfo = this.variables.get(name);
 
     if (varInfo === undefined)
@@ -23,18 +23,18 @@ export default class Scope {
     return varInfo;
   }
 
-  public createConstant(name: string, type: string = 'Unknown'): T.Variable {
-    const info: T.Variable = { name, type, isConst: true };
+  public createConstant(name: string, type: string = 'Unknown'): Variable {
+    const variable: Variable = new Variable(name, type);
 
-    this.variables.set(name, info);
-    return info;
+    this.variables.set(name, variable);
+    return variable;
   }
 
-  public createMutableVariable(name: string, type: string = 'Unknown'): T.Variable {
-    const info: T.Variable = { name, type, isConst: false };
+  public createMutableVariable(name: string, type: string = 'Unknown'): Variable {
+    const variable: Variable = new Variable(name, type, false);
 
-    this.variables.set(name, info);
-    return info;
+    this.variables.set(name, variable);
+    return variable;
   }
 
   public hasFunction(name: string) {

@@ -46,19 +46,7 @@ export const enum Operator {
   // Underscore = '_'
 }
 
-export type Variable = {
-  name: string;
-  isConst: boolean;
-  type: string;
-};
-
 export type FunctionPatternInfo = { returnType: string };
-export type FunctionPattern = {
-  name: string;
-  patterns: Map<Symbol, FunctionPatternInfo>;
-  // For instance:
-  // Symbol.for('Num.Str') means two parameter with first argument as Num and second argument as Str
-};
 
 export type ParseOptions = {
   ast?: AST;
