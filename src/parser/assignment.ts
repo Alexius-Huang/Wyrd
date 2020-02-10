@@ -47,12 +47,7 @@ export function parseAssignmentExpr(
       returnType: 'Void',
     };
 
-    const variableInfo: T.Variable = {
-      name: varName,
-      isConst: true,
-      type: 'Unknown',
-    };
-    scope.variables.set(varName, variableInfo);
+    const variableInfo = scope.createConstant(varName);
 
     result.expr2 = parseExpr(undefined, { scope });
     const isInvalid = result.expr2.returnType === 'Invalid';

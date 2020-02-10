@@ -50,14 +50,7 @@ export function parseVarDeclaration(
   ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
 
   result.expr1.returnType = result.expr2.returnType;
-
-  // Add variable's info into current Scope
-  const varInfo: T.Variable = {
-    name: varName,
-    type: result.expr1.returnType,
-    isConst: false,
-  };
-  variables.set(varName, varInfo);
+  scope.createMutableVariable(varName, result.expr1.returnType);
 
   return result;
 }
