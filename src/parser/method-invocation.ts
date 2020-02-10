@@ -16,6 +16,55 @@ export function parseMethodInvokeExpr(
   if (prevExpr.type === 'TypeLiteral')
     return parseBuiltinTypeMethodInvokeExpr(tt, parseExpr, scope, prevExpr);
 
+  return parseBasicMethodInvokeExpr(tt, parseExpr, scope, prevExpr);
+}
+
+function parseMethodInvokeParameters(
+  tt: TokenTracker,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
+): Array<T.Expr> {
+  const params: Array<T.Expr> = [];
+
+  while (true) {
+    let parameterExpr: T.Expr;
+    parameterExpr = parseMethodInvokeParameter(tt, parseExpr, scope);
+    params.push(parameterExpr);
+
+    if (tt.isOneOf('rparen', 'newline')) break;
+    tt.next();
+  }
+
+  return params;
+}
+
+function parseMethodInvokeParameter(
+  tt: TokenTracker,
+  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
+): T.Expr {
+  const parameterExpr: T.AST = [];
+  let expr: T.Expr | undefined;
+
+  while (tt.isNotOneOf('newline', 'comma', 'rparen')) {
+    expr = parseExpr(undefined, { scope, ast: parameterExpr });
+    parameterExpr.push(expr);
+    tt.next();
+  }
+
+  let [result] = parameterExpr;
+  return result;
+}
+
+/**
+ *  Basic case of invoking method from values, for instance: 123.toStr()
+ */
+function parseBasicMethodInvokeExpr(
+  tt: TokenTracker,
+  parseExpr: (orevExpr?: T.Expr, meta?: any) => T.Expr,
+  scope: T.Scope,
+  prevExpr: T.Expr,
+): T.Expr {
   const name = tt.value;
   const result: T.MethodInvokeExpr = {
     type: 'MethodInvokeExpr',
@@ -72,46 +121,9 @@ export function parseMethodInvokeExpr(
   return result;
 }
 
-function parseMethodInvokeParameters(
-  tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
-): Array<T.Expr> {
-  const params: Array<T.Expr> = [];
-
-  while (true) {
-    let parameterExpr: T.Expr;
-    parameterExpr = parseMethodInvokeParameter(tt, parseExpr, scope);
-    params.push(parameterExpr);
-
-    if (tt.isOneOf('rparen', 'newline')) break;
-    tt.next();
-  }
-
-  return params;
-}
-
-function parseMethodInvokeParameter(
-  tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
-): T.Expr {
-  const parameterExpr: T.AST = [];
-  let expr: T.Expr | undefined;
-
-  while (tt.isNotOneOf('newline', 'comma', 'rparen')) {
-    expr = parseExpr(undefined, { scope, ast: parameterExpr });
-    parameterExpr.push(expr);
-    tt.next();
-  }
-
-  let [result] = parameterExpr;
-  return result;
-}
-
 /**
- *  Invoke method via type, for instance: 123.toStr()
- *  is equivalent to: Num.toSrr(123);
+ *  Invoke method via type, for instance: Num.toStr(123)
+ *  is equivalent to: 123.toStr()
  */
 function parseBuiltinTypeMethodInvokeExpr(
   tt: TokenTracker,
