@@ -1,12 +1,13 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserError, ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 
 export function parseVarDeclaration(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.Expr {
   tt.next(); // Skip keyword `mutable`
 
@@ -17,9 +18,8 @@ export function parseVarDeclaration(
   const varName = tt.value;
 
   // Check if variable is redeclared before in the current scope
-  const { variables } = scope;
-  if (variables.has(varName)) {
-    const varInfo = variables.get(varName) as T.Variable;
+  if (scope.hasVariable(varName)) {
+    const varInfo = scope.getVariable(varName);
 
     if (varInfo.isConst) {
       ParserError(`Constant \`${varName}\` cannot be redeclared as variable`);
@@ -49,14 +49,7 @@ export function parseVarDeclaration(
   ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
 
   result.expr1.returnType = result.expr2.returnType;
-
-  // Add variable's info into current Scope
-  const varInfo: T.Variable = {
-    name: varName,
-    type: result.expr1.returnType,
-    isConst: false,
-  };
-  variables.set(varName, varInfo);
+  scope.createMutableVariable(varName, result.expr1.returnType);
 
   return result;
 }

@@ -1,15 +1,16 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserErrorIf } from './error';
 
 export function parseFunctionInvokeExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr?: T.Expr,
 ): T.FunctionInvokeExpr {
-  const { functions } = scope;
-  const { name, patterns } = functions.get(tt.value) as T.FunctionPattern;
+  const name = tt.value;
+  const functionObj = scope.getFunction(name);
 
   const result: T.FunctionInvokeExpr = {
     type: 'FunctionInvokeExpr',
@@ -29,17 +30,14 @@ export function parseFunctionInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseFunctionParameters(tt, parseExpr, scope);
 
-  const inputParamsTypePattern = result.params
-    .map(expr => expr.returnType)
-    .join('.');
-  const inputParamsTypeSymbol = Symbol.for(inputParamsTypePattern);
+  const inputTypes = result.params.map(expr => expr.returnType);
 
   ParserErrorIf(
-    !patterns.has(inputParamsTypeSymbol),
-    `Function \`${name}\` is called with unmatched input pattern \`${inputParamsTypePattern}\``
+    ! functionObj.hasInputPattern(inputTypes),
+    `Function \`${name}\` is called with unmatched input pattern \`${inputTypes.join('.')}\``
   );
 
-  const patternInfo = patterns.get(inputParamsTypeSymbol) as T.FunctionPatternInfo;
+  const patternInfo = functionObj.getPatternInfo(inputTypes);
   result.returnType = patternInfo.returnType;
 
   return result;
@@ -48,7 +46,7 @@ export function parseFunctionInvokeExpr(
 function parseFunctionParameters(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): Array<T.Expr> {
   const params: Array<T.Expr> = [];
 
@@ -67,7 +65,7 @@ function parseFunctionParameters(
 function parseFunctionParameter(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.Expr {
   const parameterExpr: T.AST = [];
   let expr: T.Expr | undefined;

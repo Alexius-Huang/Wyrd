@@ -1,5 +1,7 @@
 import * as T from "../types";
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
+import FunctionObject from "./Scope.FunctionObject";
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';
@@ -21,15 +23,18 @@ export function parse(
 ): T.AST {
   const tt = new TokenTracker(tokens);
   const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
-  const globalScope: T.Scope = {
-    parentScope: null,
-    childScopes: new Map<string, T.Scope>(),
-    variables: new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
-    functions: new Map<string, T.FunctionPattern>(parseOptions?.functions ?? new Map()),
-  };
+  let globalScope = new Scope();
+  
+  if (parseOptions?.scope) {
+    if (parseOptions.scope instanceof Scope) {
+      globalScope = parseOptions.scope;
+    } else {
+      globalScope = parseOptions.scope();
+    }
+  }
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
-    const scope: T.Scope = meta?.scope ?? globalScope;
+    const scope: Scope = meta?.scope ?? globalScope;
     const ast: T.AST = meta?.ast ?? globalAst;
 
     if (tt.is('keyword')) {

@@ -1,11 +1,12 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
 import { ParserError, ParserErrorIf } from './error';
+import Scope from './Scope';
 
 export function parseFunctionDeclaration(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.FunctionDeclaration {
   tt.next(); // Skip 'def' keyword
 
@@ -24,14 +25,8 @@ export function parseFunctionDeclaration(
   /* TODO: Handle situation of function re-declaration */
 
   tt.next(); // Skip the function name identifier
-  
-  const functionalScope: T.Scope = {
-    parentScope: scope,
-    childScopes: new Map<string, T.Scope>(),
-    variables: new Map<string, T.Variable>(),
-    functions: new Map<string, T.FunctionPattern>(),
-  };
-  scope.childScopes.set(result.name, functionalScope);
+
+  const functionalScope = scope.createChildScope(result.name);
 
   if (tt.is('lparen'))
     result.arguments = parseFunctionArguments(tt, functionalScope);
@@ -45,14 +40,8 @@ export function parseFunctionDeclaration(
   result.outputType = tt.value;
 
   /* Setup a new available pattern for function invocation */
-  const pattern: T.FunctionPattern = {
-    name: result.name,
-    patterns: new Map<Symbol, T.FunctionPatternInfo>(),
-  };
-
-  const inputTypePattern = Symbol.for(result.arguments.map(({ type }) => type).join('.'));
-  pattern.patterns.set(inputTypePattern, { returnType: result.outputType });
-  scope.functions.set(result.name, pattern);  
+  const functionObj = scope.createFunction(result.name);
+  functionObj.createNewPattern(result.arguments.map(({ type }) => type), result.outputType);
 
   /* Parsing the function declartion expression */
   tt.next();
@@ -85,7 +74,7 @@ export function parseFunctionDeclaration(
 
 export function parseFunctionArguments(
   tt: TokenTracker,
-  scope: T.Scope,
+  scope: Scope,
 ): Array<T.Argument> {
   tt.next();
   const result: Array<T.Argument> = [];
@@ -108,11 +97,7 @@ export function parseFunctionArguments(
       // Setting variable infos from arguments
       // TODO: Handle duplicate argument name case
       result.push(argument);
-      scope.variables.set(argument.ident, {
-        name: argument.ident,
-        isConst: true,
-        type: argument.type,
-      });
+      scope.createConstant(argument.ident, argument.type);
 
       if (tt.is('comma')) {
         tt.next();
@@ -134,7 +119,7 @@ export function parseFunctionArguments(
 export function parseBlock(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   tt.next(); // Skip keyword `do`

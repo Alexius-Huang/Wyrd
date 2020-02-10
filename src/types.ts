@@ -1,3 +1,5 @@
+import Scope from "./parser/Scope";
+
 export type Token = {
   type: string;
   value: string;
@@ -44,24 +46,11 @@ export const enum Operator {
   // Underscore = '_'
 }
 
-export type Variable = {
-  name: string;
-  isConst: boolean;
-  type: string;
-};
-
 export type FunctionPatternInfo = { returnType: string };
-export type FunctionPattern = {
-  name: string;
-  patterns: Map<Symbol, FunctionPatternInfo>;
-  // For instance:
-  // Symbol.for('Num.Str') means two parameter with first argument as Num and second argument as Str
-};
 
 export type ParseOptions = {
   ast?: AST;
-  variables?: Map<string, Variable>;
-  functions?: Map<string, FunctionPattern>;
+  scope?: Scope | (() => Scope);
 };
 
 /* Builtin unoverridable operator actions */
@@ -69,13 +58,6 @@ export type OPActionPair = { returnType: string };
 export type OPAction = {
   symbol: string; // symbol of the operator
   actionPairs: Map<Symbol, OPActionPair>;
-};
-
-export type Scope = {
-  parentScope: null | Scope;
-  childScopes: Map<string, Scope>;
-  variables: Map<string, Variable>;
-  functions: Map<string, FunctionPattern>;
 };
 
 export type AST = Array<Expr>;

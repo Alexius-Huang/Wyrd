@@ -1,13 +1,14 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserError, ParserErrorIf } from './error';
 import { compare } from './precedence';
-import TokenTracker from './TokenTracker';
 import { EmptyExpression } from './constants';
 
 export function parseBinaryOpExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   ParserErrorIf(
@@ -56,7 +57,7 @@ export function parseBinaryOpExpr(
     prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     prevExpr.expr1.returnType = prevExpr.expr2.returnType;
     const varName = prevExpr.expr1.value;
-    const variableInfo = scope.variables.get(varName) as T.Variable;
+    const variableInfo = scope.getVariable(varName);
     variableInfo.type = prevExpr.expr1.returnType;
     return prevExpr;
   }
@@ -66,7 +67,7 @@ export function parseBinaryOpExpr(
     if (prevExpr.expr1.type === 'IdentLiteral') {
       prevExpr.expr1.returnType = prevExpr.expr2.returnType;
       const varName = prevExpr.expr1.value;
-      const variableInfo = scope.variables.get(varName) as T.Variable;
+      const variableInfo = scope.getVariable(varName);
       variableInfo.type = prevExpr.expr1.returnType;
 
       return prevExpr;

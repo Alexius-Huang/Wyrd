@@ -1,5 +1,5 @@
-import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns, Arithmetic } from '../helper';
+import { Token, AST } from '../../types';
+import { Arithmetic } from '../helper';
 import { NumberLiteral } from '../helper';
 
 const program = `\
@@ -71,16 +71,10 @@ addition(1, 2);
 
 const minified = 'function addition(x,y){return x+y;}addition(1,2);';
 
-const parseOptions: ParseOptions = {
-  functions: createFunctionPatterns([
-  ]),
-};
-
 export {
   program,
   tokens,
   ast,
   compiled,
-  parseOptions,
   minified,
 };

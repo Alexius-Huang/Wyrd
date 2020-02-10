@@ -1,13 +1,14 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserError } from './error';
 import { getOPActionDetail } from './helper';
-import TokenTracker from './TokenTracker';
 import { EmptyExpression } from './constants';
 
 export function parsePrioritizedExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
   tt.next(); // Skip the lparen token
