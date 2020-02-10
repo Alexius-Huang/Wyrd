@@ -1,5 +1,6 @@
-import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
+import { Token, AST, Operator as Op, ParseOptions } from '../../types';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
+import Scope from '../../parser/Scope';
 
 const program = `\
 3 + 1 > 2
@@ -197,17 +198,16 @@ const compiled = `\
 
 const minified = '3+1>2;5*3<15-(6*8);11>=7+7||3<=(6+2)/3;8/(4*2)>3&&!(1+(2*3)===7)||a+(b/c*d)!==w-(x*y);';
 
-const parseOptions: ParseOptions = {
-  variables: new Map<string, Variable>([
-    ['a', { name: 'a', isConst: true, type: 'Num' }],
-    ['b', { name: 'b', isConst: true, type: 'Num' }],
-    ['c', { name: 'c', isConst: true, type: 'Num' }],
-    ['d', { name: 'd', isConst: true, type: 'Num' }],
-    ['w', { name: 'w', isConst: true, type: 'Num' }],
-    ['x', { name: 'x', isConst: true, type: 'Num' }],
-    ['y', { name: 'y', isConst: true, type: 'Num' }],
-  ]),
-};
+const scope = new Scope();
+const parseOptions: ParseOptions = { scope };
+
+scope.createConstant('a', 'Num');
+scope.createConstant('b', 'Num');
+scope.createConstant('c', 'Num');
+scope.createConstant('d', 'Num');
+scope.createConstant('w', 'Num');
+scope.createConstant('x', 'Num');
+scope.createConstant('y', 'Num');
 
 export {
   program,

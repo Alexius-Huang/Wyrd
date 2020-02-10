@@ -23,10 +23,15 @@ export function parse(
 ): T.AST {
   const tt = new TokenTracker(tokens);
   const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
-  const globalScope = new Scope(
-    new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
-    new Map<string, FunctionObject>(parseOptions?.functions ?? new Map()),  
-  );
+  let globalScope = new Scope();
+  
+  if (parseOptions?.scope) {
+    if (parseOptions.scope instanceof Scope) {
+      globalScope = parseOptions.scope;
+    } else {
+      globalScope = parseOptions.scope();
+    }
+  }
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: Scope = meta?.scope ?? globalScope;

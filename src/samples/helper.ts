@@ -1,30 +1,4 @@
 import * as T from '../types';
-import FunctionObject from '../parser/FunctionObject';
-
-export function createFunctionPatterns(
-  functionPatterns: Array<[string, Array<[Array<string>, string]>]>
-): Map<string, FunctionObject> {
-  return new Map<string, FunctionObject>(
-    functionPatterns.map(([name, patterns]) => createFunctionPattern(name, patterns))
-  );
-}
-
-export function createFunctionPattern(
-  name: string,
-  patterns: Array<[Array<string>, string]>
-): [string, FunctionObject] {
-  const result: [string, FunctionObject] = [
-    name,
-    new FunctionObject(name),
-  ];
-
-
-  patterns.forEach(pattern => {
-    result[1].createNewPattern(pattern[0], pattern[1]);
-  });
-
-  return result;
-}
 
 export function Var(name: string, type: string): T.IdentLiteral {
   return { type: 'IdentLiteral', value: name, returnType: type };

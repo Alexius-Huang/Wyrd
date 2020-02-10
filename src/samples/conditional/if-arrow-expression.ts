@@ -1,5 +1,6 @@
-import { Token, AST, Operator as Op, ParseOptions, Variable } from '../../types';
+import { Token, AST, Operator as Op, ParseOptions } from '../../types';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
+import Scope from '../../parser/Scope';
 
 const program = `\
 if age < 18 => "youngster"
@@ -156,11 +157,14 @@ const example2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'e
 
 const minified = 'age<18?\'youngster\':\'adult\';const example1=age<18?\'youngster\':\'adult\';const example2=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));';
 
-const parseOptions: ParseOptions = {
-  variables: new Map<string, Variable>([
-    ['age', { name: 'age', isConst: true, type: 'Num' }],
-  ]),
+const scope = () => {
+  const result = new Scope();
+  result.createConstant('age', 'Num');
+
+  return result;
 };
+
+const parseOptions: ParseOptions = { scope };
 
 export {
   program,

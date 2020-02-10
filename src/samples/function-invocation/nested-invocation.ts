@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns } from '../helper';
+import Scope from '../../parser/Scope';
 import { NumberLiteral } from '../helper';
 
 const program = `\
@@ -275,24 +275,37 @@ funcL(funcM(1) * 2 + (3 * funcN(4)) - 5);
 
 const minified = 'funcA(1,funcB(2,3,4,5));funcC(1,2,funcD(3,4),5);funcE(1,funcF(2,3,funcG(4)),5);funcH(funcI(1)+(2*funcJ(3,4)),funcK(5));funcL(funcM(1)*2+(3*funcN(4))-5);';
 
-const parseOptions: ParseOptions = {
-  functions: createFunctionPatterns([
-    ['funcA', [[['Num', 'Num'], 'Num']]],
-    ['funcB', [[['Num', 'Num', 'Num', 'Num'], 'Num']]],
-    ['funcC', [[['Num', 'Num', 'Num', 'Num'], 'Num']]],
-    ['funcD', [[['Num', 'Num'], 'Num']]],
-    ['funcE', [[['Num', 'Num', 'Num'], 'Num']]],
-    ['funcF', [[['Num', 'Num', 'Num'], 'Num']]],
-    ['funcG', [[['Num'], 'Num']]],
-    ['funcH', [[['Num', 'Num'], 'Num']]],
-    ['funcI', [[['Num'], 'Num']]],
-    ['funcJ', [[['Num', 'Num'], 'Num']]],
-    ['funcK', [[['Num'], 'Num']]],
-    ['funcL', [[['Num'], 'Num']]],
-    ['funcM', [[['Num'], 'Num']]],
-    ['funcN', [[['Num'], 'Num']]],
-  ]),
-};
+const scope: Scope = new Scope();
+const funcA = scope.createFunction('funcA');
+funcA.createNewPattern(['Num', 'Num'], 'Num');
+const funcB = scope.createFunction('funcB');
+funcB.createNewPattern(['Num', 'Num', 'Num', 'Num'], 'Num');
+const funcC = scope.createFunction('funcC');
+funcC.createNewPattern(['Num', 'Num', 'Num', 'Num'], 'Num');
+const funcD = scope.createFunction('funcD');
+funcD.createNewPattern(['Num', 'Num'], 'Num');
+const funcE = scope.createFunction('funcE');
+funcE.createNewPattern(['Num', 'Num', 'Num'], 'Num');
+const funcF = scope.createFunction('funcF');
+funcF.createNewPattern(['Num', 'Num', 'Num'], 'Num');
+const funcG = scope.createFunction('funcG');
+funcG.createNewPattern(['Num'], 'Num');
+const funcH = scope.createFunction('funcH');
+funcH.createNewPattern(['Num', 'Num'], 'Num');
+const funcI = scope.createFunction('funcI');
+funcI.createNewPattern(['Num'], 'Num');
+const funcJ = scope.createFunction('funcJ');
+funcJ.createNewPattern(['Num', 'Num'], 'Num');
+const funcK = scope.createFunction('funcK');
+funcK.createNewPattern(['Num'], 'Num');
+const funcL = scope.createFunction('funcL');
+funcL.createNewPattern(['Num'], 'Num');
+const funcM = scope.createFunction('funcM');
+funcM.createNewPattern(['Num'], 'Num');
+const funcN = scope.createFunction('funcN');
+funcN.createNewPattern(['Num'], 'Num');
+
+const parseOptions: ParseOptions = { scope };
 
 export {
   program,

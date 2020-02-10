@@ -1,6 +1,7 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns, prioritize, Arithmetic } from '../helper';
+import { prioritize, Arithmetic } from '../helper';
 import { NumberLiteral, StringLiteral } from '../helper';
+import Scope from '../../parser/Scope';
 
 const program = `\
 funcA("Hello world")
@@ -294,17 +295,23 @@ funcF(1, 2 + (3 * (4 / 5))) / (6 - 7);
 
 const minified = 'funcA(\'Hello world\');funcB(1,2,3);funcC(1,2+(3*4),5/6-7);funcD(1,2+(3*4),5)/6-7;funcE(1,2+(3*4)+5)-(6/7);funcF(1,2+(3*(4/5)))/(6-7);1+(2*funcG(3*4,5)/6)-7;';
 
-const parseOptions: ParseOptions = {
-  functions: createFunctionPatterns([
-    ['funcA', [[['Str'], 'Null']]],
-    ['funcB', [[['Num', 'Num', 'Num'], 'Null']]],
-    ['funcC', [[['Num', 'Num', 'Num'], 'Null']]],
-    ['funcD', [[['Num', 'Num', 'Num'], 'Num']]],
-    ['funcE', [[['Num', 'Num'], 'Num']]],
-    ['funcF', [[['Num', 'Num'], 'Num']]],
-    ['funcG', [[['Num', 'Num'], 'Num']]],
-  ]),
-};
+const scope: Scope = new Scope();
+const funcA = scope.createFunction('funcA');
+funcA.createNewPattern(['Str'], 'Null');
+const funcB = scope.createFunction('funcB');
+funcB.createNewPattern(['Num', 'Num', 'Num'], 'Null');
+const funcC = scope.createFunction('funcC');
+funcC.createNewPattern(['Num', 'Num', 'Num'], 'Null');
+const funcD = scope.createFunction('funcD');
+funcD.createNewPattern(['Num', 'Num', 'Num'], 'Num');
+const funcE = scope.createFunction('funcE');
+funcE.createNewPattern(['Num', 'Num'], 'Num');
+const funcF = scope.createFunction('funcF');
+funcF.createNewPattern(['Num', 'Num'], 'Num');
+const funcG = scope.createFunction('funcG');
+funcG.createNewPattern(['Num', 'Num'], 'Num');
+
+const parseOptions: ParseOptions = { scope };
 
 export {
   program,

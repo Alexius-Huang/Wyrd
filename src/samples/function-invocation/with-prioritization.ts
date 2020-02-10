@@ -1,6 +1,7 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { createFunctionPatterns, prioritize } from '../helper';
+import { prioritize } from '../helper';
 import { NumberLiteral } from '../helper';
+import Scope from '../../parser/Scope';
 
 const program = `\
 funcA(1, (funcB(2, 3) + 4) * funcC(5))
@@ -190,18 +191,25 @@ funcF((1 - (funcG(2) * 3)) / 4, funcH(5));
 
 const minified = 'funcA(1,(funcB(2,3)+4)*funcC(5));funcD(1/(funcE(2,3)-4),5);funcF((1-(funcG(2)*3))/4,funcH(5));';
 
-const parseOptions: ParseOptions = {
-  functions: createFunctionPatterns([
-    ['funcA', [[['Num', 'Num'], 'Num']]],
-    ['funcB', [[['Num', 'Num'], 'Num']]],
-    ['funcC', [[['Num'], 'Num']]],
-    ['funcD', [[['Num', 'Num'], 'Num']]],
-    ['funcE', [[['Num', 'Num'], 'Num']]],
-    ['funcF', [[['Num', 'Num'], 'Num']]],
-    ['funcG', [[['Num'], 'Num']]],
-    ['funcH', [[['Num'], 'Num']]],
-  ]),
-};
+const scope: Scope = new Scope();
+const funcA = scope.createFunction('funcA');
+funcA.createNewPattern(['Num', 'Num'], 'Num');
+const funcB = scope.createFunction('funcB');
+funcB.createNewPattern(['Num', 'Num'], 'Num');
+const funcC = scope.createFunction('funcC');
+funcC.createNewPattern(['Num'], 'Num');
+const funcD = scope.createFunction('funcD');
+funcD.createNewPattern(['Num', 'Num'], 'Num');
+const funcE = scope.createFunction('funcE');
+funcE.createNewPattern(['Num', 'Num'], 'Num');
+const funcF = scope.createFunction('funcF');
+funcF.createNewPattern(['Num', 'Num'], 'Num');
+const funcG = scope.createFunction('funcG');
+funcG.createNewPattern(['Num'], 'Num');
+const funcH = scope.createFunction('funcH');
+funcH.createNewPattern(['Num'], 'Num');
+
+const parseOptions: ParseOptions = { scope };
 
 export {
   program,

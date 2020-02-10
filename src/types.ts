@@ -1,3 +1,5 @@
+import Scope from "./parser/Scope";
+
 export type Token = {
   type: string;
   value: string;
@@ -60,8 +62,7 @@ export type FunctionPattern = {
 
 export type ParseOptions = {
   ast?: AST;
-  variables?: Map<string, Variable>;
-  functions?: Map<string, FunctionPattern>;
+  scope?: Scope | (() => Scope);
 };
 
 /* Builtin unoverridable operator actions */
