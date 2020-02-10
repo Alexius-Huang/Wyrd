@@ -71,13 +71,6 @@ export type OPAction = {
   actionPairs: Map<Symbol, OPActionPair>;
 };
 
-export type Scope = {
-  parentScope: null | Scope;
-  childScopes: Map<string, Scope>;
-  variables: Map<string, Variable>;
-  functions: Map<string, FunctionPattern>;
-};
-
 export type AST = Array<Expr>;
 
 export type Expr =

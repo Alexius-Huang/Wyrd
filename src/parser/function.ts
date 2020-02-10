@@ -26,9 +26,7 @@ export function parseFunctionDeclaration(
 
   tt.next(); // Skip the function name identifier
 
-  const functionalScope = new Scope();
-  scope.children.set(result.name, functionalScope);
-  functionalScope.parent = scope;
+  const functionalScope = scope.createChildScope(result.name);
 
   if (tt.is('lparen'))
     result.arguments = parseFunctionArguments(tt, functionalScope);

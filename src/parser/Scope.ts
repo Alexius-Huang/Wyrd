@@ -8,4 +8,11 @@ export default class Scope {
     public variables: Map<string, T.Variable> = new Map(),
     public functions: Map<string, T.FunctionPattern> = new Map(),
   ) {}
+
+  public createChildScope(name: string): Scope {
+    const scope = new Scope();
+    this.children.set(name, scope);
+    scope.parent = this;
+    return scope;
+  }
 }
