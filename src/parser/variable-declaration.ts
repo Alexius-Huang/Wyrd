@@ -18,9 +18,8 @@ export function parseVarDeclaration(
   const varName = tt.value;
 
   // Check if variable is redeclared before in the current scope
-  const { variables } = scope;
-  if (variables.has(varName)) {
-    const varInfo = variables.get(varName) as T.Variable;
+  if (scope.hasVariable(varName)) {
+    const varInfo = scope.getVariable(varName);
 
     if (varInfo.isConst) {
       ParserError(`Constant \`${varName}\` cannot be redeclared as variable`);

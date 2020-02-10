@@ -1,4 +1,5 @@
 import * as T from '../types';
+import { ParserError } from './error';
 
 export default class Scope {
   public parent: null | Scope = null;
@@ -8,6 +9,18 @@ export default class Scope {
     public variables: Map<string, T.Variable> = new Map(),
     public functions: Map<string, T.FunctionPattern> = new Map(),
   ) {}
+
+  public hasVariable(name: string) {
+    return this.variables.has(name);
+  }
+
+  public getVariable(name: string): T.Variable {
+    const varInfo = this.variables.get(name);
+
+    if (varInfo === undefined)
+      ParserError(`Variable or Constant \`${name}\` isn't found in the scope`);
+    return varInfo;
+  }
 
   public createConstant(name: string, type: string = 'Unknown'): T.Variable {
     const info: T.Variable = { name, type, isConst: true };

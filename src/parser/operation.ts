@@ -57,7 +57,7 @@ export function parseBinaryOpExpr(
     prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     prevExpr.expr1.returnType = prevExpr.expr2.returnType;
     const varName = prevExpr.expr1.value;
-    const variableInfo = scope.variables.get(varName) as T.Variable;
+    const variableInfo = scope.getVariable(varName);
     variableInfo.type = prevExpr.expr1.returnType;
     return prevExpr;
   }
@@ -67,7 +67,7 @@ export function parseBinaryOpExpr(
     if (prevExpr.expr1.type === 'IdentLiteral') {
       prevExpr.expr1.returnType = prevExpr.expr2.returnType;
       const varName = prevExpr.expr1.value;
-      const variableInfo = scope.variables.get(varName) as T.Variable;
+      const variableInfo = scope.getVariable(varName);
       variableInfo.type = prevExpr.expr1.returnType;
 
       return prevExpr;

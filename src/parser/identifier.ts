@@ -25,9 +25,9 @@ export function parseIdentifier(
   let varInfo: T.Variable | undefined;
   let currentScope = scope;
   while (true) {
-    const { variables: v } = currentScope;
-    if (v.has(tokenName)) {
-      varInfo = v.get(tokenName) as T.Variable;
+    // const { variables: v } = currentScope;
+    if (currentScope.hasVariable(tokenName)) {
+      varInfo = currentScope.getVariable(tokenName);
       result.returnType = varInfo.type;
       break;
     }
