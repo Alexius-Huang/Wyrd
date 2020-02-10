@@ -1,5 +1,7 @@
 import * as T from "../types";
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
+import FunctionObject from "./FunctionObject";
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';
@@ -14,7 +16,6 @@ import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method-invocation';
 import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
-import Scope from './Scope';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -24,7 +25,7 @@ export function parse(
   const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
   const globalScope = new Scope(
     new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
-    new Map<string, T.FunctionPattern>(parseOptions?.functions ?? new Map()),  
+    new Map<string, FunctionObject>(parseOptions?.functions ?? new Map()),  
   );
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {

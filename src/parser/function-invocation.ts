@@ -9,8 +9,8 @@ export function parseFunctionInvokeExpr(
   scope: Scope,
   prevExpr?: T.Expr,
 ): T.FunctionInvokeExpr {
-  const { functions } = scope;
-  const { name, patterns } = functions.get(tt.value) as T.FunctionPattern;
+  const name = tt.value;
+  const functionObj = scope.getFunction(name);
 
   const result: T.FunctionInvokeExpr = {
     type: 'FunctionInvokeExpr',
@@ -30,17 +30,14 @@ export function parseFunctionInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseFunctionParameters(tt, parseExpr, scope);
 
-  const inputParamsTypePattern = result.params
-    .map(expr => expr.returnType)
-    .join('.');
-  const inputParamsTypeSymbol = Symbol.for(inputParamsTypePattern);
+  const inputTypes = result.params.map(expr => expr.returnType);
 
   ParserErrorIf(
-    !patterns.has(inputParamsTypeSymbol),
-    `Function \`${name}\` is called with unmatched input pattern \`${inputParamsTypePattern}\``
+    ! functionObj.hasInputPattern(inputTypes),
+    `Function \`${name}\` is called with unmatched input pattern \`${inputTypes.join('.')}\``
   );
 
-  const patternInfo = patterns.get(inputParamsTypeSymbol) as T.FunctionPatternInfo;
+  const patternInfo = functionObj.getPatternInfo(inputTypes);
   result.returnType = patternInfo.returnType;
 
   return result;

@@ -40,14 +40,8 @@ export function parseFunctionDeclaration(
   result.outputType = tt.value;
 
   /* Setup a new available pattern for function invocation */
-  const pattern: T.FunctionPattern = {
-    name: result.name,
-    patterns: new Map<Symbol, T.FunctionPatternInfo>(),
-  };
-
-  const inputTypePattern = Symbol.for(result.arguments.map(({ type }) => type).join('.'));
-  pattern.patterns.set(inputTypePattern, { returnType: result.outputType });
-  scope.functions.set(result.name, pattern);  
+  const functionObj = scope.createFunction(result.name);
+  functionObj.createNewPattern(result.arguments.map(({ type }) => type), result.outputType);
 
   /* Parsing the function declartion expression */
   tt.next();
@@ -103,11 +97,7 @@ export function parseFunctionArguments(
       // Setting variable infos from arguments
       // TODO: Handle duplicate argument name case
       result.push(argument);
-      scope.variables.set(argument.ident, {
-        name: argument.ident,
-        isConst: true,
-        type: argument.type,
-      });
+      scope.createConstant(argument.ident, argument.type);
 
       if (tt.is('comma')) {
         tt.next();

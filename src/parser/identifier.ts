@@ -17,7 +17,6 @@ export function parseIdentifier(
     value: tokenName,
     returnType: 'Invalid',
   };
-  const { functions } = scope;
 
   /* Find the variable through scope chain */
   // TODO: Refactor Scope, maybe use a class to represent scopes and functions
@@ -25,7 +24,6 @@ export function parseIdentifier(
   let varInfo: T.Variable | undefined;
   let currentScope = scope;
   while (true) {
-    // const { variables: v } = currentScope;
     if (currentScope.hasVariable(tokenName)) {
       varInfo = currentScope.getVariable(tokenName);
       result.returnType = varInfo.type;
@@ -36,7 +34,8 @@ export function parseIdentifier(
     currentScope = currentScope.parent;
   }
 
-  if (varInfo === undefined && functions.has(tokenName)) {
+  // TODO: Find function recursively
+  if (varInfo === undefined && scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   }
 

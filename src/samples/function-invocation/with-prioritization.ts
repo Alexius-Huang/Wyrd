@@ -192,14 +192,14 @@ const minified = 'funcA(1,(funcB(2,3)+4)*funcC(5));funcD(1/(funcE(2,3)-4),5);fun
 
 const parseOptions: ParseOptions = {
   functions: createFunctionPatterns([
-    ['funcA', [['Num.Num', 'Num']]],
-    ['funcB', [['Num.Num', 'Num']]],
-    ['funcC', [['Num', 'Num']]],
-    ['funcD', [['Num.Num', 'Num']]],
-    ['funcE', [['Num.Num', 'Num']]],
-    ['funcF', [['Num.Num', 'Num']]],
-    ['funcG', [['Num', 'Num']]],
-    ['funcH', [['Num', 'Num']]],
+    ['funcA', [[['Num', 'Num'], 'Num']]],
+    ['funcB', [[['Num', 'Num'], 'Num']]],
+    ['funcC', [[['Num'], 'Num']]],
+    ['funcD', [[['Num', 'Num'], 'Num']]],
+    ['funcE', [[['Num', 'Num'], 'Num']]],
+    ['funcF', [[['Num', 'Num'], 'Num']]],
+    ['funcG', [[['Num'], 'Num']]],
+    ['funcH', [[['Num'], 'Num']]],
   ]),
 };
 

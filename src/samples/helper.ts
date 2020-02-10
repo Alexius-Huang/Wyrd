@@ -1,32 +1,26 @@
 import * as T from '../types';
+import FunctionObject from '../parser/FunctionObject';
 
 export function createFunctionPatterns(
-  functionPatterns: Array<[string, Array<[string, string]>]>
-): Map<string, T.FunctionPattern> {
-  return new Map<string, T.FunctionPattern>(
+  functionPatterns: Array<[string, Array<[Array<string>, string]>]>
+): Map<string, FunctionObject> {
+  return new Map<string, FunctionObject>(
     functionPatterns.map(([name, patterns]) => createFunctionPattern(name, patterns))
   );
 }
 
 export function createFunctionPattern(
   name: string,
-  patterns: Array<[string, string]>
-): [string, T.FunctionPattern] {
-  const result: [string, T.FunctionPattern] = [
+  patterns: Array<[Array<string>, string]>
+): [string, FunctionObject] {
+  const result: [string, FunctionObject] = [
     name,
-    {
-      name,
-      patterns: new Map<Symbol, T.FunctionPatternInfo>(),
-    }
+    new FunctionObject(name),
   ];
 
-  patterns.forEach(pattern => {
-    const inputSymbol = Symbol.for(pattern[0]);
-    const patternInfo: T.FunctionPatternInfo = {
-      returnType: pattern[1],
-    };
 
-    result[1].patterns.set(inputSymbol, patternInfo);
+  patterns.forEach(pattern => {
+    result[1].createNewPattern(pattern[0], pattern[1]);
   });
 
   return result;

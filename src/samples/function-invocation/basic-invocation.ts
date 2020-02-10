@@ -296,13 +296,13 @@ const minified = 'funcA(\'Hello world\');funcB(1,2,3);funcC(1,2+(3*4),5/6-7);fun
 
 const parseOptions: ParseOptions = {
   functions: createFunctionPatterns([
-    ['funcA', [['Str', 'Null']]],
-    ['funcB', [['Num.Num.Num', 'Null']]],
-    ['funcC', [['Num.Num.Num', 'Null']]],
-    ['funcD', [['Num.Num.Num', 'Num']]],
-    ['funcE', [['Num.Num', 'Num']]],
-    ['funcF', [['Num.Num', 'Num']]],
-    ['funcG', [['Num.Num', 'Num']]],
+    ['funcA', [[['Str'], 'Null']]],
+    ['funcB', [[['Num', 'Num', 'Num'], 'Null']]],
+    ['funcC', [[['Num', 'Num', 'Num'], 'Null']]],
+    ['funcD', [[['Num', 'Num', 'Num'], 'Num']]],
+    ['funcE', [[['Num', 'Num'], 'Num']]],
+    ['funcF', [[['Num', 'Num'], 'Num']]],
+    ['funcG', [[['Num', 'Num'], 'Num']]],
   ]),
 };
 

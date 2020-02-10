@@ -1,4 +1,5 @@
 import * as T from '../types';
+import FunctionObject from './FunctionObject';
 import { ParserError } from './error';
 
 export default class Scope {
@@ -7,7 +8,7 @@ export default class Scope {
 
   constructor(
     public variables: Map<string, T.Variable> = new Map(),
-    public functions: Map<string, T.FunctionPattern> = new Map(),
+    public functions: Map<string, FunctionObject> = new Map(),
   ) {}
 
   public hasVariable(name: string) {
@@ -34,6 +35,24 @@ export default class Scope {
 
     this.variables.set(name, info);
     return info;
+  }
+
+  public hasFunction(name: string) {
+    return this.functions.has(name);
+  }
+
+  public getFunction(name: string): FunctionObject {
+    const functionObj = this.functions.get(name);
+
+    if (functionObj === undefined)
+      ParserError(`Function \`${name}\` isn't found in the scope`);
+    return functionObj;
+  }
+
+  public createFunction(name: string): FunctionObject {
+    const functionObj = new FunctionObject(name);
+    this.functions.set(name, functionObj);
+    return functionObj;
   }
 
   public createChildScope(name: string): Scope {
