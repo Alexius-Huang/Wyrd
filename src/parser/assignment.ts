@@ -1,12 +1,13 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserError, ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 
 export function parseAssignmentExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   tt.next(); // Skip the `eq` token

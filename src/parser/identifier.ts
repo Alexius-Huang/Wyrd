@@ -1,13 +1,14 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { getOPActionDetail } from './helper';
 import { parseFunctionInvokeExpr } from './function-invocation';
-import TokenTracker from './TokenTracker';
 import { ParserErrorIf } from './error';
 
 export function parseIdentifier(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
   const tokenName = tt.value;
@@ -31,8 +32,8 @@ export function parseIdentifier(
       break;
     }
 
-    if (currentScope.parentScope === null) break;
-    currentScope = currentScope.parentScope;
+    if (currentScope.parent === null) break;
+    currentScope = currentScope.parent;
   }
 
   if (varInfo === undefined && functions.has(tokenName)) {

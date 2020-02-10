@@ -14,6 +14,7 @@ import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method-invocation';
 import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
+import Scope from './Scope';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -21,15 +22,13 @@ export function parse(
 ): T.AST {
   const tt = new TokenTracker(tokens);
   const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
-  const globalScope: T.Scope = {
-    parentScope: null,
-    childScopes: new Map<string, T.Scope>(),
-    variables: new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
-    functions: new Map<string, T.FunctionPattern>(parseOptions?.functions ?? new Map()),
-  };
+  const globalScope = new Scope(
+    new Map<string, T.Variable>(parseOptions?.variables ?? new Map()),
+    new Map<string, T.FunctionPattern>(parseOptions?.functions ?? new Map()),  
+  );
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
-    const scope: T.Scope = meta?.scope ?? globalScope;
+    const scope: Scope = meta?.scope ?? globalScope;
     const ast: T.AST = meta?.ast ?? globalAst;
 
     if (tt.is('keyword')) {

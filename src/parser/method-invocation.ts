@@ -1,12 +1,13 @@
 import * as T from "../types";
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserErrorIf, ParserError } from './error';
 import { BuiltinPrimitiveMethods, EmptyExpression } from './constants';
 
 export function parseMethodInvokeExpr(
   tt: TokenTracker,
   parseExpr: (orevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   tt.next(); // Skip the `dot` token
@@ -22,7 +23,7 @@ export function parseMethodInvokeExpr(
 function parseMethodInvokeParameters(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): Array<T.Expr> {
   const params: Array<T.Expr> = [];
 
@@ -41,7 +42,7 @@ function parseMethodInvokeParameters(
 function parseMethodInvokeParameter(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.Expr {
   const parameterExpr: T.AST = [];
   let expr: T.Expr | undefined;
@@ -62,7 +63,7 @@ function parseMethodInvokeParameter(
 function parseBasicMethodInvokeExpr(
   tt: TokenTracker,
   parseExpr: (orevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   const name = tt.value;
@@ -128,7 +129,7 @@ function parseBasicMethodInvokeExpr(
 function parseBuiltinTypeMethodInvokeExpr(
   tt: TokenTracker,
   parseExpr: (orevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.TypeLiteral,
 ): T.Expr {
   const name = tt.value;

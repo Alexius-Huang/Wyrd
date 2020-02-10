@@ -1,11 +1,12 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
 import { ParserError, ParserErrorIf } from './error';
+import Scope from './Scope';
 
 export function parseFunctionDeclaration(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.FunctionDeclaration {
   tt.next(); // Skip 'def' keyword
 
@@ -24,14 +25,10 @@ export function parseFunctionDeclaration(
   /* TODO: Handle situation of function re-declaration */
 
   tt.next(); // Skip the function name identifier
-  
-  const functionalScope: T.Scope = {
-    parentScope: scope,
-    childScopes: new Map<string, T.Scope>(),
-    variables: new Map<string, T.Variable>(),
-    functions: new Map<string, T.FunctionPattern>(),
-  };
-  scope.childScopes.set(result.name, functionalScope);
+
+  const functionalScope = new Scope();
+  scope.children.set(result.name, functionalScope);
+  functionalScope.parent = scope;
 
   if (tt.is('lparen'))
     result.arguments = parseFunctionArguments(tt, functionalScope);
@@ -85,7 +82,7 @@ export function parseFunctionDeclaration(
 
 export function parseFunctionArguments(
   tt: TokenTracker,
-  scope: T.Scope,
+  scope: Scope,
 ): Array<T.Argument> {
   tt.next();
   const result: Array<T.Argument> = [];
@@ -134,7 +131,7 @@ export function parseFunctionArguments(
 export function parseBlock(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   tt.next(); // Skip keyword `do`

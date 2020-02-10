@@ -29,7 +29,7 @@ describe('Method Invocation', () => {
   });
 
   describe('Builtin-Type Method Invocation', () => {
-    FundamentalCompileTest('method-invocation/builtin-type-invocation', { debugParser: true });
+    FundamentalCompileTest('method-invocation/builtin-type-invocation');
 
     it('throws error when passing no receiver parameter', () => {
       const program = `\nStr.upcase()`;

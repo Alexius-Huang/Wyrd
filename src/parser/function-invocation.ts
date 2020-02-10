@@ -1,11 +1,12 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserErrorIf } from './error';
 
 export function parseFunctionInvokeExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr?: T.Expr,
 ): T.FunctionInvokeExpr {
   const { functions } = scope;
@@ -48,7 +49,7 @@ export function parseFunctionInvokeExpr(
 function parseFunctionParameters(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): Array<T.Expr> {
   const params: Array<T.Expr> = [];
 
@@ -67,7 +68,7 @@ function parseFunctionParameters(
 function parseFunctionParameter(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.Expr {
   const parameterExpr: T.AST = [];
   let expr: T.Expr | undefined;

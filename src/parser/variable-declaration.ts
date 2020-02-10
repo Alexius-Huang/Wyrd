@@ -1,12 +1,13 @@
 import * as T from '../types';
 import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserError, ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 
 export function parseVarDeclaration(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
 ): T.Expr {
   tt.next(); // Skip keyword `mutable`
 

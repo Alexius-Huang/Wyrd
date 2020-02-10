@@ -1,13 +1,14 @@
 import * as T from '../types';
+import TokenTracker from './TokenTracker';
+import Scope from './Scope';
 import { ParserError, ParserErrorIf } from './error';
 import { compare } from './precedence';
-import TokenTracker from './TokenTracker';
 import { EmptyExpression } from './constants';
 
 export function parseBinaryOpExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: T.Scope,
+  scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
   ParserErrorIf(
