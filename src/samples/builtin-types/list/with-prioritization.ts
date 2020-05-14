@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../../types';
 import { NumberLiteral, prioritize, Arithmetic } from '../../helper';
+import DT from '../../../parser/classes/DataType';
 
 const program = `\
 [1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]
@@ -41,14 +42,14 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(2),
         expr2: Arithmetic(3, '*', 4),
       },
       {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(5),
         expr2: prioritize(Arithmetic(6, '-', 7)),
       },
@@ -56,8 +57,8 @@ const ast: AST = [
       NumberLiteral(9),
       NumberLiteral(10),
     ],
-    elementType: 'Num',
-    returnType: 'List[Num]',
+    elementType: DT.Num,
+    return: DT.ListOf(DT.Num),
   },
 ];
 

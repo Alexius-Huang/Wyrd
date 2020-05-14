@@ -1,5 +1,6 @@
 import { Token, AST } from '../../types';
 import { StringLiteral, NumberLiteral } from '../helper';
+import DT from '../../parser/classes/DataType';
 
 const program = `\
 "Hello world".upcase()
@@ -29,7 +30,7 @@ const ast: AST = [
     name: 'upcase',
     receiver: StringLiteral('Hello world'),
     params: [],
-    returnType: 'Str',
+    return: DT.Str,
   },
   {
     type: 'MethodInvokeExpr',
@@ -38,7 +39,7 @@ const ast: AST = [
     params: [
       NumberLiteral(3),
     ],
-    returnType: 'Str',
+    return: DT.Str,
   },
 ];
 

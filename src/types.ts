@@ -1,9 +1,8 @@
-import Scope from "./parser/Scope";
+import Scope from './parser/classes/Scope';
+import DT from './parser/classes/DataType';
+import Parameter from './parser/classes/Parameter';
 
-export type Token = {
-  type: string;
-  value: string;
-};
+export type Token = { type: string; value: string };
 
 export const enum Precedence {
   High = 1,
@@ -46,7 +45,13 @@ export const enum Operator {
   // Underscore = '_'
 }
 
-export type FunctionPatternInfo = { returnType: string };
+export interface Operand {
+  left: DT;
+  right: DT;
+  return: DT;
+}
+
+export type FunctionPatternInfo = { return: DT };
 
 export type ParseOptions = {
   ast?: AST;
@@ -54,7 +59,7 @@ export type ParseOptions = {
 };
 
 /* Builtin unoverridable operator actions */
-export type OPActionPair = { returnType: string };
+export type OPActionPair = { return: DT };
 export type OPAction = {
   symbol: string; // symbol of the operator
   actionPairs: Map<Symbol, OPActionPair>;
@@ -62,164 +67,170 @@ export type OPAction = {
 
 export type AST = Array<Expr>;
 
-export type Expr =
-  EmptyExpr           |
-  BinaryOpExpr        |
-  NotExpr             |
-  OrExpr              |
-  AndExpr             |
-  VarDeclaration      |
-  VarAssignmentExpr   |
-  AssignmentExpr      |
-  PrioritizedExpr     |
-  ConditionalExpr     |
-  FunctionDeclaration |
-  FunctionInvokeExpr  |
-  MethodInvokeExpr    |
-  IdentLiteral        |
-  NumberLiteral       |
-  StringLiteral       |
-  BooleanLiteral      |
-  NullLiteral         |
-  ListLiteral         |
-  TypeLiteral
-;
+interface Expression {
+  type: string;
+  return: DT;
+}
 
-export type EmptyExpr = {
+export type Expr =
+  EmptyExpr
+| BinaryOpExpr
+| NotExpr
+| OrExpr
+| AndExpr
+| VarDeclaration
+| VarAssignmentExpr
+| AssignmentExpr
+| PrioritizedExpr
+| ConditionalExpr
+| FunctionDeclaration
+| FunctionInvokeExpr
+| MethodInvokeExpr
+| IdentLiteral
+| NumberLiteral
+| StringLiteral
+| BooleanLiteral
+| NullLiteral
+| ListLiteral
+| TypeLiteral;
+
+export interface EmptyExpr extends Expression {
   type: 'EmptyExpr';
-  returnType: 'Invalid';
+  return: typeof DT.Invalid;
 };
 
-export type NumberLiteral = {
+export interface NumberLiteral extends Expression {
   type: 'NumberLiteral';
   value: string;
-  returnType: 'Num';
+  return: typeof DT.Num;
 };
 
-export type StringLiteral = {
+export interface StringLiteral extends Expression {
   type: 'StringLiteral';
   value: string;
-  returnType: 'Str';
+  return: typeof DT.Str;
 };
 
-export type BooleanLiteral = {
+export interface BooleanLiteral extends Expression {
   type: 'BooleanLiteral';
   value: 'True' | 'False';
-  returnType: 'Bool';
+  return: typeof DT.Bool;
 };
 
-export type NullLiteral = {
+export interface NullLiteral extends Expression {
   type: 'NullLiteral';
   value: 'Null';
-  returnType: 'Null';
+  return: typeof DT.Null;
 };
 
-export type ListLiteral = {
+export interface ListLiteral extends Expression {
   type: 'ListLiteral';
   values: Array<Expr>;
-  elementType: string;
-  returnType: string;
+
+  // TODO: Element type can be derived from return since it is replaced by the DataType class
+  elementType: DT;
+  return: DT;
 };
 
-export type IdentLiteral = {
+export interface IdentLiteral extends Expression {
   type: 'IdentLiteral';
   value: string;
-  returnType: string;
+  return: DT;
 };
 
-export type TypeLiteral = {
+export interface TypeLiteral extends Expression {
   type: 'TypeLiteral';
   value: string;
-  returnType: 'Void';
+  return: typeof DT.Void;
 };
 
-export type VarDeclaration = {
+export interface VarDeclaration extends Expression {
   type: 'VarDeclaration';
   expr1: IdentLiteral;
   expr2: Expr;
-  returnType: 'Void';
+  return: typeof DT.Void;
 };
 
-export type VarAssignmentExpr = {
+export interface VarAssignmentExpr extends Expression {
   type: 'VarAssignmentExpr';
   expr1: IdentLiteral;
   expr2: Expr;
-  returnType: 'Void';
+  return: typeof DT.Void;
 }
 
-export type AssignmentExpr = {
+export interface AssignmentExpr extends Expression {
   type: 'AssignmentExpr';
   expr1: Expr;
   expr2: Expr;
-  returnType: 'Void';
+  return: typeof DT.Void;
 };
 
-export type PrioritizedExpr = {
+export interface PrioritizedExpr extends Expression {
   type: 'PrioritizedExpr';
   expr: Expr;
-  returnType: string;
+  return: DT;
 };
 
-export type ConditionalExpr = {
+export interface ConditionalExpr extends Expression {
   type: 'ConditionalExpr';
   condition: Expr;
   expr1: Expr;  // Condition is Truethy
   expr2: Expr; // Condition is Falsey
-  returnType: string;
+  return: DT;
 };
 
-export type BinaryOpExpr = {
+export interface BinaryOpExpr extends Expression {
   type: 'BinaryOpExpr';
   operator: Operator;
   expr1: Expr;
   expr2: Expr;
-  returnType: string;
+  return: DT;
 };
 
-export type NotExpr = {
+export interface NotExpr extends Expression {
   type: 'NotExpr';
   expr: Expr;
-  returnType: 'Bool';
+  return: typeof DT.Bool;
 };
 
-export type OrExpr = {
+export interface OrExpr extends Expression {
   type: 'OrExpr';
   expr1: Expr;
   expr2: Expr;
-  returnType: 'Bool';
+  return: typeof DT.Bool;
 };
 
-export type AndExpr = {
+export interface AndExpr extends Expression {
   type: 'AndExpr';
   expr1: Expr;
   expr2: Expr;
-  returnType: 'Bool';
+  return: typeof DT.Bool;
 };
 
-export type Argument = { ident: string; type: string };
+export type Argument = { ident: string; type: DT };
 
-export type FunctionDeclaration = {
+export interface FunctionDeclaration extends Expression {
   type: 'FunctionDeclaration';
   name: string;
   arguments: Array<Argument>;
-  outputType: string;
+  outputType: DT;
   body: Array<Expr>;
-  returnType: 'Void';
+  return: typeof DT.Void;
 };
 
-export type FunctionInvokeExpr = {
+export interface FunctionInvokeExpr extends Expression {
   type: 'FunctionInvokeExpr';
   name: string;
   params: Array<Expr>;
-  returnType: string;
+  return: DT;
 };
 
-export type MethodPattern = { name: string; inputPattern: string; returnType: string };
+export type MethodPattern = { name: string; parameter: Parameter; return: DT };
 export type MethodMappedInfo = { name: string; argCount: number };
-export type MethodInvokeExpr = {
+export interface MethodInvokeExpr extends Expression {
   type: 'MethodInvokeExpr';
   name: string;
   receiver: Expr;
   params: Array<Expr>;
-  returnType: string;
+  return: DT;
 };

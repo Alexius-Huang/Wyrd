@@ -193,9 +193,8 @@ ${codeGenFunctionBody(body, args, 2)}
   function codeGenMethodInvokeExpr(expr: T.MethodInvokeExpr): string {
     const { name, receiver, params } = expr;
 
-    if (primitives.has(receiver.returnType)) {
-      const type = receiver.returnType;
-      const directMethodMapping = MethodsDirectMap.get(type) as Map<string, string>;
+    if (primitives.has(receiver.return.type)) {
+      const directMethodMapping = MethodsDirectMap.get(receiver.return.type) as Map<string, string>;
 
       if (directMethodMapping.has(name)) {
         const mappedName = directMethodMapping.get(name) as string;

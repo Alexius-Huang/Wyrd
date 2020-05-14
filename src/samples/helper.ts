@@ -1,29 +1,30 @@
 import * as T from '../types';
+import DT from '../parser/classes/DataType';
 
-export function Var(name: string, type: string): T.IdentLiteral {
-  return { type: 'IdentLiteral', value: name, returnType: type };
+export function Var(name: string, type: DT): T.IdentLiteral {
+  return { type: 'IdentLiteral', value: name, return: type };
 }
 
 export function NumberLiteral(value: number): T.NumberLiteral {
-  return { type: 'NumberLiteral', value: value.toString(), returnType: 'Num' };
+  return { type: 'NumberLiteral', value: value.toString(), return: DT.Num };
 }
 
 export function StringLiteral(value: string): T.StringLiteral {
-  return { type: 'StringLiteral', value, returnType: 'Str' };
+  return { type: 'StringLiteral', value, return: DT.Str };
 }
 
 export function BooleanLiteral(bool: boolean): T.BooleanLiteral {
-  return { type: 'BooleanLiteral', value: bool ? 'True' : 'False', returnType: 'Bool' };
+  return { type: 'BooleanLiteral', value: bool ? 'True' : 'False', return: DT.Bool };
 }
 
 export function NullLiteral(): T.NullLiteral {
-  return { type: 'NullLiteral', value: 'Null', returnType: 'Null' };
+  return { type: 'NullLiteral', value: 'Null', return: DT.Null };
 }
 
 export function prioritize(expr: T.Expr): T.PrioritizedExpr {
   return {
     type: 'PrioritizedExpr',
-    returnType: expr.returnType,
+    return: expr.return,
     expr,
   };
 }
@@ -47,21 +48,21 @@ export function Arithmetic(
   if (typeof operand1 === 'number')
     expr1 = NumberLiteral(operand1);
   else if (typeof operand1 === 'string')
-    expr1 = { type: 'IdentLiteral', value: operand1, returnType: 'Num' };
+    expr1 = { type: 'IdentLiteral', value: operand1, return: DT.Num };
   else
     expr1 = operand1;
 
   if (typeof operand2 === 'number')
     expr2 = NumberLiteral(operand2);
   else if (typeof operand2 === 'string')
-    expr2 = { type: 'IdentLiteral', value: operand2, returnType: 'Num' };
+    expr2 = { type: 'IdentLiteral', value: operand2, return: DT.Num };
   else
     expr2 = operand2;
 
   return {
     type: 'BinaryOpExpr',
     operator,
-    returnType: 'Num',
+    return: DT.Num,
     expr1,
     expr2,
   };

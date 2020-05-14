@@ -1,10 +1,12 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
-import Variable from './Scope.Variable';
-import { getOPActionDetail } from './helper';
+import TokenTracker from './classes/TokenTracker';
+import Scope from './classes/Scope';
+import DT from './classes/DataType';
+import Variable from './classes/Scope.Variable';
+// import { getOPActionDetail } from './helper';
 import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf } from './error';
+import { BuiltinOPActions } from './constants';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -16,7 +18,7 @@ export function parseIdentifier(
   let result: T.IdentLiteral | T.FunctionInvokeExpr = {
     type: 'IdentLiteral',
     value: tokenName,
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
   /* Find the variable through scope chain */
@@ -24,10 +26,11 @@ export function parseIdentifier(
   //       and let finding variables and functions become member methods
   let varInfo: Variable | undefined;
   let currentScope = scope;
+
   while (true) {
     if (currentScope.hasVariable(tokenName)) {
       varInfo = currentScope.getVariable(tokenName);
-      result.returnType = varInfo.type;
+      result.return = varInfo.type;
       break;
     }
 
@@ -42,24 +45,28 @@ export function parseIdentifier(
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     ParserErrorIf(
-      result.returnType === 'Invalid',
+      result.return.isEqualTo(DT.Invalid),
       `Using the unidentified token \`${tokenName}\``
     );
 
     prevExpr.expr2 = result;
-    const opAction = getOPActionDetail(
-      prevExpr.operator,
-      prevExpr.expr1.returnType,
-      result.returnType,
-    );
+    // const opAction = getOPActionDetail(
+    //   prevExpr.operator,
+    //   prevExpr.expr1.return,
+    //   result.return,
+    // );
+    const operation = BuiltinOPActions.get(prevExpr.operator);
 
-    prevExpr.returnType = opAction.returnType;
+    prevExpr.return = operation?.returnTypeOfOperation(
+      prevExpr.expr1.return,
+      result.return
+    ) as DT;
     return prevExpr;
   }
 
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-    prevExpr.returnType = result.returnType;
+    prevExpr.return = result.return;
   }
 
   return result;

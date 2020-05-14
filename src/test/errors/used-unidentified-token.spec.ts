@@ -1,6 +1,6 @@
 import { compile } from '../..';
 
-describe('Used Unidentified Token', () => {
+describe.only('Used Unidentified Token', () => {
   it('throws error when using unidentified token', () => {
     const program1 = `\nfoo = 1 + bar\n`;
     expect(() => compile(program1))

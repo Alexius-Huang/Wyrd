@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
+import DT from '../../parser/classes/DataType';
 
 const program = `\
 def addition(x: Num, y: Num): Num do
@@ -87,60 +88,60 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'FunctionDeclaration',
-    returnType: 'Void',
+    return: DT.Void,
     name: 'addition',
     arguments: [
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' }
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num }
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       Arithmetic('x', '+', 'y'),
     ],
   },
   {
     type: 'FunctionDeclaration',
-    returnType: 'Void',
+    return: DT.Void,
     name: 'complexArithmetic',
     arguments: [
-      { ident: 'w', type: 'Num' },
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' },
-      { ident: 'z', type: 'Num' },
+      { ident: 'w', type: DT.Num },
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num },
+      { ident: 'z', type: DT.Num },
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       {
         type: 'AssignmentExpr',
-        returnType: 'Void',
-        expr1: { type: 'IdentLiteral', value: 'a', returnType: 'Num' },
+        return: DT.Void,
+        expr1: { type: 'IdentLiteral', value: 'a', return: DT.Num },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          returnType: 'Num',
-          expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
+          return: DT.Num,
+          expr1: { type: 'IdentLiteral', value: 'x', return: DT.Num },
           expr2: Arithmetic('y', '*', 'z'),
         },
       },
       {
         type: 'AssignmentExpr',
-        returnType: 'Void',
-        expr1: { type: 'IdentLiteral', value: 'b', returnType: 'Num' },
+        return: DT.Void,
+        expr1: { type: 'IdentLiteral', value: 'b', return: DT.Num },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Dash,
-            returnType: 'Num',
-            expr1: { type: 'IdentLiteral', value: 'w', returnType: 'Num' },
+            return: DT.Num,
+            expr1: { type: 'IdentLiteral', value: 'w', return: DT.Num },
             expr2: Arithmetic(2, '/', 'a'),
           },
           expr2: NumberLiteral(1),
         },
       },
-      { type: 'IdentLiteral', value: 'b', returnType: 'Num' },
+      { type: 'IdentLiteral', value: 'b', return: DT.Num },
     ],
   },
 ];

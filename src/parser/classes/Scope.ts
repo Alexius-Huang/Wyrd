@@ -1,6 +1,7 @@
 import FunctionObject from './Scope.FunctionObject';
 import Variable from './Scope.Variable';
-import { ParserError } from './error';
+import DT from './DataType';
+import { ParserError } from '../error';
 
 export default class Scope {
   public parent: null | Scope = null;
@@ -23,14 +24,14 @@ export default class Scope {
     return varInfo;
   }
 
-  public createConstant(name: string, type: string = 'Unknown'): Variable {
+  public createConstant(name: string, type: DT = DT.Unknown): Variable {
     const variable: Variable = new Variable(name, type);
 
     this.variables.set(name, variable);
     return variable;
   }
 
-  public createMutableVariable(name: string, type: string = 'Unknown'): Variable {
+  public createMutableVariable(name: string, type: DT = DT.Unknown): Variable {
     const variable: Variable = new Variable(name, type, false);
 
     this.variables.set(name, variable);

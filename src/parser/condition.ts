@@ -1,5 +1,6 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
+import TokenTracker from './classes/TokenTracker';
+import DT from './classes/DataType';
 import { ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 
@@ -8,7 +9,7 @@ export function parseConditionalExpr(
   parseExpr: (prevExpr: T.Expr, meta?: any) => T.Expr,
 
   /* Locked Type means there is already a if condition expression before */
-  lockedType?: string,
+  lockedType?: DT,
 ): T.ConditionalExpr {
   tt.next(); // Skip 'if' | 'elif' keyword
   let result: T.ConditionalExpr = {
@@ -16,7 +17,7 @@ export function parseConditionalExpr(
     condition: EmptyExpression,
     expr1: EmptyExpression,
     expr2: EmptyExpression,
-    returnType: lockedType ?? 'Unknown'
+    return: lockedType ?? DT.Unknown
   };
 
   while (tt.isNot('arrow') && tt.valueIsNot('then')) {
@@ -27,14 +28,14 @@ export function parseConditionalExpr(
 
   ParserErrorIf(result.condition === undefined, 'Expect to resolve a condition');
 
-  const condReturnedType = result.condition.returnType;
+  const condReturnedType = result.condition.return;
   ParserErrorIf(
-     condReturnedType !== 'Bool',
+     condReturnedType.isNotEqualTo(DT.Bool),
     `Expect conditional expression's condition should return \`Bool\` type, instead got: \`${condReturnedType}\``,
   );
 
   if (tt.valueIs('then')) {
-    tt.next(); // Skip 'then' keyword      
+    tt.next(); // Skip 'then' keyword
     ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `then` keyword');
   }
 
@@ -46,10 +47,10 @@ export function parseConditionalExpr(
   }
 
   if (lockedType === undefined) {
-    result.returnType = result.expr1.returnType;
+    result.return = result.expr1.return;
   } else {
     ParserErrorIf(
-      result.expr1.returnType !== result.returnType,
+      result.expr1.return.isNotEqualTo(result.return),
       `Expect values returned from different condition branch to be the same`
     );
   }
@@ -58,7 +59,7 @@ export function parseConditionalExpr(
 
   /* Handle elif is exactly the same as the if expression */
   if (tt.is('keyword') && tt.valueIs('elif')) {
-    result.expr2 = parseConditionalExpr(tt, parseExpr, result.returnType);
+    result.expr2 = parseConditionalExpr(tt, parseExpr, result.return);
     return result;
   }
 
@@ -98,7 +99,7 @@ export function parseConditionalExpr(
   }
 
   ParserErrorIf(
-    result.expr2.returnType !== result.returnType,
+    result.expr2.return.isNotEqualTo(result.return),
     `Expect values returned from different condition branch to be the same`
   );
 

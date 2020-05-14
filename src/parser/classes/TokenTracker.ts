@@ -1,4 +1,4 @@
-import * as T from '../types';
+import * as T from '../../types';
 
 export default class TokenTracker {
   private index = 0;

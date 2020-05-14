@@ -1,6 +1,7 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import TokenTracker from './classes/TokenTracker';
+import DT from './classes/DataType';
+import Scope from './classes/Scope';
 import { ParserError, ParserErrorIf } from './error';
 import { compare } from './precedence';
 import { EmptyExpression } from './constants';
@@ -11,8 +12,11 @@ export function parseBinaryOpExpr(
   scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
+  // if (prevExpr.type === 'IdentLiteral' && prevExpr.value === 'age') {
+  //   console.log(prevExpr);
+  // }
   ParserErrorIf(
-    prevExpr.type === 'IdentLiteral' && prevExpr.returnType === 'Invalid',
+    prevExpr.type === 'IdentLiteral' && prevExpr.return.isEqualTo(DT.Invalid),
     `Using the unidentified token \`${(prevExpr as T.IdentLiteral).value}\``,
   );
 
@@ -44,7 +48,7 @@ export function parseBinaryOpExpr(
         operator,
         expr1: prevExpr,
         expr2: EmptyExpression,
-        returnType: 'Invalid',
+        return: DT.Invalid,
       };
 
       tt.next();
@@ -55,20 +59,20 @@ export function parseBinaryOpExpr(
 
   if (prevExpr.type === 'VarDeclaration' || prevExpr.type === 'VarAssignmentExpr') {
     prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
-    prevExpr.expr1.returnType = prevExpr.expr2.returnType;
+    prevExpr.expr1.return = prevExpr.expr2.return;
     const varName = prevExpr.expr1.value;
     const variableInfo = scope.getVariable(varName);
-    variableInfo.type = prevExpr.expr1.returnType;
+    variableInfo.type = prevExpr.expr1.return;
     return prevExpr;
   }
 
   if (prevExpr.type === 'AssignmentExpr') {
     prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     if (prevExpr.expr1.type === 'IdentLiteral') {
-      prevExpr.expr1.returnType = prevExpr.expr2.returnType;
+      prevExpr.expr1.return = prevExpr.expr2.return;
       const varName = prevExpr.expr1.value;
       const variableInfo = scope.getVariable(varName);
-      variableInfo.type = prevExpr.expr1.returnType;
+      variableInfo.type = prevExpr.expr1.return;
 
       return prevExpr;
     }
@@ -92,7 +96,7 @@ export function parseBinaryOpExpr(
     operator,
     expr1: prevExpr,
     expr2: EmptyExpression,
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
   return parseExpr(result, { scope });

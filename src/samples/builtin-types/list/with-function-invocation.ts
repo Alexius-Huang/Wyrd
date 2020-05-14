@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../../types';
 import { NumberLiteral, Arithmetic } from '../../helper';
+import DT from '../../../parser/classes/DataType';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -57,12 +58,12 @@ const ast: AST = [
   {
     type: 'FunctionDeclaration',
     name: 'addition',
-    returnType: 'Void',
+    return: DT.Void,
     arguments: [
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' }
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num }
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       Arithmetic('x', '+', 'y'),
     ],
@@ -79,12 +80,12 @@ const ast: AST = [
           {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: NumberLiteral(3),
             expr2: Arithmetic(4, '*', 5),
           },
         ],
-        returnType: 'Num',
+        return: DT.Num,
       },
       NumberLiteral(6),
       {
@@ -94,17 +95,17 @@ const ast: AST = [
           {
             type: 'BinaryOpExpr',
             operator: Op.Dash,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: Arithmetic(7, '/', 8),
             expr2: NumberLiteral(9),
           },
           NumberLiteral(10),
         ],
-        returnType: 'Num',
+        return: DT.Num,
       },
     ],
-    elementType: 'Num',
-    returnType: 'List[Num]',
+    elementType: DT.Num,
+    return: DT.ListOf(DT.Num),
   },
 ];
 

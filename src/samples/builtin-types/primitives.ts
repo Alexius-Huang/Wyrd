@@ -1,4 +1,5 @@
 import { Token, AST } from '../../types';
+import DT from '../../parser/classes/DataType';
 
 const program = `\
 123
@@ -19,10 +20,10 @@ const tokens: Array<Token> = [
 ];
 
 const ast: AST = [
-  { type: 'NumberLiteral', value: '123', returnType: 'Num' },
-  { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' },
-  { type: 'BooleanLiteral', value: 'True', returnType: 'Bool', },
-  { type: 'NullLiteral', value: 'Null', returnType: 'Null' },
+  { type: 'NumberLiteral', value: '123', return: DT.Num },
+  { type: 'StringLiteral', value: 'Hello world', return: DT.Str },
+  { type: 'BooleanLiteral', value: 'True', return: DT.Bool },
+  { type: 'NullLiteral', value: 'Null', return: DT.Null },
 ];
 
 const compiled = `\

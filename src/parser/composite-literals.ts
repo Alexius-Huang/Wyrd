@@ -1,6 +1,7 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import TokenTracker from './classes/TokenTracker';
+import Scope from './classes/Scope';
+import DT from './classes/DataType';
 import { ParserErrorIf } from './error';
 
 export function parseListLiteral(
@@ -13,23 +14,23 @@ export function parseListLiteral(
   const result: T.ListLiteral = {
     type: 'ListLiteral',
     values: [],
-    elementType: 'Invalid',
-    returnType: 'Invalid',
+    elementType: DT.Invalid,
+    return: DT.Invalid,
   };
 
   // Fetch the first element
   const el = parseExpr(undefined, { scope });
   result.values.push(el);
-  result.elementType = el.returnType;
-  result.returnType = `List[${el.returnType}]`;
+  result.elementType = el.return;
+  result.return = DT.ListOf(el.return);
   tt.next();
 
   // Fetch the rest of the elements until meet `rbracket` token
   while (tt.isNot('rbracket')) {
     let el = parseExpr(undefined, { scope });
     ParserErrorIf(
-      el.returnType !== result.elementType,
-      `Expect List to contain of type \`${result.elementType}\`, instead mixed with type \`${el.returnType}\``
+      el.return.isNotEqualTo(result.elementType),
+      `Expect List to contain of type \`${result.elementType}\`, instead mixed with type \`${el.return}\``
     );
 
     // Since the expression will be already separated by comma

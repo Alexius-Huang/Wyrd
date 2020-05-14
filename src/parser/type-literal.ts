@@ -1,6 +1,7 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import TokenTracker from './classes/TokenTracker';
+import Scope from './classes/Scope';
+import DT from './classes/DataType';
 
 export function parseTypeLiteral(
   tt: TokenTracker,
@@ -10,7 +11,7 @@ export function parseTypeLiteral(
   const result: T.TypeLiteral = {
     type: 'TypeLiteral',
     value: tt.value,
-    returnType: 'Void',
+    return: DT.Void,
   };
 
   return result;

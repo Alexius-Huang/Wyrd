@@ -1,5 +1,6 @@
 import { Token, AST } from '../../types';
 import { BooleanLiteral, prioritize } from '../helper';
+import DT from '../../parser/classes/DataType';
 
 const program = `\
 not (False or True) and False
@@ -20,13 +21,13 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AndExpr',
-    returnType: 'Bool',
+    return: DT.Bool,
     expr1: {
       type: 'NotExpr',
-      returnType: 'Bool',
+      return: DT.Bool,
       expr: prioritize({
         type: 'OrExpr',
-        returnType: 'Bool',
+        return: DT.Bool,
         expr1: BooleanLiteral(false),
         expr2: BooleanLiteral(true),
       }),

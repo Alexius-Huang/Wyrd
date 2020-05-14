@@ -10,7 +10,7 @@ const tokens: Array<Token> = [
 ];
 
 const ast: AST = [
-  { type: 'StringLiteral', value: 'Hello world', returnType: 'Str' },
+  { type: 'StringLiteral', value: 'Hello world', return: 'Str' },
 ];
 
 const compiled = `\

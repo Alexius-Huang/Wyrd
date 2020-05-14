@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
+import DT from '../../parser/classes/DataType';
 
 const program = `\
 mutable foo = (1 + 2) * 3
@@ -53,29 +54,29 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'VarDeclaration',
-    returnType: 'Void',
-    expr1: Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: Var('foo', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: prioritize(Arithmetic(1, '+', 2)),
       expr2: NumberLiteral(3),
     },
   },
   {
     type: 'VarDeclaration',
-    returnType: 'Void',
-    expr1: Var('bar', 'Num'),
+    return: DT.Void,
+    expr1: Var('bar', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: NumberLiteral(1),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(2),
         expr2: prioritize(Arithmetic(3, '-', 4)),
       },
@@ -83,17 +84,17 @@ const ast: AST = [
   },
   {
     type: 'VarAssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('bar', 'Num'),
+    return: DT.Void,
+    expr1: Var('bar', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Asterisk,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: NumberLiteral(1),
       expr2: prioritize({
         type: 'BinaryOpExpr',
         operator: Op.Slash,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: prioritize(Arithmetic('foo', '+', 'bar')),
         expr2: NumberLiteral(2),
       }),

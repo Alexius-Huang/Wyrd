@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, prioritize, Arithmetic } from '../helper';
+import DT from '../../parser/classes/DataType';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -109,42 +110,42 @@ const ast: AST = [
   {
     type: 'FunctionDeclaration',
     name: 'addition',
-    returnType: 'Void',
+    return: DT.Void,
     arguments: [
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' }
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num }
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       Arithmetic('x', '+', 'y'),
     ],
   },
   {
     type: 'FunctionDeclaration',
-    returnType: 'Void',
+    return: DT.Void,
     name: 'devilNumber',
     arguments: [],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       NumberLiteral(666),
     ],
   },
   {
     type: 'FunctionDeclaration',
-    returnType: 'Void',
+    return: DT.Void,
     name: 'complexArithmetic',
     arguments: [
-      { ident: 'w', type: 'Num' },
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' },
-      { ident: 'z', type: 'Num' },
+      { ident: 'w', type: DT.Num },
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num },
+      { ident: 'z', type: DT.Num },
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: prioritize(Arithmetic('x', '+', 'y')),
         expr2: prioritize(Arithmetic('z', '/', 'w')),
       },
@@ -152,26 +153,26 @@ const ast: AST = [
   },
   {
     type: 'FunctionDeclaration',
-    returnType: 'Void',
+    return: DT.Void,
     name: 'complexArithmetic2',
     arguments: [
-      { ident: 'w', type: 'Num' },
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' },
-      { ident: 'z', type: 'Num' },
+      { ident: 'w', type: DT.Num },
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num },
+      { ident: 'z', type: DT.Num },
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
-        expr1: { type: 'IdentLiteral', value: 'x', returnType: 'Num' },
+        return: DT.Num,
+        expr1: { type: 'IdentLiteral', value: 'x', return: DT.Num },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
-          returnType: 'Num',
-          expr1: { type: 'IdentLiteral', value: 'y', returnType: 'Num' },
+          return: DT.Num,
+          expr1: { type: 'IdentLiteral', value: 'y', return: DT.Num },
           expr2: prioritize(Arithmetic('z', '/', 'w')),
         },
       },

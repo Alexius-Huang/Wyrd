@@ -1,9 +1,10 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import TokenTracker from './classes/TokenTracker';
+import Scope from './classes/Scope';
+import DT from './classes/DataType';
 import { ParserError } from './error';
-import { getOPActionDetail } from './helper';
-import { EmptyExpression } from './constants';
+// import { getOPActionDetail } from './helper';
+import { EmptyExpression, BuiltinOPActions } from './constants';
 
 export function parsePrioritizedExpr(
   tt: TokenTracker,
@@ -15,7 +16,7 @@ export function parsePrioritizedExpr(
   let result: T.PrioritizedExpr = {
     type: 'PrioritizedExpr',
     expr: EmptyExpression,
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
   while (tt.isNotOneOf('rparen', 'comma')) {
@@ -27,19 +28,25 @@ export function parsePrioritizedExpr(
     if (prevExpr.type === 'BinaryOpExpr') {
       prevExpr.expr2 = result;
 
-      const opAction = getOPActionDetail(
-        prevExpr.operator,
-        prevExpr.expr2.returnType,
-        result.returnType
-      );
+      // const opAction = getOPActionDetail(
+      //   prevExpr.operator,
+      //   prevExpr.expr2.return,
+      //   result.return
+      // );
 
-      prevExpr.returnType = opAction.returnType;
+      // prevExpr.return = opAction.return;
+      const operator = BuiltinOPActions.get(prevExpr.operator);
+      prevExpr.return = operator?.returnTypeOfOperation(
+        prevExpr.expr2.return,
+        result.return
+      ) as DT;
+
       return prevExpr;
     }
 
     if (prevExpr.type === 'PrioritizedExpr') {
       prevExpr.expr = result;
-      prevExpr.returnType = result.returnType;
+      prevExpr.return = result.return;
       return result;
     }
 
@@ -54,6 +61,6 @@ export function parsePrioritizedExpr(
   if (result.expr.type === 'FunctionInvokeExpr')
     return result.expr;
 
-  result.returnType = result.expr.returnType;
+  result.return = result.expr.return;
   return result;
 }
