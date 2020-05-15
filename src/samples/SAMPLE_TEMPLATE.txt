@@ -1,4 +1,5 @@
 import { Token, AST } from 'REFERENCE_TO_TYPE_DEFINITION/types';
+import { DataType as DT } from 'REFERENCE_TO_PARSER/classes';
 
 const program = `\
 "Hello world"
@@ -10,7 +11,7 @@ const tokens: Array<Token> = [
 ];
 
 const ast: AST = [
-  { type: 'StringLiteral', value: 'Hello world', return: 'Str' },
+  { type: 'StringLiteral', value: 'Hello world', return: DT.Str },
 ];
 
 const compiled = `\
