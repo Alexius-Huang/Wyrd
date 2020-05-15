@@ -32,7 +32,7 @@ export function parsePrioritizedExpr(
       if (operation === undefined)
         ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
 
-      prevExpr.return = operation?.return;
+      prevExpr.return = operation.return;
       return prevExpr;
     }
 
