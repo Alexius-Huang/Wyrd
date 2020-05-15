@@ -1,9 +1,6 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
-import Scope from './classes/Scope';
-import DT from './classes/DataType';
+import { TokenTracker, Scope, DataType as DT, BinaryOperator } from './classes';
 import { ParserError } from './error';
-// import { getOPActionDetail } from './helper';
 import { EmptyExpression, BuiltinOPActions } from './constants';
 
 export function parsePrioritizedExpr(
@@ -27,20 +24,15 @@ export function parsePrioritizedExpr(
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
       prevExpr.expr2 = result;
+      const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
+      const operandLeft = prevExpr.expr1.return;
+      const operandRight = result.return;
+      const operation = operator.getOperationInfo(operandLeft, operandRight);
 
-      // const opAction = getOPActionDetail(
-      //   prevExpr.operator,
-      //   prevExpr.expr2.return,
-      //   result.return
-      // );
+      if (operation === undefined)
+        ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
 
-      // prevExpr.return = opAction.return;
-      const operator = BuiltinOPActions.get(prevExpr.operator);
-      prevExpr.return = operator?.returnTypeOfOperation(
-        prevExpr.expr2.return,
-        result.return
-      ) as DT;
-
+      prevExpr.return = operation?.return;
       return prevExpr;
     }
 

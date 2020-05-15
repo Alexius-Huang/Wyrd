@@ -1,6 +1,5 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
-import DT from './classes/DataType';
+import { TokenTracker, DataType as DT } from './classes';
 import { EmptyExpression } from './constants';
 
 export function parseLogicalNotExpr(

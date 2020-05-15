@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
-import DT from '../../parser/classes/DataType';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 foo = 1

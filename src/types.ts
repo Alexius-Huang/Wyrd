@@ -1,6 +1,4 @@
-import Scope from './parser/classes/Scope';
-import DT from './parser/classes/DataType';
-import Parameter from './parser/classes/Parameter';
+import { Scope, DataType as DT, Parameter } from './parser/classes';
 
 export type Token = { type: string; value: string };
 

@@ -1,11 +1,7 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
-import Scope from './classes/Scope';
-import DT from './classes/DataType';
-import Variable from './classes/Scope.Variable';
-// import { getOPActionDetail } from './helper';
+import { TokenTracker, Scope, ScopeVariable as Variable, DataType as DT, BinaryOperator } from './classes';
 import { parseFunctionInvokeExpr } from './function-invocation';
-import { ParserErrorIf } from './error';
+import { ParserErrorIf, ParserError } from './error';
 import { BuiltinOPActions } from './constants';
 
 export function parseIdentifier(
@@ -50,17 +46,15 @@ export function parseIdentifier(
     );
 
     prevExpr.expr2 = result;
-    // const opAction = getOPActionDetail(
-    //   prevExpr.operator,
-    //   prevExpr.expr1.return,
-    //   result.return,
-    // );
-    const operation = BuiltinOPActions.get(prevExpr.operator);
+    const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
+    const operandLeft = prevExpr.expr1.return;
+    const operandRight = result.return;
+    const operation = operator.getOperationInfo(operandLeft, operandRight);
 
-    prevExpr.return = operation?.returnTypeOfOperation(
-      prevExpr.expr1.return,
-      result.return
-    ) as DT;
+    if (operation === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
+
+    prevExpr.return = operation?.return;
     return prevExpr;
   }
 

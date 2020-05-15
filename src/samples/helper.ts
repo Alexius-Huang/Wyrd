@@ -1,5 +1,5 @@
 import * as T from '../types';
-import DT from '../parser/classes/DataType';
+import { DataType as DT } from '../parser/classes';
 
 export function Var(name: string, type: DT): T.IdentLiteral {
   return { type: 'IdentLiteral', value: name, return: type };

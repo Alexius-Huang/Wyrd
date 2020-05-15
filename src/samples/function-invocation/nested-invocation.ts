@@ -1,7 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import DT from '../../parser/classes/DataType';
-import Parameter from '../../parser/classes/Parameter';
-import Scope from '../../parser/classes/Scope';
+import { DataType as DT, Parameter, Scope } from '../../parser/classes';
 import { NumberLiteral } from '../helper';
 
 const program = `\

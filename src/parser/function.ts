@@ -1,9 +1,6 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
+import { TokenTracker, DataType as DT, Scope, Parameter } from './classes';
 import { ParserError, ParserErrorIf } from './error';
-import DT from './classes/DataType';
-import Scope from './classes/Scope';
-import Parameter from './classes/Parameter';
 
 export function parseFunctionDeclaration(
   tt: TokenTracker,

@@ -1,9 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { prioritize } from '../helper';
-import { NumberLiteral } from '../helper';
-import Scope from '../../parser/classes/Scope';
-import DT from '../../parser/classes/DataType';
-import Parameter from '../../parser/classes/Parameter';
+import { DataType as DT, Scope, Parameter } from '../../parser/classes';
+import { prioritize, NumberLiteral } from '../helper';
 
 const program = `\
 funcA(1, (funcB(2, 3) + 4) * funcC(5))

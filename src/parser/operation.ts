@@ -1,7 +1,5 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
-import DT from './classes/DataType';
-import Scope from './classes/Scope';
+import { TokenTracker, Scope, DataType as DT } from './classes';
 import { ParserError, ParserErrorIf } from './error';
 import { compare } from './precedence';
 import { EmptyExpression } from './constants';
@@ -12,9 +10,6 @@ export function parseBinaryOpExpr(
   scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
-  // if (prevExpr.type === 'IdentLiteral' && prevExpr.value === 'age') {
-  //   console.log(prevExpr);
-  // }
   ParserErrorIf(
     prevExpr.type === 'IdentLiteral' && DT.isInvalid(prevExpr.return),
     `Using the unidentified token \`${(prevExpr as T.IdentLiteral).value}\``,

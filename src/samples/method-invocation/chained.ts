@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, StringLiteral, Arithmetic } from '../helper';
-import DT from '../../parser/classes/DataType';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 "Hello world".upcase().repeat(3)

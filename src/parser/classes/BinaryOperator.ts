@@ -14,15 +14,9 @@ export default class BinaryOperator {
     this.operands.push(...operands);
   }
 
-  public hasOperation(left: DT, right: DT) {
+  public getOperationInfo(left: DT, right: DT) {
     return this.operands.find(
       opr => opr.left.isEqualTo(left) && opr.right.isEqualTo(right)
-    ) !== undefined;
-  }
-
-  public returnTypeOfOperation(left: DT, right: DT) {
-    return this.operands.find(
-      opr => opr.left.isEqualTo(left) && opr.right.isEqualTo(right)
-    )?.return;
+    );
   }
 }

@@ -1,7 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
-import Scope from '../../parser/classes/Scope';
-import DT from '../../parser/classes/DataType';
+import { DataType as DT, Scope } from '../../parser/classes';
 
 const program = `\
 mixed1 = if age < 18 then

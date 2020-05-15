@@ -1,7 +1,7 @@
 import { Token, AST } from '../../types';
 import { Arithmetic } from '../helper';
 import { NumberLiteral } from '../helper';
-import DT from '../../parser/classes/DataType';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y

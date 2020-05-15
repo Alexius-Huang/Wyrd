@@ -1,8 +1,7 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
-import DT from './classes/DataType';
+import { TokenTracker, DataType as DT, BinaryOperator } from './classes';
 import { BuiltinOPActions } from './constants';
-// import { getOPActionDetail } from './helper';
+import { ParserError } from './error';
 
 function parseNumberLiteral(
   tt: TokenTracker,
@@ -16,18 +15,15 @@ function parseNumberLiteral(
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
-    const operation = BuiltinOPActions.get(prevExpr.operator);
-    // const opAction = getOPActionDetail(
-    //   prevExpr.operator,
-    //   prevExpr.expr1.return,
-    //   result.return,
-    // );
+    const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
+    const operandLeft = prevExpr.expr1.return;
+    const operandRight = result.return;
+    const operation = operator.getOperationInfo(operandLeft, operandRight);
 
-    // prevExpr.return = opAction.return;
-    prevExpr.return = operation?.returnTypeOfOperation(
-      prevExpr.expr1.return,
-      result.return
-    ) as DT;
+    if (operation === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
+
+    prevExpr.return = operation?.return;
     return prevExpr;
   }
   if (prevExpr?.type === 'PrioritizedExpr') {

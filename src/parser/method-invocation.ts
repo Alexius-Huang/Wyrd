@@ -1,8 +1,5 @@
 import * as T from '../types';
-import TokenTracker from './classes/TokenTracker';
-import Scope from './classes/Scope';
-import Parameter from './classes/Parameter';
-import DT from "./classes/DataType";
+import { TokenTracker, Scope, Parameter, DataType as DT } from './classes';
 import { ParserErrorIf, ParserError } from './error';
 import { BuiltinPrimitiveMethods, EmptyExpression } from './constants';
 

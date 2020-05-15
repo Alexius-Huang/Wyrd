@@ -1,9 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { prioritize, Arithmetic } from '../helper';
-import { NumberLiteral, StringLiteral } from '../helper';
-import Scope from '../../parser/classes/Scope';
-import DT from '../../parser/classes/DataType';
-import Parameter from '../../parser/classes/Parameter';
+import { DataType as DT, Scope, Parameter } from '../../parser/classes';
+import { prioritize, Arithmetic, NumberLiteral, StringLiteral } from '../helper';
 
 const program = `\
 funcA("Hello world")

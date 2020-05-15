@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Var, Arithmetic } from '../helper';
-import DT from '../../parser/classes/DataType';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 mutable something = 1
