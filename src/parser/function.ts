@@ -1,7 +1,6 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
+import { TokenTracker, DataType as DT, Scope, Parameter } from './classes';
 import { ParserError, ParserErrorIf } from './error';
-import Scope from './Scope';
 
 export function parseFunctionDeclaration(
   tt: TokenTracker,
@@ -17,9 +16,9 @@ export function parseFunctionDeclaration(
     type: 'FunctionDeclaration',
     name: tt.value,
     arguments: [],
-    outputType: 'Void',
+    outputType: DT.Void,
     body: [],
-    returnType: 'Void',
+    return: DT.Void,
   };
 
   /* TODO: Handle situation of function re-declaration */
@@ -37,11 +36,14 @@ export function parseFunctionDeclaration(
   tt.next();
   if (tt.isNot('builtin-type'))
     ParserError(`Expect an output data-type of the function declaration \`${result.name}\``);
-  result.outputType = tt.value;
+  result.outputType = new DT(tt.value);
 
   /* Setup a new available pattern for function invocation */
   const functionObj = scope.createFunction(result.name);
-  functionObj.createNewPattern(result.arguments.map(({ type }) => type), result.outputType);
+  functionObj.createNewPattern(
+    Parameter.from(result.arguments.map(({ type }) => type)),
+    result.outputType
+  );
 
   /* Parsing the function declartion expression */
   tt.next();
@@ -80,7 +82,7 @@ export function parseFunctionArguments(
   const result: Array<T.Argument> = [];
 
   while (true) {
-    let argument: T.Argument = { ident: '', type: '' };
+    let argument: T.Argument = { ident: '', type: DT.Invalid };
     if (tt.is('ident')) {
       argument.ident = tt.value;
 
@@ -91,7 +93,7 @@ export function parseFunctionArguments(
 
       if (tt.isNot('builtin-type'))
         ParserError('Expect token next to the colon of the argument declaration is data-type');
-      argument.type = tt.value;
+      argument.type = new DT(tt.value);
       tt.next();
 
       // Setting variable infos from arguments

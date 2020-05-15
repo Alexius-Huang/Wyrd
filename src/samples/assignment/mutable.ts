@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic, Var } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 mutable foo = 123
@@ -61,40 +62,40 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'VarDeclaration',
-    returnType: 'Void',
-    expr1: Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: Var('foo', DT.Num),
     expr2: NumberLiteral(123),
   },
   {
     type: 'VarAssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: Var('foo', DT.Num),
     expr2: NumberLiteral(456),
   },
   {
     type: 'VarAssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: Var('foo', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: Arithmetic(1, '*', 2),
       expr2: Arithmetic(3, '/', 4),
     },
   },
   {
     type: 'VarDeclaration',
-    returnType: 'Void',
-    expr1: Var('bar', 'Num'),
+    return: DT.Void,
+    expr1: Var('bar', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(1),
         expr2: Arithmetic(2, '*', 3),
       },
@@ -103,12 +104,12 @@ const ast: AST = [
   },
   {
     type: 'VarAssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('bar', 'Num'),
+    return: DT.Void,
+    expr1: Var('bar', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: Arithmetic(1, '*', 'foo'),
       expr2: Arithmetic('bar', '/', 2),
     },

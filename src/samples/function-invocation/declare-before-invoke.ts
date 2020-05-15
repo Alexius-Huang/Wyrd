@@ -1,6 +1,7 @@
 import { Token, AST } from '../../types';
 import { Arithmetic } from '../helper';
 import { NumberLiteral } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 def addition(x: Num, y: Num): Num => x + y
@@ -40,12 +41,12 @@ const ast: AST = [
   {
     type: 'FunctionDeclaration',
     name: 'addition',
-    returnType: 'Void',
+    return: DT.Void,
     arguments: [
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' }
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num }
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       Arithmetic('x', '+', 'y'),
     ],
@@ -57,7 +58,7 @@ const ast: AST = [
       NumberLiteral(1),
       NumberLiteral(2),
     ],
-    returnType: 'Num',
+    return: DT.Num,
   },
 ];
 

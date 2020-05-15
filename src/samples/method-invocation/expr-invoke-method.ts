@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 (1 + 2 * 3).toStr()
@@ -27,12 +28,12 @@ const ast: AST = [
     receiver: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: NumberLiteral(1),
       expr2: Arithmetic(2, '*', 3),
     },
     params: [],
-    returnType: 'Str',
+    return: DT.Str,
   },
 ];
 

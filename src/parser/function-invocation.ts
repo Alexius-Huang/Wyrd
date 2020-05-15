@@ -1,7 +1,6 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
-import { ParserErrorIf } from './error';
+import { TokenTracker, Scope, DataType as DT, Parameter } from './classes';
+import { ParserErrorIf, ParserError } from './error';
 
 export function parseFunctionInvokeExpr(
   tt: TokenTracker,
@@ -16,7 +15,7 @@ export function parseFunctionInvokeExpr(
     type: 'FunctionInvokeExpr',
     name,
     params: [],
-    returnType: 'Unknown',
+    return: DT.Unknown,
   };
 
   tt.next(); // Skip the name of the function
@@ -30,15 +29,12 @@ export function parseFunctionInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseFunctionParameters(tt, parseExpr, scope);
 
-  const inputTypes = result.params.map(expr => expr.returnType);
-
-  ParserErrorIf(
-    ! functionObj.hasInputPattern(inputTypes),
-    `Function \`${name}\` is called with unmatched input pattern \`${inputTypes.join('.')}\``
-  );
-
-  const patternInfo = functionObj.getPatternInfo(inputTypes);
-  result.returnType = patternInfo.returnType;
+  const inputParameter = Parameter.from(result.params.map(expr => expr.return));
+  const patternInfo = functionObj.getPatternInfo(inputParameter);  
+  if (patternInfo === undefined) {
+    ParserError(`Function \`${name}\` is called with unmatched input pattern \`${inputParameter}\``);
+  }
+  result.return = patternInfo.returnDataType;
 
   return result;
 }

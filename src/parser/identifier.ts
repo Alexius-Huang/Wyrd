@@ -1,10 +1,8 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
-import Variable from './Scope.Variable';
-import { getOPActionDetail } from './helper';
+import { TokenTracker, Scope, ScopeVariable as Variable, DataType as DT, BinaryOperator } from './classes';
 import { parseFunctionInvokeExpr } from './function-invocation';
-import { ParserErrorIf } from './error';
+import { ParserErrorIf, ParserError } from './error';
+import { BuiltinOPActions } from './constants';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -16,7 +14,7 @@ export function parseIdentifier(
   let result: T.IdentLiteral | T.FunctionInvokeExpr = {
     type: 'IdentLiteral',
     value: tokenName,
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
   /* Find the variable through scope chain */
@@ -24,10 +22,11 @@ export function parseIdentifier(
   //       and let finding variables and functions become member methods
   let varInfo: Variable | undefined;
   let currentScope = scope;
+
   while (true) {
     if (currentScope.hasVariable(tokenName)) {
       varInfo = currentScope.getVariable(tokenName);
-      result.returnType = varInfo.type;
+      result.return = varInfo.type;
       break;
     }
 
@@ -42,24 +41,26 @@ export function parseIdentifier(
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     ParserErrorIf(
-      result.returnType === 'Invalid',
+      DT.isInvalid(result.return),
       `Using the unidentified token \`${tokenName}\``
     );
 
     prevExpr.expr2 = result;
-    const opAction = getOPActionDetail(
-      prevExpr.operator,
-      prevExpr.expr1.returnType,
-      result.returnType,
-    );
+    const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
+    const operandLeft = prevExpr.expr1.return;
+    const operandRight = result.return;
+    const operation = operator.getOperationInfo(operandLeft, operandRight);
 
-    prevExpr.returnType = opAction.returnType;
+    if (operation === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
+
+    prevExpr.return = operation.return;
     return prevExpr;
   }
 
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-    prevExpr.returnType = result.returnType;
+    prevExpr.return = result.return;
   }
 
   return result;

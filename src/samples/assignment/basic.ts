@@ -1,4 +1,5 @@
 import { Token, AST } from '../../types';
+import { DataType as DT } from '../../parser/classes';
 import * as helper from '../helper';
 
 const program = `\
@@ -45,32 +46,32 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: helper.Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: helper.Var('foo', DT.Num),
     expr2: helper.NumberLiteral(123),
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: helper.Var('bar', 'Str'),
+    return: DT.Void,
+    expr1: helper.Var('bar', DT.Str),
     expr2: helper.StringLiteral('Hello world'),
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: helper.Var('baz', 'Bool'),
+    return: DT.Void,
+    expr1: helper.Var('baz', DT.Bool),
     expr2: helper.BooleanLiteral(true),
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: helper.Var('nothing', 'Null'),
+    return: DT.Void,
+    expr1: helper.Var('nothing', DT.Null),
     expr2: helper.NullLiteral(),
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: helper.Var('list', 'List[Num]'),
+    return: DT.Void,
+    expr1: helper.Var('list', DT.ListOf(DT.Num)),
     expr2: {
       type: 'ListLiteral',
       values: [
@@ -80,8 +81,8 @@ const ast: AST = [
         helper.NumberLiteral(4),
         helper.NumberLiteral(5),
       ],
-      elementType: 'Num',
-      returnType: 'List[Num]',
+      elementType: DT.Num,
+      return: DT.ListOf(DT.Num),
     },
   },
 ];

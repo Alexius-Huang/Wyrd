@@ -1,5 +1,5 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
+import { TokenTracker, DataType as DT } from './classes';
 import { EmptyExpression } from './constants';
 
 export function parseLogicalNotExpr(
@@ -9,7 +9,7 @@ export function parseLogicalNotExpr(
   let result: T.NotExpr = {
     type: 'NotExpr',
     expr: EmptyExpression,
-    returnType: 'Bool',
+    return: DT.Bool,
   };
   tt.next();
   result.expr = parseExpr(result);
@@ -26,7 +26,7 @@ export function parseLogicalAndOrExpr(
     type: logicType,
     expr1: prevExpr,
     expr2: EmptyExpression,
-    returnType: 'Bool',
+    return: DT.Bool,
   };
 
   tt.next();

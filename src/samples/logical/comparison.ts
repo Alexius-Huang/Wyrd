@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { DataType as DT, Scope } from '../../parser/classes';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
-import Scope from '../../parser/Scope';
 
 const program = `\
 3 + 1 > 2
@@ -83,42 +83,42 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Gt,
-    returnType: 'Bool',
+    return: DT.Bool,
     expr1: Arithmetic(3, '+', 1),
     expr2: NumberLiteral(2)
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Lt,
-    returnType: 'Bool',
+    return: DT.Bool,
     expr1: Arithmetic(5, '*', 3),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Dash,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: NumberLiteral(15),
       expr2: Arithmetic(6, '*', 8),
     },
   },
   {
     type: 'OrExpr',
-    returnType: 'Bool',
+    return: DT.Bool,
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.GtEq,
-      returnType: 'Bool',
+      return: DT.Bool,
       expr1: NumberLiteral(11),
       expr2: Arithmetic(7, '+', 7),
     },
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.LtEq,
-      returnType: 'Bool',
+      return: DT.Bool,
       expr1: NumberLiteral(3),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: prioritize(Arithmetic(6, '+', 2)),
         expr2: NumberLiteral(3), 
       },
@@ -126,18 +126,18 @@ const ast: AST = [
   },
   {
     type: 'OrExpr',
-    returnType: 'Bool',
+    return: DT.Bool,
     expr1: {
       type: 'AndExpr',
-      returnType: 'Bool',
+      return: DT.Bool,
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Gt,
-        returnType: 'Bool',
+        return: DT.Bool,
         expr1: {
           type: 'BinaryOpExpr',
           operator: Op.Slash,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: NumberLiteral(8),
           expr2: prioritize(Arithmetic(4, '*', 2)),
         },
@@ -145,15 +145,15 @@ const ast: AST = [
       },
       expr2: {
         type: 'NotExpr',
-        returnType: 'Bool',
+        return: DT.Bool,
         expr: {
           type: 'BinaryOpExpr',
           operator: Op.EqEq,
-          returnType: 'Bool',
+          return: DT.Bool,
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: NumberLiteral(1),
             expr2: Arithmetic(2, '*', 3),
           },
@@ -164,25 +164,25 @@ const ast: AST = [
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.BangEq,
-      returnType: 'Bool',
+      return: DT.Bool,
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
-        expr1: Var('a', 'Num'),
+        return: DT.Num,
+        expr1: Var('a', DT.Num),
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: Arithmetic('b', '/', 'c'),
-          expr2: Var('d', 'Num'),
+          expr2: Var('d', DT.Num),
         },
       },
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Dash,
-        returnType: 'Num',
-        expr1: Var('w', 'Num'),
+        return: DT.Num,
+        expr1: Var('w', DT.Num),
         expr2: Arithmetic('x', '*', 'y'),
       },
     },
@@ -201,13 +201,13 @@ const minified = '3+1>2;5*3<15-(6*8);11>=7+7||3<=(6+2)/3;8/(4*2)>3&&!(1+(2*3)===
 const scope = new Scope();
 const parseOptions: ParseOptions = { scope };
 
-scope.createConstant('a', 'Num');
-scope.createConstant('b', 'Num');
-scope.createConstant('c', 'Num');
-scope.createConstant('d', 'Num');
-scope.createConstant('w', 'Num');
-scope.createConstant('x', 'Num');
-scope.createConstant('y', 'Num');
+scope.createConstant('a', DT.Num);
+scope.createConstant('b', DT.Num);
+scope.createConstant('c', DT.Num);
+scope.createConstant('d', DT.Num);
+scope.createConstant('w', DT.Num);
+scope.createConstant('x', DT.Num);
+scope.createConstant('y', DT.Num);
 
 export {
   program,

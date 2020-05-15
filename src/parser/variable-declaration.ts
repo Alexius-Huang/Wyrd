@@ -1,6 +1,5 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import { TokenTracker, Scope, DataType as DT } from './classes';
 import { ParserError, ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 
@@ -38,18 +37,18 @@ export function parseVarDeclaration(
 
   const result: T.VarDeclaration = {
     type: 'VarDeclaration',
-    expr1: { type: 'IdentLiteral', value: varName, returnType: 'Invalid' },
+    expr1: { type: 'IdentLiteral', value: varName, return: DT.Invalid },
     expr2: EmptyExpression,
-    returnType: 'Void'
+    return: DT.Void
   };
 
   result.expr2 = parseExpr(undefined, { scope });
-  const isInvalid = result.expr2.returnType === 'Invalid';
-  const isVoid = result.expr2.returnType === 'Void';
+  const isInvalid = DT.isInvalid(result.expr2.return);
+  const isVoid = DT.isVoid(result.expr2.return);
   ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
 
-  result.expr1.returnType = result.expr2.returnType;
-  scope.createMutableVariable(varName, result.expr1.returnType);
+  result.expr1.return = result.expr2.return;
+  scope.createMutableVariable(varName, result.expr1.return);
 
   return result;
 }

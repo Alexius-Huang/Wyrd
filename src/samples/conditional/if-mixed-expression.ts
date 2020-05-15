@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
-import Scope from '../../parser/Scope';
+import { DataType as DT, Scope } from '../../parser/classes';
 
 const program = `\
 mixed1 = if age < 18 then
@@ -87,38 +87,38 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'mixed1', returnType: 'Str' },
+    return: DT.Void,
+    expr1: { type: 'IdentLiteral', value: 'mixed1', return: DT.Str },
     expr2: {
       type: 'ConditionalExpr',
-      returnType: 'Str',
+      return: DT.Str,
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        returnType: 'Bool',
-        expr1: Var('age', 'Num'),
+        return: DT.Bool,
+        expr1: Var('age', DT.Num),
         expr2: NumberLiteral(18)
       },
       expr1: StringLiteral('youngster'),
       expr2: {
         type: 'ConditionalExpr',
-        returnType: 'Str',
+        return: DT.Str,
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
-          returnType: 'Bool',
-          expr1: Var('age', 'Num'),
+          return: DT.Bool,
+          expr1: Var('age', DT.Num),
           expr2: NumberLiteral(60)
         },
         expr1: StringLiteral('adult'),
         expr2: {
           type: 'ConditionalExpr',
-          returnType: 'Str',
+          return: DT.Str,
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
-            returnType: 'Bool',
-            expr1: Var('age', 'Num'),
+            return: DT.Bool,
+            expr1: Var('age', DT.Num),
             expr2: NumberLiteral(100)
           },
           expr1: StringLiteral('elder'),
@@ -129,38 +129,38 @@ const ast: AST = [
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: { type: 'IdentLiteral', value: 'mixed2', returnType: 'Str' },
+    return: DT.Void,
+    expr1: { type: 'IdentLiteral', value: 'mixed2', return: DT.Str },
     expr2: {
       type: 'ConditionalExpr',
-      returnType: 'Str',
+      return: DT.Str,
       condition: {
         type: 'BinaryOpExpr',
         operator: Op.Lt,
-        returnType: 'Bool',
-        expr1: Var('age', 'Num'),
+        return: DT.Bool,
+        expr1: Var('age', DT.Num),
         expr2: NumberLiteral(18)
       },
       expr1: StringLiteral('youngster'),
       expr2: {
         type: 'ConditionalExpr',
-        returnType: 'Str',
+        return: DT.Str,
         condition: {
           type: 'BinaryOpExpr',
           operator: Op.LtEq,
-          returnType: 'Bool',
-          expr1: Var('age', 'Num'),
+          return: DT.Bool,
+          expr1: Var('age', DT.Num),
           expr2: NumberLiteral(60)
         },
         expr1: StringLiteral('adult'),
         expr2: {
           type: 'ConditionalExpr',
-          returnType: 'Str',
+          return: DT.Str,
           condition: {
             type: 'BinaryOpExpr',
             operator: Op.Lt,
-            returnType: 'Bool',
-            expr1: Var('age', 'Num'),
+            return: DT.Bool,
+            expr1: Var('age', DT.Num),
             expr2: NumberLiteral(100)
           },
           expr1: StringLiteral('elder'),
@@ -180,7 +180,7 @@ const minified = 'const mixed1=age<18?\'youngster\':(age<=60?\'adult\':(age<100?
 
 const scope = () => {
   const result = new Scope();
-  result.createConstant('age', 'Num');
+  result.createConstant('age', DT.Num);
 
   return result;
 };

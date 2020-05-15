@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Var, Arithmetic } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 mutable something = 1
@@ -79,58 +80,58 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'VarDeclaration',
-    returnType: 'Void',
-    expr1: Var('something', 'Num'),
+    return: DT.Void,
+    expr1: Var('something', DT.Num),
     expr2: NumberLiteral(1)
   },
   {
     type: 'FunctionDeclaration',
     name: 'addSomething',
     arguments: [
-      { ident: 'x', type: 'Num' },
+      { ident: 'x', type: DT.Num },
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       Arithmetic('x', '+', 'something'),
     ],
-    returnType: 'Void',
+    return: DT.Void,
   },
   {
     type: 'VarAssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('something', 'Num'),
+    return: DT.Void,
+    expr1: Var('something', DT.Num),
     expr2: NumberLiteral(2),
   },
   {
     type: 'FunctionDeclaration',
     name: 'complexArithmetics',
     arguments: [
-      { ident: 'x', type: 'Num' },
-      { ident: 'y', type: 'Num' },
+      { ident: 'x', type: DT.Num },
+      { ident: 'y', type: DT.Num },
     ],
-    outputType: 'Num',
+    outputType: DT.Num,
     body: [
       {
         type: 'AssignmentExpr',
-        returnType: 'Void',
-        expr1: Var('a', 'Num'),
+        return: DT.Void,
+        expr1: Var('a', DT.Num),
         expr2: Arithmetic('x', '+', 'y'),
       },
       {
         type: 'AssignmentExpr',
-        returnType: 'Void',
-        expr1: Var('b', 'Num'),
+        return: DT.Void,
+        expr1: Var('b', DT.Num),
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: Arithmetic('a', '*', 'something'),
-          expr2: Var('y', 'Num'),
+          expr2: Var('y', DT.Num),
         },
       },
-      Var('b', 'Num'),
+      Var('b', DT.Num),
     ],
-    returnType: 'Void',
+    return: DT.Void,
   }
 ];
 

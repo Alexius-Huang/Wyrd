@@ -1,5 +1,6 @@
 import { Token, AST } from '../../types';
 import { StringLiteral } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 "Hello world".concat("Wyrd-Lang".concat(" is awesome!"))
@@ -33,10 +34,10 @@ const ast: AST = [
         params: [
           StringLiteral(' is awesome!'),
         ],
-        returnType: 'Str',
+        return: DT.Str,
       },
     ],
-    returnType: 'Str',
+    return: DT.Str,
   },
 ];
 

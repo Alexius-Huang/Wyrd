@@ -1,5 +1,7 @@
 import { Token, AST } from '../../../types';
 import { NumberLiteral } from '../../helper';
+import { DataType as DT } from '../../../parser/classes';
+
 
 const program = `\
 [[1 2 3] [4 5 6] [7 8 9]]
@@ -37,8 +39,8 @@ const ast: AST = [
           NumberLiteral(2),
           NumberLiteral(3),
         ],
-        elementType: 'Num',
-        returnType: 'List[Num]',
+        elementType: DT.Num,
+        return: DT.ListOf(DT.Num),
       },    
       {
         type: 'ListLiteral',
@@ -47,8 +49,8 @@ const ast: AST = [
           NumberLiteral(5),
           NumberLiteral(6),
         ],
-        elementType: 'Num',
-        returnType: 'List[Num]',
+        elementType: DT.Num,
+        return: DT.ListOf(DT.Num),
       },    
       {
         type: 'ListLiteral',
@@ -57,12 +59,12 @@ const ast: AST = [
           NumberLiteral(8),
           NumberLiteral(9),
         ],
-        elementType: 'Num',
-        returnType: 'List[Num]',
+        elementType: DT.Num,
+        return: DT.ListOf(DT.Num),
       },    
     ],
-    elementType: 'List[Num]',
-    returnType: 'List[List[Num]]',
+    elementType: DT.ListOf(DT.Num),
+    return: DT.ListOf(DT.ListOf(DT.Num)),
   },
 ];
 

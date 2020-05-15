@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 foo = 1
@@ -41,22 +42,22 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: Var('foo', DT.Num),
     expr2: NumberLiteral(1),
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('bar', 'Num'),
+    return: DT.Void,
+    expr1: Var('bar', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(1),
         expr2: Arithmetic(2, '*', 3),
       },
@@ -65,17 +66,17 @@ const ast: AST = [
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('baz', 'Num'),
+    return: DT.Void,
+    expr1: Var('baz', DT.Num),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: NumberLiteral(1),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Asterisk,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: prioritize(Arithmetic(2, '-', 3)),
         expr2: NumberLiteral(4),
       },

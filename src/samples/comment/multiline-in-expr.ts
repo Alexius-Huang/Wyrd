@@ -1,5 +1,6 @@
 import { Token, AST } from '../../types';
 import { Var, NumberLiteral } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 foo = ## Assignment ## 123
@@ -25,14 +26,14 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('foo', 'Num'),
+    return: DT.Void,
+    expr1: Var('foo', DT.Num),
     expr2: NumberLiteral(123),
   },
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('baz', 'Num'),
+    return: DT.Void,
+    expr1: Var('baz', DT.Num),
     expr2: NumberLiteral(789),
   },
 ];

@@ -1,9 +1,7 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import { TokenTracker, Scope, DataType as DT, BinaryOperator } from './classes';
 import { ParserError } from './error';
-import { getOPActionDetail } from './helper';
-import { EmptyExpression } from './constants';
+import { EmptyExpression, BuiltinOPActions } from './constants';
 
 export function parsePrioritizedExpr(
   tt: TokenTracker,
@@ -15,7 +13,7 @@ export function parsePrioritizedExpr(
   let result: T.PrioritizedExpr = {
     type: 'PrioritizedExpr',
     expr: EmptyExpression,
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
   while (tt.isNotOneOf('rparen', 'comma')) {
@@ -26,20 +24,21 @@ export function parsePrioritizedExpr(
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
       prevExpr.expr2 = result;
+      const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
+      const operandLeft = prevExpr.expr1.return;
+      const operandRight = result.return;
+      const operation = operator.getOperationInfo(operandLeft, operandRight);
 
-      const opAction = getOPActionDetail(
-        prevExpr.operator,
-        prevExpr.expr2.returnType,
-        result.returnType
-      );
+      if (operation === undefined)
+        ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
 
-      prevExpr.returnType = opAction.returnType;
+      prevExpr.return = operation.return;
       return prevExpr;
     }
 
     if (prevExpr.type === 'PrioritizedExpr') {
       prevExpr.expr = result;
-      prevExpr.returnType = result.returnType;
+      prevExpr.return = result.return;
       return result;
     }
 
@@ -54,6 +53,6 @@ export function parsePrioritizedExpr(
   if (result.expr.type === 'FunctionInvokeExpr')
     return result.expr;
 
-  result.returnType = result.expr.returnType;
+  result.return = result.expr.return;
   return result;
 }

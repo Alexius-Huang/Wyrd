@@ -1,6 +1,7 @@
 import * as T from '../types';
-import { getOPActionDetail } from './helper';
-import TokenTracker from './TokenTracker';
+import { TokenTracker, DataType as DT, BinaryOperator } from './classes';
+import { BuiltinOPActions } from './constants';
+import { ParserError } from './error';
 
 function parseNumberLiteral(
   tt: TokenTracker,
@@ -9,23 +10,25 @@ function parseNumberLiteral(
   const result: T.NumberLiteral = {
     type: 'NumberLiteral',
     value: tt.value,
-    returnType: 'Num',
+    return: DT.Num,
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
-    const opAction = getOPActionDetail(
-      prevExpr.operator,
-      prevExpr.expr1.returnType,
-      result.returnType,
-    );
+    const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
+    const operandLeft = prevExpr.expr1.return;
+    const operandRight = result.return;
+    const operation = operator.getOperationInfo(operandLeft, operandRight);
 
-    prevExpr.returnType = opAction.returnType;
+    if (operation === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
+
+    prevExpr.return = operation.return;
     return prevExpr;
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-    prevExpr.returnType = result.returnType;
+    prevExpr.return = result.return;
   }
   return result;
 }
@@ -37,7 +40,7 @@ function parseStringLiteral(
   const result: T.StringLiteral = {
     type: 'StringLiteral',
     value: tt.value,
-    returnType: 'Str',
+    return: DT.Str,
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -46,7 +49,7 @@ function parseStringLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-    prevExpr.returnType = result.returnType;
+    prevExpr.return = result.return;
   }
   return result;
 }
@@ -58,7 +61,7 @@ function parseBooleanLiteral(
   const result: T.BooleanLiteral = {
     type: 'BooleanLiteral',
     value: tt.value as 'True' | 'False',
-    returnType: 'Bool',
+    return: DT.Bool,
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -67,7 +70,7 @@ function parseBooleanLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-    prevExpr.returnType = result.returnType;
+    prevExpr.return = result.return;
   }
   return result;
 }
@@ -79,7 +82,7 @@ function parseNullLiteral(
   const result: T.NullLiteral = {
     type: 'NullLiteral',
     value: 'Null',
-    returnType: 'Null',
+    return: DT.Null,
   };
 
   if (prevExpr?.type === 'BinaryOpExpr') {
@@ -88,7 +91,7 @@ function parseNullLiteral(
   }
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
-    prevExpr.returnType = result.returnType;
+    prevExpr.return = result.return;
   }
   return result;
 }

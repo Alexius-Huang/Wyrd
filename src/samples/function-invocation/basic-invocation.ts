@@ -1,7 +1,6 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import { prioritize, Arithmetic } from '../helper';
-import { NumberLiteral, StringLiteral } from '../helper';
-import Scope from '../../parser/Scope';
+import { DataType as DT, Scope, Parameter } from '../../parser/classes';
+import { prioritize, Arithmetic, NumberLiteral, StringLiteral } from '../helper';
 
 const program = `\
 funcA("Hello world")
@@ -132,7 +131,7 @@ const ast: AST = [
     params: [
       StringLiteral('Hello world'),
     ],
-    returnType: 'Null'
+    return: DT.Null
   },
   {
     type: 'FunctionInvokeExpr',
@@ -142,7 +141,7 @@ const ast: AST = [
       NumberLiteral(2),
       NumberLiteral(3),
     ],
-    returnType: 'Null'
+    return: DT.Null
   },
   {
     type: 'FunctionInvokeExpr',
@@ -152,28 +151,28 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(2),
         expr2: Arithmetic(3, '*', 4),
       },
       {
         type: 'BinaryOpExpr',
         operator: Op.Dash,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: Arithmetic(5, '/', 6),
         expr2: NumberLiteral(7),
       },
     ],
-    returnType: 'Null',
+    return: DT.Null,
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Dash,
-    returnType: 'Num',
+    return: DT.Num,
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Slash,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: {
         type: 'FunctionInvokeExpr',
         name: 'funcD',
@@ -182,13 +181,13 @@ const ast: AST = [
           {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: NumberLiteral(2),
             expr2: Arithmetic(3, '*', 4),
           },
           NumberLiteral(5),  
         ],
-        returnType: 'Num',
+        return: DT.Num,
       },
       expr2: NumberLiteral(6),
     },
@@ -197,7 +196,7 @@ const ast: AST = [
   {
     type: 'BinaryOpExpr',
     operator: Op.Dash,
-    returnType: 'Num',
+    return: DT.Num,
     expr1: {
       type: 'FunctionInvokeExpr',
       name: 'funcE',
@@ -206,25 +205,25 @@ const ast: AST = [
         {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Plus,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: NumberLiteral(2),
             expr2: Arithmetic(3, '*', 4),
           },
           expr2: NumberLiteral(5),
         }
       ],
-      returnType: 'Num',
+      return: DT.Num,
     },
     expr2: Arithmetic(6, '/', 7),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Slash,
-    returnType: 'Num',
+    return: DT.Num,
     expr1: {
       type: 'FunctionInvokeExpr',
       name: 'funcF',
@@ -233,38 +232,38 @@ const ast: AST = [
         {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: NumberLiteral(2),
           expr2: {
             type: 'BinaryOpExpr',
             operator: Op.Asterisk,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: NumberLiteral(3),
             expr2: prioritize(Arithmetic(4, '/', 5)),
           },
         },
       ],
-      returnType: 'Num',
+      return: DT.Num,
     },
     expr2: prioritize(Arithmetic(6, '-', 7)),
   },
   {
     type: 'BinaryOpExpr',
     operator: Op.Dash,
-    returnType: 'Num',
+    return: DT.Num,
     expr1: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,
-      returnType: 'Num',
+      return: DT.Num,
       expr1: NumberLiteral(1),
       expr2: {
         type: 'BinaryOpExpr',
         operator: Op.Slash,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: NumberLiteral(2),
           expr2: {
             type: 'FunctionInvokeExpr',
@@ -273,7 +272,7 @@ const ast: AST = [
               Arithmetic(3, '*', 4),
               NumberLiteral(5),
             ],
-            returnType: 'Num',
+            return: DT.Num,
           },
         },
         expr2: NumberLiteral(6),
@@ -297,19 +296,19 @@ const minified = 'funcA(\'Hello world\');funcB(1,2,3);funcC(1,2+(3*4),5/6-7);fun
 
 const scope: Scope = new Scope();
 const funcA = scope.createFunction('funcA');
-funcA.createNewPattern(['Str'], 'Null');
+funcA.createNewPattern(Parameter.of(DT.Str), DT.Null);
 const funcB = scope.createFunction('funcB');
-funcB.createNewPattern(['Num', 'Num', 'Num'], 'Null');
+funcB.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Null);
 const funcC = scope.createFunction('funcC');
-funcC.createNewPattern(['Num', 'Num', 'Num'], 'Null');
+funcC.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Null);
 const funcD = scope.createFunction('funcD');
-funcD.createNewPattern(['Num', 'Num', 'Num'], 'Num');
+funcD.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Num);
 const funcE = scope.createFunction('funcE');
-funcE.createNewPattern(['Num', 'Num'], 'Num');
+funcE.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 const funcF = scope.createFunction('funcF');
-funcF.createNewPattern(['Num', 'Num'], 'Num');
+funcF.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 const funcG = scope.createFunction('funcG');
-funcG.createNewPattern(['Num', 'Num'], 'Num');
+funcG.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 
 const parseOptions: ParseOptions = { scope };
 

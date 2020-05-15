@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic, Var } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 isTrue = 3 + 1 > 2
@@ -19,12 +20,12 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    returnType: 'Void',
-    expr1: Var('isTrue', 'Bool'),
+    return: DT.Void,
+    expr1: Var('isTrue', DT.Bool),
     expr2: {
       type: 'BinaryOpExpr',
       operator: Op.Gt,
-      returnType: 'Bool',
+      return: DT.Bool,
       expr1: Arithmetic(3, '+', 1),
       expr2: NumberLiteral(2),
     },  

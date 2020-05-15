@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
-import Scope from '../../parser/Scope';
+import { DataType as DT, Parameter, Scope } from '../../parser/classes';
 import { NumberLiteral } from '../helper';
 
 const program = `\
@@ -124,10 +124,10 @@ const ast: AST = [
           NumberLiteral(4),
           NumberLiteral(5),
         ],
-        returnType: 'Num',
-      },    
+        return: DT.Num,
+      },
     ],
-    returnType: 'Num',
+    return: DT.Num,
   },
   {
     type: 'FunctionInvokeExpr',
@@ -142,11 +142,11 @@ const ast: AST = [
           NumberLiteral(3),
           NumberLiteral(4),
         ],
-        returnType: 'Num',
+        return: DT.Num,
       },    
       NumberLiteral(5),
     ],
-    returnType: 'Num',
+    return: DT.Num,
   },
   {
     type: 'FunctionInvokeExpr',
@@ -165,14 +165,14 @@ const ast: AST = [
             params: [
               NumberLiteral(4),
             ],
-            returnType: 'Num',
+            return: DT.Num,
           },    
         ],
-        returnType: 'Num',
+        return: DT.Num,
       },    
       NumberLiteral(5),
     ],
-    returnType: 'Num',
+    return: DT.Num,
   },
   {
     type: 'FunctionInvokeExpr',
@@ -181,19 +181,19 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: {
           type: 'FunctionInvokeExpr',
           name: 'funcI',
           params: [
             NumberLiteral(1),
           ],
-          returnType: 'Num',
+          return: DT.Num,
         },
         expr2: {
           type: 'BinaryOpExpr',
           operator: Op.Asterisk,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: NumberLiteral(2),
           expr2: {
             type: 'FunctionInvokeExpr',
@@ -202,7 +202,7 @@ const ast: AST = [
               NumberLiteral(3),
               NumberLiteral(4),
             ],
-            returnType: 'Num',
+            return: DT.Num,
           }
         }
       },
@@ -212,10 +212,10 @@ const ast: AST = [
         params: [
           NumberLiteral(5),
         ],
-        returnType: 'Num',
+        return: DT.Num,
       },
     ],
-    returnType: 'Num',
+    return: DT.Num,
   },
   {
     type: 'FunctionInvokeExpr',
@@ -224,29 +224,29 @@ const ast: AST = [
       {
         type: 'BinaryOpExpr',
         operator: Op.Dash,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: {
           type: 'BinaryOpExpr',
           operator: Op.Plus,
-          returnType: 'Num',
+          return: DT.Num,
           expr1: {
             type: 'BinaryOpExpr',
             operator: Op.Asterisk,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: {
               type: 'FunctionInvokeExpr',
               name: 'funcM',
               params: [
                 NumberLiteral(1),
               ],
-              returnType: 'Num',
+              return: DT.Num,
             },
             expr2: NumberLiteral(2),
           },
           expr2: {
             type: 'BinaryOpExpr',
             operator: Op.Asterisk,
-            returnType: 'Num',
+            return: DT.Num,
             expr1: NumberLiteral(3),
             expr2: {
               type: 'FunctionInvokeExpr',
@@ -254,14 +254,14 @@ const ast: AST = [
               params: [
                 NumberLiteral(4),
               ],
-              returnType: 'Num',
+              return: DT.Num,
             },      
           },
         },
         expr2: NumberLiteral(5),
       },
     ],
-    returnType: 'Num',
+    return: DT.Num,
   },
 ];
 
@@ -277,33 +277,33 @@ const minified = 'funcA(1,funcB(2,3,4,5));funcC(1,2,funcD(3,4),5);funcE(1,funcF(
 
 const scope: Scope = new Scope();
 const funcA = scope.createFunction('funcA');
-funcA.createNewPattern(['Num', 'Num'], 'Num');
+funcA.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 const funcB = scope.createFunction('funcB');
-funcB.createNewPattern(['Num', 'Num', 'Num', 'Num'], 'Num');
+funcB.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num, DT.Num), DT.Num);
 const funcC = scope.createFunction('funcC');
-funcC.createNewPattern(['Num', 'Num', 'Num', 'Num'], 'Num');
+funcC.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num, DT.Num), DT.Num);
 const funcD = scope.createFunction('funcD');
-funcD.createNewPattern(['Num', 'Num'], 'Num');
+funcD.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 const funcE = scope.createFunction('funcE');
-funcE.createNewPattern(['Num', 'Num', 'Num'], 'Num');
+funcE.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Num);
 const funcF = scope.createFunction('funcF');
-funcF.createNewPattern(['Num', 'Num', 'Num'], 'Num');
+funcF.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Num);
 const funcG = scope.createFunction('funcG');
-funcG.createNewPattern(['Num'], 'Num');
+funcG.createNewPattern(Parameter.of(DT.Num), DT.Num);
 const funcH = scope.createFunction('funcH');
-funcH.createNewPattern(['Num', 'Num'], 'Num');
+funcH.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 const funcI = scope.createFunction('funcI');
-funcI.createNewPattern(['Num'], 'Num');
+funcI.createNewPattern(Parameter.of(DT.Num), DT.Num);
 const funcJ = scope.createFunction('funcJ');
-funcJ.createNewPattern(['Num', 'Num'], 'Num');
+funcJ.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
 const funcK = scope.createFunction('funcK');
-funcK.createNewPattern(['Num'], 'Num');
+funcK.createNewPattern(Parameter.of(DT.Num), DT.Num);
 const funcL = scope.createFunction('funcL');
-funcL.createNewPattern(['Num'], 'Num');
+funcL.createNewPattern(Parameter.of(DT.Num), DT.Num);
 const funcM = scope.createFunction('funcM');
-funcM.createNewPattern(['Num'], 'Num');
+funcM.createNewPattern(Parameter.of(DT.Num), DT.Num);
 const funcN = scope.createFunction('funcN');
-funcN.createNewPattern(['Num'], 'Num');
+funcN.createNewPattern(Parameter.of(DT.Num), DT.Num);
 
 const parseOptions: ParseOptions = { scope };
 

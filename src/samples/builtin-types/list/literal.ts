@@ -1,4 +1,5 @@
 import { Token, AST } from '../../../types';
+import { DataType as DT } from '../../../parser/classes';
 import * as helper from '../../helper';
 
 const program = `\
@@ -58,8 +59,8 @@ const ast: AST = [
       helper.NumberLiteral(4),
       helper.NumberLiteral(5),
     ],
-    elementType: 'Num',
-    returnType: 'List[Num]',
+    elementType: DT.Num,
+    return: DT.ListOf(DT.Num),
   },
   {
     type: 'ListLiteral',
@@ -70,8 +71,8 @@ const ast: AST = [
       helper.StringLiteral('is'),
       helper.StringLiteral('Awesome'),
     ],
-    elementType: 'Str',
-    returnType: 'List[Str]',
+    elementType: DT.Str,
+    return: DT.ListOf(DT.Str),
   },
   {
     type: 'ListLiteral',
@@ -84,8 +85,8 @@ const ast: AST = [
       helper.BooleanLiteral(false),
       helper.BooleanLiteral(true),
     ],
-    elementType: 'Bool',
-    returnType: 'List[Bool]',
+    elementType: DT.Bool,
+    return: DT.ListOf(DT.Bool),
   },
   {
     type: 'ListLiteral',
@@ -96,8 +97,8 @@ const ast: AST = [
       helper.NullLiteral(),
       helper.NullLiteral(),
     ],
-    elementType: 'Null',
-    returnType: 'List[Null]',
+    elementType: DT.Null,
+    return: DT.ListOf(DT.Null),
   },
 ];
 

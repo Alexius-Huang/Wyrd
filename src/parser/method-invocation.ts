@@ -1,6 +1,5 @@
-import * as T from "../types";
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import * as T from '../types';
+import { TokenTracker, Scope, Parameter, DataType as DT } from './classes';
 import { ParserErrorIf, ParserError } from './error';
 import { BuiltinPrimitiveMethods, EmptyExpression } from './constants';
 
@@ -72,18 +71,18 @@ function parseBasicMethodInvokeExpr(
     name,
     receiver: prevExpr,
     params: [],
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
   // Strip down the prioritized layer since the receiver will always be a single node
   if (result.receiver.type === 'PrioritizedExpr')
     result.receiver = result.receiver.expr;
 
-  const receiverType = prevExpr.returnType;
+  const receiverType = prevExpr.return;
 
   // TODO: Currently only support primitive type of data, future support
   //       for custom type data
-  const builtinMethods = BuiltinPrimitiveMethods.get(receiverType) as Map<string, T.MethodPattern>;
+  const builtinMethods = BuiltinPrimitiveMethods.get(receiverType.type) as Map<string, T.MethodPattern>;
   let isBuiltinMethod = false;
   let builtinMethodPattern: T.MethodPattern | null = null;
   if (builtinMethods.has(name)) {
@@ -105,18 +104,16 @@ function parseBasicMethodInvokeExpr(
     result.params = parseMethodInvokeParameters(tt, parseExpr, scope);
 
   /* Input pattern validation */
-  const inputParamsTypePattern = result.params
-    .map(expr => expr.returnType)
-    .join('.');
+  const inputParamsTypePattern = Parameter.from(result.params.map(expr => expr.return));
 
   if (isBuiltinMethod) {
-    const { inputPattern, returnType } = builtinMethodPattern;
+    const { parameter, return: r } = builtinMethodPattern;
     ParserErrorIf(
-      inputParamsTypePattern !== inputPattern,
-      `Expect ${receiverType}.${name} to receive input pattern of \`${inputPattern}\`, instead got: \`${inputParamsTypePattern}\``
+      !inputParamsTypePattern.matches(parameter),
+      `Expect ${receiverType}.${name} to receive input pattern of \`${parameter}\`, instead got: \`${inputParamsTypePattern}\``
     );
 
-    result.returnType = returnType;
+    result.return = r;
   }
 
   return result;
@@ -138,14 +135,14 @@ function parseBuiltinTypeMethodInvokeExpr(
     name,
     receiver: EmptyExpression,
     params: [],
-    returnType: 'Invalid',
+    return: DT.Invalid,
   };
 
-  const receiverType = prevExpr.value;
+  const receiver = new DT(prevExpr.value);
 
   // TODO: Currently only support primitive type of data, future support
   //       for custom type data
-  const builtinMethods = BuiltinPrimitiveMethods.get(receiverType) as Map<string, T.MethodPattern>;
+  const builtinMethods = BuiltinPrimitiveMethods.get(receiver.type) as Map<string, T.MethodPattern>;
   let isBuiltinMethod = false;
   let builtinMethodPattern: T.MethodPattern | null = null;
   if (builtinMethods.has(name)) {
@@ -166,32 +163,30 @@ function parseBuiltinTypeMethodInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseMethodInvokeParameters(tt, parseExpr, scope);
 
-  const methodName = `${receiverType}.${name}`;
+  const methodName = `${receiver}.${name}`;
   ParserErrorIf(
     result.params.length === 0,
-    `Expect \`${methodName}\` to have parameter as receiver of type \`${receiverType}\``
+    `Expect \`${methodName}\` to have parameter as receiver of type \`${receiver}\``
   );
   const receiverParam = result.params.shift() as T.Expr;
   result.receiver = receiverParam;
 
   ParserErrorIf(
-    result.receiver.returnType !== receiverType,
-    `Expect \`${methodName}\` to have receiver of type \`${receiverType}\`, instead got \`${result.receiver.returnType}\``
+    result.receiver.return.isNotEqualTo(receiver),
+    `Expect \`${methodName}\` to have receiver of type \`${receiver}\`, instead got \`${result.receiver.return}\``
   );
 
   /* Input pattern validation */
-  const inputParamsTypePattern = result.params
-    .map(expr => expr.returnType)
-    .join('.');
+  const inputParamsTypePattern = Parameter.from(result.params.map(expr => expr.return));
 
   if (isBuiltinMethod) {
-    const { inputPattern, returnType } = builtinMethodPattern;
+    const { parameter, return: r } = builtinMethodPattern;
     ParserErrorIf(
-      inputParamsTypePattern !== inputPattern,
-      `Expect ${receiverType}.${name} to receive input pattern of \`${inputPattern}\`, instead got: \`${inputParamsTypePattern}\``
+      !inputParamsTypePattern.matches(parameter),
+      `Expect ${receiver}.${name} to receive input pattern of \`${parameter}\`, instead got: \`${inputParamsTypePattern}\``
     );
 
-    result.returnType = returnType;
+    result.return = r;
   }
 
   return result;

@@ -1,5 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, StringLiteral, Arithmetic } from '../helper';
+import { DataType as DT } from '../../parser/classes';
 
 const program = `\
 "Hello world".upcase().repeat(3)
@@ -47,12 +48,12 @@ const ast: AST = [
       name: 'upcase',
       receiver: StringLiteral('Hello world'),
       params: [],
-      returnType: 'Str',
+      return: DT.Str,
     },
     params: [
       NumberLiteral(3),
     ],
-    returnType: 'Str',
+    return: DT.Str,
   },
   {
     type: 'MethodInvokeExpr',
@@ -63,17 +64,17 @@ const ast: AST = [
       receiver: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
-        returnType: 'Num',
+        return: DT.Num,
         expr1: NumberLiteral(1),
         expr2: Arithmetic(2, '*', 3),
       },
       params: [],
-      returnType: 'Str',
+      return: DT.Str,
     },
     params: [
       NumberLiteral(3),
     ],
-    returnType: 'Str',
+    return: DT.Str,
   },
 ];
 

@@ -1,6 +1,5 @@
 import * as T from '../types';
-import TokenTracker from './TokenTracker';
-import Scope from './Scope';
+import { TokenTracker, Scope, DataType as DT } from './classes';
 import { ParserError, ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 
@@ -24,16 +23,16 @@ export function parseAssignmentExpr(
         type: 'VarAssignmentExpr',
         expr1: prevExpr,
         expr2: EmptyExpression,
-        returnType: 'Void',
+        return: DT.Void,
       };
 
       result.expr2 = parseExpr(undefined, { scope });
-      const isInvalid = result.expr2.returnType === 'Invalid';
-      const isVoid = result.expr2.returnType === 'Void';
+      const isInvalid = DT.isInvalid(result.expr2.return);
+      const isVoid = DT.isVoid(result.expr2.return);
       ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
       ParserErrorIf(
-        varInfo.type !== result.expr2.returnType,
-        `Expect mutable variable \`${varName}\` to assign value of type \`${varInfo.type}\`, instead got: \`${result.expr2.returnType}\``
+        varInfo.type.isNotEqualTo(result.expr2.return),
+        `Expect mutable variable \`${varName}\` to assign value of type \`${varInfo.type}\`, instead got: \`${result.expr2.return}\``
       );
       return result;
     }
@@ -43,18 +42,18 @@ export function parseAssignmentExpr(
       type: 'AssignmentExpr',
       expr1: prevExpr,
       expr2: EmptyExpression,
-      returnType: 'Void',
+      return: DT.Void,
     };
 
     const variableInfo = scope.createConstant(varName);
 
     result.expr2 = parseExpr(undefined, { scope });
-    const isInvalid = result.expr2.returnType === 'Invalid';
-    const isVoid = result.expr2.returnType === 'Void';
+    const isInvalid = DT.isInvalid(result.expr2.return);
+    const isVoid = DT.isVoid(result.expr2.return);
     ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    
 
-    prevExpr.returnType = result.expr2.returnType;
-    variableInfo.type = prevExpr.returnType;
+    prevExpr.return = result.expr2.return;
+    variableInfo.type = prevExpr.return;
     return result;
   }
 
