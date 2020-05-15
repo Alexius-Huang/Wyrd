@@ -45,7 +45,7 @@ export function parseIdentifier(
 
   if (prevExpr?.type === 'BinaryOpExpr') {
     ParserErrorIf(
-      result.return.isEqualTo(DT.Invalid),
+      DT.isInvalid(result.return),
       `Using the unidentified token \`${tokenName}\``
     );
 

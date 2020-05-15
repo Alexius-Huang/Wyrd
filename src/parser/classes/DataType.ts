@@ -10,6 +10,14 @@ export default class DataType {
     return dt;
   }
 
+  static isInvalid(t: DataType) {
+    return t.isEqualTo(DataType.Invalid);
+  }
+
+  static isVoid(t: DataType) {
+    return t.isEqualTo(DataType.Void);
+  }
+
   static Num = new DataType('Num');
   static Str = new DataType('Str');
   static Bool = new DataType('Bool');

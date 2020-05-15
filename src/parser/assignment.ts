@@ -29,8 +29,8 @@ export function parseAssignmentExpr(
       };
 
       result.expr2 = parseExpr(undefined, { scope });
-      const isInvalid = result.expr2.return.isEqualTo(DT.Invalid);
-      const isVoid = result.expr2.return.isEqualTo(DT.Void);
+      const isInvalid = DT.isInvalid(result.expr2.return);
+      const isVoid = DT.isVoid(result.expr2.return);
       ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
       ParserErrorIf(
         varInfo.type.isNotEqualTo(result.expr2.return),
@@ -50,8 +50,8 @@ export function parseAssignmentExpr(
     const variableInfo = scope.createConstant(varName);
 
     result.expr2 = parseExpr(undefined, { scope });
-    const isInvalid = result.expr2.return.isEqualTo(DT.Invalid);
-    const isVoid = result.expr2.return.isEqualTo(DT.Void);
+    const isInvalid = DT.isInvalid(result.expr2.return);
+    const isVoid = DT.isVoid(result.expr2.return);
     ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    
 
     prevExpr.return = result.expr2.return;

@@ -16,7 +16,7 @@ export function parseBinaryOpExpr(
   //   console.log(prevExpr);
   // }
   ParserErrorIf(
-    prevExpr.type === 'IdentLiteral' && prevExpr.return.isEqualTo(DT.Invalid),
+    prevExpr.type === 'IdentLiteral' && DT.isInvalid(prevExpr.return),
     `Using the unidentified token \`${(prevExpr as T.IdentLiteral).value}\``,
   );
 

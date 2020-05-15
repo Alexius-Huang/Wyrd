@@ -2,7 +2,7 @@ import * as T from '../types';
 import TokenTracker from './classes/TokenTracker';
 import Scope from './classes/Scope';
 import DT from './classes/DataType';
-import { ParserErrorIf } from './error';
+import { ParserErrorIf, ParserError } from './error';
 import Parameter from './classes/Parameter';
 
 export function parseFunctionInvokeExpr(
@@ -32,14 +32,11 @@ export function parseFunctionInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseFunctionParameters(tt, parseExpr, scope);
 
-  const inputTypes = Parameter.from(result.params.map(expr => expr.return));
-
-  ParserErrorIf(
-    ! functionObj.matchesParameter(inputTypes),
-    `Function \`${name}\` is called with unmatched input pattern \`${inputTypes}\``
-  );
-
-  const patternInfo = functionObj.getPatternInfo(inputTypes);
+  const inputParameter = Parameter.from(result.params.map(expr => expr.return));
+  const patternInfo = functionObj.getPatternInfo(inputParameter);  
+  if (patternInfo === undefined) {
+    ParserError(`Function \`${name}\` is called with unmatched input pattern \`${inputParameter}\``);
+  }
   result.return = patternInfo.returnDataType;
 
   return result;
