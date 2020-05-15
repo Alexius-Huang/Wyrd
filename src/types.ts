@@ -49,18 +49,9 @@ export interface Operand {
   return: DT;
 }
 
-export type FunctionPatternInfo = { return: DT };
-
 export type ParseOptions = {
   ast?: AST;
   scope?: Scope | (() => Scope);
-};
-
-/* Builtin unoverridable operator actions */
-export type OPActionPair = { return: DT };
-export type OPAction = {
-  symbol: string; // symbol of the operator
-  actionPairs: Map<Symbol, OPActionPair>;
 };
 
 export type AST = Array<Expr>;
@@ -127,13 +118,11 @@ export interface ListLiteral extends Expression {
 
   // TODO: Element type can be derived from return since it is replaced by the DataType class
   elementType: DT;
-  return: DT;
 };
 
 export interface IdentLiteral extends Expression {
   type: 'IdentLiteral';
   value: string;
-  return: DT;
 };
 
 export interface TypeLiteral extends Expression {
@@ -166,7 +155,6 @@ export interface AssignmentExpr extends Expression {
 export interface PrioritizedExpr extends Expression {
   type: 'PrioritizedExpr';
   expr: Expr;
-  return: DT;
 };
 
 export interface ConditionalExpr extends Expression {
@@ -174,7 +162,6 @@ export interface ConditionalExpr extends Expression {
   condition: Expr;
   expr1: Expr;  // Condition is Truethy
   expr2: Expr; // Condition is Falsey
-  return: DT;
 };
 
 export interface BinaryOpExpr extends Expression {
@@ -182,7 +169,6 @@ export interface BinaryOpExpr extends Expression {
   operator: Operator;
   expr1: Expr;
   expr2: Expr;
-  return: DT;
 };
 
 export interface NotExpr extends Expression {
@@ -220,7 +206,6 @@ export interface FunctionInvokeExpr extends Expression {
   type: 'FunctionInvokeExpr';
   name: string;
   params: Array<Expr>;
-  return: DT;
 };
 
 export type MethodPattern = { name: string; parameter: Parameter; return: DT };
@@ -230,5 +215,4 @@ export interface MethodInvokeExpr extends Expression {
   name: string;
   receiver: Expr;
   params: Array<Expr>;
-  return: DT;
 };
