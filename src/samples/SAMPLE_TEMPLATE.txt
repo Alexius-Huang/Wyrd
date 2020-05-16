@@ -18,6 +18,7 @@ const compiled = `\
 'Hello world';
 `;
 
+// TODO: Add minification test separatedly in other file
 const minified = '\'Hello world\';';
 
 export {
