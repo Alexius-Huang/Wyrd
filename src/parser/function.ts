@@ -54,13 +54,17 @@ export function parseFunctionDeclaration(
         functionPattern !== undefined,
         `Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`
       );
-
-      /* TODO: Function Overloading */
     }
   }
 
   /* Setup a new available pattern for function invocation */
   else {
+    ParserErrorIf(
+      options?.override === true,
+      `Function \`${result.name}\` need not to be override since no input pattern \`${parameter}\` declared`
+    );
+
+    /* TODO: Function Overloading */
     const functionObj = scope.createFunction(result.name);
     functionObj.createNewPattern(parameter, result.outputType);
   }
