@@ -40,11 +40,8 @@ export function parseFunctionDeclaration(
 
   /* Check if function is redeclared with same input pattern */
   if (scope.hasFunction(result.name)) {
-    const functionObj = scope.getFunction(result.name);
-    const info = functionObj.getPatternInfo(parameter);
-
     ParserErrorIf(
-      info !== undefined,
+      scope.getFunctionPattern(result.name, parameter) !== undefined,
       `ParserError: Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`
     );
   }
