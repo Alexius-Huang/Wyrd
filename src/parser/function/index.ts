@@ -1,0 +1,1 @@
+export { parseFunctionDeclaration } from './declaration';

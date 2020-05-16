@@ -1,6 +1,8 @@
-import * as T from '../types';
-import { TokenTracker, DataType as DT, Scope, Parameter } from './utils';
-import { ParserError, ParserErrorIf } from './error';
+import * as T from '../../types';
+import { TokenTracker, DataType as DT, Scope, Parameter } from '../utils';
+import { parseFunctionArguments } from './arguments';
+import { parseBlock } from './block';
+import { ParserError, ParserErrorIf } from '../error';
 
 export function parseFunctionDeclaration(
   tt: TokenTracker,
@@ -98,77 +100,4 @@ export function parseFunctionDeclaration(
   }
 
   return result;
-}
-
-export function parseFunctionArguments(
-  tt: TokenTracker,
-  scope: Scope,
-): Array<T.Argument> {
-  tt.next();
-  const result: Array<T.Argument> = [];
-
-  while (true) {
-    let argument: T.Argument = { ident: '', type: DT.Invalid };
-    if (tt.is('ident')) {
-      argument.ident = tt.value;
-
-      tt.next();
-      if (tt.isNot('colon'))
-        ParserError('Expect token next to the name of the argument is colon');
-      tt.next();
-
-      if (tt.isNot('builtin-type'))
-        ParserError('Expect token next to the colon of the argument declaration is data-type');
-      argument.type = new DT(tt.value);
-      tt.next();
-
-      // Setting variable infos from arguments
-      // TODO: Handle duplicate argument name case
-      result.push(argument);
-      scope.createConstant(argument.ident, argument.type);
-
-      if (tt.is('comma')) {
-        tt.next();
-        continue;
-      }
-
-      if (tt.is('rparen')) {
-        tt.next();
-        break;
-      }
-
-      ParserError('Expect token after argument declaration to be comma or right-parenthesis');
-    }
-  }
-
-  return result;
-}
-
-export function parseBlock(
-  tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
-  scope: Scope,
-  prevExpr: T.Expr,
-): T.Expr {``
-  tt.next(); // Skip keyword `do`
-
-  ParserErrorIf(tt.isNot('newline'), 'Invalid to contain any expressions after the `do` keyword');
-  tt.next(); // Skip newline
-
-  if (prevExpr.type === 'FunctionDeclaration') {
-    while (!(tt.is('keyword') && tt.valueIs('end'))) {
-      if (tt.is('newline')) {
-        tt.next();
-        continue;
-      }
-
-      prevExpr.body.push(parseExpr(undefined, { scope, ast: prevExpr.body }));
-      tt.next();
-    }
-
-    tt.next();
-    return prevExpr;
-  }
-
-  ParserError(`Unhandled parsing block-level expression with expression of type \`${prevExpr.type}\``)
 }
