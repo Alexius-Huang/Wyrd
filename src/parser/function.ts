@@ -21,14 +21,14 @@ export function parseFunctionDeclaration(
     return: DT.Void,
   };
 
-  /* TODO: Handle situation of function re-declaration */
-
   tt.next(); // Skip the function name identifier
 
   const functionalScope = scope.createChildScope(result.name);
 
+  /* Arguemnt and parameter parsing */
   if (tt.is('lparen'))
     result.arguments = parseFunctionArguments(tt, functionalScope);
+  const parameter = Parameter.from(result.arguments.map(arg => arg.type));
 
   if (tt.isNot('colon'))
     ParserError(`Expect token of type \`colon\` before the output type of the function declaration: \`${result.name}\``);
@@ -38,12 +38,20 @@ export function parseFunctionDeclaration(
     ParserError(`Expect an output data-type of the function declaration \`${result.name}\``);
   result.outputType = new DT(tt.value);
 
+  /* Check if function is redeclared with same input pattern */
+  if (scope.hasFunction(result.name)) {
+    const functionObj = scope.getFunction(result.name);
+    const info = functionObj.getPatternInfo(parameter);
+
+    ParserErrorIf(
+      info !== undefined,
+      `ParserError: Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`
+    );
+  }
+
   /* Setup a new available pattern for function invocation */
   const functionObj = scope.createFunction(result.name);
-  functionObj.createNewPattern(
-    Parameter.from(result.arguments.map(({ type }) => type)),
-    result.outputType
-  );
+  functionObj.createNewPattern(parameter, result.outputType);
 
   /* Parsing the function declartion expression */
   tt.next();
