@@ -7,7 +7,7 @@ export default class FunctionObject {
   constructor(public name: string) {}
 
   public createNewPattern(parameter: Parameter, outputType: DT) {
-    this.patterns.push(new Pattern(parameter, outputType));
+    this.patterns.push(new Pattern(this.name, parameter, outputType));
   }
 
   public getPatternInfo(parameter: Parameter): Pattern | undefined {
@@ -21,8 +21,19 @@ export default class FunctionObject {
 }
 
 class Pattern {
+  public overridenIndex = 0;
+
   constructor(
+    public _name: string,
     public parameter: Parameter,
     public returnDataType: DT,
   ) {}
+
+  get name() {
+    return this.overridenIndex === 0 ? this._name : `${this._name}$${this.overridenIndex}`;
+  }
+
+  public override() {
+    this.overridenIndex++;
+  }
 }

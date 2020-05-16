@@ -36,6 +36,14 @@ export function parse(
     const ast: T.AST = meta?.ast ?? globalAst;
 
     if (tt.is('keyword')) {
+      if (tt.valueIs('override')) {
+        tt.next();
+
+        if (tt.valueIs('def'))
+          return parseFunctionDeclaration(tt, parseExpr, scope, { override: true });
+        ParserError('Keyword `override` should used with `def` to override an existing function declaration');
+      }
+
       if (tt.valueIs('def'))
         return parseFunctionDeclaration(tt, parseExpr, scope);
 

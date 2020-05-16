@@ -6,6 +6,7 @@ export function parseFunctionDeclaration(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: Scope,
+  options?: { override?: Boolean },
 ): T.FunctionDeclaration {
   tt.next(); // Skip 'def' keyword
 
@@ -40,15 +41,29 @@ export function parseFunctionDeclaration(
 
   /* Check if function is redeclared with same input pattern */
   if (scope.hasFunction(result.name)) {
-    ParserErrorIf(
-      scope.getFunctionPattern(result.name, parameter) !== undefined,
-      `ParserError: Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`
-    );
+    const functionPattern = scope.getFunctionPattern(result.name, parameter);
+    if (options?.override) {
+      if (functionPattern === undefined)
+        ParserError(`Function \`${result.name}\` need not to be override since no input pattern \`${parameter}\` declared`);
+
+      functionPattern.override();
+      result.name = functionPattern.name;
+    } else {
+      /* Check if redeclaration */
+      ParserErrorIf(
+        functionPattern !== undefined,
+        `Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`
+      );
+
+      /* TODO: Function Overloading */
+    }
   }
 
   /* Setup a new available pattern for function invocation */
-  const functionObj = scope.createFunction(result.name);
-  functionObj.createNewPattern(parameter, result.outputType);
+  else {
+    const functionObj = scope.createFunction(result.name);
+    functionObj.createNewPattern(parameter, result.outputType);
+  }
 
   /* Parsing the function declartion expression */
   tt.next();
@@ -128,7 +143,7 @@ export function parseBlock(
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: Scope,
   prevExpr: T.Expr,
-): T.Expr {
+): T.Expr {``
   tt.next(); // Skip keyword `do`
 
   ParserErrorIf(tt.isNot('newline'), 'Invalid to contain any expressions after the `do` keyword');
