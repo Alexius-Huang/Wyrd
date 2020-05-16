@@ -73,6 +73,7 @@ describe('Compiler Option: Minification', () => {
     perform('uses variables from parent scope', 'function-declaration/using-vars-from-parent-scope');
     perform('override function declaration', 'function-declaration/override-function-declaration');
     perform('function overloading', 'function-declaration/function-overloading');
+    perform('override function overloading', 'function-declaration/override-function-overloading');
   });
 
   describe('Function Invocation', () => {

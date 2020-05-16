@@ -20,6 +20,10 @@ describe('Functions', () => {
 
     describe('Override Function Declaration', () => {
       FundamentalCompileTest('function-declaration/override-function-declaration');
+
+      describe('With Function Overloading', () => {
+        FundamentalCompileTest('function-declaration/override-function-overloading');
+      });
     });
   });
   
