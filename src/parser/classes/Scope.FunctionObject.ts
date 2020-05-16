@@ -7,10 +7,13 @@ export default class FunctionObject {
 
   constructor(public name: string) {}
 
-  public createNewPattern(parameter: Parameter, outputType: DT) {
+  public createNewPattern(parameter: Parameter, outputType: DT): Pattern {
     const referenceName = this.patternIndex === 0 ? this.name : `${this.name}_${this.patternIndex}`;
-    this.patterns.push(new Pattern(referenceName, parameter, outputType));
+    const pattern = new Pattern(referenceName, parameter, outputType);
+    this.patterns.push(pattern);
     this.patternIndex++;
+
+    return pattern;
   }
 
   public getPatternInfo(parameter: Parameter): Pattern | undefined {
