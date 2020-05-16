@@ -41,7 +41,8 @@ export function parseFunctionDeclaration(
 
   /* Check if function is redeclared with same input pattern */
   if (scope.hasFunction(result.name)) {
-    const functionPattern = scope.getFunctionPattern(result.name, parameter);
+    const functionObj = scope.getFunction(result.name);
+    const functionPattern = functionObj.getPatternInfo(parameter);
     if (options?.override) {
       if (functionPattern === undefined)
         ParserError(`Function \`${result.name}\` need not to be override since no input pattern \`${parameter}\` declared`);
@@ -50,10 +51,12 @@ export function parseFunctionDeclaration(
       result.name = functionPattern.name;
     } else {
       /* Check if redeclaration */
-      ParserErrorIf(
-        functionPattern !== undefined,
-        `Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`
-      );
+      if (functionPattern !== undefined)
+        ParserError(`Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`);
+
+      /* Function Overload */
+      const overloadedPattern = functionObj.createNewPattern(parameter, result.outputType);
+      result.name = overloadedPattern.name;
     }
   }
 
@@ -64,9 +67,8 @@ export function parseFunctionDeclaration(
       `Function \`${result.name}\` need not to be override since no input pattern \`${parameter}\` declared`
     );
 
-    /* TODO: Function Overloading */
     const functionObj = scope.createFunction(result.name);
-    functionObj.createNewPattern(parameter, result.outputType);
+    functionObj.createNewPattern(parameter, result.outputType);  
   }
 
   /* Parsing the function declartion expression */

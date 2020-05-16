@@ -3,11 +3,17 @@ import DT from './DataType';
 
 export default class FunctionObject {
   public patterns: Pattern[] = [];
+  public patternIndex: number = 0;
 
   constructor(public name: string) {}
 
-  public createNewPattern(parameter: Parameter, outputType: DT) {
-    this.patterns.push(new Pattern(this.name, parameter, outputType));
+  public createNewPattern(parameter: Parameter, outputType: DT): Pattern {
+    const referenceName = this.patternIndex === 0 ? this.name : `${this.name}_${this.patternIndex}`;
+    const pattern = new Pattern(referenceName, parameter, outputType);
+    this.patterns.push(pattern);
+    this.patternIndex++;
+
+    return pattern;
   }
 
   public getPatternInfo(parameter: Parameter): Pattern | undefined {
