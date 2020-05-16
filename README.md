@@ -20,10 +20,12 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   - [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression)
   - [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression)
   - [[WIP] Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation)
-  - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
-  - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
-  - [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
-  - [Override Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#override-function-declaration)
+  - Functions
+    - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
+    - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
+    - [Function Overloading](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-overloading)
+    - [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
+    - [Override Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#override-function-declaration)
   - [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment)
 
 ## Supported Syntax Rules
@@ -233,6 +235,8 @@ const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 ```
 
 ### Function Declaration as Expression
+To declare one-liner function, we can use the `def ... => <Expression>` syntax:
+
 **Wyrd Lang**
 ```
 def addition(x: Num, y: Num): Num => x + y
@@ -256,6 +260,8 @@ function complexArithmetic(w, x, y, z) {
 ```
 
 ### Function Declaration
+You can also declare block-level function using the `do` block:
+
 **Wyrd Code**
 ```
 def addition(x: Num, y: Num): Num do
@@ -280,6 +286,32 @@ function complexArithmetic(w, x, y, z) {
   const b = w - (2 / a) + 1;
   return b;
 }
+```
+
+### Function Overloading
+Different from JavaScript, in Wyrd-Lang, you can declare function with same name but different input parameter pattern. It is so-called **Function Overloading**:
+
+**Wyrd Code**
+```
+def addition(x: Num, y: Num): Num => x + y
+def addition(x: Num, y: Num, z: Num): Num => x + y + z
+
+addition(1, 2, 3)
+addition(1, 2)
+```
+
+**Compiled Wyrd Code**
+```js
+function addition(x, y) {
+  return x + y;
+}
+
+function addition_1(x, y, z) {
+  return x + y + z;
+}
+
+addition_1(1, 2, 3);
+addition(1, 2);
 ```
 
 ### Function Invocation
