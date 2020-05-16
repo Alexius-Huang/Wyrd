@@ -1,6 +1,4 @@
-import FunctionObject from './Scope.FunctionObject';
-import Variable from './Scope.Variable';
-import DT from './DataType';
+import { Parameter, ScopeVariable as Variable, DataType as DT, ScopeFunctionObject as FunctionObject } from '.';
 import { ParserError } from '../error';
 
 export default class Scope {
@@ -48,6 +46,11 @@ export default class Scope {
     if (functionObj === undefined)
       ParserError(`Function \`${name}\` isn't found in the scope`);
     return functionObj;
+  }
+
+  public getFunctionPattern(name: string, parameter: Parameter) {
+    const functionObj = this.getFunction(name);
+    return functionObj.getPatternInfo(parameter);
   }
 
   public createFunction(name: string): FunctionObject {
