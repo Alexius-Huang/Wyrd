@@ -13,6 +13,10 @@ describe('Functions', () => {
     describe('Function Declaration Using Variables in Parent Level Scope', () => {
       FundamentalCompileTest('function-declaration/using-vars-from-parent-scope');
     });
+
+    describe('Override Function Declaration', () => {
+      FundamentalCompileTest('function-declaration/override-function-declaration');
+    });
   });
   
   describe('Function Invocation', () => {

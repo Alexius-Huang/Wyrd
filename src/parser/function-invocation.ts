@@ -12,7 +12,7 @@ export function parseFunctionInvokeExpr(
 
   const result: T.FunctionInvokeExpr = {
     type: 'FunctionInvokeExpr',
-    name,
+    name: '',
     params: [],
     return: DT.Unknown,
   };
@@ -33,6 +33,7 @@ export function parseFunctionInvokeExpr(
   if (patternInfo === undefined) {
     ParserError(`Function \`${name}\` is called with unmatched input pattern \`${inputParameter}\``);
   }
+  result.name = patternInfo.name;
   result.return = patternInfo.returnDataType;
 
   return result;

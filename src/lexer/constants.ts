@@ -16,6 +16,7 @@ const keywords = new Set<string>([
   'else',
   'then',
   'mutable',
+  'override'
 ]);
 
 const regex = {
