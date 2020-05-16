@@ -15,7 +15,7 @@ describe('Functions', () => {
     });
 
     describe('Override Function Declaration', () => {
-      FundamentalCompileTest('function-declaration/override-function-declaration', { debugParser: true });
+      FundamentalCompileTest('function-declaration/override-function-declaration');
     });
   });
   

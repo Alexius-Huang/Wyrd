@@ -209,7 +209,7 @@ function addition$2(x, y) {
 addition$2(1, 2);
 `;
 
-const minified = 'function addition(x,y){return x+y;}function complexArithmetic(w,x,y,z){const a=x+(y*z);const b=w-(2/a)+1;return b;}';
+const minified = 'function addition(x,y){return x+y;}addition(1,2);function addition$1(x,y){return (x+y)*2;}addition$1(1,2);function addition$2(x,y){return x+(y/2);}addition$2(1,2);';
 
 export {
   program,
