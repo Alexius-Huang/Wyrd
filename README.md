@@ -23,6 +23,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   - [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
   - [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
   - [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
+  - [Override Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#override-function-declaration)
   - [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment)
 
 ## Supported Syntax Rules
@@ -302,6 +303,32 @@ funcE(1, funcF(2, 3, funcG(4)), 5);
 funcI(1, (funcJ(2, 3) + 4) * funcK(5));
 funcL(1 / (funcM(2, 3) - 4), 5);
 funcN((1 - (funcO(2) * 3)) / 4, funcP(5));
+```
+
+### Override Function Declaration
+Whenever you need to override **previously declared function with specific input type**, you must add `override` keyword before function declaration:
+
+**Wyrd Code**
+```
+def randomCalc(x: Num, y: Num): Num => x + y
+randomCalc(1, 2)
+
+def randomCalc(x: Num, y: Num): Num => (x + y) * 2
+randomCalc(1, 2)
+```
+
+**Compiled Wyrd Code**
+```js
+function randomCalc(x, y) {
+  return x + y;
+}
+
+randomCalc(1, 2);
+function randomCalc$1(x, y) {
+  return (x + y) * 2;
+}
+
+randomCalc$1(1, 2);
 ```
 
 ### Comment
