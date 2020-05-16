@@ -313,7 +313,7 @@ Whenever you need to override **previously declared function with specific input
 def randomCalc(x: Num, y: Num): Num => x + y
 randomCalc(1, 2)
 
-def randomCalc(x: Num, y: Num): Num => (x + y) * 2
+override def randomCalc(x: Num, y: Num): Num => (x + y) * 2
 randomCalc(1, 2)
 ```
 
