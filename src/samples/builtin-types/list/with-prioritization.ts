@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op } from '../../../types';
 import { NumberLiteral, prioritize, Arithmetic } from '../../helper';
-import { DataType as DT } from '../../../parser/classes';
+import { DataType as DT } from '../../../parser/utils';
 
 const program = `\
 [1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]

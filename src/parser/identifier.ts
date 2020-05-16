@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { TokenTracker, Scope, ScopeVariable as Variable, DataType as DT, BinaryOperator } from './classes';
+import { TokenTracker, Scope, ScopeVariable as Variable, DataType as DT, BinaryOperator } from './utils';
 import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { BuiltinOPActions } from './constants';

@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT, Parameter } from './classes';
+import { TokenTracker, Scope, DataType as DT, Parameter } from './utils';
 import { ParserErrorIf, ParserError } from './error';
 
 export function parseFunctionInvokeExpr(

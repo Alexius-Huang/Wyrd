@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { DataType as DT, BinaryOperator, Parameter } from './classes';
+import { DataType as DT, BinaryOperator, Parameter } from './utils';
 
 export const Primitives = new Set(['Num', 'Str', 'Bool']);
 export const EmptyExpression: T.EmptyExpr = { type: 'EmptyExpr', return: DT.Invalid };

@@ -1,6 +1,6 @@
 import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
-import { DataType as DT } from '../../parser/classes';
+import { DataType as DT } from '../../parser/utils';
 
 const program = `\
 def addition(x: Num, y: Num): Num do

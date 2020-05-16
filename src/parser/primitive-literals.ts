@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { TokenTracker, DataType as DT, BinaryOperator } from './classes';
+import { TokenTracker, DataType as DT, BinaryOperator } from './utils';
 import { BuiltinOPActions } from './constants';
 import { ParserError } from './error';
 

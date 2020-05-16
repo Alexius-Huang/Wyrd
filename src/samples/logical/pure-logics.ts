@@ -1,6 +1,6 @@
 import { Token, AST } from '../../types';
 import { BooleanLiteral } from '../helper';
-import { DataType as DT } from '../../parser/classes';
+import { DataType as DT } from '../../parser/utils';
 
 const program = `\
 True and False or not False

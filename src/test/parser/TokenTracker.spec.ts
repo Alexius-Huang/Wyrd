@@ -1,4 +1,4 @@
-import { TokenTracker } from '../../parser/classes';
+import { TokenTracker } from '../../parser/utils';
 import * as T from '../../types';
 
 describe('Token Tracker', () => {

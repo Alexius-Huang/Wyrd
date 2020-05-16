@@ -1,5 +1,5 @@
 import { Token, AST } from '../../../types';
-import { DataType as DT } from '../../../parser/classes';
+import { DataType as DT } from '../../../parser/utils';
 import * as helper from '../../helper';
 
 const program = `\

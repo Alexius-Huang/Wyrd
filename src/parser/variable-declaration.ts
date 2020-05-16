@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT } from './classes';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 import { ParserError, ParserErrorIf } from './error';
 import { EmptyExpression } from './constants';
 

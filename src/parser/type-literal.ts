@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT } from './classes';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 
 export function parseTypeLiteral(
   tt: TokenTracker,

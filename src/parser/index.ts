@@ -1,5 +1,5 @@
 import * as T from "../types";
-import { TokenTracker, Scope } from './classes';
+import { TokenTracker, Scope } from './utils';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';

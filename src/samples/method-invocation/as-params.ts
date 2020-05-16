@@ -1,6 +1,6 @@
 import { Token, AST } from '../../types';
 import { StringLiteral } from '../helper';
-import { DataType as DT } from '../../parser/classes';
+import { DataType as DT } from '../../parser/utils';
 
 const program = `\
 "Hello world".concat("Wyrd-Lang".concat(" is awesome!"))
