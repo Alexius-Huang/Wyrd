@@ -18,24 +18,9 @@ export function parseIdentifier(
     return: DT.Invalid,
   };
 
-  /* Find the variable through scope chain */
-  // TODO: Refactor Scope, maybe use a class to represent scopes and functions
-  //       and let finding variables and functions become member methods
-  let varInfo: Variable | undefined;
-  let currentScope = scope;
-
-  while (true) {
-    if (currentScope.hasVariable(tokenName)) {
-      varInfo = currentScope.getVariable(tokenName);
-      result.return = varInfo.type;
-      break;
-    }
-
-    if (currentScope.parent === null) break;
-    currentScope = currentScope.parent;
-  }
-
-  if (varInfo === undefined && scope.hasFunction(tokenName)) {
+  if (scope.hasVariable(tokenName)) {
+    result.return = scope.getVariable(tokenName).type;
+  } else if (scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   }
 
@@ -44,7 +29,7 @@ export function parseIdentifier(
       DT.isInvalid(result.return),
       `Using the unidentified token \`${tokenName}\``
     );
-  
+
     prevExpr.expr2 = result;
     const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
     const operandLeft = prevExpr.expr1.return;
