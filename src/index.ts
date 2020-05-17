@@ -8,10 +8,13 @@ export function compile(
   options?: {
     parseOptions?: T.ParseOptions,
     minify?: boolean,
+    showAST?: boolean;
   },
 ): string {
   const tokens = lex(code);
   const ast = parse(tokens, options?.parseOptions);
+
+  if (options?.showAST) console.log(ast);
 
   const minify = options?.minify ?? false;
   const result = generateCode(ast, { minify });

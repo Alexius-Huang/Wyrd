@@ -11,7 +11,7 @@ describe('Assignment Expression', () => {
   
     describe('Logical Expression', () => {
       FundamentalCompileTest('assignment/logical-expression');
-    });  
+    });
 
     describe('Reassignment', () => {
       it('Throws error when reassigning new value to a constant', () => {
