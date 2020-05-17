@@ -6,6 +6,8 @@ function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
 }
 
+function spaces(n: number) { return ' '.repeat(n); }
+
 export function generateCode(
   ast: T.AST,
   option?: {
@@ -14,6 +16,7 @@ export function generateCode(
 ): string {
   let result = '';
   let index = 0;
+  let functionLayers = 0;
   const minify = option?.minify ?? false;
   const commaDelimiter = minify ? ',' : ', ';
 
@@ -137,29 +140,31 @@ export function generateCode(
 
   function codeGenFunctionDeclaration(expr: T.FunctionDeclaration) {
     const { name, arguments: args, body } = expr;
+    const s = spaces(functionLayers * 2);
+    functionLayers++;
 
     if (args.length === 0) {
       if (minify)
-        return `function ${name}(){${codeGenFunctionBody(body, [])}}`;
+        return `function ${name}(){${codeGenFunctionBody(body, [], 0)}}`;
       return `\
 function ${name}() {
-${codeGenFunctionBody(body, [], 2)}
-}`;
+${codeGenFunctionBody(body, [], functionLayers * 2)}
+${s}}`;
     }
 
     if (minify)
-      return `function ${name}(${codeGenArguments(args)}){${codeGenFunctionBody(body, args)}}`;
+      return `function ${name}(${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`;
     return `\
 function ${name}(${codeGenArguments(args)}) {
-${codeGenFunctionBody(body, args, 2)}
-}`;
+${codeGenFunctionBody(body, args, functionLayers * 2)}
+${s}}`;
   }
 
   function codeGenArguments(args: Array<T.Argument>) {
     return args.map(({ ident }) => ident).join(commaDelimiter);
   }
 
-  function codeGenFunctionBody(body: Array<T.Expr>, args: Array<T.Argument>, indent = 2) {
+  function codeGenFunctionBody(body: Array<T.Expr>, args: Array<T.Argument>, indent: number) {
     let i = 0;
     const result: Array<string> = [];
     if (minify) {
@@ -170,6 +175,7 @@ ${codeGenFunctionBody(body, args, 2)}
   
       const lastIndex = result.length - 1;
       result[lastIndex] = `return ${result[lastIndex]}`;
+      functionLayers--;
       return result.join('');
     }
 
@@ -180,6 +186,7 @@ ${codeGenFunctionBody(body, args, 2)}
 
     const lastIndex = result.length - 1;
     result[lastIndex] = `${result[lastIndex].slice(0, indent)}return ${result[lastIndex].slice(indent)}`;
+    functionLayers--;
     return result.join('\n');
   }
 
