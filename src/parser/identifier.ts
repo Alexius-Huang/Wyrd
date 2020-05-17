@@ -3,6 +3,7 @@ import { TokenTracker, Scope, ScopeVariable as Variable, DataType as DT, BinaryO
 import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { BuiltinOPActions } from './constants';
+import { parseAssignmentExpr } from './assignment';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -17,25 +18,9 @@ export function parseIdentifier(
     return: DT.Invalid,
   };
 
-  /* Find the variable through scope chain */
-  // TODO: Refactor Scope, maybe use a class to represent scopes and functions
-  //       and let finding variables and functions become member methods
-  let varInfo: Variable | undefined;
-  let currentScope = scope;
-
-  while (true) {
-    if (currentScope.hasVariable(tokenName)) {
-      varInfo = currentScope.getVariable(tokenName);
-      result.return = varInfo.type;
-      break;
-    }
-
-    if (currentScope.parent === null) break;
-    currentScope = currentScope.parent;
-  }
-
-  // TODO: Find function recursively
-  if (varInfo === undefined && scope.hasFunction(tokenName)) {
+  if (scope.hasVariable(tokenName)) {
+    result.return = scope.getVariable(tokenName).type;
+  } else if (scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   }
 
@@ -61,6 +46,16 @@ export function parseIdentifier(
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
     prevExpr.return = result.return;
+  }
+
+  if (result.type === 'IdentLiteral' && result.return.isEqualTo(DT.Invalid)) {
+    tt.next(); // Skip the current identifier
+
+    /* Handle Assignment Expression when identifier is unknown */
+    if (tt.is('eq'))
+      return parseAssignmentExpr(tt, parseExpr, scope, result);
+
+    ParserError(`Using the unidentified token \`${result.value}\``)
   }
 
   return result;

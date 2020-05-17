@@ -1,5 +1,5 @@
 import * as T from "../types";
-import { TokenTracker, Scope } from './utils';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';
@@ -105,7 +105,7 @@ export function parse(
   while (true) {
     if (tt.isNot('newline'))
       globalAst.push(parseExpr());
-    
+
     if (!tt.hasNext()) break;
     tt.next();
   }

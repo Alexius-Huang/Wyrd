@@ -10,4 +10,10 @@ describe('Used Unidentified Token', () => {
     expect(() => compile(program2))
       .toThrowError('ParserError: Using the unidentified token `bar`');
   });
+
+  it('throws error when invoking undeclared function', () => {
+    const program = `\nfoo(123)`;
+    expect(() => compile(program))
+      .toThrowError('ParserError: Using the unidentified token `foo`');
+  });
 });
