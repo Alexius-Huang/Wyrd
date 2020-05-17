@@ -14,6 +14,10 @@ describe('Functions', () => {
       FundamentalCompileTest('function-declaration/using-vars-from-parent-scope');
     });
 
+    describe('Nested Function Declaration', () => {
+      FundamentalCompileTest('function-declaration/nested-declaration');
+    });
+
     describe('Function Overloading', () => {
       FundamentalCompileTest('function-declaration/function-overloading');
     });
