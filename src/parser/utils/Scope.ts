@@ -11,14 +11,17 @@ export default class Scope {
   ) {}
 
   public hasVariable(name: string) {
-    return this.variables.has(name);
+    return this.variables.has(name) || this.parent?.variables.has(name);
   }
 
   public getVariable(name: string): Variable {
     const varInfo = this.variables.get(name);
 
-    if (varInfo === undefined)
-      ParserError(`Variable or Constant \`${name}\` isn't found in the scope`);
+    if (varInfo === undefined) {
+      if (this.parent === null)
+        ParserError(`Variable or Constant \`${name}\` isn't found throughout the scope chain`);
+      return this.parent.getVariable(name);
+    }
     return varInfo;
   }
 
@@ -37,14 +40,17 @@ export default class Scope {
   }
 
   public hasFunction(name: string) {
-    return this.functions.has(name);
+    return this.functions.has(name) || this.parent?.functions.has(name);
   }
 
   public getFunction(name: string): FunctionObject {
     const functionObj = this.functions.get(name);
 
-    if (functionObj === undefined)
-      ParserError(`Function \`${name}\` isn't found in the scope`);
+    if (functionObj === undefined) {
+      if (this.parent === null)
+        ParserError(`Function \`${name}\` isn't declared throughout scope chain`);
+      return this.parent.getFunction(name);
+    }
     return functionObj;
   }
 

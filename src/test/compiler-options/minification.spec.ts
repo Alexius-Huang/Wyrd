@@ -70,8 +70,9 @@ describe('Compiler Option: Minification', () => {
   describe('Function Declaration', () => {
     perform('function arrow declaration', 'function-declaration/function-arrow-declaration');
     perform('function block expression declaration', 'function-declaration/function-block-declaration');
-    perform('nested declaration', 'function-declaration/nested-declaration');
     perform('uses variables from parent scope', 'function-declaration/using-vars-from-parent-scope');
+    perform('invoking other declared function', 'function-declaration/invoke-declared-function');
+    perform('nested declaration', 'function-declaration/nested-declaration');
     perform('override function declaration', 'function-declaration/override-function-declaration');
     perform('function overloading', 'function-declaration/function-overloading');
     perform('override function overloading', 'function-declaration/override-function-overloading');

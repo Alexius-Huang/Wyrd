@@ -35,8 +35,6 @@ export function parseIdentifier(
     currentScope = currentScope.parent;
   }
 
-
-  // TODO: Find function recursively
   if (varInfo === undefined && scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   }
