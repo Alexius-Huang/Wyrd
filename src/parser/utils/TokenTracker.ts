@@ -1,4 +1,5 @@
 import * as T from '../../types';
+import { NoTokenLeftException } from '../exceptions';
 
 export default class TokenTracker {
   private index = 0;
@@ -10,8 +11,7 @@ export default class TokenTracker {
   get peek(): T.Token | null { return this.tokens[this.index + 1] ?? null }
 
   public next(): T.Token {
-    if (!this.hasNext())
-      throw new Error('TokenTracker: Out of bound, there are no tokens left for tracking');
+    if (!this.hasNext()) throw NoTokenLeftException;
 
     this.index += 1;    
     return this.current;
@@ -23,6 +23,10 @@ export default class TokenTracker {
 
   public valueIs(value: string): boolean {
     return this.current.value === value;
+  }
+
+  public peekValueIs(value: string): boolean {
+    return this.peek?.value === value;
   }
 
   public isNot(type: string): boolean {
@@ -39,6 +43,12 @@ export default class TokenTracker {
 
   public valueIsOneOf(...values: Array<string>): boolean {
     return values.indexOf(this.current.value) !== -1;
+  }
+
+  public peekValueIsOneOf(...values: Array<string>): boolean {
+    if (this.peek !== null)
+      return values.indexOf(this.peek?.value) !== -1;
+    return false;
   }
 
   public isNotOneOf(...types: Array<string>): boolean {

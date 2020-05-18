@@ -1,6 +1,6 @@
 import * as T from '../types';
 import { TokenTracker, DataType as DT } from './utils';
-import { ParserErrorIf } from './error';
+import { ParserErrorIf, ParserError } from './error';
 import { EmptyExpression } from './constants';
 
 export function parseConditionalExpr(
@@ -19,6 +19,8 @@ export function parseConditionalExpr(
     return: lockedType ?? DT.Unknown
   };
 
+  let isThenExpression = false;
+
   while (tt.isNot('arrow') && tt.valueIsNot('then')) {
     result.condition = parseExpr(result, { target: 'condition' });
     tt.next();
@@ -35,6 +37,7 @@ export function parseConditionalExpr(
 
   if (tt.valueIs('then')) {
     tt.next(); // Skip 'then' keyword
+    isThenExpression = true;
     ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `then` keyword');
   }
 
@@ -50,15 +53,35 @@ export function parseConditionalExpr(
   } else {
     ParserErrorIf(
       result.expr1.return.isNotEqualTo(result.return),
-      `Expect values returned from different condition branch to be the same`
+      'Expect values returned from different condition branch to be the same'
     );
   }
 
-  tt.next(); // Skip newline
+  if (
+    /* Without-Else expression and last line condition */
+    !tt.hasNext() ||
+
+    /* Without-else-expression condition */
+    !(tt.peekIs('keyword') && tt.peekValueIsOneOf('elif', 'else'))
+  ) {
+    result.return = result.return.toNullable();
+
+    if (isThenExpression && tt.peekIs('keyword') && tt.peekValueIs('end')) 
+      tt.next(); // Skip `end` keyword
+    return result;
+  }
+
+  tt.next(); // Skip `newline`
 
   /* Handle elif is exactly the same as the if expression */
   if (tt.is('keyword') && tt.valueIs('elif')) {
     result.expr2 = parseConditionalExpr(tt, parseExpr, result.return);
+
+    /* Case when elif-expression has no else expression further */
+    if (!result.return.nullable && result.expr2.return.nullable) {
+      result.return = result.return.toNullable();
+    }
+
     return result;
   }
 
@@ -97,10 +120,8 @@ export function parseConditionalExpr(
     }
   }
 
-  ParserErrorIf(
-    result.expr2.return.isNotEqualTo(result.return),
-    `Expect values returned from different condition branch to be the same`
-  );
+  if (result.expr2.return.isNotEqualTo(result.return))
+    ParserError(`Expect values returned from different condition branch to be the same`);
 
   return result;
 }
