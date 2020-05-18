@@ -35,4 +35,15 @@ override def addition(x: Num, y: Num, z: Num): Num => x + y + z
         .toThrowError('ParserError: Function `addition` need not to be override since no input pattern `Num.Num.Num` declared');
     });
   });
+
+  describe('Unmatched Output Type', () => {
+    it('throws error when declared function output type isn\'t matched with the actual return value type', () => {
+      const program = `\
+def foo: Num => True
+`;
+
+      expect(() => compile(program))
+        .toThrowError('ParserError: Return type of function `foo` should be `Num`, instead got: `Bool`');
+    });
+  });
 });

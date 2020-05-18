@@ -99,5 +99,11 @@ export function parseFunctionDeclaration(
     parseBlock(tt, parseExpr, functionalScope, result);
   }
 
+  /* Check the return type matched with declared output type */
+  const lastExpr = result.body[result.body.length - 1];
+  ParserErrorIf(
+    lastExpr.return.isNotEqualTo(result.outputType),
+    `ParserError: Return type of function \`${result.name}\` should be \`${result.outputType}\`, instead got: \`${lastExpr.return}\``
+  );
   return result;
 }
