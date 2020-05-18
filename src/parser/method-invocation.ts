@@ -96,7 +96,8 @@ function parseValueMethodInvokeExpr(
     if (methodPattern === undefined)
       ParserError(`Method for ${receiverType}.${name} with input pattern \`${parameter}\` doesn't exist`);
 
-    result.name = methodPattern.name;
+    result.isNotBuiltin = methodPattern.isNotBuiltin;
+    result.name = result.isNotBuiltin ? `${receiverType.type}_${methodPattern.name}`  : methodPattern.name;
     result.return = methodPattern.returnDataType;
   }
 
@@ -152,7 +153,8 @@ function parseTypeMethodInvokeExpr(
     if (methodPattern === undefined)
       ParserError(`Method for ${receiverType}.${name} with input pattern \`${parameter}\` doesn't exist`);
 
-    result.name = methodPattern.name;
+    result.isNotBuiltin = methodPattern.isNotBuiltin;
+    result.name = result.isNotBuiltin ? `${receiverType.type}_${methodPattern.name}`  : methodPattern.name;
     result.return = methodPattern.returnDataType;
   }
 
