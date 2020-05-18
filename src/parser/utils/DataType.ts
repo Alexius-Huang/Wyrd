@@ -4,8 +4,8 @@ export default class DataType {
     return t.type === 'List';
   }
 
-  static ListOf(t: DataType) {
-    const dt = new DataType('List');
+  static ListOf(t: DataType, nullable = false) {
+    const dt = new DataType('List', nullable);
     dt.listOfType = t;
     return dt;
   }
@@ -26,16 +26,26 @@ export default class DataType {
   static Invalid = new DataType('Invalid');
   static Unknown = new DataType('Unknown');
 
+  /* Maybe-types or Nullable-types may contain Null values */
+  static Maybe = {
+    Num: new DataType('Num', true),
+    Str: new DataType('Str', true),
+    Bool: new DataType('Bool', true),
+  };
+
   private listOfType: DataType | undefined = undefined;
 
-  constructor(public type: string) {}
+  constructor(
+    public type: string,
+    public readonly nullable: boolean = false
+  ) {}
 
   public toString(): string {
     if (DataType.isList(this)) {
       if (this.listOfType === undefined) throw new Error('Invalid List Data Type');
-      return `List[${this.listOfType.toString()}]`;
+      return `List${this.nullable ? '?' : ''}[${this.listOfType.toString()}]`;
     }
-    return this.type;
+    return this.type + (this.nullable ? '?' : '');
   }
 
   public isEqualTo(otherDT: DataType) {
@@ -44,5 +54,12 @@ export default class DataType {
 
   public isNotEqualTo(otherDT: DataType) {
     return this.toString() !== otherDT.toString();
+  }
+
+  public toNullable(): DataType {
+    if (DataType.isList(this)) {
+      return DataType.ListOf(this.listOfType as DataType, true);
+    }
+    return new DataType(this.type, true);
   }
 }

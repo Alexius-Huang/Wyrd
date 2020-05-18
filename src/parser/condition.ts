@@ -1,6 +1,6 @@
 import * as T from '../types';
 import { TokenTracker, DataType as DT } from './utils';
-import { ParserErrorIf } from './error';
+import { ParserErrorIf, ParserError } from './error';
 import { EmptyExpression } from './constants';
 
 export function parseConditionalExpr(
@@ -50,11 +50,22 @@ export function parseConditionalExpr(
   } else {
     ParserErrorIf(
       result.expr1.return.isNotEqualTo(result.return),
-      `Expect values returned from different condition branch to be the same`
+      'Expect values returned from different condition branch to be the same'
     );
   }
 
-  tt.next(); // Skip newline
+  if (
+    /* Without-Else expression and last line condition */
+    !tt.hasNext() ||
+
+    /* Without-else-expression condition */
+    !(tt.peekIs('keyword') && tt.peekValueIsOneOf('elif', 'else'))
+  ) {
+    result.return = result.return.toNullable();
+    return result;
+  }
+
+  tt.next(); // Skip `newline`
 
   /* Handle elif is exactly the same as the if expression */
   if (tt.is('keyword') && tt.valueIs('elif')) {
@@ -97,10 +108,8 @@ export function parseConditionalExpr(
     }
   }
 
-  ParserErrorIf(
-    result.expr2.return.isNotEqualTo(result.return),
-    `Expect values returned from different condition branch to be the same`
-  );
+  if (result.expr2.return.isNotEqualTo(result.return))
+    ParserError(`Expect values returned from different condition branch to be the same`);
 
   return result;
 }

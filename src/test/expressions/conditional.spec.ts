@@ -12,4 +12,8 @@ describe('Conditional Expressions', () => {
   describe('If-Mixed Expression', () => {
     FundamentalCompileTest('conditional/if-mixed-expression');
   });
+
+  describe('If-Without-Else Expression', () => {
+    FundamentalCompileTest('conditional/if-without-else-expression');
+  });
 });
