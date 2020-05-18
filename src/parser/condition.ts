@@ -76,6 +76,12 @@ export function parseConditionalExpr(
   /* Handle elif is exactly the same as the if expression */
   if (tt.is('keyword') && tt.valueIs('elif')) {
     result.expr2 = parseConditionalExpr(tt, parseExpr, result.return);
+
+    /* Case when elif-expression has no else expression further */
+    if (!result.return.nullable && result.expr2.return.nullable) {
+      result.return = result.return.toNullable();
+    }
+
     return result;
   }
 

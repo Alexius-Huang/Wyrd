@@ -67,6 +67,7 @@ describe('Compiler Option: Minification', () => {
     perform('If-Then expression', 'conditional/if-then-expression');
     perform('If-Then without Else expression', 'conditional/if-then-without-else-expression');
     perform('If-Mixed expression', 'conditional/if-mixed-expression');
+    perform('If-Mixed without Else expression', 'conditional/if-mixed-without-else-expression');
   });
 
   describe('Function Declaration', () => {

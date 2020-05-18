@@ -16,5 +16,6 @@ describe('Conditional Expressions', () => {
   describe('If-Without-Else Expression', () => {
     FundamentalCompileTest('conditional/if-arrow-without-else-expression');
     FundamentalCompileTest('conditional/if-then-without-else-expression');
+    FundamentalCompileTest('conditional/if-mixed-without-else-expression');
   });
 });
