@@ -1,7 +1,7 @@
 import * as T from '../types';
 import { TokenTracker, Scope, Parameter, DataType as DT } from './utils';
 import { ParserErrorIf, ParserError } from './error';
-import { BuiltinPrimitiveMethods, EmptyExpression } from './constants';
+import { EmptyExpression } from './constants';
 
 export function parseMethodInvokeExpr(
   tt: TokenTracker,
@@ -14,9 +14,9 @@ export function parseMethodInvokeExpr(
   ParserErrorIf(tt.isNot('ident'), `Expect method invoke with token of type \`identifier\`, got token of type \`${tt.type}\``);
 
   if (prevExpr.type === 'TypeLiteral')
-    return parseBuiltinTypeMethodInvokeExpr(tt, parseExpr, scope, prevExpr);
+    return parseTypeMethodInvokeExpr(tt, parseExpr, scope, prevExpr);
 
-  return parseBasicMethodInvokeExpr(tt, parseExpr, scope, prevExpr);
+  return parseValueMethodInvokeExpr(tt, parseExpr, scope, prevExpr);
 }
 
 function parseMethodInvokeParameters(
@@ -59,7 +59,7 @@ function parseMethodInvokeParameter(
 /**
  *  Basic case of invoking method from values, for instance: 123.toStr()
  */
-function parseBasicMethodInvokeExpr(
+function parseValueMethodInvokeExpr(
   tt: TokenTracker,
   parseExpr: (orevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: Scope,
@@ -68,34 +68,15 @@ function parseBasicMethodInvokeExpr(
   const name = tt.value;
   const result: T.MethodInvokeExpr = {
     type: 'MethodInvokeExpr',
-    name,
+    name: 'UNDECIDED',
     receiver: prevExpr,
     params: [],
     return: DT.Invalid,
   };
 
-  // Strip down the prioritized layer since the receiver will always be a single node
-  if (result.receiver.type === 'PrioritizedExpr')
-    result.receiver = result.receiver.expr;
-
-  const receiverType = prevExpr.return;
-
-  // TODO: Currently only support primitive type of data, future support
-  //       for custom type data
-  const builtinMethods = BuiltinPrimitiveMethods.get(receiverType.type) as Map<string, T.MethodPattern>;
-  let isBuiltinMethod = false;
-  let builtinMethodPattern: T.MethodPattern | null = null;
-  if (builtinMethods.has(name)) {
-    builtinMethodPattern = builtinMethods.get(name) as T.MethodPattern;
-    isBuiltinMethod = true;
-  } else {
-    ParserError('Unhandled method invocation');
-  }
-
   tt.next(); // Skip the name of the method
-  
-  ParserErrorIf(tt.isNot('lparen'), `Expect method \`${name}\` invocation should follow with token \`lparen\``);
 
+  ParserErrorIf(tt.isNot('lparen'), `Expect method \`${name}\` invocation should follow with token \`lparen\``);
   tt.next(); // Skip the left parentheses
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
@@ -103,17 +84,20 @@ function parseBasicMethodInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseMethodInvokeParameters(tt, parseExpr, scope);
 
-  /* Input pattern validation */
-  const inputParamsTypePattern = Parameter.from(result.params.map(expr => expr.return));
+  // Strip down the prioritized layer since the receiver will always be a single node
+  if (result.receiver.type === 'PrioritizedExpr')
+    result.receiver = result.receiver.expr;
 
-  if (isBuiltinMethod) {
-    const { parameter, return: r } = builtinMethodPattern;
-    ParserErrorIf(
-      !inputParamsTypePattern.matches(parameter),
-      `Expect ${receiverType}.${name} to receive input pattern of \`${parameter}\`, instead got: \`${inputParamsTypePattern}\``
-    );
+  const receiverType = prevExpr.return;
 
-    result.return = r;
+  if (scope.hasMethod(receiverType, name)) {
+    const parameter = Parameter.from(result.params.map(expr => expr.return));
+    const methodPattern = scope.getMethodPattern(receiverType, name, parameter);
+    if (methodPattern === undefined)
+      ParserError(`Method for ${receiverType}.${name} with input pattern \`${parameter}\` doesn't exist`);
+
+    result.name = methodPattern.name;
+    result.return = methodPattern.returnDataType;
   }
 
   return result;
@@ -123,7 +107,7 @@ function parseBasicMethodInvokeExpr(
  *  Invoke method via type, for instance: Num.toStr(123)
  *  is equivalent to: 123.toStr()
  */
-function parseBuiltinTypeMethodInvokeExpr(
+function parseTypeMethodInvokeExpr(
   tt: TokenTracker,
   parseExpr: (orevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: Scope,
@@ -132,30 +116,16 @@ function parseBuiltinTypeMethodInvokeExpr(
   const name = tt.value;
   const result: T.MethodInvokeExpr = {
     type: 'MethodInvokeExpr',
-    name,
+    name: 'UNDECIDED',
     receiver: EmptyExpression,
     params: [],
     return: DT.Invalid,
   };
-
-  const receiver = new DT(prevExpr.value);
-
-  // TODO: Currently only support primitive type of data, future support
-  //       for custom type data
-  const builtinMethods = BuiltinPrimitiveMethods.get(receiver.type) as Map<string, T.MethodPattern>;
-  let isBuiltinMethod = false;
-  let builtinMethodPattern: T.MethodPattern | null = null;
-  if (builtinMethods.has(name)) {
-    builtinMethodPattern = builtinMethods.get(name) as T.MethodPattern;
-    isBuiltinMethod = true;
-  } else {
-    ParserError('Unhandled method invocation');
-  }
+  const receiverType = new DT(prevExpr.value);
 
   tt.next(); // Skip the name of the method
   
   ParserErrorIf(tt.isNot('lparen'), `Expect method \`${name}\` invocation should follow with token \`lparen\``);
-
   tt.next(); // Skip the left parentheses
 
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
@@ -163,30 +133,27 @@ function parseBuiltinTypeMethodInvokeExpr(
   if (tt.isNot('rparen'))
     result.params = parseMethodInvokeParameters(tt, parseExpr, scope);
 
-  const methodName = `${receiver}.${name}`;
+  const methodName = `${receiverType}.${name}`;
   ParserErrorIf(
     result.params.length === 0,
-    `Expect \`${methodName}\` to have parameter as receiver of type \`${receiver}\``
+    `Expect \`${methodName}\` to have parameter as receiver of type \`${receiverType}\``
   );
-  const receiverParam = result.params.shift() as T.Expr;
-  result.receiver = receiverParam;
 
+  /* Check if receiver as parameter matches the correct type */
+  result.receiver = result.params.shift() as T.Expr;
   ParserErrorIf(
-    result.receiver.return.isNotEqualTo(receiver),
-    `Expect \`${methodName}\` to have receiver of type \`${receiver}\`, instead got \`${result.receiver.return}\``
+    result.receiver.return.isNotEqualTo(receiverType),
+    `Expect \`${methodName}\` to have receiver of type \`${receiverType}\`, instead got \`${result.receiver.return}\``
   );
 
-  /* Input pattern validation */
-  const inputParamsTypePattern = Parameter.from(result.params.map(expr => expr.return));
+  if (scope.hasMethod(receiverType, name)) {
+    const parameter = Parameter.from(result.params.map(expr => expr.return));
+    const methodPattern = scope.getMethodPattern(receiverType, name, parameter);
+    if (methodPattern === undefined)
+      ParserError(`Method for ${receiverType}.${name} with input pattern \`${parameter}\` doesn't exist`);
 
-  if (isBuiltinMethod) {
-    const { parameter, return: r } = builtinMethodPattern;
-    ParserErrorIf(
-      !inputParamsTypePattern.matches(parameter),
-      `Expect ${receiver}.${name} to receive input pattern of \`${parameter}\`, instead got: \`${inputParamsTypePattern}\``
-    );
-
-    result.return = r;
+    result.name = methodPattern.name;
+    result.return = methodPattern.returnDataType;
   }
 
   return result;

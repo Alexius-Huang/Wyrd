@@ -1,5 +1,5 @@
 import * as T from "../types";
-import { TokenTracker, Scope, DataType as DT } from './utils';
+import { TokenTracker, Scope, DataType as DT, Parameter } from './utils';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';
@@ -14,6 +14,7 @@ import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method-invocation';
 import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
+import setupBuiltinMethods from './builtin-methods';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -30,6 +31,8 @@ export function parse(
       globalScope = parseOptions.scope();
     }
   }
+
+  setupBuiltinMethods(globalScope);
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: Scope = meta?.scope ?? globalScope;

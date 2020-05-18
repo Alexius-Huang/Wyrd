@@ -1,4 +1,11 @@
-import { Parameter, ScopeVariable as Variable, DataType as DT, ScopeFunctionObject as FunctionObject } from '.';
+import {
+  Parameter,
+  DataType as DT,
+  ScopeVariable as Variable,
+  ScopeFunctionObject as FunctionObject,
+  ScopeMethodType as MethodType,
+  ScopeMethodObject as MethodObject
+} from '.';
 import { ParserError } from '../error';
 
 export default class Scope {
@@ -8,10 +15,11 @@ export default class Scope {
   constructor(
     public variables: Map<string, Variable> = new Map(),
     public functions: Map<string, FunctionObject> = new Map(),
+    public methods: Map<string, MethodType> = new Map(),
   ) {}
 
-  public hasVariable(name: string) {
-    return this.variables.has(name) || this.parent?.variables.has(name);
+  public hasVariable(name: string): boolean {
+    return this.variables.has(name) || (this.parent ? this.parent.hasVariable(name) : false);
   }
 
   public getVariable(name: string): Variable {
@@ -39,8 +47,8 @@ export default class Scope {
     return variable;
   }
 
-  public hasFunction(name: string) {
-    return this.functions.has(name) || this.parent?.functions.has(name);
+  public hasFunction(name: string): boolean {
+    return this.functions.has(name) || (this.parent ? this.parent.hasFunction(name) : false);
   }
 
   public getFunction(name: string): FunctionObject {
@@ -63,6 +71,52 @@ export default class Scope {
     const functionObj = new FunctionObject(name);
     this.functions.set(name, functionObj);
     return functionObj;
+  }
+
+  public hasMethod(receiver: DT, name: string): boolean {
+    if (this.methods.has(receiver.type)) {
+      const methodType = this.methods.get(receiver.type) as MethodType;
+      if (methodType.methods.has(name))
+        return true;
+    }
+    return this.parent ? this.parent.hasMethod(receiver, name) : false;
+  }
+
+  public getMethod(receiver: DT, name: string): MethodObject {
+    const methodType = this.methods.get(receiver.type);
+
+    if (methodType === undefined) {
+      if (this.parent === null)
+        ParserError(`Method \`${receiver.type}.${name}\` isn't declared throughout scope chain`);
+      return this.parent.getMethod(receiver, name);
+    }
+
+    const methodObj = methodType.methods.get(name);
+    if (methodObj === undefined) {
+      if (this.parent === null)
+        ParserError(`Method \`${receiver.type}.${name}\` isn't declared throughout scope chain`);
+      return this.parent.getMethod(receiver, name);
+    }
+
+    return methodObj;
+  }
+  
+  public getMethodPattern(receiver: DT, name: string, parameter: Parameter) {
+    const methodObj = this.getMethod(receiver, name);
+    return methodObj.getPatternInfo(parameter);
+  }
+
+  public createMethod(receiver: DT, name: string): MethodObject {
+    let methodType: MethodType;
+    if (this.methods.has(receiver.type)) {
+      methodType = this.methods.get(receiver.type) as MethodType;
+    } else {
+      // TODO: Support List[T] Type
+      methodType = new MethodType(receiver.type);
+      this.methods.set(receiver.type, methodType);
+    }
+
+    return methodType.createMethod(name);
   }
 
   public createChildScope(name: string): Scope {

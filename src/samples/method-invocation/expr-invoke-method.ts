@@ -24,7 +24,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'MethodInvokeExpr',
-    name: 'toStr',
+    name: 'toString',
     receiver: {
       type: 'BinaryOpExpr',
       operator: Op.Plus,

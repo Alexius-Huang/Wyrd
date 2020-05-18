@@ -1,5 +1,5 @@
 import * as T from '../types';
-import { DataType as DT, BinaryOperator, Parameter } from './utils';
+import { DataType as DT, BinaryOperator } from './utils';
 
 export const Primitives = new Set(['Num', 'Str', 'Bool']);
 export const EmptyExpression: T.EmptyExpr = { type: 'EmptyExpr', return: DT.Invalid };
@@ -65,31 +65,4 @@ export const BuiltinOPActions = new Map<string, BinaryOperator>([
   ['<', ltOperation],
   ['>=', gteOperation],
   ['<=', lteOperation],
-]);
-
-export const BuiltinStrMethods = new Map<string, T.MethodPattern>([
-  ['upcase',   { name: 'upcase',   parameter: Parameter.Void(),             return: DT.Str }],
-  ['downcase', { name: 'downcase', parameter: Parameter.Void(),             return: DT.Str }],
-  ['repeat',   { name: 'repeat',   parameter: Parameter.of(DT.Num),         return: DT.Str }],
-  ['toStr',    { name: 'toStr',    parameter: Parameter.Void(),             return: DT.Str }],
-  ['at',       { name: 'at',       parameter: Parameter.of(DT.Num),         return: DT.Str }],
-  ['concat',   { name: 'concat',   parameter: Parameter.of(DT.Str),         return: DT.Str }],
-  ['indexOf',  { name: 'indexOf',  parameter: Parameter.of(DT.Str),         return: DT.Num }],
-  ['split',    { name: 'split',    parameter: Parameter.of(DT.Str),         return: DT.ListOf(DT.Str) }],
-  ['rest',     { name: 'rest',     parameter: Parameter.of(DT.Num),         return: DT.Str }],
-  ['between',  { name: 'between',  parameter: Parameter.of(DT.Num, DT.Num), return: DT.Str }],
-]);
-
-export const BuiltinNumMethods = new Map<string, T.MethodPattern>([
-  ['toStr', { name: 'toStr', parameter: Parameter.Void(), return: DT.Str }],
-]);
-
-export const BuiltinBoolMethods = new Map<string, T.MethodPattern>([
-  ['toStr', { name: 'toStr', parameter: Parameter.Void(), return: DT.Str }],
-])
-
-export const BuiltinPrimitiveMethods = new Map([
-  ['Str', BuiltinStrMethods],
-  ['Num', BuiltinNumMethods],
-  ['Bool', BuiltinBoolMethods],
 ]);

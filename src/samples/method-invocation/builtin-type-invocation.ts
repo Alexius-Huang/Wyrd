@@ -30,7 +30,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'MethodInvokeExpr',
-    name: 'upcase',
+    name: 'toUpperCase',
     receiver: StringLiteral('Hello world'),
     params: [],
     return: DT.Str,
