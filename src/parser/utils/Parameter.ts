@@ -22,6 +22,7 @@ export default class Parameter {
   get length() { return this.list.length; }
 
   public toString() {
+    if (this.list.length === 0) return 'Void';
     return this.list.map(dt => dt.toString()).join('.');
   }
 

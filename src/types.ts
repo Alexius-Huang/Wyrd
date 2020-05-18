@@ -1,4 +1,4 @@
-import { Scope, DataType as DT, Parameter } from './parser/utils';
+import { Scope, DataType as DT } from './parser/utils';
 
 export type Token = { type: string; value: string };
 
@@ -208,8 +208,6 @@ export interface FunctionInvokeExpr extends Expression {
   params: Array<Expr>;
 };
 
-export type MethodPattern = { name: string; parameter: Parameter; return: DT };
-export type MethodMappedInfo = { name: string; argCount: number };
 export interface MethodInvokeExpr extends Expression {
   type: 'MethodInvokeExpr';
   name: string;

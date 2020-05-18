@@ -45,7 +45,7 @@ const ast: AST = [
     name: 'repeat',
     receiver: {
       type: 'MethodInvokeExpr',
-      name: 'upcase',
+      name: 'toUpperCase',
       receiver: StringLiteral('Hello world'),
       params: [],
       return: DT.Str,
@@ -60,7 +60,7 @@ const ast: AST = [
     name: 'repeat',
     receiver: {
       type: 'MethodInvokeExpr',
-      name: 'toStr',
+      name: 'toString',
       receiver: {
         type: 'BinaryOpExpr',
         operator: Op.Plus,
