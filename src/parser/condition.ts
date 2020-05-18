@@ -19,6 +19,8 @@ export function parseConditionalExpr(
     return: lockedType ?? DT.Unknown
   };
 
+  let isThenExpression = false;
+
   while (tt.isNot('arrow') && tt.valueIsNot('then')) {
     result.condition = parseExpr(result, { target: 'condition' });
     tt.next();
@@ -35,6 +37,7 @@ export function parseConditionalExpr(
 
   if (tt.valueIs('then')) {
     tt.next(); // Skip 'then' keyword
+    isThenExpression = true;
     ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `then` keyword');
   }
 
@@ -62,6 +65,9 @@ export function parseConditionalExpr(
     !(tt.peekIs('keyword') && tt.peekValueIsOneOf('elif', 'else'))
   ) {
     result.return = result.return.toNullable();
+
+    if (isThenExpression && tt.peekIs('keyword') && tt.peekValueIs('end')) 
+      tt.next(); // Skip `end` keyword
     return result;
   }
 
