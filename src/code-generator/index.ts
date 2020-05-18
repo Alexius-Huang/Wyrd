@@ -232,7 +232,7 @@ ${s}}`;
     if (expr2.type === 'ConditionalExpr') {
       result += `(${codeGenConditionalExpr(expr2)})`;
     } else if (expr2.type === 'EmptyExpr') {
-      result += `null`;
+      result += 'null';
     } else {
       result += genExpr(expr2);
     }

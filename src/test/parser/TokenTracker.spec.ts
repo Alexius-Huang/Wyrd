@@ -134,6 +134,30 @@ describe('Token Tracker', () => {
       });
     });
 
+    describe('TokenTracker#peekValueIs', () => {
+      it('checks the value of the peeked token and returns the boolean result', () => {
+        expect(tt.peekValueIs('=')).toBe(true);
+        expect(tt.peekValueIs('foo')).toBe(false);
+
+        tt.next();
+        expect(tt.peekValueIs('=')).toBe(false);
+        expect(tt.peekValueIs('1')).toBe(true);
+
+        tt.next();
+        expect(tt.peekValueIs('+')).toBe(true);
+        expect(tt.peekValueIs('1')).toBe(false);
+  
+        tt.next();
+        expect(tt.peekValueIs('foo')).toBe(false);
+        expect(tt.peekValueIs('2')).toBe(true);
+        expect(tt.peekValueIs('+')).toBe(false);
+  
+        tt.next();
+        expect(tt.peekValueIs('foo')).toBe(false);
+        expect(tt.peekValueIs('2')).toBe(false);
+      });
+    });
+
     describe('TokenTracker#isNot', () => {
       it('checks the type of the current token and returns the boolean result', () => {
         expect(tt.isNot('number')).toBe(true);
@@ -199,6 +223,13 @@ describe('Token Tracker', () => {
         tt.next();
         expect(tt.valueIsOneOf('+', '-', '*', '/', '=')).toBe(true);
         expect(tt.valueIsOneOf('+', '-', '*', '/')).toBe(false);
+      });
+    });
+
+    describe('TokenTracker#peekValueIsOneOf', () => {
+      it('checks the value of the peeked token is one of the specified input and returns the boolean result', () => {
+        expect(tt.peekValueIsOneOf('+', '-', '*', '/', '=')).toBe(true);
+        expect(tt.peekValueIsOneOf('+', '-', '*', '/')).toBe(false);
       });
     });
 
