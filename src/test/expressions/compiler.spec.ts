@@ -10,4 +10,9 @@ describe('Compiler', () => {
     const { program, compiled } = await import('../../examples/builtin-methods');
     expect(compile(program)).toBe(compiled);
   });
+
+  it('compiles available method operations', async () => {
+    const { program, compiled } = await import('../../examples/method-operations');
+    expect(compile(program)).toBe(compiled);
+  });
 });

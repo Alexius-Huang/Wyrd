@@ -31,16 +31,16 @@ const BuiltinBoolMethods: Array<DefaultMethodFormat> = [
 export default function setupBuiltinMethods(scope: Scope) {
   BuiltinStrMethods.forEach(({ name, directMapping, parameter, return: r }) => {
     const methodObj = scope.createMethod(DT.Str, name);
-    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Str, { directMapping });
+    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Str, { directMapping, isNotBuiltin: false });
   });
 
   BuiltinNumMethods.forEach(({ name, directMapping, parameter, return: r }) => {
     const methodObj = scope.createMethod(DT.Num, name);
-    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Num, { directMapping });
+    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Num, { directMapping, isNotBuiltin: false });
   });
 
   BuiltinBoolMethods.forEach(({ name, directMapping, parameter, return: r }) => {
     const methodObj = scope.createMethod(DT.Bool, name);
-    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Bool, { directMapping });
+    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Bool, { directMapping, isNotBuiltin: false });
   });
 }

@@ -3,6 +3,7 @@ import Parameter from './Parameter';
 
 type MethodObjectInitialzeOptions = {
   directMapping?: string;
+  isNotBuiltin?: boolean;
 }
 
 export default class MethodObject {
@@ -18,6 +19,7 @@ export default class MethodObject {
     this.patterns.push(pattern);
     this.patternIndex++;
 
+    pattern.isNotBuiltin = options?.isNotBuiltin ?? true;
     return pattern;
   }
 
@@ -33,6 +35,7 @@ export default class MethodObject {
 
 class Pattern {
   public overridenIndex = 0;
+  public isNotBuiltin = true;
 
   constructor(
     public _name: string,

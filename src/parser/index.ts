@@ -5,7 +5,7 @@ import { parsePrimitive } from './primitive-literals';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseVarDeclaration } from './variable-declaration';
-import { parseFunctionDeclaration } from './function';
+import { parseFunctionDeclaration, parseMethodDeclaration } from './function';
 import { parseConditionalExpr } from './condition';
 import { parseAssignmentExpr } from './assignment';
 import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
@@ -15,6 +15,7 @@ import { parseMethodInvokeExpr } from './method-invocation';
 import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
 import setupBuiltinMethods from './builtin-methods';
+import { parseThisLiteral } from "./this-literal";
 
 export function parse(
   tokens: Array<T.Token>,
@@ -43,12 +44,18 @@ export function parse(
         tt.next();
 
         if (tt.valueIs('def'))
-          return parseFunctionDeclaration(tt, parseExpr, scope, { override: true });
+          if (tt.peekIs('builtin-type'))
+            return parseMethodDeclaration(tt, parseExpr, scope, { override: true });
+          else
+            return parseFunctionDeclaration(tt, parseExpr, scope, { override: true });
         ParserError('Keyword `override` should used with `def` to override an existing function declaration');
       }
 
-      if (tt.valueIs('def'))
+      if (tt.valueIs('def')) {
+        if (tt.peekIs('builtin-type'))
+          return parseMethodDeclaration(tt, parseExpr, scope);
         return parseFunctionDeclaration(tt, parseExpr, scope);
+      }
 
       if (tt.valueIs('if'))
         return parseConditionalExpr(tt, parseExpr);
@@ -61,6 +68,9 @@ export function parse(
           return parseLogicalAndOrExpr(tt, parseExpr, prevExpr.expr);  
         return parseLogicalAndOrExpr(tt, parseExpr, ast.pop() as T.Expr);
       }
+
+      if (tt.valueIs('this'))
+        return parseThisLiteral(tt, scope, prevExpr);
 
       if (tt.valueIs('mutable'))
         return parseVarDeclaration(tt, parseExpr, scope);

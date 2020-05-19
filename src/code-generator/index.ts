@@ -32,6 +32,8 @@ export function generateCode(
         return 'null';
       case 'ListLiteral':
         return codeGenListLiteral(expr);
+      case 'ThisLiteral':
+        return '_this';
       case 'NotExpr':
         return codeGenNotExpr(expr);
       case 'AndExpr':
@@ -51,6 +53,8 @@ export function generateCode(
         return codeGenFunctionDeclaration(expr);
       case 'FunctionInvokeExpr':
         return codeGenFunctionInvokeExpr(expr);
+      case 'MethodDeclaration':
+        return codeGenMethodDeclaration(expr);
       case 'MethodInvokeExpr':
         return codeGenMethodInvokeExpr(expr);
       case 'ConditionalExpr':
@@ -194,9 +198,41 @@ ${s}}`;
     return `${name}(${params.map(genExpr).join(commaDelimiter)})`;
   }
 
+  function codeGenMethodDeclaration(expr: T.MethodDeclaration) {
+    const { name, arguments: args, body } = expr;
+    const s = spaces(functionLayers * 2);
+    functionLayers++;
+
+    if (args.length === 0) {
+      if (minify)
+        return `function ${name}(_this){${codeGenFunctionBody(body, [], 0)}}`;
+      return `\
+function ${name}(_this) {
+${codeGenFunctionBody(body, [], functionLayers * 2)}
+${s}}`;
+    }
+
+    if (minify)
+      return `function ${name}(_this,${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`;
+    return `\
+function ${name}(_this, ${codeGenArguments(args)}) {
+${codeGenFunctionBody(body, args, functionLayers * 2)}
+${s}}`;
+  }
+
   function codeGenMethodInvokeExpr(expr: T.MethodInvokeExpr): string {
-    const { name, receiver, params } = expr;
+    const { name, receiver, params, isNotBuiltin } = expr;
     const args = params.map(genExpr).join(commaDelimiter);
+
+    if (isNotBuiltin) {
+      if (params.length === 0)
+        return `${name}(${genExpr(receiver)})`;
+
+      if (minify)
+        return `${name}(${genExpr(receiver)},${args})`
+      return `${name}(${genExpr(receiver)}, ${args})`;
+    }
+
     if (receiver.type === 'MethodInvokeExpr')
       return `${genExpr(receiver)}.${name}(${args})`;
     return `(${genExpr(receiver)}).${name}(${args})`;

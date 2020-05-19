@@ -48,14 +48,20 @@ export function Arithmetic(
   if (typeof operand1 === 'number')
     expr1 = NumberLiteral(operand1);
   else if (typeof operand1 === 'string')
-    expr1 = { type: 'IdentLiteral', value: operand1, return: DT.Num };
+    if (operand1 === 'this')
+      expr1 = { type: 'ThisLiteral', return: DT.Num };
+    else
+      expr1 = { type: 'IdentLiteral', value: operand1, return: DT.Num };
   else
     expr1 = operand1;
 
   if (typeof operand2 === 'number')
     expr2 = NumberLiteral(operand2);
   else if (typeof operand2 === 'string')
-    expr2 = { type: 'IdentLiteral', value: operand2, return: DT.Num };
+    if (operand2 === 'this')
+      expr2 = { type: 'ThisLiteral', return: DT.Num };
+    else
+      expr2 = { type: 'IdentLiteral', value: operand2, return: DT.Num };
   else
     expr2 = operand2;
 

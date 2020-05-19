@@ -13,7 +13,10 @@ export function parseBlock(
   ParserErrorIf(tt.isNot('newline'), 'Invalid to contain any expressions after the `do` keyword');
   tt.next(); // Skip newline
 
-  if (prevExpr.type === 'FunctionDeclaration') {
+  if (
+    prevExpr.type === 'FunctionDeclaration' ||
+    prevExpr.type === 'MethodDeclaration'
+  ) {
     while (!(tt.is('keyword') && tt.valueIs('end'))) {
       if (tt.is('newline')) {
         tt.next();
