@@ -205,7 +205,7 @@ ${s}}`;
 
     if (args.length === 0) {
       if (minify)
-        return `function ${name}(){_this, ${codeGenFunctionBody(body, [], 0)}}`;
+        return `function ${name}(_this){${codeGenFunctionBody(body, [], 0)}}`;
       return `\
 function ${name}(_this) {
 ${codeGenFunctionBody(body, [], functionLayers * 2)}
@@ -213,7 +213,7 @@ ${s}}`;
     }
 
     if (minify)
-      return `function ${name}(_this, ${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`;
+      return `function ${name}(_this,${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`;
     return `\
 function ${name}(_this, ${codeGenArguments(args)}) {
 ${codeGenFunctionBody(body, args, functionLayers * 2)}
@@ -227,6 +227,9 @@ ${s}}`;
     if (isNotBuiltin) {
       if (params.length === 0)
         return `${name}(${genExpr(receiver)})`;
+
+      if (minify)
+        return `${name}(${genExpr(receiver)},${args})`
       return `${name}(${genExpr(receiver)}, ${args})`;
     }
 

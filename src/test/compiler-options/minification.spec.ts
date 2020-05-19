@@ -88,6 +88,11 @@ describe('Compiler Option: Minification', () => {
     perform('declare function before function invocation', 'function-invocation/declare-before-invoke');
   });
 
+  describe('Method Declaration', () => {
+    perform('method arrow declaration', 'method-declaration/method-arrow-declaration');
+    perform('method block declaration', 'method-declaration/method-block-declaration');
+  });
+
   describe('Method Invocation', () => {
     perform('method invocation with direct method mapping', 'method-invocation/direct-method-mapping');
     perform('expression invoke method expression', 'method-invocation/expr-invoke-method');

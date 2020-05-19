@@ -175,7 +175,7 @@ Num_add(123, 456);
 Num_add(123, 456);
 `;
 
-const minified = 'TODO';
+const minified = 'function Num_isPositive(_this){return _this>0;}Num_isPositive(123);Num_isPositive(123);function Num_add(_this,x){return _this+x;}Num_add(123,456);Num_add(123,456);';
 
 export {
   program,
