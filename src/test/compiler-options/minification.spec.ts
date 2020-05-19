@@ -92,6 +92,7 @@ describe('Compiler Option: Minification', () => {
     perform('method arrow declaration', 'method-declaration/method-arrow-declaration');
     perform('method block declaration', 'method-declaration/method-block-declaration');
     perform('method declaration overloading', 'method-declaration/method-overloading');
+    perform('method declaration overriding', 'method-declaration/method-overriding');
   });
 
   describe('Method Invocation', () => {

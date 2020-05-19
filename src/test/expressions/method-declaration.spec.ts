@@ -12,4 +12,8 @@ describe('Method Declaration', () => {
   describe('Method Declaration Overloading', () => {
     FundamentalCompileTest('method-declaration/method-overloading');
   });
+
+  describe('Method Declaration Overriding', () => {
+    FundamentalCompileTest('method-declaration/method-overriding');
+  });
 });
