@@ -4,9 +4,12 @@ import { DataType as DT } from '../../parser/utils';
 
 const program = `\
 def Num.isPositive: Bool => this > 0
-
 123.isPositive()
 Num.isPositive(123)
+
+def Num.add(x: Num): Num => this + x
+123.add(456)
+Num.add(123, 456)
 `;
 
 // TODO: More Test Samples
@@ -24,7 +27,6 @@ const tokens: Array<Token> = [
   { type: 'gt', value: '>' },
   { type: 'number', value: '0' },
   { type: 'newline', value: '\n' },
-  { type: 'newline', value: '\n' },
 
   { type: 'number', value: '123' },
   { type: 'dot', value: '.' },
@@ -38,6 +40,42 @@ const tokens: Array<Token> = [
   { type: 'ident', value: 'isPositive' },
   { type: 'lparen', value: '(' },
   { type: 'number', value: '123' },
+  { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'keyword', value: 'def' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'add' },
+  { type: 'lparen', value: '(' },
+  { type: 'ident', value: 'x' },
+  { type: 'colon', value: ':' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'rparen', value: ')' },
+  { type: 'colon', value: ':' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'arrow', value: '=>' },
+  { type: 'keyword', value: 'this' },
+  { type: 'plus', value: '+' },
+  { type: 'ident', value: 'x' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'number', value: '123' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'add' },
+  { type: 'lparen', value: '(' },
+  { type: 'number', value: '456' },
+  { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'add' },
+  { type: 'lparen', value: '(' },
+  { type: 'number', value: '123' },
+  { type: 'comma', value: ',' },
+  { type: 'number', value: '456' },
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
 ];
@@ -76,6 +114,39 @@ const ast: AST = [
     return: DT.Bool,
     isNotBuiltin: true,
   },
+  {
+    type: 'MethodDeclaration',
+    receiverType: DT.Num,
+    name: 'Num_add',
+    return: DT.Void,
+    arguments: [
+      { ident: 'x', type: DT.Num }
+    ],
+    outputType: DT.Num,
+    body: [
+      Arithmetic('this', '+', 'x')
+    ],
+  },
+  {
+    type: 'MethodInvokeExpr',
+    name: 'Num_add',
+    receiver: NumberLiteral(123),
+    params: [
+      NumberLiteral(456),
+    ],
+    return: DT.Num,
+    isNotBuiltin: true,
+  },
+  {
+    type: 'MethodInvokeExpr',
+    name: 'Num_add',
+    receiver: NumberLiteral(123),
+    params: [
+      NumberLiteral(456),
+    ],
+    return: DT.Num,
+    isNotBuiltin: true,
+  },
 ];
 
 const compiled = `\
@@ -85,6 +156,12 @@ function Num_isPositive(_this) {
 
 Num_isPositive(123);
 Num_isPositive(123);
+function Num_add(_this, x) {
+  return _this + x;
+}
+
+Num_add(123, 456);
+Num_add(123, 456);
 `;
 
 const minified = 'TODO';
