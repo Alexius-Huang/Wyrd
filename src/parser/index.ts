@@ -44,7 +44,10 @@ export function parse(
         tt.next();
 
         if (tt.valueIs('def'))
-          return parseFunctionDeclaration(tt, parseExpr, scope, { override: true });
+          if (tt.peekIs('builtin-type'))
+            return parseMethodDeclaration(tt, parseExpr, scope, { override: true });
+          else
+            return parseFunctionDeclaration(tt, parseExpr, scope, { override: true });
         ParserError('Keyword `override` should used with `def` to override an existing function declaration');
       }
 

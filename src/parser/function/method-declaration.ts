@@ -28,10 +28,12 @@ export function parseMethodDeclaration(
     ParserError('Method declaration should contain the name of the function');
 
   const name = tt.value;
+  const compiledName = `${receiverType.type}_${tt.value}`;
+  const invokeFormatName = `${receiverType.type}.${tt.value}`;
   const result: T.MethodDeclaration = {
     type: 'MethodDeclaration',
     receiverType,
-    name: `${receiverType.type}_${tt.value}`,
+    name: compiledName,
     arguments: [],
     outputType: DT.Void,
     body: [],
@@ -57,36 +59,36 @@ export function parseMethodDeclaration(
   result.outputType = new DT(tt.value);
 
   /* TODO: Check if method is redeclared with same input pattern */
-  // if (scope.hasFunction(result.name)) {
-  //   const functionObj = scope.getFunction(result.name);
-  //   const functionPattern = functionObj.getPatternInfo(parameter);
-  //   if (options?.override) {
-  //     if (functionPattern === undefined)
-  //       ParserError(`Function \`${result.name}\` need not to be override since no input pattern \`${parameter}\` declared`);
+  if (scope.hasMethod(receiverType, name)) {
+    const methodObj = scope.getMethod(receiverType, name);
+    const methodPattern = methodObj.getPatternInfo(parameter);
+    if (options?.override) {
+      if (methodPattern === undefined)
+        ParserError(`method \`${invokeFormatName}\` need not to be override since no input pattern \`${parameter}\` declared`);
 
-  //     functionPattern.override();
-  //     result.name = functionPattern.name;
-  //   } else {
-  //     /* Check if redeclaration */
-  //     if (functionPattern !== undefined)
-  //       ParserError(`Overriding function \`${result.name}\` with existing input pattern \`${parameter}\`; to override the function, address it with \`override\` keyword before \`def\` token`);
+      methodPattern.override();
+      result.name = `${receiverType}_${methodPattern.name}`;
+    } else {
+      /* Check if redeclaration */
+      if (methodPattern !== undefined)
+        ParserError(`Overriding method \`${invokeFormatName}\` with existing input pattern \`${parameter}\`; to override the method, address it with \`override\` keyword before \`def\` token`);
 
-  //     /* Function Overload */
-  //     const overloadedPattern = functionObj.createNewPattern(parameter, result.outputType);
-  //     result.name = overloadedPattern.name;
-  //   }
-  // }
+      /* Nethod Overload */
+      const overloadedPattern = methodObj.createNewPattern(parameter, result.outputType);
+      result.name = `${receiverType}_${overloadedPattern.name}`;
+    }
+  }
 
   /* Setup a new available pattern for method invocation */
-  // else {
+  else {
     ParserErrorIf(
       options?.override === true,
-      `Function \`${result.name}\` need not to be override since no input pattern \`${parameter}\` declared`
+      `Method \`${invokeFormatName}\` need not to be override since no input pattern \`${parameter}\` declared`
     );
 
     const methodObj = scope.createMethod(receiverType, name);
     methodObj.createNewPattern(parameter, result.outputType);  
-  // }
+  }
 
   /* Parsing the function declartion expression */
   tt.next();
@@ -95,7 +97,7 @@ export function parseMethodDeclaration(
 
   ParserErrorIf(
     ! (isArrow || isDoBlock),
-    `Unhandled function declaration where token of type \`${tt.type}\` and value \`${tt.value}\``
+    `Unhandled method declaration where token of type \`${tt.type}\` and value \`${tt.value}\``
   );
 
   /* Single-line function declaration expression */
@@ -118,7 +120,7 @@ export function parseMethodDeclaration(
   const lastExpr = result.body[result.body.length - 1];
   ParserErrorIf(
     lastExpr.return.isNotEqualTo(result.outputType),
-    `ParserError: Return type of function \`${result.name}\` should be \`${result.outputType}\`, instead got: \`${lastExpr.return}\``
+    `ParserError: Return type of method \`${invokeFormatName}\` should be \`${result.outputType}\`, instead got: \`${lastExpr.return}\``
   );
   return result;
 }
