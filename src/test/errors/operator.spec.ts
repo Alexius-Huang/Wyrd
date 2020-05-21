@@ -42,6 +42,18 @@ describe('Error: Operator', () => {
       const program10 = `\nfoo = 1\n"2" + foo`;
       expect(() => compile(program10))
         .toThrow('ParserError: Invalid operation for operator `+` with operands of type `Str` and `Num`');    
+
+      const program11 = `\n123 == "123"`;
+      expect(() => compile(program11))
+        .toThrow('ParserError: Invalid operation for operator `==` with operands of type `Num` and `Str`');    
+
+      const program12 = `\n123 == True`;
+      expect(() => compile(program12))
+        .toThrow('ParserError: Invalid operation for operator `==` with operands of type `Num` and `Bool`');
+
+      const program13 = `\n123 == Null`;
+      expect(() => compile(program13))
+        .toThrow('ParserError: Invalid operation for operator `==` with operands of type `Num` and `Null`');
     });
   });
 });
