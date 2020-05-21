@@ -15,6 +15,7 @@ import { parseMethodInvokeExpr } from './method-invocation';
 import { ParserError } from './error';
 import { BuiltinBinaryOperators } from './constants';
 import setupBuiltinMethods from './builtin-methods';
+import setupBuiltinOperators from './builtin-operators';
 import { parseThisLiteral } from "./this-literal";
 
 export function parse(
@@ -34,6 +35,7 @@ export function parse(
   }
 
   setupBuiltinMethods(globalScope);
+  setupBuiltinOperators(globalScope);
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: Scope = meta?.scope ?? globalScope;

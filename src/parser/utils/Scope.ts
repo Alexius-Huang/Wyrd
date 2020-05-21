@@ -4,7 +4,8 @@ import {
   ScopeVariable as Variable,
   ScopeFunctionObject as FunctionObject,
   ScopeMethodType as MethodType,
-  ScopeMethodObject as MethodObject
+  ScopeMethodObject as MethodObject,
+  ScopeOperatorObject as OperatorObject
 } from '.';
 import { ParserError } from '../error';
 
@@ -16,7 +17,15 @@ export default class Scope {
     public variables: Map<string, Variable> = new Map(),
     public functions: Map<string, FunctionObject> = new Map(),
     public methods: Map<string, MethodType> = new Map(),
+    public operators: Map<string, OperatorObject> = new Map(),
   ) {}
+
+  public createChildScope(name: string): Scope {
+    const scope = new Scope();
+    this.children.set(name, scope);
+    scope.parent = this;
+    return scope;
+  }
 
   public hasVariable(name: string): boolean {
     return this.variables.has(name) || (this.parent ? this.parent.hasVariable(name) : false);
@@ -119,10 +128,30 @@ export default class Scope {
     return methodType.createMethod(name);
   }
 
-  public createChildScope(name: string): Scope {
-    const scope = new Scope();
-    this.children.set(name, scope);
-    scope.parent = this;
-    return scope;
+  // May not need hasOperator since operator
+  // public hasOperator(name: string): boolean {
+  //   return this.operators.has(name) || (this.parent ? this.parent.hasOperator(name) : false);
+  // }
+
+  public getOperator(name: string): OperatorObject {
+    const operatorObj = this.operators.get(name);
+
+    if (operatorObj === undefined) {
+      if (this.parent === null)
+        ParserError(`Operator \`${name}\` isn't declared throughout scope chain`);
+      return this.parent.getOperator(name);
+    }
+    return operatorObj;
+  }
+
+  public getOperatorPattern(name: string, opType1: DT, opType2: DT) {
+    const operatorObj = this.getOperator(name);
+    return operatorObj.getPatternInfo(opType1, opType2);
+  }
+
+  public createOperator(name: string): OperatorObject {
+    const operatorObj = new OperatorObject(name);
+    this.operators.set(name, operatorObj);
+    return operatorObj;
   }
 }
