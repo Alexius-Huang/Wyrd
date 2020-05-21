@@ -1,7 +1,7 @@
-import * as T from "../types";
-import { TokenTracker, Scope, DataType as DT, Parameter } from './utils';
+import * as T from '../types';
+import { TokenTracker, Scope } from './utils';
 import { parseIdentifier } from './identifier';
-import { parsePrimitive } from './primitive-literals';
+import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseVarDeclaration } from './variable-declaration';
@@ -12,11 +12,10 @@ import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method-invocation';
+import { parseThisLiteral } from './this-literal';
 import { ParserError } from './error';
-import { BuiltinBinaryOperators } from './constants';
 import setupBuiltinMethods from './builtin-methods';
 import setupBuiltinOperators from './builtin-operators';
-import { parseThisLiteral } from "./this-literal";
 
 export function parse(
   tokens: Array<T.Token>,
@@ -81,7 +80,7 @@ export function parse(
     }
 
     if (tt.isOneOf('number', 'string', 'boolean', 'null'))
-      return parsePrimitive(tt, prevExpr);
+      return parsePrimitive(tt, scope, prevExpr);
 
     if (tt.is('builtin-type'))
       return parseTypeLiteral(tt, parseExpr, scope);
@@ -102,7 +101,7 @@ export function parse(
       return parseMethodInvokeExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
     }
 
-    if (BuiltinBinaryOperators.has(tt.value)) {
+    if (scope.hasOperator(tt.value)) {
       if (prevExpr?.type === 'PrioritizedExpr')
         return parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
 

@@ -1,8 +1,7 @@
 import * as T from '../types';
-import { TokenTracker, Scope, ScopeVariable as Variable, DataType as DT, BinaryOperator } from './utils';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
-import { BuiltinOPActions } from './constants';
 import { parseAssignmentExpr } from './assignment';
 
 export function parseIdentifier(
@@ -29,17 +28,16 @@ export function parseIdentifier(
       DT.isInvalid(result.return),
       `Using the unidentified token \`${tokenName}\``
     );
-
     prevExpr.expr2 = result;
-    const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
-    const operandLeft = prevExpr.expr1.return;
-    const operandRight = result.return;
-    const operation = operator.getOperationInfo(operandLeft, operandRight);
+    const operator = prevExpr.operator;
+    const opLeft = prevExpr.expr1.return;
+    const opRight = result.return;
+    const operatorObj = scope.getOperatorPattern(operator, opLeft, opRight);
 
-    if (operation === undefined)
-      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
+    if (operatorObj === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type \`${opLeft}\` and \`${opRight}\``);
 
-    prevExpr.return = operation.return;
+    prevExpr.return = operatorObj.returnDataType;
     return prevExpr;
   }
 

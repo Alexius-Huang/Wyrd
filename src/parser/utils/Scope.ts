@@ -128,30 +128,29 @@ export default class Scope {
     return methodType.createMethod(name);
   }
 
-  // May not need hasOperator since operator
-  // public hasOperator(name: string): boolean {
-  //   return this.operators.has(name) || (this.parent ? this.parent.hasOperator(name) : false);
-  // }
+  public hasOperator(name: string): boolean {
+    return this.operators.has(name) || (this.parent ? this.parent.hasOperator(name) : false);
+  }
 
-  public getOperator(name: string): OperatorObject {
-    const operatorObj = this.operators.get(name);
+  public getOperator(op: string): OperatorObject {
+    const operatorObj = this.operators.get(op);
 
     if (operatorObj === undefined) {
       if (this.parent === null)
-        ParserError(`Operator \`${name}\` isn't declared throughout scope chain`);
-      return this.parent.getOperator(name);
+        ParserError(`Operator \`${op}\` isn't declared throughout scope chain`);
+      return this.parent.getOperator(op);
     }
     return operatorObj;
   }
 
-  public getOperatorPattern(name: string, opType1: DT, opType2: DT) {
-    const operatorObj = this.getOperator(name);
+  public getOperatorPattern(op: string, opType1: DT, opType2: DT) {
+    const operatorObj = this.getOperator(op);
     return operatorObj.getPatternInfo(opType1, opType2);
   }
 
-  public createOperator(name: string): OperatorObject {
-    const operatorObj = new OperatorObject(name);
-    this.operators.set(name, operatorObj);
+  public createOperator(op: string): OperatorObject {
+    const operatorObj = new OperatorObject(op);
+    this.operators.set(op, operatorObj);
     return operatorObj;
   }
 }

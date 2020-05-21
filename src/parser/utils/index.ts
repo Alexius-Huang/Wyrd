@@ -1,4 +1,3 @@
-export { default as BinaryOperator } from './BinaryOperator';
 export { default as DataType } from './DataType';
 export { default as Parameter } from './Parameter';
 export { default as Scope } from './Scope';
