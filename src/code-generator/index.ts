@@ -1,5 +1,4 @@
 import * as T from '../types';
-import { LogicalBinaryOperators } from '../parser/constants';
 
 function CodeGenerateError(msg: string): never {
   throw new Error(`Code Generation Error: ${msg}`);
@@ -69,6 +68,7 @@ export function generateCode(
     return `[${values.map(genExpr).join(commaDelimiter)}]`;
   }
 
+  const LogicalBinaryOperators = new Set<string>(['>', '<', '>=', '<=', '==', '!=']);
   function codeGenBinaryOpExpr(expr: T.BinaryOpExpr) {
     let expr2Result = '';
     if (expr.expr2 === undefined)

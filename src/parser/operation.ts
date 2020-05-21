@@ -1,6 +1,6 @@
 import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
-import { ParserError, ParserErrorIf } from './error';
+import { ParserError } from './error';
 import { compare } from './precedence';
 import { EmptyExpression } from './constants';
 
@@ -10,26 +10,11 @@ export function parseBinaryOpExpr(
   scope: Scope,
   prevExpr: T.Expr,
 ): T.Expr {
-  ParserErrorIf(
-    prevExpr.type === 'IdentLiteral' && DT.isInvalid(prevExpr.return),
-    `Using the unidentified token \`${(prevExpr as T.IdentLiteral).value}\``,
-  );
-
-  let operator: T.Operator;
-  switch(tt.value) {
-    case '+':  operator = T.Operator.Plus;     break;
-    case '-':  operator = T.Operator.Dash;     break;
-    case '*':  operator = T.Operator.Asterisk; break;
-    case '/':  operator = T.Operator.Slash;    break;
-    case '%':  operator = T.Operator.Percent;  break;
-    case '>':  operator = T.Operator.Gt;       break;
-    case '<':  operator = T.Operator.Lt;       break;
-    case '>=': operator = T.Operator.GtEq;     break;
-    case '<=': operator = T.Operator.LtEq;     break;
-    case '==': operator = T.Operator.EqEq;     break;
-    case '!=': operator = T.Operator.BangEq;   break;
-    default: ParserError(`Unhandled BinaryOpExpr Operator \`${tt.value}\``)
+  if (prevExpr.type === 'IdentLiteral' && DT.isInvalid(prevExpr.return)) {
+    ParserError(`Using the unidentified token \`${prevExpr.value}\``);
   }
+
+  const operator = tt.value as T.Operator;
 
   if (prevExpr.type === 'BinaryOpExpr') {
     const precedence = compare(prevExpr.operator, operator);
@@ -37,19 +22,20 @@ export function parseBinaryOpExpr(
     if (precedence === -1) /* Low level */ {
       prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
       return prevExpr;
-    } else /* Eq or higher level */ {
-      const newNode: T.BinaryOpExpr = {
-        type: 'BinaryOpExpr',
-        operator,
-        expr1: prevExpr,
-        expr2: EmptyExpression,
-        return: DT.Invalid,
-      };
-
-      tt.next();
-      parseExpr(newNode, { scope });
-      return newNode;
     }
+    
+    /* Eq or higher level */
+    const newNode: T.BinaryOpExpr = {
+      type: 'BinaryOpExpr',
+      operator,
+      expr1: prevExpr,
+      expr2: EmptyExpression,
+      return: DT.Invalid,
+    };
+
+    tt.next();
+    parseExpr(newNode, { scope });
+    return newNode;
   }
 
   if (prevExpr.type === 'VarDeclaration' || prevExpr.type === 'VarAssignmentExpr') {

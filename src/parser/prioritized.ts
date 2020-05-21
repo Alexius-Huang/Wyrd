@@ -1,7 +1,7 @@
 import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT, BinaryOperator } from './utils';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 import { ParserError } from './error';
-import { EmptyExpression, BuiltinOPActions } from './constants';
+import { EmptyExpression } from './constants';
 
 export function parsePrioritizedExpr(
   tt: TokenTracker,
@@ -24,15 +24,15 @@ export function parsePrioritizedExpr(
   if (prevExpr !== undefined) {
     if (prevExpr.type === 'BinaryOpExpr') {
       prevExpr.expr2 = result;
-      const operator = BuiltinOPActions.get(prevExpr.operator) as BinaryOperator;
-      const operandLeft = prevExpr.expr1.return;
-      const operandRight = result.return;
-      const operation = operator.getOperationInfo(operandLeft, operandRight);
-
-      if (operation === undefined)
-        ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type ${operandLeft} and ${operandRight}`);
-
-      prevExpr.return = operation.return;
+      const operator = prevExpr.operator;
+      const opLeft = prevExpr.expr1.return;
+      const opRight = result.return;
+      const operatorObj = scope.getOperatorPattern(operator, opLeft, opRight);
+  
+      if (operatorObj === undefined)
+        ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type \`${opLeft}\` and \`${opRight}\``);
+  
+      prevExpr.return = operatorObj.returnDataType;
       return prevExpr;
     }
 

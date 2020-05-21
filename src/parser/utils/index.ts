@@ -1,4 +1,3 @@
-export { default as BinaryOperator } from './BinaryOperator';
 export { default as DataType } from './DataType';
 export { default as Parameter } from './Parameter';
 export { default as Scope } from './Scope';
@@ -6,4 +5,5 @@ export { default as ScopeVariable } from './Scope.Variable';
 export { default as ScopeFunctionObject } from './Scope.FunctionObject';
 export { default as ScopeMethodType } from './Scope.MethodType';
 export { default as ScopeMethodObject } from './Scope.MethodObject';
+export { default as ScopeOperatorObject } from './Scope.OperatorObject';
 export { default as TokenTracker } from './TokenTracker';
