@@ -4,6 +4,7 @@ import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
+import { parseRecordDeclaration } from './record';
 import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration, parseMethodDeclaration } from './function';
 import { parseConditionalExpr } from './condition';
@@ -76,6 +77,9 @@ export function parse(
       if (tt.valueIs('mutable'))
         return parseVarDeclaration(tt, parseExpr, scope);
 
+      if (tt.valueIs('record'))
+        return parseRecordDeclaration(tt, parseExpr, scope);
+
       ParserError(`Unhandled keyword token with value \`${tt.value}\``);
     }
 
@@ -117,8 +121,10 @@ export function parse(
   }
 
   while (true) {
-    if (tt.isNot('newline'))
-      globalAst.push(parseExpr());
+    if (tt.isNot('newline')) {
+      const expr = parseExpr();
+      expr.type !== 'VoidExpr' && globalAst.push(expr);
+    }
 
     if (!tt.hasNext()) break;
     tt.next();

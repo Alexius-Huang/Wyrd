@@ -16,6 +16,7 @@ const tokenMaps = new Map<string, Token>([
   ['=', { type: 'eq', value: '=' }],
   ['==', { type: 'eqeq', value: '==' }],
   ['=>', { type: 'arrow', value: '=>' }],
+  ['->', { type: 'ref', value: '->' }],
   ['&', { type: 'amp', value: '&' }],
   ['|', { type: 'pipe', value: '|' }],
   ['?', { type: 'question', value: '?' }],

@@ -63,6 +63,7 @@ interface Expression {
 
 export type Expr =
   EmptyExpr
+| VoidExpr
 | BinaryOpExpr
 | NotExpr
 | OrExpr
@@ -83,11 +84,19 @@ export type Expr =
 | NullLiteral
 | ListLiteral
 | TypeLiteral
-| ThisLiteral;
+| ThisLiteral
+| RecordExpr;
 
+// Empty expression signifies the expression is expected not to be empty, hence the return type is invalid
 export interface EmptyExpr extends Expression {
   type: 'EmptyExpr';
   return: typeof DT.Invalid;
+}
+
+// Void expression signifies the expression can be either not important or replace by other expression
+export interface VoidExpr extends Expression {
+  type: 'VoidExpr';
+  return: typeof DT.Void;
 }
 
 export interface NumberLiteral extends Expression {
@@ -231,4 +240,11 @@ export interface MethodInvokeExpr extends Expression {
   receiver: Expr;
   isNotBuiltin?: boolean;
   params: Array<Expr>;
+}
+
+export type RecordProperty = { name: string; type: DT; };
+export type RecordPropertyValue = RecordProperty & { value: Expr };
+export interface RecordExpr extends Expression {
+  type: 'RecordExpr';
+  properties: Array<RecordPropertyValue>;
 }
