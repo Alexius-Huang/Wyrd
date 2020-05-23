@@ -10,8 +10,8 @@ export function parseRecordReferenceExpr(
 ): T.Expr {
   tt.next(); // Skip `->`
 
-  if (prevExpr.type === 'AssignmentExpr')
-    return handleAssignmentExpr(tt, parseExpr, scope, prevExpr);
+  if (prevExpr.type === 'AssignmentExpr' || prevExpr.type === 'VarDeclaration')
+    return handleGeneralVarDeclarationExpr(tt, parseExpr, scope, prevExpr);
 
   /* Check if the prevExpr returns record */
   const prevExprType = prevExpr.return.type;
@@ -36,12 +36,12 @@ export function parseRecordReferenceExpr(
   } as T.RecordReferenceExpr;
 }
 
-function handleAssignmentExpr(
+function handleGeneralVarDeclarationExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
   scope: Scope,
-  prevExpr: T.AssignmentExpr
-): T.AssignmentExpr {
+  prevExpr: T.AssignmentExpr | T.VarDeclaration
+): T.AssignmentExpr | T.VarDeclaration {
   const prevExprType = prevExpr.expr2.return.type;
   if (!scope.hasRecord(prevExprType))
     ParserError(`Type \`${prevExpr.return}\` is not a kind of record`);
@@ -65,12 +65,8 @@ function handleAssignmentExpr(
 
   /* Type Correction for assignment */
   prevExpr.expr1.return = recordProp.type;
-  if (prevExpr.expr1.type === 'IdentLiteral') {
-    const varInfo = scope.getVariable(prevExpr.expr1.value);
-    varInfo.type = recordProp.type;
-  } else {
-    ParserError(`Unhandled assignment expression of type \`${prevExpr.expr1.type}\``)
-  }
+  const varInfo = scope.getVariable(prevExpr.expr1.value);
+  varInfo.type = recordProp.type;
 
   return prevExpr;
 }
