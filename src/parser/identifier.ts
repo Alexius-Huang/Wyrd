@@ -4,6 +4,7 @@ import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
+import { parseMethodInvokeExpr } from './method-invocation';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -21,9 +22,20 @@ export function parseIdentifier(
   if (scope.hasVariable(tokenName)) {
     result.return = scope.getVariable(tokenName).type;
 
-    if (tt.peekIs('ref')) {
-      tt.next();
-      result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
+    while (true) {
+      if (tt.peekIs('dot')) {
+        tt.next();
+        result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
+        continue;
+      }
+
+      if (tt.peekIs('ref')) {
+        tt.next();
+        result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
+        continue;
+      }
+  
+      break;
     }
   } else if (scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
