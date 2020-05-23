@@ -5,7 +5,6 @@ import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
 
-
 export function parseIdentifier(
   tt: TokenTracker,
   parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
