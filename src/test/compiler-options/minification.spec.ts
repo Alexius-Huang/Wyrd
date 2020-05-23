@@ -41,6 +41,7 @@ describe('Compiler Option: Minification', () => {
     perform('assignment with arithmetic expressions', 'assignment/arithmetic-expression');
     perform('assignment with logical expressions', 'assignment/logical-expression');
     perform('assignment with method invocation', 'assignment/method-invocation');
+    perform('assignment with method invocation and prioritization', 'assignment/method-invocation-with-prioritization');
     perform('mutable variable declaration & assignment', 'assignment/mutable');
     perform('mutable variable declaration & assignment with prioritization', 'assignment/mutable-with-prioritization');
   });

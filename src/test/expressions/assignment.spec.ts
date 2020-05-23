@@ -14,6 +14,7 @@ describe('Assignment Expression', () => {
 
     describe('Method Invocation Expression', () => {
       FundamentalCompileTest('assignment/method-invocation');
+      FundamentalCompileTest('assignment/method-invocation-with-prioritization');
     });
   });
 
