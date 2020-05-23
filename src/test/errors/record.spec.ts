@@ -3,7 +3,27 @@ import { Scope, DataType as DT } from '../../parser/utils';
 import { ParseOptions } from '../../types';
 
 describe('Error: Record', () => {
+  const parseOptions: ParseOptions = {
+    scope(): Scope {
+      const s = new Scope();
+      const record = s.createRecord('UserInfo');
+      record
+      .setProperty(DT.Str, 'name')
+      .setProperty(DT.Num, 'age')
+      .setProperty(DT.Bool, 'hasPet');
+
+      s.createConstant('maxwell', new DT('UserInfo'));
+      return s;
+    }
+  };
+
   describe('Declaration', () => {
+    it('throws error when declaration of record missing its name', () => {
+      const program = '\nrecord { Str name, Num age, Bool hasPet }';
+      expect(() => compile(program))
+        .toThrow('ParserError: Expect to give the name of the record, instead got token of type: `lcurly`');
+    });
+
     it('throws error when format is wrong', () => {
       const program1 = '\nrecord UserInfo\n';
       expect(() => compile(program1))
@@ -23,21 +43,23 @@ describe('Error: Record', () => {
       expect(() => compile(program))
         .toThrow('ParserError: Expect record declaration `UserInfo` is not blank');
     });
+
+    it('throws error when redeclaring the record', () => {
+      const program = `\nrecord UserInfo { Str name, Num age, Bool married }`;
+      expect(() => compile(program, { parseOptions }))
+        .toThrow('ParserError: Cannot declare record `UserInfo`, since the name has already been used');
+    });
+
+    it('throws error when the name of the record conflict other entity', () => {
+      const program1 = `\nUserInfo = "Maxwell"\nrecord UserInfo { Str name, Num age, Bool hasPet }`;
+      expect(() => compile(program1))
+        .toThrow('ParserError: Cannot declare record `UserInfo`, since the name has already been used');
+
+      const program2 = `\ndef UserInfo(x: Str): Str => x\nrecord UserInfo { Str name, Num age, Bool hasPet }`;
+      expect(() => compile(program2))
+        .toThrow('ParserError: Cannot declare record `UserInfo`, since the name has already been used');
+    });
   });
-
-  const parseOptions: ParseOptions = {
-    scope(): Scope {
-      const s = new Scope();
-      const record = s.createRecord('UserInfo');
-      record
-      .setProperty(DT.Str, 'name')
-      .setProperty(DT.Num, 'age')
-      .setProperty(DT.Bool, 'hasPet');
-
-      s.createConstant('maxwell', new DT('UserInfo'));
-      return s;
-    }
-  };
 
   describe('Literal', () => {
     it('throws error when missing any property', () => {
