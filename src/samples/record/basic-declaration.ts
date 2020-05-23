@@ -65,11 +65,7 @@ const ast: AST = [
 ];
 
 const compiled = `\
-const maxwell = {
-  name: 'Maxwell',
-  age: 18,
-  hasPet: false
-};
+const maxwell = { name: 'Maxwell', age: 18, hasPet: false };
 `;
 
 const minified = 'TODO';

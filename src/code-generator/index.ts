@@ -6,6 +6,8 @@ function CodeGenerateError(msg: string): never {
 
 function spaces(n: number) { return ' '.repeat(n); }
 
+type CodeGenerationResult = { result: string; type: string };
+
 export function generateCode(
   ast: T.AST,
   option?: {
@@ -18,21 +20,21 @@ export function generateCode(
   const minify = option?.minify ?? false;
   const commaDelimiter = minify ? ',' : ', ';
 
-  function genExpr(expr: T.Expr): string {
+  function genExpr(expr: T.Expr): CodeGenerationResult {
     switch (expr.type) {
       case 'NumberLiteral':
       case 'IdentLiteral':
-        return expr.value;
+        return { result: expr.value, type: expr.type };
       case 'StringLiteral':
-        return `'${expr.value}'`;
+        return { result: `'${expr.value}'`, type: expr.type };
       case 'BooleanLiteral':
-        return expr.value === 'True' ? 'true' : 'false';
+        return { result: expr.value === 'True' ? 'true' : 'false', type: expr.type };
       case 'NullLiteral':
-        return 'null';
+        return { result: 'null', type: expr.type };
       case 'ListLiteral':
         return codeGenListLiteral(expr);
       case 'ThisLiteral':
-        return '_this';
+        return { result: '_this', type: expr.type };
       case 'NotExpr':
         return codeGenNotExpr(expr);
       case 'AndExpr':
@@ -65,43 +67,43 @@ export function generateCode(
     }
   }
 
-  function codeGenListLiteral(expr: T.ListLiteral) {
+  function codeGenListLiteral(expr: T.ListLiteral): CodeGenerationResult {
     const { values } = expr;
-    return `[${values.map(genExpr).join(commaDelimiter)}]`;
+    return { result: `[${values.map(v => genExpr(v).result).join(commaDelimiter)}]`, type: 'ListLiteral' };
   }
 
   const LogicalBinaryOperators = new Set<string>(['>', '<', '>=', '<=', '==', '!=']);
-  function codeGenBinaryOpExpr(expr: T.BinaryOpExpr) {
+  function codeGenBinaryOpExpr(expr: T.BinaryOpExpr): CodeGenerationResult {
     let expr2Result = '';
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect 2nd expression in binary operation');
     else if (expr.expr2.type === 'BinaryOpExpr' && !LogicalBinaryOperators.has(expr.operator)) {
-      expr2Result = `(${genExpr(expr.expr2)})`;
+      expr2Result = `(${genExpr(expr.expr2).result})`;
     } else {
-      expr2Result = genExpr(expr.expr2);
+      expr2Result = genExpr(expr.expr2).result;
     }
 
     if (expr.operator === T.Operator.EqEq || expr.operator === T.Operator.BangEq) {
       if (minify)
-        return `${genExpr(expr.expr1)}${expr.operator}=${expr2Result}`;
-      return `${genExpr(expr.expr1)} ${expr.operator}= ${expr2Result}`;
+        return { result: `${genExpr(expr.expr1).result}${expr.operator}=${expr2Result}`, type: 'BinaryOpExpr' };
+      return { result: `${genExpr(expr.expr1).result} ${expr.operator}= ${expr2Result}`, type: 'BinaryOpExpr' };
     }
 
     if (minify)
-      return `${genExpr(expr.expr1)}${expr.operator}${expr2Result}`;
-    return `${genExpr(expr.expr1)} ${expr.operator} ${expr2Result}`;
+      return { result: `${genExpr(expr.expr1).result}${expr.operator}${expr2Result}`, type: 'BinaryOpExpr' };
+    return { result: `${genExpr(expr.expr1).result} ${expr.operator} ${expr2Result}`, type: 'BinaryOpExpr'};
   }
 
-  function codeGenNotExpr(expr: T.NotExpr) {
+  function codeGenNotExpr(expr: T.NotExpr): CodeGenerationResult {
     if (expr.expr === undefined)
       CodeGenerateError('Expect logical Not have expression');
     
     if (expr.expr.type === 'PrioritizedExpr')
-      return `!${genExpr(expr.expr)}`;
-    return `!(${genExpr(expr.expr)})`;
+      return { result: `!${genExpr(expr.expr).result}`, type: 'NotExpr' };
+    return { result: `!(${genExpr(expr.expr).result})`, type: 'NotExpr' };
   }
 
-  function codeGenAndOrExpr(expr: T.AndExpr | T.OrExpr) {
+  function codeGenAndOrExpr(expr: T.AndExpr | T.OrExpr): CodeGenerationResult {
     const logicType = expr.type === 'AndExpr' ? 'And' : 'Or';
     if (expr.expr2 === undefined)
       CodeGenerateError(`Expect logical ${logicType} have expression`);
@@ -109,78 +111,78 @@ export function generateCode(
     const logicOperator = logicType === 'And' ? '&&' : '||';
 
     if (minify)
-      return `${genExpr(expr.expr1)}${logicOperator}${genExpr(expr.expr2)}`;
-    return `${genExpr(expr.expr1)} ${logicOperator} ${genExpr(expr.expr2)}`;
+      return { result: `${genExpr(expr.expr1).result}${logicOperator}${genExpr(expr.expr2).result}`, type: expr.type };
+    return { result: `${genExpr(expr.expr1).result} ${logicOperator} ${genExpr(expr.expr2).result}`, type: expr.type };
   }
 
-  function codeGenRecordExpr(expr: T.RecordExpr) {
+  function codeGenRecordExpr(expr: T.RecordExpr): CodeGenerationResult {
     const { properties } = expr;
-    const recordStr = properties.map(({ name, value }) => `${name}: ${genExpr(value)}`).join(', ');
-    return `{ ${recordStr} }`;
+    const recordStr = properties.map(({ name, value }) => `${name}: ${genExpr(value).result}`).join(', ');
+    return { result: `{ ${recordStr} }`, type: 'RecordExpr' };
   }
 
-  function codeGenAssignmentExpr(expr: T.AssignmentExpr) {
+  function codeGenAssignmentExpr(expr: T.AssignmentExpr): CodeGenerationResult {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect assignment to have expression to evaluate');
     if (minify)
-      return `const ${genExpr(expr.expr1)}=${genExpr(expr.expr2)}`;
-    return `const ${genExpr(expr.expr1)} = ${genExpr(expr.expr2)}`;
+      return { result: `const ${genExpr(expr.expr1).result}=${genExpr(expr.expr2).result}`, type: 'AssignmentExpr' };
+    return { result: `const ${genExpr(expr.expr1).result} = ${genExpr(expr.expr2).result}`, type: 'AssignmentExpr' };
   }
 
-  function codeGenVarDeclaration(expr: T.VarDeclaration) {
+  function codeGenVarDeclaration(expr: T.VarDeclaration): CodeGenerationResult {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect mutable variable declaration to have expression to evaluate');
     if (minify)
-      return `let ${expr.expr1.value}=${genExpr(expr.expr2)}`;
-    return `let ${expr.expr1.value} = ${genExpr(expr.expr2)}`;
+      return { result: `let ${expr.expr1.value}=${genExpr(expr.expr2).result}`, type: 'VarDeclaration' };
+    return { result: `let ${expr.expr1.value} = ${genExpr(expr.expr2).result}`, type: 'VarDeclaration' };
   }
 
-  function codeGenVarAssignmentExpr(expr: T.VarAssignmentExpr) {
+  function codeGenVarAssignmentExpr(expr: T.VarAssignmentExpr): CodeGenerationResult {
     if (expr.expr2 === undefined)
       CodeGenerateError('Expect mutable variable assignment expression to have expression to evaluate');
     if (minify)
-      return `${expr.expr1.value}=${genExpr(expr.expr2)}`;
-    return `${expr.expr1.value} = ${genExpr(expr.expr2)}`;
+      return { result: `${expr.expr1.value}=${genExpr(expr.expr2).result}`, type: 'VarAssignmentExpr' };
+    return { result: `${expr.expr1.value} = ${genExpr(expr.expr2).result}`, type: 'VarAssignmentExpr' };
   }
 
-  function codeGenPrioritizedExpr(expr: T.PrioritizedExpr) {
+  function codeGenPrioritizedExpr(expr: T.PrioritizedExpr): CodeGenerationResult {
     if (expr.expr)
-      return `(${genExpr(expr.expr)})`;
-    return '()';
+      return { result: `(${genExpr(expr.expr).result})`, type: 'PrioritizedExpr'};
+    return { result: '()', type: 'PrioritizedExpr' };
   }
 
-  function codeGenFunctionDeclaration(expr: T.FunctionDeclaration) {
+  function codeGenFunctionDeclaration(expr: T.FunctionDeclaration): CodeGenerationResult {
     const { name, arguments: args, body } = expr;
     const s = spaces(functionLayers * 2);
     functionLayers++;
 
     if (args.length === 0) {
       if (minify)
-        return `function ${name}(){${codeGenFunctionBody(body, [], 0)}}`;
-      return `\
+        return { result: `function ${name}(){${codeGenFunctionBody(body, [], 0)}}`, type: 'FunctionDeclaration'};
+      return { result: `\
 function ${name}() {
 ${codeGenFunctionBody(body, [], functionLayers * 2)}
-${s}}`;
+${s}}`, type: 'FunctionDeclaration'};
     }
 
     if (minify)
-      return `function ${name}(${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`;
-    return `\
+      return { result: `function ${name}(${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`, type: 'FunctionDeclaration' };
+    return { result: `\
 function ${name}(${codeGenArguments(args)}) {
 ${codeGenFunctionBody(body, args, functionLayers * 2)}
-${s}}`;
+${s}}`, type: 'FunctionDeclaration' };
   }
 
-  function codeGenArguments(args: Array<T.Argument>) {
+  function codeGenArguments(args: Array<T.Argument>): string {
     return args.map(({ ident }) => ident).join(commaDelimiter);
   }
 
-  function codeGenFunctionBody(body: Array<T.Expr>, args: Array<T.Argument>, indent: number) {
+  function codeGenFunctionBody(body: Array<T.Expr>, args: Array<T.Argument>, indent: number): string {
     let i = 0;
     const result: Array<string> = [];
     if (minify) {
       while (i < body.length) {
-        result.push(`${genExpr(body[i])};`);
+        result.push(`${genExpr(body[i]).result};`);
         i += 1;
       }
   
@@ -191,7 +193,7 @@ ${s}}`;
     }
 
     while (i < body.length) {
-      result.push(`${' '.repeat(indent)}${genExpr(body[i])};`);
+      result.push(`${' '.repeat(indent)}${genExpr(body[i]).result};`);
       i += 1;
     }
 
@@ -201,90 +203,96 @@ ${s}}`;
     return result.join('\n');
   }
 
-  function codeGenFunctionInvokeExpr(expr: T.FunctionInvokeExpr) {
+  function codeGenFunctionInvokeExpr(expr: T.FunctionInvokeExpr): CodeGenerationResult {
     const { name, params } = expr;
-    return `${name}(${params.map(genExpr).join(commaDelimiter)})`;
+    return { result: `${name}(${params.map(p => genExpr(p).result).join(commaDelimiter)})`, type: 'FunctionInvokeExpr' };
   }
 
-  function codeGenMethodDeclaration(expr: T.MethodDeclaration) {
+  function codeGenMethodDeclaration(expr: T.MethodDeclaration): CodeGenerationResult {
     const { name, arguments: args, body } = expr;
     const s = spaces(functionLayers * 2);
     functionLayers++;
 
     if (args.length === 0) {
       if (minify)
-        return `function ${name}(_this){${codeGenFunctionBody(body, [], 0)}}`;
-      return `\
+        return { result: `function ${name}(_this){${codeGenFunctionBody(body, [], 0)}}`, type: 'MethodDeclaration' };
+      return { result: `\
 function ${name}(_this) {
 ${codeGenFunctionBody(body, [], functionLayers * 2)}
-${s}}`;
+${s}}`, type: 'MethodDeclaration' };
     }
 
     if (minify)
-      return `function ${name}(_this,${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`;
-    return `\
+      return { result: `function ${name}(_this,${codeGenArguments(args)}){${codeGenFunctionBody(body, args, 0)}}`, type: 'MethodDeclaration'};
+    return { result: `\
 function ${name}(_this, ${codeGenArguments(args)}) {
 ${codeGenFunctionBody(body, args, functionLayers * 2)}
-${s}}`;
+${s}}`, type: 'MethodDeclaration' };
   }
 
-  function codeGenMethodInvokeExpr(expr: T.MethodInvokeExpr): string {
+  function codeGenMethodInvokeExpr(expr: T.MethodInvokeExpr): CodeGenerationResult {
     const { name, receiver, params, isNotBuiltin } = expr;
-    const args = params.map(genExpr).join(commaDelimiter);
+    const args = params.map(p => genExpr(p).result).join(commaDelimiter);
 
     if (isNotBuiltin) {
       if (params.length === 0)
-        return `${name}(${genExpr(receiver)})`;
+        return { result: `${name}(${genExpr(receiver).result})`, type: 'MethodInvokeExpr' };
 
       if (minify)
-        return `${name}(${genExpr(receiver)},${args})`
-      return `${name}(${genExpr(receiver)}, ${args})`;
+        return { result: `${name}(${genExpr(receiver).result},${args})`, type: 'MethodInvokeExpr' };
+      return { result: `${name}(${genExpr(receiver).result}, ${args})`, type: 'MethodInvokeExpr' };
     }
 
     if (receiver.type === 'MethodInvokeExpr')
-      return `${genExpr(receiver)}.${name}(${args})`;
-    return `(${genExpr(receiver)}).${name}(${args})`;
+      return { result: `${genExpr(receiver).result}.${name}(${args})`, type: 'MethodInvokeExpr' };
+    return { result: `(${genExpr(receiver).result}).${name}(${args})`, type: 'MethodInvokeExpr' };
   }
 
-  function codeGenConditionalExpr(expr: T.ConditionalExpr) {
+  function codeGenConditionalExpr(expr: T.ConditionalExpr): CodeGenerationResult {
     const { condition, expr1, expr2 } = expr;
     if (condition === undefined || expr1 === undefined || expr2 === undefined)
       CodeGenerateError('Missing expressions in `ConditionExpr`');
 
     let result: string;
     if (minify) {
-      result = `${genExpr(condition)}?${genExpr(expr1)}:`;
+      result = `${genExpr(condition).result}?${genExpr(expr1).result}:`;
     } else {
-      result = `${genExpr(condition)} ? ${genExpr(expr1)} : `;
+      result = `${genExpr(condition).result} ? ${genExpr(expr1).result} : `;
     }
 
     if (expr2.type === 'ConditionalExpr') {
-      result += `(${codeGenConditionalExpr(expr2)})`;
+      result += `(${codeGenConditionalExpr(expr2).result})`;
     } else if (expr2.type === 'EmptyExpr') {
       result += 'null';
     } else {
-      result += genExpr(expr2);
+      result += genExpr(expr2).result;
     }
-    return result;
+    return { result, type: 'ConditionalExpr' };
   }
 
+  const notRequiredSemicolonSet = new Set([
+    'FunctionDeclaration',
+    'MethodDeclaration' 
+  ]);
   if (minify) {
     while (index < ast.length) {
       const expr = ast[index];
-      result += `${genExpr(expr)}`;
-      if (result[result.length - 1] !== '}')
+      const generated = genExpr(expr);
+      result += `${generated.result}`;
+      if (!notRequiredSemicolonSet.has(generated.type))
         result += ';';
       index++;
     }
   } else {
     while (index < ast.length) {
       const expr = ast[index];
-      result += `${genExpr(expr)}`;
+      const generated = genExpr(expr);
+      result += `${generated.result}`;
   
-      if (result[result.length - 1] === '}')
-        result += '\n\n';
-      else
+      if (!notRequiredSemicolonSet.has(generated.type))
         result += ';\n';
+      else
+        result += '\n\n';
   
       index++;
     }
