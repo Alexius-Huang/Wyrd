@@ -3,7 +3,8 @@ import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
-import { parseRecordLiteral } from './record';
+import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
+
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -12,7 +13,7 @@ export function parseIdentifier(
   prevExpr?: T.Expr,
 ): T.Expr {
   const tokenName = tt.value;
-  let result: T.IdentLiteral | T.FunctionInvokeExpr | T.RecordExpr = {
+  let result: T.Expr = {
     type: 'IdentLiteral',
     value: tokenName,
     return: DT.Invalid,
@@ -20,6 +21,11 @@ export function parseIdentifier(
 
   if (scope.hasVariable(tokenName)) {
     result.return = scope.getVariable(tokenName).type;
+
+    if (tt.peekIs('ref')) {
+      tt.next();
+      result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
+    }
   } else if (scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
   } else if (scope.hasRecord(tokenName)) {
