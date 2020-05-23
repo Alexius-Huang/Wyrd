@@ -38,6 +38,8 @@ export function generateCode(
       case 'AndExpr':
       case 'OrExpr':
         return codeGenAndOrExpr(expr);
+      case 'RecordExpr':
+        return codeGenRecordExpr(expr);
       case 'AssignmentExpr':
         return codeGenAssignmentExpr(expr);
       case 'VarDeclaration':
@@ -109,6 +111,12 @@ export function generateCode(
     if (minify)
       return `${genExpr(expr.expr1)}${logicOperator}${genExpr(expr.expr2)}`;
     return `${genExpr(expr.expr1)} ${logicOperator} ${genExpr(expr.expr2)}`;
+  }
+
+  function codeGenRecordExpr(expr: T.RecordExpr) {
+    const { properties } = expr;
+    const recordStr = properties.map(({ name, value }) => `${name}: ${genExpr(value)}`).join(', ');
+    return `{ ${recordStr} }`;
   }
 
   function codeGenAssignmentExpr(expr: T.AssignmentExpr) {
