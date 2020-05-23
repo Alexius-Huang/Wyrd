@@ -10,12 +10,13 @@ export default class Record {
 
   get type() { return new DT(this.name); }
 
-  public setProperty(type: DT, name: string) {
+  public setProperty(type: DT, name: string): Record {
     if (this.propertySet.has(name))
       ParserError(`Property ${name} in \`${this.name}\` has already been declared`);
 
     this.propertySet.add(name);
     this.properties.set(name, { type, name });
+    return this;
   }
 
   public getProperty(name: string): RecordProperty {

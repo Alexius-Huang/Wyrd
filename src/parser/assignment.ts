@@ -45,7 +45,7 @@ export function parseAssignmentExpr(
       return: DT.Void,
     };
 
-    const variableInfo = scope.createConstant(varName);
+    const varInfo = scope.createConstant(varName);
 
     result.expr2 = parseExpr(undefined, { scope });
     const isInvalid = DT.isInvalid(result.expr2.return);
@@ -53,7 +53,7 @@ export function parseAssignmentExpr(
     ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    
 
     prevExpr.return = result.expr2.return;
-    variableInfo.type = prevExpr.return;
+    varInfo.type = prevExpr.return;
     return result;
   }
 

@@ -56,6 +56,7 @@ describe('Compiler Option: Minification', () => {
 
     describe('Record', () => {
       perform('record declaration', 'record/basic-declaration');
+      perform('record assignment', 'record/record-assignment');
     });
   });
 

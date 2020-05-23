@@ -1,6 +1,6 @@
 import { Token, AST } from '../../types';
 import { NumberLiteral, StringLiteral, BooleanLiteral, Var } from '../helper';
-import { DataType as DT, DataType } from '../../parser/utils';
+import { DataType as DT } from '../../parser/utils';
 
 const program = `\
 record UserInfo { Str name, Num age, Bool hasPet }
@@ -50,7 +50,7 @@ const tokens: Array<Token> = [
 const ast: AST = [
   {
     type: 'AssignmentExpr',
-    expr1: Var('maxwell', new DataType('UserInfo')),
+    expr1: Var('maxwell', new DT('UserInfo')),
     expr2: {
       type: 'RecordExpr',
       properties: [
@@ -58,13 +58,13 @@ const ast: AST = [
         { name: 'age', type: DT.Num, value: NumberLiteral(18) },
         { name: 'hasPet', type: DT.Bool, value: BooleanLiteral(false) }
       ],
-      return: new DataType('UserInfo')
+      return: new DT('UserInfo')
     },
     return: DT.Void,
   },
   {
     type: 'RecordReferenceExpr',
-    recordExpr: Var('maxwell', new DataType('UserInfo')),
+    recordExpr: Var('maxwell', new DT('UserInfo')),
     property: 'age',
     return: DT.Num
   },
