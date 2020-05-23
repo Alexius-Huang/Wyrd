@@ -119,6 +119,11 @@ export function generateCode(
 
   function codeGenRecordExpr(expr: T.RecordExpr): CodeGenerationResult {
     const { properties } = expr;
+    if (minify) {
+      const recordStr = properties.map(({ name, value }) => `${name}:${genExpr(value).result}`).join(',');
+      return { result: `{${recordStr}}`, type: 'RecordExpr' };  
+    }
+
     const recordStr = properties.map(({ name, value }) => `${name}: ${genExpr(value).result}`).join(', ');
     return { result: `{ ${recordStr} }`, type: 'RecordExpr' };
   }

@@ -53,6 +53,10 @@ describe('Compiler Option: Minification', () => {
       perform('list with function invocation', 'builtin-types/list/with-function-invocation');
       perform('list with prioritization expressions', 'builtin-types/list/with-prioritization');
     });
+
+    describe('Record', () => {
+      perform('record declaration', 'record/basic-declaration');
+    });
   });
 
   describe('Comment', () => {

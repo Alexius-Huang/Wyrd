@@ -75,7 +75,7 @@ const maxwell = { name: 'Maxwell', age: 18, hasPet: false };
 maxwell.age;
 `;
 
-const minified = 'TODO';
+const minified = 'const maxwell={name:\'Maxwell\',age:18,hasPet:false};maxwell.age;';
 
 export {
   program,
