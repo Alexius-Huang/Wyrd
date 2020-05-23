@@ -5,9 +5,11 @@ import {
   ScopeFunctionObject as FunctionObject,
   ScopeMethodType as MethodType,
   ScopeMethodObject as MethodObject,
-  ScopeOperatorObject as OperatorObject
+  ScopeOperatorObject as OperatorObject,
+  ScopeRecord as Record
 } from '.';
 import { ParserError } from '../error';
+import { RecordProperty } from '../../types';
 
 export default class Scope {
   public parent: null | Scope = null;
@@ -18,6 +20,7 @@ export default class Scope {
     public functions: Map<string, FunctionObject> = new Map(),
     public methods: Map<string, MethodType> = new Map(),
     public operators: Map<string, OperatorObject> = new Map(),
+    public records: Map<string, Record> = new Map(),
   ) {}
 
   public createChildScope(name: string): Scope {
@@ -25,6 +28,14 @@ export default class Scope {
     this.children.set(name, scope);
     scope.parent = this;
     return scope;
+  }
+
+  public canBeNamedAs(name: string): boolean {
+    return (
+      this.hasVariable(name) ||
+      this.hasFunction(name) ||
+      this.hasRecord(name)
+    );
   }
 
   public hasVariable(name: string): boolean {
@@ -152,5 +163,19 @@ export default class Scope {
     const operatorObj = new OperatorObject(op);
     this.operators.set(op, operatorObj);
     return operatorObj;
+  }
+
+  public hasRecord(name: string): boolean {
+    return this.records.has(name) || (this.parent ? this.parent.hasRecord(name) : false);
+  }
+
+  public getRecord(name: string): Record {
+    return this.records.get(name) as Record;
+  }
+
+  public createRecord(name: string): Record {
+    const r = new Record(name);
+    this.records.set(name, r);
+    return r;
   }
 }

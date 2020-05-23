@@ -6,4 +6,5 @@ export { default as ScopeFunctionObject } from './Scope.FunctionObject';
 export { default as ScopeMethodType } from './Scope.MethodType';
 export { default as ScopeMethodObject } from './Scope.MethodObject';
 export { default as ScopeOperatorObject } from './Scope.OperatorObject';
+export { default as ScopeRecord } from './Scope.Record';
 export { default as TokenTracker } from './TokenTracker';
