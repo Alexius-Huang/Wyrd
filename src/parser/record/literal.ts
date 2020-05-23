@@ -39,7 +39,7 @@ export function parseRecordLiteral(
       const propDef = recordDef.getProperty(propName);
       const propValue: T.RecordPropertyValue = {
         name: propName,
-        type: propDef?.type,
+        type: propDef.type,
         value: EmptyExpression,
       };
 
@@ -50,16 +50,16 @@ export function parseRecordLiteral(
         if (tt.is('comma') || tt.is('rcurly')) break;
       }
 
+      if (propValueExpr.return.isNotEqualTo(propValue.type))
+        ParserError(`Expect property \`${propName}\` in record \`${recordDef.name}\` to receive value of type \`${propDef.type}\`, instead got value of type \`${propValueExpr.return}\``);
+
       propValue.value = propValueExpr;
       result.properties.push(propValue);
     } else {
       ParserError(`Property \`${propName}\` isn't exist in definition of record \`${recordName}\``);
     }
 
-    if (tt.isNot('comma')) {
-      if (tt.is('rcurly')) break;
-      ParserError(`Expect more key-value pairs of record \`${recordName}\` to dilimited by comma, instead got token of type \`${tt.type}\``);
-    }
+    if (tt.isNot('comma') && tt.is('rcurly')) break;
     tt.next(); // Skip comma
   }
 
