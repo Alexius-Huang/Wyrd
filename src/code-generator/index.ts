@@ -42,6 +42,8 @@ export function generateCode(
         return codeGenAndOrExpr(expr);
       case 'RecordExpr':
         return codeGenRecordExpr(expr);
+      case 'RecordReferenceExpr':
+        return codeGenRecordReferenceExpr(expr);
       case 'AssignmentExpr':
         return codeGenAssignmentExpr(expr);
       case 'VarDeclaration':
@@ -119,6 +121,11 @@ export function generateCode(
     const { properties } = expr;
     const recordStr = properties.map(({ name, value }) => `${name}: ${genExpr(value).result}`).join(', ');
     return { result: `{ ${recordStr} }`, type: 'RecordExpr' };
+  }
+
+  function codeGenRecordReferenceExpr(expr: T.RecordReferenceExpr): CodeGenerationResult {
+    const { recordExpr, property } = expr;
+    return { result: `${genExpr(recordExpr).result}.${property}`, type: 'RecordReferenceExpr' };
   }
 
   function codeGenAssignmentExpr(expr: T.AssignmentExpr): CodeGenerationResult {

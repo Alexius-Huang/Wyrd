@@ -19,8 +19,12 @@ export default class Record {
   }
 
   public getProperty(name: string): RecordProperty {
-    if (this.properties.has(name))
+    if (this.hasProperty(name))
       return this.properties.get(name) as RecordProperty;
     ParserError(`Property \`${name}\` isn't existed in definition of record \`${this.name}\``);
+  }
+
+  public hasProperty(name: string) {
+    return this.propertySet.has(name);
   }
 }

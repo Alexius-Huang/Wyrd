@@ -5,7 +5,7 @@ import { DataType as DT, DataType } from '../../parser/utils';
 const program = `\
 record UserInfo { Str name, Num age, Bool hasPet }
 maxwell = UserInfo { name: "Maxwell", age: 18, hasPet: False }
-`;`maxwell->age
+maxwell->age
 `;
 
 const tokens: Array<Token> = [
@@ -41,10 +41,10 @@ const tokens: Array<Token> = [
   { type: 'rcurly', value: '}' },
   { type: 'newline', value: '\n' },
 
-  // { type: 'ident', value: 'maxwell' },
-  // { type: 'ref', value: '->' },
-  // { type: 'ident', value: 'age' },
-  // { type: 'newline', value: '\n' },
+  { type: 'ident', value: 'maxwell' },
+  { type: 'ref', value: '->' },
+  { type: 'ident', value: 'age' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
@@ -62,10 +62,17 @@ const ast: AST = [
     },
     return: DT.Void,
   },
+  {
+    type: 'RecordReferenceExpr',
+    recordExpr: Var('maxwell', new DataType('UserInfo')),
+    property: 'age',
+    return: DT.Num
+  },
 ];
 
 const compiled = `\
 const maxwell = { name: 'Maxwell', age: 18, hasPet: false };
+maxwell.age;
 `;
 
 const minified = 'TODO';

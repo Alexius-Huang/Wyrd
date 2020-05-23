@@ -85,7 +85,8 @@ export type Expr =
 | ListLiteral
 | TypeLiteral
 | ThisLiteral
-| RecordExpr;
+| RecordExpr
+| RecordReferenceExpr;
 
 // Empty expression signifies the expression is expected not to be empty, hence the return type is invalid
 export interface EmptyExpr extends Expression {
@@ -247,4 +248,10 @@ export type RecordPropertyValue = RecordProperty & { value: Expr };
 export interface RecordExpr extends Expression {
   type: 'RecordExpr';
   properties: Array<RecordPropertyValue>;
+}
+
+export interface RecordReferenceExpr extends Expression {
+  type: 'RecordReferenceExpr';
+  recordExpr: Expr;
+  property: string;
 }
