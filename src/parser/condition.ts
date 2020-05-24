@@ -1,7 +1,7 @@
 import * as T from '../types';
 import { TokenTracker, DataType as DT } from './utils';
 import { ParserErrorIf, ParserError } from './error';
-import { EmptyExpression } from './constants';
+import { EmptyExpression, VoidExpression } from './constants';
 
 export function parseConditionalExpr(
   tt: TokenTracker,
@@ -15,7 +15,7 @@ export function parseConditionalExpr(
     type: 'ConditionalExpr',
     condition: EmptyExpression,
     expr1: EmptyExpression,
-    expr2: EmptyExpression,
+    expr2: VoidExpression,
     return: lockedType ?? DT.Unknown
   };
 

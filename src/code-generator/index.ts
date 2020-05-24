@@ -64,6 +64,9 @@ export function generateCode(
         return codeGenMethodInvokeExpr(expr);
       case 'ConditionalExpr':
         return codeGenConditionalExpr(expr);
+      case 'VoidExpr':
+        console.warn('Code Generation Warning: `VoidExpression` is expected to be avoid during the parsing phase');
+        return { result: '', type: 'VoidExpr' };
       default:
         CodeGenerateError(`Unhandled expression of type \`${(expr).type}\``);
     }
@@ -274,7 +277,7 @@ ${s}}`, type: 'MethodDeclaration' };
 
     if (expr2.type === 'ConditionalExpr') {
       result += `(${codeGenConditionalExpr(expr2).result})`;
-    } else if (expr2.type === 'EmptyExpr') {
+    } else if (expr2.type === 'VoidExpr') {
       result += 'null';
     } else {
       result += genExpr(expr2).result;

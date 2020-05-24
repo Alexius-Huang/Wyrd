@@ -1,7 +1,7 @@
 import { Token, AST, Operator as Op, ParseOptions } from '../../types';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
-import { EmptyExpression } from '../../parser/constants';
+import { VoidExpression } from '../../parser/constants';
 
 const program = `\
 if age < 18 => "youngster"
@@ -56,7 +56,7 @@ const ast: AST = [
       expr2: NumberLiteral(18),
     },
     expr1: StringLiteral('youngster'),
-    expr2: EmptyExpression,
+    expr2: VoidExpression,
   },
   {
     type: 'ConditionalExpr',
@@ -91,7 +91,7 @@ const ast: AST = [
           expr2: NumberLiteral(100),
         },
         expr1: StringLiteral('elder'),
-        expr2: EmptyExpression,
+        expr2: VoidExpression,
       },
     },
   },
