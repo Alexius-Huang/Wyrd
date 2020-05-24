@@ -64,6 +64,8 @@ export function generateCode(
         return codeGenMethodInvokeExpr(expr);
       case 'ConditionalExpr':
         return codeGenConditionalExpr(expr);
+      case 'DoBlockExpr':
+        return codeGenDoBlockExpr(expr);
       case 'VoidExpr':
         console.warn('Code Generation Warning: `VoidExpression` is expected to be avoid during the parsing phase');
         return { result: '', type: 'VoidExpr' };
@@ -285,10 +287,22 @@ ${s}}`, type: 'MethodDeclaration' };
     return { result, type: 'ConditionalExpr' };
   }
 
+  function codeGenDoBlockExpr(expr: T.DoBlockExpr): CodeGenerationResult {
+    const { body } = expr;
+    
+    if (minify)
+      return { result: `(function(){${codeGenFunctionBody(body, [], 0)}})()`, type: 'DoBlockExpr' };
+    return { result: `\
+(function () {
+${codeGenFunctionBody(body, [], 2)}
+})()`, type: 'DoBlockExpr' };
+  }
+
   const notRequiredSemicolonSet = new Set([
     'FunctionDeclaration',
     'MethodDeclaration' 
   ]);
+
   if (minify) {
     while (index < ast.length) {
       const expr = ast[index];

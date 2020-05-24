@@ -1,7 +1,7 @@
 import * as T from '../../types';
 import { TokenTracker, DataType as DT, Scope } from '../utils';
 import { parseCondition } from './condition';
-import { parseIfArrowExpr, parseIfThenExpr } from './if-expression';
+import { parseIfArrowExpr, parseIfThenExpr, parseIfBlockExpr } from './if-expression';
 import { parseElseIfExpression } from './if-else-if-expression';
 import { parseElseExpression } from './else-expression';
 import { EmptyExpression, VoidExpression } from '../constants';
@@ -24,20 +24,17 @@ export function parseConditionalExpr(
   tt.next(); // Skip 'if' | 'elif' keyword
   result = parseCondition(tt, parseExpr, result);
 
-  let expressionType: 'arrow' | 'then';
+  let expressionType: 'arrow' | 'then' | 'do-block';
   if (tt.is('arrow')) {
     result = parseIfArrowExpr(tt, parseExpr, scope, result);
     expressionType = 'arrow';
   } else if (tt.valueIs('then')) {
     result = parseIfThenExpr(tt, parseExpr, scope, result);
     expressionType = 'then';
-  }
-  // else if (tt.valueIs('do')) {
-  //   tt.next(); // Skip 'do' keyword
-  //   ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `do` keyword');
-  // }
-  else
-    ParserError(`Unhandled conditional expression parsing with token of type \`${tt.type}\``);
+  } else if (tt.valueIs('do')) {
+    result = parseIfBlockExpr(tt, parseExpr, scope, result);
+    expressionType = 'do-block';
+  } else ParserError(`Unhandled conditional expression parsing with token of type \`${tt.type}\``);
 
   if (
     /* Without-Else expression and last line condition */
@@ -48,7 +45,7 @@ export function parseConditionalExpr(
   ) {
     if (expressionType === 'arrow')
       return parseIfArrowNoElseExpr(tt, parseExpr, scope, result);
-    else
+    else if (expressionType === 'then')
       return parseIfThenNoElseExpr(tt, parseExpr, scope, result);
   }
 

@@ -16,9 +16,8 @@ export function parseElseIfExpression(
    *  Case when elif-expression has no else expression further,
    *  the overall conditional expression should be converted to maybe types
    */
-  if (!result.return.nullable && result.expr2.return.nullable) {
+  if (!result.return.nullable && result.expr2.return.nullable)
     result.return = result.return.toNullable();
-  }
 
   if (result.return.isNotEqualTo(result.expr2.return))
     ParserError('Expect values returned from different condition branch to be the same');

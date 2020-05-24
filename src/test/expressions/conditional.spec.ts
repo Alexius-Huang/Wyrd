@@ -9,6 +9,10 @@ describe('Conditional Expressions', () => {
     FundamentalCompileTest('conditional/if-then-expression');
   });
 
+  describe('If-Block Expression', () => {
+    FundamentalCompileTest('conditional/if-block-expression');
+  });
+
   describe('If-Mixed Expression', () => {
     FundamentalCompileTest('conditional/if-mixed-expression');
   });
