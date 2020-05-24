@@ -6,7 +6,6 @@ import { parseElseIfExpression } from './if-else-if-expression';
 import { parseElseExpression } from './else-expression';
 import { EmptyExpression, VoidExpression } from '../constants';
 import { ParserError } from '../error';
-import { parseIfArrowNoElseExpr, parseIfThenNoElseExpr } from './if-no-else-expression';
 
 export function parseConditionalExpr(
   tt: TokenTracker,
@@ -43,10 +42,11 @@ export function parseConditionalExpr(
     /* Without-else-expression condition */
     !(tt.peekIs('keyword') && tt.peekValueIsOneOf('elif', 'else'))
   ) {
-    if (expressionType === 'arrow')
-      return parseIfArrowNoElseExpr(tt, parseExpr, scope, result);
-    else if (expressionType === 'then')
-      return parseIfThenNoElseExpr(tt, parseExpr, scope, result);
+    result.return = result.return.toNullable();
+
+    if (expressionType !== 'arrow' && tt.peekIs('keyword') && tt.peekValueIs('end'))
+      tt.next(); // Skip `end` keyword
+    return result;
   }
 
   tt.next(); // Skip `newline`
