@@ -1,13 +1,15 @@
-import * as T from '../types';
-import { TokenTracker, DataType as DT } from './utils';
-import { ParserErrorIf, ParserError } from './error';
-import { EmptyExpression, VoidExpression } from './constants';
+import * as T from '../../types';
+import { TokenTracker, DataType as DT, Scope } from '../utils';
+import { ParserErrorIf, ParserError } from '../error';
+import { EmptyExpression, VoidExpression } from '../constants';
+import { parseElseIfExpression } from './else-if-expression';
+import { parseCondition } from './condition';
 
 export function parseConditionalExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr: T.Expr, meta?: any) => T.Expr,
+  scope: Scope,
 ): T.ConditionalExpr {
-  tt.next(); // Skip 'if' | 'elif' keyword
   let result: T.ConditionalExpr = {
     type: 'ConditionalExpr',
     condition: EmptyExpression,
@@ -16,21 +18,11 @@ export function parseConditionalExpr(
     return: DT.Unknown
   };
 
+  tt.next(); // Skip 'if' | 'elif' keyword
+  result = parseCondition(tt, parseExpr, result);
+
   let isThenExpression = false;
-
-  while (tt.isNot('arrow') && tt.valueIsNot('then')) {
-    result.condition = parseExpr(result, { target: 'condition' });
-    tt.next();
-    ParserErrorIf(tt.is('newline'), 'Expect condition to end followed by arrow `=>` or the `then` keyword');
-  }
-
-  ParserErrorIf(result.condition === undefined, 'Expect to resolve a condition');
-
-  const condReturnedType = result.condition.return;
-  ParserErrorIf(
-     condReturnedType.isNotEqualTo(DT.Bool),
-    `Expect conditional expression's condition should return \`Bool\` type, instead got: \`${condReturnedType}\``,
-  );
+  // let isDoBlockExpression = false;
 
   if (tt.valueIs('then')) {
     tt.next(); // Skip 'then' keyword
@@ -38,7 +30,13 @@ export function parseConditionalExpr(
     ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `then` keyword');
   }
 
-  tt.next(); // Skip '=>' inline-control operator or skip `newline` if using `then block`
+  // else if (tt.valueIs('do')) {
+  //   tt.next(); // Skip 'do' keyword
+  //   isDoBlockExpression = true;
+  //   ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `do` keyword');
+  // }
+
+  tt.next(); // Skip '=>' inline-control operator or skip `newline` if using `then` expression or `do` block
 
   while (tt.isNot('newline')) {
     result.expr1 = parseExpr(result, { target: 'expr1' });
@@ -64,22 +62,8 @@ export function parseConditionalExpr(
   tt.next(); // Skip `newline`
 
   /* Handle elif is exactly the same as the if expression */
-  if (tt.is('keyword') && tt.valueIs('elif')) {
-    result.expr2 = parseConditionalExpr(tt, parseExpr);
-
-    /*
-     *  Case when elif-expression has no else expression further,
-     *  the overall conditional expression should be converted to maybe types
-     */
-    if (!result.return.nullable && result.expr2.return.nullable) {
-      result.return = result.return.toNullable();
-    }
-
-    if (result.return.isNotEqualTo(result.expr2.return))
-      ParserError('Expect values returned from different condition branch to be the same');
-
-    return result;
-  }
+  if (tt.is('keyword') && tt.valueIs('elif'))
+    return parseElseIfExpression(tt, parseExpr, scope, result);
 
   /* Handle else expression */
   if (tt.is('keyword') && tt.valueIs('else')) {

@@ -8,7 +8,7 @@ import { parseRecordDeclaration } from './record/declaration';
 import { parseRecordReferenceExpr } from './record/reference';
 import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration, parseMethodDeclaration } from './function';
-import { parseConditionalExpr } from './condition';
+import { parseConditionalExpr } from './conditional';
 import { parseAssignmentExpr } from './assignment';
 import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
@@ -61,7 +61,7 @@ export function parse(
       }
 
       if (tt.valueIs('if'))
-        return parseConditionalExpr(tt, parseExpr);
+        return parseConditionalExpr(tt, parseExpr, scope);
 
       if (tt.valueIs('not'))
         return parseLogicalNotExpr(tt, parseExpr);
