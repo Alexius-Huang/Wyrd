@@ -41,13 +41,9 @@ export function parsePrioritizedExpr(
       prevExpr.expr = result;
       prevExpr.return = result.return;
 
-      while (true) {
-        if (tt.peekIs('dot')) {
-          tt.next();
-          result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
-          continue;
-        }
-        break;
+      while (tt.peekIs('dot')) {
+        tt.next();
+        result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
       }
       return result;
     }
@@ -65,13 +61,9 @@ export function parsePrioritizedExpr(
 
   result.return = result.expr.return;
 
-  while (true) {
-    if (tt.peekIs('dot')) {
-      tt.next();
-      result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
-      continue;
-    }
-    break;
+  while (tt.peekIs('dot')) {
+    tt.next();
+    result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
   }
   return result;
 }

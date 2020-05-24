@@ -5,6 +5,7 @@ import { parseStringLiteral } from './string';
 import { parseBooleanLiteral } from './boolean';
 import { parseNullLiteral } from './null';
 import { parseMethodInvokeExpr } from '../method-invocation';
+import { ParserError } from '../error';
 
 const primitiveMapParsingFunctions = new Map([
   ['number', parseNumberLiteral],
@@ -24,13 +25,30 @@ export function parsePrimitive(
   let result = func(tt, scope, prevExpr);
 
   /* Parse wuth method invocation if value chained directly with dot token */
-  while (true) {
-    if (tt.peekIs('dot')) {
-      tt.next();
-      result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
-      continue;
-    }
-    break;  
+  while (tt.peekIs('dot')) {
+    tt.next();
+    result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
+  }
+
+  // TODO: After implement operator overloading, should also test
+  //       operator mixed method invocation
+  if (prevExpr?.type === 'BinaryOpExpr') {
+    prevExpr.expr2 = result;
+    const operator = prevExpr.operator;
+    const opLeft = prevExpr.expr1.return;
+    const opRight = result.return;
+    const operatorObj = scope.getOperatorPattern(operator, opLeft, opRight);
+
+    if (operatorObj === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type \`${opLeft}\` and \`${opRight}\``);
+
+    prevExpr.return = operatorObj.returnDataType;
+    return prevExpr;
+  }
+
+  if (prevExpr?.type === 'PrioritizedExpr') {
+    prevExpr.expr = result;
+    prevExpr.return = result.return;
   }
 
   return result;

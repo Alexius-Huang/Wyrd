@@ -22,20 +22,13 @@ export function parseIdentifier(
   if (scope.hasVariable(tokenName)) {
     result.return = scope.getVariable(tokenName).type;
 
-    while (true) {
-      if (tt.peekIs('dot')) {
-        tt.next();
+    while (tt.peekIs('dot') || tt.peekIs('ref')) {
+      tt.next();
+      if (tt.is('dot')) {
         result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
-        continue;
-      }
-
-      if (tt.peekIs('ref')) {
-        tt.next();
+      } else {
         result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
-        continue;
       }
-  
-      break;
     }
   } else if (scope.hasFunction(tokenName)) {
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
