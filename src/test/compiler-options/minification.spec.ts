@@ -107,6 +107,7 @@ describe('Compiler Option: Minification', () => {
     perform('expression invoke method expression', 'method-invocation/expr-invoke-method');
     perform('chained method invocation', 'method-invocation/chained');
     perform('method invocation as parameters', 'method-invocation/as-params');
+    perform('method invocation mixed binary operation', 'method-invocation/with-binary-operation');
     perform('builtin-type method invocation', 'method-invocation/builtin-type-invocation');
   });
 });
