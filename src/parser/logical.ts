@@ -4,7 +4,7 @@ import { EmptyExpression } from './constants';
 
 export function parseLogicalNotExpr(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
 ): T.Expr {
   let result: T.NotExpr = {
     type: 'NotExpr',
@@ -18,7 +18,7 @@ export function parseLogicalNotExpr(
 
 export function parseLogicalAndOrExpr(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   prevExpr: T.Expr,
 ): T.Expr {
   const logicType = tt.valueIs('and') ? 'AndExpr' : 'OrExpr';

@@ -21,7 +21,7 @@ export function parseMethodInvokeExpr(
 
 function parseMethodInvokeParameters(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): Array<T.Expr> {
   const params: Array<T.Expr> = [];
@@ -40,7 +40,7 @@ function parseMethodInvokeParameters(
 
 function parseMethodInvokeParameter(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): T.Expr {
   const parameterExpr: T.AST = [];

@@ -4,7 +4,7 @@ import { ParserErrorIf, ParserError } from './error';
 
 export function parseFunctionInvokeExpr(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   prevExpr?: T.Expr,
 ): T.FunctionInvokeExpr {
@@ -41,7 +41,7 @@ export function parseFunctionInvokeExpr(
 
 function parseFunctionParameters(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): Array<T.Expr> {
   const params: Array<T.Expr> = [];
@@ -60,7 +60,7 @@ function parseFunctionParameters(
 
 function parseFunctionParameter(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): T.Expr {
   const parameterExpr: T.AST = [];

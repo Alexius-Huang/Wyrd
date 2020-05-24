@@ -5,7 +5,7 @@ import { parseConditionalExpr } from '.';
 
 export function parseElseIfExpression(
   tt: TokenTracker,
-  parseExpr: (prevExpr: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   prevExpr: T.ConditionalExpr,
 ): T.ConditionalExpr {

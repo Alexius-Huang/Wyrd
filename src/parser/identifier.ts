@@ -8,7 +8,7 @@ import { parseMethodInvokeExpr } from './method-invocation';
 
 export function parseIdentifier(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   prevExpr?: T.Expr,
 ): T.Expr {

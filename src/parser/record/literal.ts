@@ -5,7 +5,7 @@ import { ParserError } from '../error';
 
 export function parseRecordLiteral(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   prevExpr?: T.Expr,
 ): T.RecordExpr {

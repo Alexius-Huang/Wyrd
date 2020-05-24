@@ -6,7 +6,7 @@ import { ParserError, ParserErrorIf } from '../error';
 
 export function parseFunctionDeclaration(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   options?: { override?: Boolean },
 ): T.FunctionDeclaration {
