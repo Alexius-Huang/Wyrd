@@ -267,8 +267,6 @@ ${s}}`, type: 'MethodDeclaration' };
 
   function codeGenConditionalExpr(expr: T.ConditionalExpr): CodeGenerationResult {
     const { condition, expr1, expr2 } = expr;
-    if (condition === undefined || expr1 === undefined || expr2 === undefined)
-      CodeGenerateError('Missing expressions in `ConditionExpr`');
 
     let result: string;
     if (minify) {

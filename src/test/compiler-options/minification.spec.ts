@@ -73,6 +73,10 @@ describe('Compiler Option: Minification', () => {
     perform('If-Arrow without Else expression', 'conditional/if-arrow-without-else-expression');
     perform('If-Then expression', 'conditional/if-then-expression');
     perform('If-Then without Else expression', 'conditional/if-then-without-else-expression');
+    perform('If-Block expression', 'conditional/if-else-block-expression');
+    perform('If-Else-If-Block expression', 'conditional/if-else-if-block-expression');
+    perform('If-Block without Else expression', 'conditional/if-block-without-else-expression');
+    perform('If-Else-If-Block without Else expression', 'conditional/if-else-if-block-without-else-expression');
     perform('If-Mixed expression', 'conditional/if-mixed-expression');
     perform('If-Mixed without Else expression', 'conditional/if-mixed-without-else-expression');
   });

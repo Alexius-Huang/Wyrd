@@ -119,7 +119,7 @@ const foo = cond ? (function () {
 })();
 `;
 
-const minified = '';
+const minified = 'const foo=cond?(function(){const a=123;const b=456;return a+b;})():(function(){const a=456;const b=789;return b-a;})();';
 
 const scope = () => {
   const result = new Scope();

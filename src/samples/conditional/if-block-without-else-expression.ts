@@ -77,7 +77,7 @@ const foo = cond ? (function () {
 })() : null;
 `;
 
-const minified = '';
+const minified = 'const foo=cond?(function(){const a=123;const b=456;return a+b;})():null;';
 
 const scope = () => {
   const result = new Scope();

@@ -231,7 +231,7 @@ const example = cond1 ? (function () {
 })() : null));
 `;
 
-const minified = '';
+const minified = 'const example=cond1?(function(){const a=123;const b=456;return (a+b).toString();})():(cond2?(function(){const foo=\'Hello\';const bar=123;return foo.concat(bar.toString());})():(cond3?(function(){const baz=666;const bazz=\'Devil Number: \';return bazz.concat(baz.toString());})():null));';
 
 const scope = () => {
   const result = new Scope();
