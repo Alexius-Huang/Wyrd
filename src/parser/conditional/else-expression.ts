@@ -18,7 +18,7 @@ export function parseElseExpression(
   else if (tt.valueIs('do'))
     result = parseElseBlockExpr(tt, parseExpr, scope, result);
   else 
-    ParserError('Expect else condition to followed by arrow `=>` or the `then` keyword');
+    ParserError('Expect else condition to followed by arrow `=>`, `then` or `do` keyword');
 
   return result;
 }

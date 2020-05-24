@@ -12,6 +12,14 @@ describe('Error: Conditional', () => {
     },
   };
 
+  describe('Condition', () => {
+    it('throws error if condition expression is not of type `Bool`', () => {
+      const program = `\nif 123 => "Hello"\nelse => "World"`;
+      expect(() => compile(program))
+        .toThrow('ParserError: Expect conditional expression\'s condition should return `Bool` type, instead got: `Num`');  
+    });
+  });
+
   describe('Different Branch Returns Different Values', () => {
     it('throws error when If-Else expression returns different value in each branch', () => {
       const program = `
@@ -90,6 +98,14 @@ describe('Error: Conditional', () => {
       `;
       expect(() => compile(program3, { parseOptions }))
         .toThrow('ParserError: Expect values returned from different condition branch to be the same');
+    });
+  });
+
+  describe('Else-Expression', () => {
+    it('throws error if else-expression isn\'t followed by either `arrow`, `then` or `do` keyword', () => {
+      const program = `\nif cond1 => 123\nelse 123\n`;
+      expect(() => compile(program, { parseOptions }))
+        .toThrow('Expect else condition to followed by arrow `=>`, `then` or `do` keyword');
     });
   });
 });
