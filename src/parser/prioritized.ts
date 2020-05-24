@@ -56,9 +56,6 @@ export function parsePrioritizedExpr(
     ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
   }
 
-  if (result.expr.type === 'FunctionInvokeExpr')
-    return result.expr;
-
   result.return = result.expr.return;
 
   while (tt.peekIs('dot')) {

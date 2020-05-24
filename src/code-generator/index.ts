@@ -255,7 +255,7 @@ ${s}}`, type: 'MethodDeclaration' };
       return { result: `${name}(${genExpr(receiver).result}, ${args})`, type: 'MethodInvokeExpr' };
     }
 
-    if (receiver.type === 'MethodInvokeExpr' || receiver.type === 'IdentLiteral')
+    if (receiver.type === 'MethodInvokeExpr' || receiver.type === 'FunctionInvokeExpr' || receiver.type === 'IdentLiteral')
       return { result: `${genExpr(receiver).result}.${name}(${args})`, type: 'MethodInvokeExpr' };
     return { result: `(${genExpr(receiver).result}).${name}(${args})`, type: 'MethodInvokeExpr' };
   }

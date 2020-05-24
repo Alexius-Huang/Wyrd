@@ -48,6 +48,10 @@ describe('Functions', () => {
       FundamentalCompileTest('function-invocation/with-prioritization');
     });
 
+    describe('With Method Invocation', () => {
+      FundamentalCompileTest('function-invocation/with-method-invocation');
+    });
+
     describe('Declare Before Invocation', () => {
       FundamentalCompileTest('function-invocation/declare-before-invoke');
     });
