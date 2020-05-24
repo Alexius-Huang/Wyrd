@@ -28,6 +28,10 @@ describe('Method Invocation', () => {
     FundamentalCompileTest('method-invocation/as-params');
   });
 
+  describe('Method Invocation mixed Binary Operation', () => {
+    FundamentalCompileTest('method-invocation/with-binary-operation');
+  });
+
   describe('Builtin-Type Method Invocation', () => {
     FundamentalCompileTest('method-invocation/builtin-type-invocation');
 

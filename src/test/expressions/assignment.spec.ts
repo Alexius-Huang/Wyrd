@@ -11,6 +11,11 @@ describe('Assignment Expression', () => {
     describe('Logical Expression', () => {
       FundamentalCompileTest('assignment/logical-expression');
     });
+
+    describe('Method Invocation Expression', () => {
+      FundamentalCompileTest('assignment/method-invocation');
+      FundamentalCompileTest('assignment/method-invocation-with-prioritization');
+    });
   });
 
   describe('Mutable Var Declaration & Assignment', () => {

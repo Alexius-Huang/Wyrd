@@ -85,7 +85,7 @@ export function parse(
     }
 
     if (tt.isOneOf('number', 'string', 'boolean', 'null'))
-      return parsePrimitive(tt, scope, prevExpr);
+      return parsePrimitive(tt, parseExpr, scope, prevExpr);
 
     if (tt.is('builtin-type'))
       return parseTypeLiteral(tt, parseExpr, scope);

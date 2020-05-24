@@ -4,7 +4,7 @@ import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
-
+import { parseMethodInvokeExpr } from './method-invocation';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -19,16 +19,38 @@ export function parseIdentifier(
     return: DT.Invalid,
   };
 
+  /* Handle Identifier as a Variable */
   if (scope.hasVariable(tokenName)) {
     result.return = scope.getVariable(tokenName).type;
 
-    if (tt.peekIs('ref')) {
+    while (tt.peekIs('dot') || tt.peekIs('ref')) {
       tt.next();
-      result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
+      if (tt.is('dot')) {
+        result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
+      } else {
+        result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
+      }
     }
-  } else if (scope.hasFunction(tokenName)) {
+  }
+
+  /* Handle Identifier as a Function*/
+  else if (scope.hasFunction(tokenName)) {
+    if (!tt.peekIs('lparen'))
+      ParserError(`Unhandled function \`${tokenName}\` as a value, currently Wyrd-Lang do not support function object`);
+
     result = parseFunctionInvokeExpr(tt, parseExpr, scope, prevExpr);
-  } else if (scope.hasRecord(tokenName)) {
+    while (tt.peekIs('dot') || tt.peekIs('ref')) {
+      tt.next();
+      if (tt.is('dot')) {
+        result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
+      } else {
+        result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
+      }
+    }
+  }
+
+  /* Handle Identifier as a Record */
+  else if (scope.hasRecord(tokenName)) {
     result = parseRecordLiteral(tt, parseExpr, scope, prevExpr);
   }
 

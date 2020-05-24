@@ -2,6 +2,7 @@ import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
 import { ParserError } from './error';
 import { EmptyExpression } from './constants';
+import { parseMethodInvokeExpr } from './method-invocation';
 
 export function parsePrioritizedExpr(
   tt: TokenTracker,
@@ -10,7 +11,7 @@ export function parsePrioritizedExpr(
   prevExpr?: T.Expr,
 ): T.Expr {
   tt.next(); // Skip the lparen token
-  let result: T.PrioritizedExpr = {
+  let result: T.Expr = {
     type: 'PrioritizedExpr',
     expr: EmptyExpression,
     return: DT.Invalid,
@@ -39,6 +40,11 @@ export function parsePrioritizedExpr(
     if (prevExpr.type === 'PrioritizedExpr') {
       prevExpr.expr = result;
       prevExpr.return = result.return;
+
+      while (tt.peekIs('dot')) {
+        tt.next();
+        result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
+      }
       return result;
     }
 
@@ -50,9 +56,11 @@ export function parsePrioritizedExpr(
     ParserError(`Unhandled parsing prioritized expression based on expression of type \`${prevExpr.type}\``);
   }
 
-  if (result.expr.type === 'FunctionInvokeExpr')
-    return result.expr;
-
   result.return = result.expr.return;
+
+  while (tt.peekIs('dot')) {
+    tt.next();
+    result = parseMethodInvokeExpr(tt, parseExpr, scope, result);
+  }
   return result;
 }
