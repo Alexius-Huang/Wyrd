@@ -77,6 +77,7 @@ export type Expr =
 | FunctionInvokeExpr
 | MethodDeclaration
 | MethodInvokeExpr
+| DoBlockExpr
 | IdentLiteral
 | NumberLiteral
 | StringLiteral
@@ -254,4 +255,9 @@ export interface RecordReferenceExpr extends Expression {
   type: 'RecordReferenceExpr';
   recordExpr: Expr;
   property: string;
+}
+
+export interface DoBlockExpr extends Expression {
+  type: 'DoBlockExpr';
+  body: Array<Expr>;
 }

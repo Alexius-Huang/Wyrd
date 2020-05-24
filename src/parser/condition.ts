@@ -6,9 +6,6 @@ import { EmptyExpression, VoidExpression } from './constants';
 export function parseConditionalExpr(
   tt: TokenTracker,
   parseExpr: (prevExpr: T.Expr, meta?: any) => T.Expr,
-
-  /* Locked Type means there is already a if condition expression before */
-  lockedType?: DT,
 ): T.ConditionalExpr {
   tt.next(); // Skip 'if' | 'elif' keyword
   let result: T.ConditionalExpr = {
@@ -16,7 +13,7 @@ export function parseConditionalExpr(
     condition: EmptyExpression,
     expr1: EmptyExpression,
     expr2: VoidExpression,
-    return: lockedType ?? DT.Unknown
+    return: DT.Unknown
   };
 
   let isThenExpression = false;
@@ -48,14 +45,7 @@ export function parseConditionalExpr(
     tt.next();
   }
 
-  if (lockedType === undefined) {
-    result.return = result.expr1.return;
-  } else {
-    ParserErrorIf(
-      result.expr1.return.isNotEqualTo(result.return),
-      'Expect values returned from different condition branch to be the same'
-    );
-  }
+  result.return = result.expr1.return;
 
   if (
     /* Without-Else expression and last line condition */
@@ -75,12 +65,18 @@ export function parseConditionalExpr(
 
   /* Handle elif is exactly the same as the if expression */
   if (tt.is('keyword') && tt.valueIs('elif')) {
-    result.expr2 = parseConditionalExpr(tt, parseExpr, result.return);
+    result.expr2 = parseConditionalExpr(tt, parseExpr);
 
-    /* Case when elif-expression has no else expression further */
+    /*
+     *  Case when elif-expression has no else expression further,
+     *  the overall conditional expression should be converted to maybe types
+     */
     if (!result.return.nullable && result.expr2.return.nullable) {
       result.return = result.return.toNullable();
     }
+
+    if (result.return.isNotEqualTo(result.expr2.return))
+      ParserError('Expect values returned from different condition branch to be the same');
 
     return result;
   }
