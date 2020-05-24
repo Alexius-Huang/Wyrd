@@ -3,7 +3,7 @@ import { TokenTracker, Scope, DataType as DT } from './utils';
 
 export function parseTypeLiteral(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope
 ): T.Expr {
   const result: T.TypeLiteral = {

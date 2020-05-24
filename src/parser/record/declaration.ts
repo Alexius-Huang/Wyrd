@@ -5,7 +5,7 @@ import { ParserError } from '../error';
 
 export function parseRecordDeclaration(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): T.VoidExpr {
   tt.next(); // Skip the `record` keyword
@@ -30,7 +30,7 @@ export function parseRecordDeclaration(
 
 function parseRecordDefinition(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   record: Record,
 ): Record {
   if (tt.is('rcurly'))

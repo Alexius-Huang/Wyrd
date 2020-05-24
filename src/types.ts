@@ -77,6 +77,7 @@ export type Expr =
 | FunctionInvokeExpr
 | MethodDeclaration
 | MethodInvokeExpr
+| DoBlockExpr
 | IdentLiteral
 | NumberLiteral
 | StringLiteral
@@ -87,6 +88,8 @@ export type Expr =
 | ThisLiteral
 | RecordExpr
 | RecordReferenceExpr;
+
+export type ExpressionParsingFunction = (prevExpr?: Expr, meta?: any) => Expr;
 
 // Empty expression signifies the expression is expected not to be empty, hence the return type is invalid
 export interface EmptyExpr extends Expression {
@@ -254,4 +257,9 @@ export interface RecordReferenceExpr extends Expression {
   type: 'RecordReferenceExpr';
   recordExpr: Expr;
   property: string;
+}
+
+export interface DoBlockExpr extends Expression {
+  type: 'DoBlockExpr';
+  body: Array<Expr>;
 }

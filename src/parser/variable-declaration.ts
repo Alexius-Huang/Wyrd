@@ -5,7 +5,7 @@ import { EmptyExpression } from './constants';
 
 export function parseVarDeclaration(
   tt: TokenTracker,
-  parseExpr: (prevExpr?: T.Expr, meta?: any) => T.Expr,
+  parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): T.Expr {
   tt.next(); // Skip keyword `mutable`

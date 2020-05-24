@@ -64,6 +64,11 @@ export function generateCode(
         return codeGenMethodInvokeExpr(expr);
       case 'ConditionalExpr':
         return codeGenConditionalExpr(expr);
+      case 'DoBlockExpr':
+        return codeGenDoBlockExpr(expr);
+      case 'VoidExpr':
+        console.warn('Code Generation Warning: `VoidExpression` is expected to be avoid during the parsing phase');
+        return { result: '', type: 'VoidExpr' };
       default:
         CodeGenerateError(`Unhandled expression of type \`${(expr).type}\``);
     }
@@ -262,8 +267,6 @@ ${s}}`, type: 'MethodDeclaration' };
 
   function codeGenConditionalExpr(expr: T.ConditionalExpr): CodeGenerationResult {
     const { condition, expr1, expr2 } = expr;
-    if (condition === undefined || expr1 === undefined || expr2 === undefined)
-      CodeGenerateError('Missing expressions in `ConditionExpr`');
 
     let result: string;
     if (minify) {
@@ -274,7 +277,7 @@ ${s}}`, type: 'MethodDeclaration' };
 
     if (expr2.type === 'ConditionalExpr') {
       result += `(${codeGenConditionalExpr(expr2).result})`;
-    } else if (expr2.type === 'EmptyExpr') {
+    } else if (expr2.type === 'VoidExpr') {
       result += 'null';
     } else {
       result += genExpr(expr2).result;
@@ -282,10 +285,22 @@ ${s}}`, type: 'MethodDeclaration' };
     return { result, type: 'ConditionalExpr' };
   }
 
+  function codeGenDoBlockExpr(expr: T.DoBlockExpr): CodeGenerationResult {
+    const { body } = expr;
+    
+    if (minify)
+      return { result: `(function(){${codeGenFunctionBody(body, [], 0)}})()`, type: 'DoBlockExpr' };
+    return { result: `\
+(function () {
+${codeGenFunctionBody(body, [], 2)}
+})()`, type: 'DoBlockExpr' };
+  }
+
   const notRequiredSemicolonSet = new Set([
     'FunctionDeclaration',
     'MethodDeclaration' 
   ]);
+
   if (minify) {
     while (index < ast.length) {
       const expr = ast[index];
