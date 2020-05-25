@@ -37,7 +37,7 @@ export function parseAssignmentExpr(
       const isVoid = DT.isVoid(result.expr2.return);
       ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
       ParserErrorIf(
-        !varInfo.type.isAssignableTo(result.expr2.return),
+        !result.expr2.return.isAssignableTo(varInfo.type),
         `Expect mutable variable \`${varName}\` to assign value of type \`${varInfo.type}\`, instead got: \`${result.expr2.return}\``
       );
       return result;

@@ -1,10 +1,10 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, Arithmetic, Var } from '../helper';
+import { NumberLiteral, Arithmetic, Var, NullLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const program = `\
 mutable foo maybe Num = 123
-foo = 456
+foo = Null
 foo = 1 * 2 - 3 / 4
 
 `;
@@ -20,7 +20,7 @@ const tokens: Array<Token> = [
 
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
-  { type: 'number', value: '456' },
+  { type: 'null', value: 'Null' },
   { type: 'newline', value: '\n' },
 
   { type: 'ident', value: 'foo' },
@@ -47,7 +47,7 @@ const ast: AST = [
     type: 'VarAssignmentExpr',
     return: DT.Void,
     expr1: Var('foo', DT.Maybe.Num),
-    expr2: NumberLiteral(456),
+    expr2: NullLiteral(),
   },
   {
     type: 'VarAssignmentExpr',
@@ -65,7 +65,7 @@ const ast: AST = [
 
 const compiled = `\
 let foo = 123;
-foo = 456;
+foo = null;
 foo = 1 * 2 - (3 / 4);
 `;
 
