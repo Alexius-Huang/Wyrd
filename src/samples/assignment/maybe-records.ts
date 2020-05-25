@@ -175,7 +175,7 @@ bazz = { age: 23, hasPet: false, name: 'Martin' };
 bazz = null;
 `;
 
-const minified = '';
+const minified = 'let baz={name:\'Maxwell\',age:18,hasPet:false};baz=null;baz={name:\'Alexius\',age:20,hasPet:true};let bazz=null;bazz={age:23,hasPet:false,name:\'Martin\'};bazz=null;';
 
 export {
   program,

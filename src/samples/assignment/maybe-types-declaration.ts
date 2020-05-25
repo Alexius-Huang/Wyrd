@@ -124,7 +124,7 @@ bar = ('Hello world!').concat(' Wyrd-Lang!');
 bar = null;
 `;
 
-const minified = '';
+const minified = 'let foo=123+456;foo=null;foo=1*2-(3/4);let bar=null;bar=(\'Hello world!\').concat(\' Wyrd-Lang!\');bar=null;';
 
 export {
   program,
