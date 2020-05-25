@@ -40,8 +40,8 @@ export function generateCode(
       case 'AndExpr':
       case 'OrExpr':
         return codeGenAndOrExpr(expr);
-      case 'RecordExpr':
-        return codeGenRecordExpr(expr);
+      case 'RecordLiteral':
+        return codeGenRecordLiteral(expr);
       case 'RecordReferenceExpr':
         return codeGenRecordReferenceExpr(expr);
       case 'AssignmentExpr':
@@ -122,20 +122,20 @@ export function generateCode(
     return { result: `${genExpr(expr.expr1).result} ${logicOperator} ${genExpr(expr.expr2).result}`, type: expr.type };
   }
 
-  function codeGenRecordExpr(expr: T.RecordExpr): CodeGenerationResult {
+  function codeGenRecordLiteral(expr: T.RecordLiteral): CodeGenerationResult {
     const { properties } = expr;
     if (minify) {
       const recordStr = properties.map(({ name, value }) => `${name}:${genExpr(value).result}`).join(',');
-      return { result: `{${recordStr}}`, type: 'RecordExpr' };  
+      return { result: `{${recordStr}}`, type: 'RecordLiteral' };  
     }
 
     const recordStr = properties.map(({ name, value }) => `${name}: ${genExpr(value).result}`).join(', ');
-    return { result: `{ ${recordStr} }`, type: 'RecordExpr' };
+    return { result: `{ ${recordStr} }`, type: 'RecordLiteral' };
   }
 
   function codeGenRecordReferenceExpr(expr: T.RecordReferenceExpr): CodeGenerationResult {
-    const { recordExpr, property } = expr;
-    return { result: `${genExpr(recordExpr).result}.${property}`, type: 'RecordReferenceExpr' };
+    const { RecordLiteral, property } = expr;
+    return { result: `${genExpr(RecordLiteral).result}.${property}`, type: 'RecordReferenceExpr' };
   }
 
   function codeGenAssignmentExpr(expr: T.AssignmentExpr): CodeGenerationResult {

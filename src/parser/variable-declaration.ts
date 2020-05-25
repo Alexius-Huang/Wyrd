@@ -74,10 +74,13 @@ function handleMaybeTypeDeclaration(
   tt.next(); // Skip the `maybe` keyword
 
   // TODO: Support list, records or in future, support tuple
-  if (tt.isNot('builtin-type'))
+  if (tt.is('builtin-type'))
+    result.expr1.return = new DT(tt.value, true);
+  else if (tt.is('ident') && scope.hasRecord(tt.value))
+    result.expr1.return = scope.getRecord(tt.value).type.toNullable();
+  else
     ParserError('Currently Wyrd-Lang only support builtin-types as maybe types');
 
-  result.expr1.return = new DT(tt.value, true);
   scope.createMutableVariable(varName, result.expr1.return);
   tt.next();
 

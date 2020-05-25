@@ -27,7 +27,7 @@ export function parseRecordReferenceExpr(
   const recordProp = record.getProperty(propName);
   return {
     type: 'RecordReferenceExpr',
-    recordExpr: prevExpr,
+    RecordLiteral: prevExpr,
     property: recordProp.name,
     return: recordProp.type,
   } as T.RecordReferenceExpr;

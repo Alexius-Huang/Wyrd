@@ -39,7 +39,7 @@ const ast: AST = [
     expr1: Var('age', DT.Num),
     expr2: {
       type: 'RecordReferenceExpr',
-      recordExpr: Var('maxwell', new DT('UserInfo')),
+      RecordLiteral: Var('maxwell', new DT('UserInfo')),
       property: 'age',
       return: DT.Num
     },
@@ -50,7 +50,7 @@ const ast: AST = [
     expr1: Var('name', DT.Str),
     expr2: {
       type: 'RecordReferenceExpr',
-      recordExpr: Var('maxwell', new DT('UserInfo')),
+      RecordLiteral: Var('maxwell', new DT('UserInfo')),
       property: 'name',
       return: DT.Str
     },
@@ -61,7 +61,7 @@ const ast: AST = [
     expr1: Var('name', DT.Str),
     expr2: {
       type: 'RecordReferenceExpr',
-      recordExpr: Var('maxwell', new DT('UserInfo')),
+      RecordLiteral: Var('maxwell', new DT('UserInfo')),
       property: 'name',
       return: DT.Str
     },

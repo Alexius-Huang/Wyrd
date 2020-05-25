@@ -27,6 +27,7 @@ describe('Assignment Expression', () => {
 
     describe('As Maybe Types', () => {
       FundamentalCompileTest('assignment/maybe-types-declaration');
+      FundamentalCompileTest('assignment/maybe-records');
     });
   });
 });
