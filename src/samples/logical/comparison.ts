@@ -77,6 +77,7 @@ const tokens: Array<Token> = [
   { type: 'ident', value: 'x' },
   { type: 'asterisk', value: '*' },
   { type: 'ident', value: 'y' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [

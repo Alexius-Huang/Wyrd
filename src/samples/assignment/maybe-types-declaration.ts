@@ -1,5 +1,5 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, Arithmetic, Var, NullLiteral } from '../helper';
+import { NumberLiteral, Arithmetic, Var, NullLiteral, StringLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const program = `\
@@ -7,6 +7,9 @@ mutable foo maybe Num = 123
 foo = Null
 foo = 1 * 2 - 3 / 4
 
+mutable bar maybe Str
+bar = "Hello world!".concat(" Wyrd-Lang!")
+bar = Null
 `;
 
 const tokens: Array<Token> = [
@@ -33,6 +36,27 @@ const tokens: Array<Token> = [
   { type: 'slash', value: '/' },
   { type: 'number', value: '4' },
   { type: 'newline', value: '\n' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'keyword', value: 'mutable' },
+  { type: 'ident', value: 'bar' },
+  { type: 'keyword', value: 'maybe' },
+  { type: 'builtin-type', value: 'Str' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'bar' },
+  { type: 'eq', value: '=' },
+  { type: 'string', value: 'Hello world!' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'concat' },
+  { type: 'lparen', value: '(' },
+  { type: 'string', value: ' Wyrd-Lang!' },
+  { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'bar' }, 
+  { type: 'eq', value: '=' },
+  { type: 'null', value: 'Null' },
   { type: 'newline', value: '\n' },
 ];
 
@@ -61,12 +85,41 @@ const ast: AST = [
       expr2: Arithmetic(3, '/', 4),
     },
   },
+  {
+    type: 'VarDeclaration',
+    return: DT.Void,
+    expr1: Var('bar', DT.Maybe.Str),
+    expr2: NullLiteral(),
+  },
+  {
+    type: 'VarAssignmentExpr',
+    return: DT.Void,
+    expr1: Var('bar', DT.Maybe.Str),
+    expr2: {
+      type: 'MethodInvokeExpr',
+      name: 'concat',
+      receiver: StringLiteral('Hello world!'),
+      params: [
+        StringLiteral(' Wyrd-Lang!'),
+      ],
+      return: DT.Str,
+    },
+  },
+  {
+    type: 'VarAssignmentExpr',
+    return: DT.Void,
+    expr1: Var('bar', DT.Maybe.Str),
+    expr2: NullLiteral(),
+  },
 ];
 
 const compiled = `\
 let foo = 123;
 foo = null;
 foo = 1 * 2 - (3 / 4);
+let bar = null;
+bar = ('Hello world!').concat(' Wyrd-Lang!');
+bar = null;
 `;
 
 const minified = '';

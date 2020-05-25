@@ -56,6 +56,7 @@ const tokens: Array<Token> = [
   { type: 'slash', value: '/' },
   { type: 'number', value: '5' },
   { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [

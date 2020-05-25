@@ -71,6 +71,7 @@ function handleMaybeTypeDeclaration(
     ParserError('Currently Wyrd-Lang only support builtin-types as maybe types');
 
   result.expr1.return = new DT(tt.value, true);
+  scope.createMutableVariable(varName, result.expr1.return);
   tt.next();
 
   if (tt.is('newline')) {
@@ -85,7 +86,5 @@ function handleMaybeTypeDeclaration(
   const isInvalid = DT.isInvalid(result.expr2.return);
   const isVoid = DT.isVoid(result.expr2.return);
   ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
-
-  scope.createMutableVariable(varName, result.expr1.return);
   return result;
 }
