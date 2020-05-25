@@ -30,6 +30,7 @@ export function parseAssignmentExpr(
       while (tt.isNot('newline')) {
         const expr = parseExpr(undefined, { scope, ast: subAST });
         subAST.push(expr);
+        if (tt.is('newline') || !tt.hasNext()) break;
         tt.next();
       }
       result.expr2 = subAST.pop() as T.Expr;
@@ -53,7 +54,15 @@ export function parseAssignmentExpr(
 
     const varInfo = scope.createConstant(varName);
 
-    result.expr2 = parseExpr(undefined, { scope });
+    // result.expr2 = parseExpr(undefined, { scope });
+    const subAST: T.AST = [];
+    while (tt.isNot('newline')) {
+      const expr = parseExpr(undefined, { scope, ast: subAST });
+      subAST.push(expr);
+      if (tt.is('newline') || !tt.hasNext()) break;
+      tt.next();
+    }
+    result.expr2 = subAST.pop() as T.Expr;
     const isInvalid = DT.isInvalid(result.expr2.return);
     const isVoid = DT.isVoid(result.expr2.return);
     ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    

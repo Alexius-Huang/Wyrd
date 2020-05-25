@@ -1,9 +1,9 @@
 import { Token, AST, Operator as Op } from '../../types';
-import { NumberLiteral, Arithmetic, Var, NullLiteral, StringLiteral } from '../helper';
+import { Arithmetic, Var, NullLiteral, StringLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const program = `\
-mutable foo maybe Num = 123
+mutable foo maybe Num = 123 + 456
 foo = Null
 foo = 1 * 2 - 3 / 4
 
@@ -19,6 +19,8 @@ const tokens: Array<Token> = [
   { type: 'builtin-type', value: 'Num' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
+  { type: 'plus', value: '+' },
+  { type: 'number', value: '456' },
   { type: 'newline', value: '\n' },
 
   { type: 'ident', value: 'foo' },
@@ -65,7 +67,7 @@ const ast: AST = [
     type: 'VarDeclaration',
     return: DT.Void,
     expr1: Var('foo', DT.Maybe.Num),
-    expr2: NumberLiteral(123),
+    expr2: Arithmetic(123, '+', 456),
   },
   {
     type: 'VarAssignmentExpr',
@@ -114,7 +116,7 @@ const ast: AST = [
 ];
 
 const compiled = `\
-let foo = 123;
+let foo = 123 + 456;
 foo = null;
 foo = 1 * 2 - (3 / 4);
 let bar = null;

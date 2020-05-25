@@ -38,29 +38,6 @@ export function parseBinaryOpExpr(
     return newNode;
   }
 
-  if (prevExpr.type === 'VarDeclaration') {
-    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
-    prevExpr.expr1.return = prevExpr.expr2.return;
-    const varName = prevExpr.expr1.value;
-    const variableInfo = scope.getVariable(varName);
-    variableInfo.type = prevExpr.expr1.return;
-    return prevExpr;
-  }
-
-  if (prevExpr.type === 'AssignmentExpr') {
-    prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
-    if (prevExpr.expr1.type === 'IdentLiteral') {
-      prevExpr.expr1.return = prevExpr.expr2.return;
-      const varName = prevExpr.expr1.value;
-      const variableInfo = scope.getVariable(varName);
-      variableInfo.type = prevExpr.expr1.return;
-
-      return prevExpr;
-    }
-
-    ParserError('Unhandled assignment expression parsing other than assigning to variable');
-  }
-
   if (prevExpr.type === 'NotExpr') {
     prevExpr.expr = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
     return prevExpr;
