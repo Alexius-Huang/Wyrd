@@ -255,7 +255,7 @@ export interface RecordLiteral extends Expression {
 
 export interface RecordReferenceExpr extends Expression {
   type: 'RecordReferenceExpr';
-  RecordLiteral: Expr;
+  recordExpr: Expr;
   property: string;
 }
 

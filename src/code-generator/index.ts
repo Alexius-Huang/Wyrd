@@ -134,8 +134,8 @@ export function generateCode(
   }
 
   function codeGenRecordReferenceExpr(expr: T.RecordReferenceExpr): CodeGenerationResult {
-    const { RecordLiteral, property } = expr;
-    return { result: `${genExpr(RecordLiteral).result}.${property}`, type: 'RecordReferenceExpr' };
+    const { recordExpr, property } = expr;
+    return { result: `${genExpr(recordExpr).result}.${property}`, type: 'RecordReferenceExpr' };
   }
 
   function codeGenAssignmentExpr(expr: T.AssignmentExpr): CodeGenerationResult {

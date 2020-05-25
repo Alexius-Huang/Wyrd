@@ -64,7 +64,7 @@ const ast: AST = [
   },
   {
     type: 'RecordReferenceExpr',
-    RecordLiteral: Var('maxwell', new DT('UserInfo')),
+    recordExpr: Var('maxwell', new DT('UserInfo')),
     property: 'age',
     return: DT.Num
   },
