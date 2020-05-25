@@ -48,6 +48,17 @@ export default class DataType {
     return this.type + (this.nullable ? '?' : '');
   }
 
+  // For instance, Num is assignable to Maybe Num (or Num?)
+  public isAssignableTo(otherDT: DataType) {
+    if (this.isEqualTo(DataType.Null))
+      return otherDT.nullable;
+    return this.type === otherDT.type;
+  }
+
+  public isNotAssignableTo(otherDT: DataType) {
+    return !this.isAssignableTo(otherDT);
+  }
+
   public isEqualTo(otherDT: DataType) {
     return this.toString() === otherDT.toString();
   }

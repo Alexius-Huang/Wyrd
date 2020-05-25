@@ -24,5 +24,9 @@ describe('Assignment Expression', () => {
     describe('With Prioritization', () => {
       FundamentalCompileTest('assignment/mutable-with-prioritization');
     });
+
+    describe('As Maybe Types', () => {
+      FundamentalCompileTest('assignment/maybe-types-declaration');
+    });
   });
 });

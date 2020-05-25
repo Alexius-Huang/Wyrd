@@ -16,6 +16,7 @@ const keywords = new Set<string>([
   'else',
   'then',
   'mutable',
+  'maybe',
   'override',
   'this',
   'record',

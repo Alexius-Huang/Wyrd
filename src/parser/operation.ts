@@ -38,7 +38,7 @@ export function parseBinaryOpExpr(
     return newNode;
   }
 
-  if (prevExpr.type === 'VarDeclaration' || prevExpr.type === 'VarAssignmentExpr') {
+  if (prevExpr.type === 'VarDeclaration') {
     prevExpr.expr2 = parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr2);
     prevExpr.expr1.return = prevExpr.expr2.return;
     const varName = prevExpr.expr1.value;
