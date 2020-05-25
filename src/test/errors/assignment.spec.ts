@@ -34,4 +34,20 @@ describe('Error: Assignment', () => {
         .toThrow('ParserError: Variable `foo` cannot be redeclared again');
     });
   });
+
+  describe('Maybe-Types Declaration and Assignment', () => {
+    it('throws error when maybe-types variable assigned to absolute types variable', () => {
+      const program = '\nmutable foo maybe Num = 123\nmutable bar = 456\nbar = foo';
+
+      expect(() => compile(program))
+        .toThrow('ParserError: Expect mutable variable `bar` to assign value of type `Num`, instead got: `maybe Num`');
+    });
+
+    it('throws error when maybe-types assigned with invalid type', () => {
+      const program = `\nmutable foo maybe Num = "Hello world"`;
+
+      expect(() => compile(program))
+        .toThrow('ParserError: Expect mutable variable `foo` to assign value of type `maybe Num`, instead got: `Str`');
+    });
+  });
 });

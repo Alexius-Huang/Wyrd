@@ -43,9 +43,23 @@ export default class DataType {
   public toString(): string {
     if (DataType.isList(this)) {
       if (this.listOfType === undefined) throw new Error('Invalid List Data Type');
-      return `List${this.nullable ? '?' : ''}[${this.listOfType.toString()}]`;
+      return `${this.nullable ? 'maybe ' : ''}List[${this.listOfType.toString()}]`;
     }
-    return this.type + (this.nullable ? '?' : '');
+    return (this.nullable ? 'maybe ' : '') + this.type;
+  }
+
+  // For instance, Num is assignable to Maybe Num (or Num?)
+  public isAssignableTo(otherDT: DataType) {
+    if (this.type !== otherDT.type)
+      return (this.type === 'Null' && otherDT.nullable);
+
+    return !(
+      !otherDT.nullable && (this.nullable || this.type === 'Null')
+    );
+  }
+
+  public isNotAssignableTo(otherDT: DataType) {
+    return !this.isAssignableTo(otherDT);
   }
 
   public isEqualTo(otherDT: DataType) {

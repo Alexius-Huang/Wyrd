@@ -33,11 +33,8 @@ export function FundamentalCompileTest(
   
     it('lexes the program into tokens correctly', () => {
       const result: Array<T.Token> = lex(program);
-      for (let i = 0; i < tokens.length; i += 1) {
-        const [resultToken, expectedToken] = [result[i], tokens[i]];
-        expect(resultToken.type).toBe(expectedToken.type);
-        expect(resultToken.value).toBe(expectedToken.value);
-      }
+      expect(result.length).toBe(tokens.length);
+      expect(result).toMatchObject(tokens);
     });
   
     it('parses the tokens into AST correctly', () => {
@@ -46,6 +43,7 @@ export function FundamentalCompileTest(
         const index = options?.focusedASTIndex ?? 0;
         console.log(JSON.stringify(result[index], undefined, 2));
       }
+      expect(result.length).toBe(ast.length);
       expect(result).toMatchObject(ast);
     });
   

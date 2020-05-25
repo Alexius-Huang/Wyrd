@@ -44,6 +44,8 @@ describe('Compiler Option: Minification', () => {
     perform('assignment with method invocation and prioritization', 'assignment/method-invocation-with-prioritization');
     perform('mutable variable declaration & assignment', 'assignment/mutable');
     perform('mutable variable declaration & assignment with prioritization', 'assignment/mutable-with-prioritization');
+    perform('maybe-types declaration', 'assignment/maybe-types-declaration');
+    perform('maybe-record-types declaration', 'assignment/maybe-records');
   });
 
   describe('Builtin Types', () => {

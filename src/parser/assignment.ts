@@ -26,12 +26,19 @@ export function parseAssignmentExpr(
         return: DT.Void,
       };
 
-      result.expr2 = parseExpr(undefined, { scope });
+      const subAST: T.AST = [];
+      while (tt.isNot('newline')) {
+        const expr = parseExpr(undefined, { scope, ast: subAST });
+        subAST.push(expr);
+        if (tt.is('newline') || !tt.hasNext()) break;
+        tt.next();
+      }
+      result.expr2 = subAST.pop() as T.Expr;
       const isInvalid = DT.isInvalid(result.expr2.return);
       const isVoid = DT.isVoid(result.expr2.return);
       ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);
       ParserErrorIf(
-        varInfo.type.isNotEqualTo(result.expr2.return),
+        !result.expr2.return.isAssignableTo(varInfo.type),
         `Expect mutable variable \`${varName}\` to assign value of type \`${varInfo.type}\`, instead got: \`${result.expr2.return}\``
       );
       return result;
@@ -47,7 +54,14 @@ export function parseAssignmentExpr(
 
     const varInfo = scope.createConstant(varName);
 
-    result.expr2 = parseExpr(undefined, { scope });
+    const subAST: T.AST = [];
+    while (tt.isNot('newline')) {
+      const expr = parseExpr(undefined, { scope, ast: subAST });
+      subAST.push(expr);
+      if (tt.is('newline') || !tt.hasNext()) break;
+      tt.next();
+    }
+    result.expr2 = subAST.pop() as T.Expr;
     const isInvalid = DT.isInvalid(result.expr2.return);
     const isVoid = DT.isVoid(result.expr2.return);
     ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    

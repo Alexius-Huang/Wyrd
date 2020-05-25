@@ -8,12 +8,12 @@ export function parseRecordLiteral(
   parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   prevExpr?: T.Expr,
-): T.RecordExpr {
+): T.RecordLiteral {
   const recordName = tt.value;
   tt.next(); // Skip `ident`
 
-  const result: T.RecordExpr = {
-    type: 'RecordExpr',
+  const result: T.RecordLiteral = {
+    type: 'RecordLiteral',
     properties: [],
     return: new DT(recordName),
   };

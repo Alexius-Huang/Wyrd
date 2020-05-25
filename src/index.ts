@@ -14,7 +14,10 @@ export function compile(
   const tokens = lex(code);
   const ast = parse(tokens, options?.parseOptions);
 
-  if (options?.showAST) console.log(ast);
+  if (options?.showAST) {
+    console.log('/* AST */');
+    ast.forEach((n) => console.log(n));
+  }
 
   const minify = options?.minify ?? false;
   const result = generateCode(ast, { minify });

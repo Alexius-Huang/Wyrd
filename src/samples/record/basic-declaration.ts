@@ -52,7 +52,7 @@ const ast: AST = [
     type: 'AssignmentExpr',
     expr1: Var('maxwell', new DT('UserInfo')),
     expr2: {
-      type: 'RecordExpr',
+      type: 'RecordLiteral',
       properties: [
         { name: 'name', type: DT.Str, value: StringLiteral('Maxwell') },
         { name: 'age', type: DT.Num, value: NumberLiteral(18) },

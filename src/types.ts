@@ -86,7 +86,7 @@ export type Expr =
 | ListLiteral
 | TypeLiteral
 | ThisLiteral
-| RecordExpr
+| RecordLiteral
 | RecordReferenceExpr;
 
 export type ExpressionParsingFunction = (prevExpr?: Expr, meta?: any) => Expr;
@@ -248,8 +248,8 @@ export interface MethodInvokeExpr extends Expression {
 
 export type RecordProperty = { name: string; type: DT; };
 export type RecordPropertyValue = RecordProperty & { value: Expr };
-export interface RecordExpr extends Expression {
-  type: 'RecordExpr';
+export interface RecordLiteral extends Expression {
+  type: 'RecordLiteral';
   properties: Array<RecordPropertyValue>;
 }
 
