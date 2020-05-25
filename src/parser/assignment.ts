@@ -54,7 +54,6 @@ export function parseAssignmentExpr(
 
     const varInfo = scope.createConstant(varName);
 
-    // result.expr2 = parseExpr(undefined, { scope });
     const subAST: T.AST = [];
     while (tt.isNot('newline')) {
       const expr = parseExpr(undefined, { scope, ast: subAST });
