@@ -2,7 +2,6 @@ import { Token, AST } from '../../../types';
 import { NumberLiteral } from '../../helper';
 import { DataType as DT } from '../../../parser/utils';
 
-
 const program = `\
 [[1 2 3] [4 5 6] [7 8 9]]
 `;
