@@ -6,7 +6,8 @@ describe('Builtin Types', () => {
     FundamentalCompileTest('builtin-types/primitives');
   });
 
-  describe('Composite Data Structure', () => {
+  FundamentalCompileTest('builtin-types/list/literal');
+  describe.skip('Composite Data Structure', () => {
     describe('List', () => {
       FundamentalCompileTest('builtin-types/list/literal');
 

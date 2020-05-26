@@ -51,7 +51,7 @@ describe('Compiler Option: Minification', () => {
   describe('Builtin Types', () => {
     perform('primitives', 'builtin-types/primitives');
 
-    describe('List', () => {
+    describe.skip('List', () => {
       perform('list literals', 'builtin-types/list/literal');
       perform('multidimensional list', 'builtin-types/list/multidimension');
       perform('list with function invocation', 'builtin-types/list/with-function-invocation');

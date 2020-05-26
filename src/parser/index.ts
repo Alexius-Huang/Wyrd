@@ -1,9 +1,8 @@
 import * as T from '../types';
 import { TokenTracker, Scope } from './utils';
 import { parseIdentifier } from './identifier';
-import { parsePrimitive } from './primitives';
+import { parsePrimitive, parseListLiteral } from './primitives';
 import { parseTypeLiteral } from './type-literal';
-import { parseListLiteral } from './composite-literals';
 import { parseRecordDeclaration } from './record/declaration';
 import { parseRecordReferenceExpr } from './record/reference';
 import { parseVarDeclaration } from './variable-declaration';
@@ -88,13 +87,16 @@ export function parse(
       return parsePrimitive(tt, parseExpr, scope, prevExpr);
 
     if (tt.is('builtin-type'))
-      return parseTypeLiteral(tt, parseExpr, scope);
+      if (tt.valueIs('List') && tt.peekIs('keyword') && tt.peekValueIs('of'))
+        return parseListLiteral(tt, parseExpr, scope);
+      else
+        return parseTypeLiteral(tt, parseExpr, scope);
 
     if (tt.is('ident'))
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
 
-    if (tt.is('lbracket'))
-      return parseListLiteral(tt, parseExpr, scope, prevExpr);
+    // if (tt.is('lbracket'))
+    //   return parseListLiteral(tt, parseExpr, scope, prevExpr);
 
     if (tt.is('lparen'))
       return parsePrioritizedExpr(tt, parseExpr, scope, prevExpr);

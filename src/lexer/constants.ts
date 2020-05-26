@@ -20,6 +20,8 @@ const keywords = new Set<string>([
   'override',
   'this',
   'record',
+  // 'tuple',
+  'of',
 ]);
 
 const regex = {
@@ -34,6 +36,9 @@ const builtinTypes = new Set<string>([
   'Str',
   'Bool',
   'Null',
+  'List',
+  // 'Record',
+  // 'Tuple',
   'Void',
 ]);
 

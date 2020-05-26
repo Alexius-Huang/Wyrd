@@ -3,13 +3,16 @@ import { DataType as DT } from '../../../parser/utils';
 import * as helper from '../../helper';
 
 const program = `\
-[1 2 3 4 5]
-["Hello world" "Wyrd" "Lang" "is" "Awesome"]
-[True False False True True False True]
-[Null Null Null Null Null]
+List of Num [1 2 3 4 5]
+List of Str ["Hello world" "Wyrd" "Lang" "is" "Awesome"]
+List of Bool [True False False True True False True]
+List of Null[Null Null Null Null Null]
 `;
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'List' },
+  { type: 'keyword', value: 'of' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'lbracket', value: '[' },
   { type: 'number', value: '1' },
   { type: 'number', value: '2' },
@@ -19,6 +22,9 @@ const tokens: Array<Token> = [
   { type: 'rbracket', value: ']' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'List' },
+  { type: 'keyword', value: 'of' },
+  { type: 'builtin-type', value: 'Str' },
   { type: 'lbracket', value: '[' },
   { type: 'string', value: 'Hello world' },
   { type: 'string', value: 'Wyrd' },
@@ -28,6 +34,9 @@ const tokens: Array<Token> = [
   { type: 'rbracket', value: ']' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'List' },
+  { type: 'keyword', value: 'of' },
+  { type: 'builtin-type', value: 'Bool' },
   { type: 'lbracket', value: '[' },
   { type: 'boolean', value: 'True' },
   { type: 'boolean', value: 'False' },
@@ -39,6 +48,9 @@ const tokens: Array<Token> = [
   { type: 'rbracket', value: ']' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'List' },
+  { type: 'keyword', value: 'of' },
+  { type: 'null', value: 'Null' },
   { type: 'lbracket', value: '[' },
   { type: 'null', value: 'Null' },
   { type: 'null', value: 'Null' },

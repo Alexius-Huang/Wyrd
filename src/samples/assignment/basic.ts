@@ -7,7 +7,7 @@ foo = 123
 bar = "Hello world"
 baz = True
 nothing = Null
-list = [1 2 3 4 5]
+`;`list = [1 2 3 4 5]
 `;
 
 const tokens: Array<Token> = [
@@ -31,16 +31,16 @@ const tokens: Array<Token> = [
   { type: 'null', value: 'Null' },
   { type: 'newline', value: '\n' },
 
-  { type: 'ident', value: 'list' },
-  { type: 'eq', value: '=' },
-  { type: 'lbracket', value: '[' },
-  { type: 'number', value: '1' },
-  { type: 'number', value: '2' },
-  { type: 'number', value: '3' },
-  { type: 'number', value: '4' },
-  { type: 'number', value: '5' },
-  { type: 'rbracket', value: ']' },
-  { type: 'newline', value: '\n' },
+  // { type: 'ident', value: 'list' },
+  // { type: 'eq', value: '=' },
+  // { type: 'lbracket', value: '[' },
+  // { type: 'number', value: '1' },
+  // { type: 'number', value: '2' },
+  // { type: 'number', value: '3' },
+  // { type: 'number', value: '4' },
+  // { type: 'number', value: '5' },
+  // { type: 'rbracket', value: ']' },
+  // { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
@@ -68,23 +68,23 @@ const ast: AST = [
     expr1: helper.Var('nothing', DT.Null),
     expr2: helper.NullLiteral(),
   },
-  {
-    type: 'AssignmentExpr',
-    return: DT.Void,
-    expr1: helper.Var('list', DT.ListOf(DT.Num)),
-    expr2: {
-      type: 'ListLiteral',
-      values: [
-        helper.NumberLiteral(1),
-        helper.NumberLiteral(2),
-        helper.NumberLiteral(3),
-        helper.NumberLiteral(4),
-        helper.NumberLiteral(5),
-      ],
-      elementType: DT.Num,
-      return: DT.ListOf(DT.Num),
-    },
-  },
+  // {
+  //   type: 'AssignmentExpr',
+  //   return: DT.Void,
+  //   expr1: helper.Var('list', DT.ListOf(DT.Num)),
+  //   expr2: {
+  //     type: 'ListLiteral',
+  //     values: [
+  //       helper.NumberLiteral(1),
+  //       helper.NumberLiteral(2),
+  //       helper.NumberLiteral(3),
+  //       helper.NumberLiteral(4),
+  //       helper.NumberLiteral(5),
+  //     ],
+  //     elementType: DT.Num,
+  //     return: DT.ListOf(DT.Num),
+  //   },
+  // },
 ];
 
 const compiled = `\
@@ -92,10 +92,10 @@ const foo = 123;
 const bar = 'Hello world';
 const baz = true;
 const nothing = null;
-const list = [1, 2, 3, 4, 5];
+`;`const list = [1, 2, 3, 4, 5];
 `;
 
-const minified = 'const foo=123;const bar=\'Hello world\';const baz=true;const nothing=null;const list=[1,2,3,4,5];';
+const minified = 'const foo=123;const bar=\'Hello world\';const baz=true;const nothing=null;';'const list=[1,2,3,4,5];';
 
 export {
   program,

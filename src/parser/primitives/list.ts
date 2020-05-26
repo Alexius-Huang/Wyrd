@@ -1,6 +1,6 @@
-import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT } from './utils';
-import { ParserErrorIf } from './error';
+import * as T from '../../types';
+import { TokenTracker, Scope, DataType as DT } from '../utils';
+import { ParserErrorIf, ParserError } from '../error';
 
 export function parseListLiteral(
   tt: TokenTracker,
@@ -8,20 +8,29 @@ export function parseListLiteral(
   scope: Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
+  tt.next(); // Skip `builtin-type: List`
+  tt.next(); // SKip `of` keyword
+
+  let listOfType: DT;
+  // TODO: Support list of lists/records or tuples ... etc
+  if (tt.is('builtin-type') || tt.is('null'))
+   listOfType = new DT(tt.value);
+  else
+    ParserError(`Expect List type to provide the type of the data, instead got token of type: \`${tt.type}\``);
+
+  const listType = DT.ListOf(listOfType);
+  tt.next(); // Skip `builtin-type`
+
+  if (tt.isNot('lbracket'))
+    ParserError(`Expect List literal to start with left bracket, instead got token of type \`${tt.type}\``);
+
   tt.next(); // Skip lbracket
   const result: T.ListLiteral = {
     type: 'ListLiteral',
     values: [],
-    elementType: DT.Invalid,
-    return: DT.Invalid,
+    elementType: listOfType,
+    return: listType,
   };
-
-  // Fetch the first element
-  const el = parseExpr(undefined, { scope });
-  result.values.push(el);
-  result.elementType = el.return;
-  result.return = DT.ListOf(el.return);
-  tt.next();
 
   // Fetch the rest of the elements until meet `rbracket` token
   while (tt.isNot('rbracket')) {

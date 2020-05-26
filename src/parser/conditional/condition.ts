@@ -1,16 +1,17 @@
 import * as T from '../../types';
-import { TokenTracker, DataType as DT } from '../utils';
+import { TokenTracker, DataType as DT, Scope } from '../utils';
 import { ParserErrorIf, ParserError } from '../error';
 
 export function parseCondition(
   tt: TokenTracker,
   parseExpr: (prevExpr: T.Expr, meta?: any) => T.Expr,
+  scope: Scope,
   prevExpr: T.ConditionalExpr
 ): T.ConditionalExpr {
   const result = { ...prevExpr };
 
   while (tt.isNot('arrow') && tt.valueIsNotOneOf('then', 'do')) {
-    result.condition = parseExpr(result, { target: 'condition' });
+    result.condition = parseExpr(result, { target: 'condition', scope });
     tt.next();
     ParserErrorIf(tt.is('newline'), 'Expect condition to end followed by arrow `=>` or the `then` keyword');
   }

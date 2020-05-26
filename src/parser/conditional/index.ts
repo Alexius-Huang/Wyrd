@@ -21,7 +21,7 @@ export function parseConditionalExpr(
   };
 
   tt.next(); // Skip 'if' | 'elif' keyword
-  result = parseCondition(tt, parseExpr, result);
+  result = parseCondition(tt, parseExpr, scope, result);
 
   let expressionType: 'arrow' | 'then' | 'do-block';
   if (tt.is('arrow')) {
