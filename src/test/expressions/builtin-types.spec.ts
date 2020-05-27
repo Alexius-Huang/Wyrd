@@ -22,6 +22,10 @@ describe('Builtin Types', () => {
         FundamentalCompileTest('builtin-types/list/with-function-invocation');
       });
 
+      describe('Invoke Builtin Methods', () => {
+        FundamentalCompileTest('builtin-types/list/builtin-methods');
+      });
+
       describe('Invalid Conditions', () => {
         it('cannot contain mixed type of elements', () => {
           const program = `\n[1 2 "3" 4 5]`;

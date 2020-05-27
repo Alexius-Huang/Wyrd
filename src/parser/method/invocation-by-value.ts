@@ -45,8 +45,19 @@ export function parseValueMethodInvokeExpr(
 
     result.isNotBuiltin = methodPattern.isNotBuiltin;
     result.name = result.isNotBuiltin ? `${receiverType.type}_${methodPattern.name}`  : methodPattern.name;
-    result.return = methodPattern.returnDataType;
+
+    const returnType = methodPattern.returnDataType;
+    const { genericTypeMap: gtm } = receiverType;
+    if (returnType.hasTypeParameters()) {
+      result.return = returnType.applyTypeParameters(gtm);
+    } else if (returnType.isGeneric) {
+      result.return = gtm[returnType.type];
+    } else {
+      result.return = returnType;
+    }
   }
+  else
+    ParserError(`Invoking an unexisting function \`${name}\``)
 
   return result;
 }

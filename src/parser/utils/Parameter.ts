@@ -26,13 +26,19 @@ export default class Parameter {
     return this.list.map(dt => dt.toString()).join('.');
   }
 
-  public matches(p: Parameter): boolean {
+  public matches(p: Parameter, receiver?: DataType): boolean {
     const pList = p.list;
 
     if (pList.length !== this.list.length) return false;
 
+    const genericTypeMap = receiver ? receiver.genericTypeMap : {};
     for (let i = 0; i < this.list.length; i += 1) {
-      if (pList[i].isNotEqualTo(this.list[i])) return false;
+      if (this.list[i].isGeneric) {
+        if (pList[i].isNotEqualTo(genericTypeMap[this.list[i].type]))
+          return false;
+      } else if (pList[i].isNotEqualTo(this.list[i])) {
+        return false;
+      }
     }
     return true;
   }

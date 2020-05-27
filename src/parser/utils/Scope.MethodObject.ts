@@ -23,10 +23,10 @@ export default class MethodObject {
     return pattern;
   }
 
-  public getPatternInfo(parameter: Parameter): Pattern | undefined {
+  public getPatternInfo(receiver: DT, parameter: Parameter): Pattern | undefined {
     for (let i = 0; i < this.patterns.length; i += 1) {
       const p = this.patterns[i].parameter;
-      if (p.matches(parameter)) return this.patterns[i];
+      if (p.matches(parameter, receiver)) return this.patterns[i];
     }
 
     return undefined;

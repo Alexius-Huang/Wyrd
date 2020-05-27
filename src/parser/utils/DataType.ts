@@ -26,6 +26,12 @@ export default class DataType {
     return t.isEqualTo(DataType.Void);
   }
 
+  static GenericOf(name: string, nullable = false) {
+    const dt = new DataType(name, nullable);
+    dt.isGeneric = true;
+    return dt;
+  }
+
   static Num = new DataType('Num');
   static Str = new DataType('Str');
   static Bool = new DataType('Bool');
@@ -33,7 +39,6 @@ export default class DataType {
   static Void = new DataType('Void');
   static Invalid = new DataType('Invalid');
   static Unknown = new DataType('Unknown');
-  static Generic = new DataType('Generic');
 
   /* Maybe-types or Nullable-types may contain Null values */
   static Maybe = {
@@ -43,6 +48,7 @@ export default class DataType {
   };
 
   public typeParams: Map<string, TypeParameter> = new Map();
+  public isGeneric = false;
 
   constructor(
     public type: string,
@@ -90,7 +96,7 @@ export default class DataType {
   public newTypeParameter(paramName: string, type?: DataType) {
     this.typeParams.set(paramName, {
       name: paramName,
-      type: type ?? DataType.Generic,
+      type: type ?? DataType.Unknown,
       order: this.typeParams.size + 1
     });
   }
@@ -107,7 +113,27 @@ export default class DataType {
     ParserError(`Type \`${this}\` has no type parameter of name \`${paramName}\``);
   }
 
+  public hasTypeParameters(): boolean {
+    return this.typeParams.size !== 0;
+  }
+
+  public applyTypeParameters(mapping: { [key: string]: DataType }): DataType {
+    const dt = new DataType(this.type);
+    this.typeParameters.forEach(tp => {
+      dt.newTypeParameter(tp.name, tp.type.isGeneric ? mapping[tp.name] : tp.type);
+    });
+    return dt;
+  }
+
   get typeParameters(): Array<TypeParameter> {
     return Array.from(this.typeParams.values()).sort((a, b) => a.order - b.order);
+  }
+
+  get genericTypeMap(): { [key: string]: DataType } {
+    const result: { [key: string]: DataType } = {};
+    Array.from(this.typeParams.values()).forEach(gt => {
+      result[gt.name] = gt.type;
+    });
+    return result;
   }
 }

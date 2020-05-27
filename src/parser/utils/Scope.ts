@@ -9,19 +9,15 @@ import {
   ScopeRecord as Record
 } from '.';
 import { ParserError } from '../error';
-import { RecordProperty } from '../../types';
 
 export default class Scope {
   public parent: null | Scope = null;
   public children: Map<string, Scope> = new Map();
-
-  constructor(
-    public variables: Map<string, Variable> = new Map(),
-    public functions: Map<string, FunctionObject> = new Map(),
-    public methods: Map<string, MethodType> = new Map(),
-    public operators: Map<string, OperatorObject> = new Map(),
-    public records: Map<string, Record> = new Map(),
-  ) {}
+  public variables: Map<string, Variable> = new Map();
+  public functions: Map<string, FunctionObject> = new Map();
+  public methods: Map<string, MethodType> = new Map();
+  public operators: Map<string, OperatorObject> = new Map();
+  public records: Map<string, Record> = new Map();
 
   public createChildScope(name: string): Scope {
     const scope = new Scope();
@@ -123,7 +119,7 @@ export default class Scope {
   
   public getMethodPattern(receiver: DT, name: string, parameter: Parameter) {
     const methodObj = this.getMethod(receiver, name);
-    return methodObj.getPatternInfo(parameter);
+    return methodObj.getPatternInfo(receiver, parameter);
   }
 
   public createMethod(receiver: DT, name: string): MethodObject {
