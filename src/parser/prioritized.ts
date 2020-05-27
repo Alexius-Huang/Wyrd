@@ -2,7 +2,7 @@ import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
 import { ParserError } from './error';
 import { EmptyExpression } from './constants';
-import { parseMethodInvokeExpr } from './method-invocation';
+import { parseMethodInvokeExpr } from './method/invocation';
 
 export function parsePrioritizedExpr(
   tt: TokenTracker,

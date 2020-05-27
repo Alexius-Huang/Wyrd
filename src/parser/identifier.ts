@@ -4,7 +4,7 @@ import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
-import { parseMethodInvokeExpr } from './method-invocation';
+import { parseMethodInvokeExpr } from './method/invocation';
 
 export function parseIdentifier(
   tt: TokenTracker,
