@@ -1,4 +1,5 @@
 import DataType from './DataType';
+import { ParserError } from '../error';
 
 export default class Parameter {
   public list: DataType[];
@@ -33,10 +34,17 @@ export default class Parameter {
 
     const typeParameterMap = receiver ? receiver.typeParameterMap : {};
     for (let i = 0; i < this.list.length; i += 1) {
-      if (this.list[i].isGeneric) {
-        if (pList[i].isNotEqualTo(typeParameterMap[this.list[i].type]))
+      const required = this.list[i];
+
+      if (required.isGeneric) {
+        if (pList[i].isNotEqualTo(typeParameterMap[required.type]))
           return false;
-      } else if (pList[i].isNotEqualTo(this.list[i])) {
+      } else if (required.hasTypeParameters()) {
+        if (receiver === undefined)
+          ParserError('Receiver cannot be undefined');
+        if (pList[i].isNotEqualTo(required.applyTypeParametersFrom(receiver)))
+          return false;
+      } else if (pList[i].isNotEqualTo(required)) {
         return false;
       }
     }

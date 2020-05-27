@@ -5,6 +5,7 @@ import { NumberLiteral, Var } from '../../helper';
 const program = `\
 foo = [1 2 3 4 5]
 foo.push(6)
+foo.concat([7 8 9])
 `;
 
 const tokens: Array<Token> = [
@@ -24,6 +25,18 @@ const tokens: Array<Token> = [
   { type: 'ident', value: 'push' },
   { type: 'lparen', value: '(' },
   { type: 'number', value: '6' },
+  { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'foo' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'concat' },
+  { type: 'lparen', value: '(' },
+  { type: 'lbracket', value: '[' },
+  { type: 'number', value: '7' },
+  { type: 'number', value: '8' },
+  { type: 'number', value: '9' },
+  { type: 'rbracket', value: ']' },
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
 ];
@@ -55,11 +68,30 @@ const ast: AST = [
     ],
     return: DT.Num
   },
+  {
+    type: 'MethodInvokeExpr',
+    name: 'concat',
+    receiver: Var('foo', DT.ListOf(DT.Num)),
+    params: [
+      {
+        type: 'ListLiteral',
+        values: [
+          NumberLiteral(7),
+          NumberLiteral(8),
+          NumberLiteral(9),
+        ],
+        elementType: DT.Num,
+        return: DT.ListOf(DT.Num),
+      }
+    ],
+    return: DT.ListOf(DT.Num),
+  },
 ];
 
 const compiled = `\
 const foo = [1, 2, 3, 4, 5];
 foo.push(6);
+foo.concat([7, 8, 9]);
 `;
 
 const minified = 'ToDO';

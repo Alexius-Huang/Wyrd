@@ -31,6 +31,10 @@ export default class DataType {
     return dt;
   }
 
+  static GenericList(): DataType {
+    return DataType.ListOf(DataType.Generic('element'));
+  }
+
   static Num = new DataType('Num');
   static Str = new DataType('Str');
   static Bool = new DataType('Bool');
@@ -118,8 +122,8 @@ export default class DataType {
     return this.typeParams.size !== 0;
   }
 
-  public applyTypeParametersFrom(fromDT: DataType): DataType {
-    const mapping = fromDT.typeParameterMap;
+  public applyTypeParametersFrom(otherDT: DataType): DataType {
+    const mapping = otherDT.typeParameterMap;
     const dt = new DataType(this.type);
     this.typeParameters.forEach(tp => {
       dt.newTypeParameter(tp.name, tp.type.isGeneric ? mapping[tp.name] : tp.type);
