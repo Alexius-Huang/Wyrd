@@ -1,3 +1,11 @@
+import { ParserError } from "../error";
+
+type TypeParameter = {
+  name: string;
+  type: DataType;
+  order: number;
+};
+
 export default class DataType {
 
   static isList(t: DataType) {
@@ -6,7 +14,7 @@ export default class DataType {
 
   static ListOf(t: DataType, nullable = false) {
     const dt = new DataType('List', nullable);
-    dt.listOfType = t;
+    dt.newTypeParameter('element', t);
     return dt;
   }
 
@@ -25,6 +33,7 @@ export default class DataType {
   static Void = new DataType('Void');
   static Invalid = new DataType('Invalid');
   static Unknown = new DataType('Unknown');
+  static Generic = new DataType('Generic');
 
   /* Maybe-types or Nullable-types may contain Null values */
   static Maybe = {
@@ -33,7 +42,7 @@ export default class DataType {
     Bool: new DataType('Bool', true),
   };
 
-  private listOfType: DataType | undefined = undefined;
+  public typeParams: Map<string, TypeParameter> = new Map();
 
   constructor(
     public type: string,
@@ -41,11 +50,11 @@ export default class DataType {
   ) {}
 
   public toString(): string {
-    if (DataType.isList(this)) {
-      if (this.listOfType === undefined) throw new Error('Invalid List Data Type');
-      return `${this.nullable ? 'maybe ' : ''}List[${this.listOfType.toString()}]`;
-    }
-    return (this.nullable ? 'maybe ' : '') + this.type;
+    const typeParams = this.typeParameters;
+    let typeParamsString = '';
+    if (typeParams.length !== 0)
+      typeParamsString = `<${typeParams.map(t =>  t.type)}>`;
+    return `${this.nullable ? 'maybe ' : ''}${this.type}${typeParamsString}`;
   }
 
   // For instance, Num is assignable to Maybe Num (or Num?)
@@ -72,8 +81,33 @@ export default class DataType {
 
   public toNullable(): DataType {
     if (DataType.isList(this)) {
-      return DataType.ListOf(this.listOfType as DataType, true);
+      const el = this.getTypeParameter('element');
+      return DataType.ListOf(el.type, true);
     }
     return new DataType(this.type, true);
+  }
+
+  public newTypeParameter(paramName: string, type?: DataType) {
+    this.typeParams.set(paramName, {
+      name: paramName,
+      type: type ?? DataType.Generic,
+      order: this.typeParams.size + 1
+    });
+  }
+
+  public setTypeParameter(paramName: string, type: DataType) {
+    if (this.typeParams.has(paramName))
+      this.typeParams.set(paramName, { ...(this.typeParams.get(paramName) as TypeParameter), type });
+    ParserError(`Type \`${this}\` has no type parameter of name \`${paramName}\``);
+  }
+
+  public getTypeParameter(paramName: string): TypeParameter {
+    if (this.typeParams.has(paramName))
+      return this.typeParams.get(paramName) as TypeParameter;
+    ParserError(`Type \`${this}\` has no type parameter of name \`${paramName}\``);
+  }
+
+  get typeParameters(): Array<TypeParameter> {
+    return Array.from(this.typeParams.values()).sort((a, b) => a.order - b.order);
   }
 }
