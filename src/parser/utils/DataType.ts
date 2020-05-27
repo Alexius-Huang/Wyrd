@@ -7,7 +7,6 @@ type TypeParameter = {
 };
 
 export default class DataType {
-
   static isList(t: DataType) {
     return t.type === 'List';
   }
@@ -26,7 +25,7 @@ export default class DataType {
     return t.isEqualTo(DataType.Void);
   }
 
-  static GenericOf(name: string, nullable = false) {
+  static Generic(name: string, nullable = false) {
     const dt = new DataType(name, nullable);
     dt.isGeneric = true;
     return dt;
@@ -47,7 +46,9 @@ export default class DataType {
     Bool: new DataType('Bool', true),
   };
 
-  public typeParams: Map<string, TypeParameter> = new Map();
+  private typeParams: Map<string, TypeParameter> = new Map();
+  public readonly typeParameterMap: { [key: string]: DataType } = {};
+  public readonly typeParameters: Array<TypeParameter> = [];
   public isGeneric = false;
 
   constructor(
@@ -94,17 +95,17 @@ export default class DataType {
   }
 
   public newTypeParameter(paramName: string, type?: DataType) {
-    this.typeParams.set(paramName, {
-      name: paramName,
-      type: type ?? DataType.Unknown,
-      order: this.typeParams.size + 1
-    });
-  }
+    const dt = type ?? DataType.Unknown;
 
-  public setTypeParameter(paramName: string, type: DataType) {
-    if (this.typeParams.has(paramName))
-      this.typeParams.set(paramName, { ...(this.typeParams.get(paramName) as TypeParameter), type });
-    ParserError(`Type \`${this}\` has no type parameter of name \`${paramName}\``);
+    const tp: TypeParameter = {
+      name: paramName,
+      type: dt,
+      order: this.typeParams.size + 1
+    };
+
+    this.typeParams.set(paramName, tp);
+    this.typeParameterMap[paramName] = dt;
+    this.typeParameters.push(tp);
   }
 
   public getTypeParameter(paramName: string): TypeParameter {
@@ -117,23 +118,12 @@ export default class DataType {
     return this.typeParams.size !== 0;
   }
 
-  public applyTypeParameters(mapping: { [key: string]: DataType }): DataType {
+  public applyTypeParametersFrom(fromDT: DataType): DataType {
+    const mapping = fromDT.typeParameterMap;
     const dt = new DataType(this.type);
     this.typeParameters.forEach(tp => {
       dt.newTypeParameter(tp.name, tp.type.isGeneric ? mapping[tp.name] : tp.type);
     });
     return dt;
-  }
-
-  get typeParameters(): Array<TypeParameter> {
-    return Array.from(this.typeParams.values()).sort((a, b) => a.order - b.order);
-  }
-
-  get genericTypeMap(): { [key: string]: DataType } {
-    const result: { [key: string]: DataType } = {};
-    Array.from(this.typeParams.values()).forEach(gt => {
-      result[gt.name] = gt.type;
-    });
-    return result;
   }
 }

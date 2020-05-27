@@ -47,11 +47,10 @@ export function parseValueMethodInvokeExpr(
     result.name = result.isNotBuiltin ? `${receiverType.type}_${methodPattern.name}`  : methodPattern.name;
 
     const returnType = methodPattern.returnDataType;
-    const { genericTypeMap: gtm } = receiverType;
     if (returnType.hasTypeParameters()) {
-      result.return = returnType.applyTypeParameters(gtm);
+      result.return = returnType.applyTypeParametersFrom(receiverType);
     } else if (returnType.isGeneric) {
-      result.return = gtm[returnType.type];
+      result.return = receiverType.typeParameterMap[returnType.type];
     } else {
       result.return = returnType;
     }

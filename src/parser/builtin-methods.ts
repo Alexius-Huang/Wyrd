@@ -29,7 +29,7 @@ const BuiltinBoolMethods: Array<DefaultMethodFormat> = [
 ];
 
 const BuiltinListMethods: Array<DefaultMethodFormat> = [
-  { name: 'push', directMapping: 'push', parameter: Parameter.of(DT.GenericOf('element')),  return: DT.GenericOf('element') },
+  { name: 'push', directMapping: 'push', parameter: Parameter.of(DT.Generic('element')),  return: DT.Generic('element') },
 ];
 
 export default function setupBuiltinMethods(scope: Scope) {
@@ -49,7 +49,7 @@ export default function setupBuiltinMethods(scope: Scope) {
   });
 
   BuiltinListMethods.forEach(({ name, directMapping, parameter, return: r }) => {
-    const methodObj = scope.createMethod(DT.ListOf(DT.GenericOf('element')), name);
-    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.GenericOf('element'), { directMapping, isNotBuiltin: false });
+    const methodObj = scope.createMethod(DT.ListOf(DT.Generic('element')), name);
+    methodObj.createNewPattern(parameter ?? Parameter.Void(), r ?? DT.Generic('element'), { directMapping, isNotBuiltin: false });
   });
 }
