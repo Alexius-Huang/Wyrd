@@ -4,6 +4,7 @@ import {
   GenericType as GT,
   ScopeVariable as Variable,
   ScopeFunctionObject as FunctionObject,
+  FunctionPattern,
   ScopeMethodType as MethodType,
   ScopeMethodObject as MethodObject,
   ScopeOperatorObject as OperatorObject,
@@ -80,12 +81,17 @@ export default class Scope {
     return functionObj;
   }
 
-  public getFunctionPattern(name: string, parameter: Parameter) {
+  public getFunctionPattern(name: string, parameter: Parameter): FunctionPattern {
     const functionObj = this.getFunction(name);
-    return functionObj.getPatternInfo(parameter);
+    const result = functionObj.getPatternInfo(parameter);
+    if (result === undefined)
+      ParserError(`Function \`${name}\` with input parameter \`${parameter}\` isn't declared throughout scope chain`);
+    return result;
   }
 
   public createFunction(name: string): FunctionObject {
+    if (this.functions.has(name))
+      ParserError(`Function object \`${name}\` has already been created in current scope`);
     const functionObj = new FunctionObject(name);
     this.functions.set(name, functionObj);
     return functionObj;
