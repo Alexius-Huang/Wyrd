@@ -27,7 +27,7 @@ export default class FunctionObject {
 }
 
 class Pattern {
-  public overridenIndex = 0;
+  private overridenIndex = 0;
 
   constructor(
     public _name: string,

@@ -1,3 +1,13 @@
-// import { Scope, DataType as DT } from '../../parser/utils';
+import { Scope } from '../../parser/utils';
 
-describe.skip('Scope', () => {});
+describe('Scope', () => {
+  describe('Scope#createChildScope', () => {
+    it('creates child scope which links each other', () => {
+      const s = new Scope();
+      const childScope = s.createChildScope('foo');
+
+      expect(s.children.get('foo')).toBe(childScope);
+      expect(childScope.parent).toBe(s);
+    });
+  });
+});
