@@ -10,7 +10,7 @@ describe('Scope Record Object', () => {
       });
     });
 
-    describe('Property Setting and Getting - Record#setProperty and Record#getProperty', () => {
+    describe('Record#setProperty and Record#getProperty', () => {
       it('sets property with corresponding type of data', () => {
         const record = new Record('UserInfo');
         expect(record.propertySet.size).toBe(0);
@@ -53,7 +53,7 @@ describe('Scope Record Object', () => {
       });
     });
 
-    describe('Check Existence of Specific Property - Record#hasProperty', () => {
+    describe('Record#hasProperty', () => {
       it('returns `true` if property is exist in record definition', () => {
         const record = new Record('UserInfo');
         record
@@ -70,5 +70,76 @@ describe('Scope Record Object', () => {
     });
   });
 
-  describe.skip('Scope-Record Manipulation', () => {});
+  describe('Scope-Record Manipulation', () => {
+    describe('Scope#createRecrod', () => {
+      it('creates Scope.Record object in current scope', () => {
+        const s = new Scope();
+        const record = s.createRecord('UserInfo');
+        expect(record.name).toBe('UserInfo');
+        expect(s.records.has('UserInfo')).toBeTruthy();
+      });
+
+      it('throws error when record is already declared in current scope', () => {
+        const s = new Scope();
+        s.createRecord('UserInfo');
+        expect(() => s.createRecord('UserInfo'))
+          .toThrow('ParserError: Record `UserInfo` is already declared in current scope');
+      });
+
+      it('safely creates Scope.Record object even if parent scope has the same name', () => {
+        const s = new Scope();
+        const childScope = s.createChildScope('test-child-scope');
+        const recordParent = s.createRecord('UserInfo');
+        const recordChild = childScope.createRecord('UserInfo');
+        expect(recordChild.name).toBe(recordParent.name);
+      });
+    });
+
+    describe('Scope#hasRecord', () => {
+      const s = new Scope();
+      const childScope = s.createChildScope('test-child-scope');
+      s.createRecord('UserInfo');
+      childScope.createRecord('UserAccount');
+
+      it('returns `true` if record definition is in current scope', () => {
+        expect(s.hasRecord('UserInfo')).toBeTruthy();
+        expect(s.hasRecord('UserAccount')).toBeFalsy();
+        expect(childScope.hasRecord('UserAccount')).toBeTruthy();
+      });
+
+      it('returns `true` if record definition is in parent scope', () => {
+        expect(childScope.hasRecord('UserInfo')).toBeTruthy();
+      });
+    });
+
+    describe('Scope#getRecord', () => {
+      const s = new Scope();
+      const childScope = s.createChildScope('test-child-scope');
+      const record1 = s.createRecord('UserInfo');
+      const record2 = childScope.createRecord('UserAccount');
+
+      it('returns Scope.Record object if exists in current scope', () => {
+        const result1 = s.getRecord('UserInfo');
+        const result2 = childScope.getRecord('UserAccount');
+        expect(result1).toBe(record1);
+        expect(result2).toBe(record2);
+        expect(result1).not.toBe(result2);
+      });
+
+      it('returns Scope.Record object if exists in parent scope', () => {
+        expect(childScope.getRecord('UserInfo')).toBe(record1);
+      });
+
+      it('throws error when record isn\'t declared througout scope chain', () => {
+        expect(() => s.getRecord('UserAccount'))
+          .toThrow('ParserError: Record `UserAccount` isn\'t declared throughout scope chain');
+
+        expect(() => s.getRecord('NonExistedRecord'))
+          .toThrow('ParserError: Record `NonExistedRecord` isn\'t declared throughout scope chain')
+
+        expect(() => childScope.getRecord('NonExistedRecord'))
+          .toThrow('ParserError: Record `NonExistedRecord` isn\'t declared throughout scope chain')
+      });
+    });
+  });
 });
