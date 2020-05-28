@@ -25,12 +25,18 @@ export function parseTypeLiteral(
     const tps = Array.from(gt.typeParameters);
     for (let i = 0; i < tps.length; i += 1) {
       const tp = tps[i];
+      if (tt.isNotOneOf('ident', 'builtin-type'))
+        ParserError(`Expect type parameters in generic type \`${gt.name}\` has ${tps.length} type parameter(s), instead got: ${i}`);
+
       const typeLit = parseTypeLiteral(tt, parseExpr, scope);
       result.typeObject.newTypeParameter(tp.name, typeLit.typeObject);
       tt.next();
 
       if (tt.is('comma')) tt.next();
     }
+
+    if (tt.isOneOf('builtin-type', 'ident'))
+      ParserError(`Expect type parameters in generic type \`${gt.name}\` has ${tps.length} type parameter(s), instead got more than ${tps.length}`)
 
     if (tt.isNot('gt'))
       ParserError(`Expect type parameters in generic type literal to end with token \`gt\`, instead got token of type \`${tt.type}\``);
