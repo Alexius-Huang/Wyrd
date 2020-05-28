@@ -93,10 +93,14 @@ export default class DataType {
   }
 
   public toNullable(): DataType {
-    if (DataType.isList(this)) {
-      const el = this.getTypeParameter('element');
-      return DataType.ListOf(el.type, true);
+    if (this.hasTypeParameters()) {
+      const result = new DataType(this.type, true);
+      this.typeParameters.forEach(tp => {
+        result.newTypeParameter(tp.name, tp.type);
+      });
+      return result;
     }
+
     return new DataType(this.type, true);
   }
 

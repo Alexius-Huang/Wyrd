@@ -70,7 +70,20 @@ describe('Data Type', () => {
       expect(maybeDT.nullable).toBeTruthy();
     });
 
-    it.todo('returns new maybe generic type version of the original generic type');
+    it('returns new maybe generic type version of the original generic type', () => {
+      const dt = new DT('GenericExample');
+      dt.newTypeParameter('param-1', new DT('Num'));
+      dt.newTypeParameter('param-2', new DT('Str'));
+      dt.newTypeParameter('param-3', new DT('Bool'));
+      expect(dt.nullable).toBeFalsy();
+
+      const result = dt.toNullable();
+      expect(dt).not.toBe(result);
+      expect(result.nullable).toBeTruthy();
+      expect(result.getTypeParameter('param-1').type.isEqualTo(new DT('Num'))).toBeTruthy();
+      expect(result.getTypeParameter('param-2').type.isEqualTo(new DT('Str'))).toBeTruthy();
+      expect(result.getTypeParameter('param-3').type.isEqualTo(new DT('Bool'))).toBeTruthy();
+    });
   });
 
   describe('DataType#newTypeParameter', () => {
