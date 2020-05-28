@@ -1,6 +1,7 @@
 import {
   Parameter,
   DataType as DT,
+  GenericType as GT,
   ScopeVariable as Variable,
   ScopeFunctionObject as FunctionObject,
   ScopeMethodType as MethodType,
@@ -18,6 +19,7 @@ export default class Scope {
   public methods: Map<string, MethodType> = new Map();
   public operators: Map<string, OperatorObject> = new Map();
   public records: Map<string, Record> = new Map();
+  public declaredGenerics: Map<string, GT> = new Map();
 
   public createChildScope(name: string): Scope {
     const scope = new Scope();
@@ -173,5 +175,19 @@ export default class Scope {
     const r = new Record(name);
     this.records.set(name, r);
     return r;
+  }
+
+  public declareGenericType(name: string): GT {
+    const gt = new GT(name);
+    this.declaredGenerics.set(name, gt);
+    return gt;
+  }
+
+  public hasGenericType(name: string): boolean {
+    return this.declaredGenerics.has(name) || (this.parent ? this.parent.hasGenericType(name) : false);
+  }
+
+  public getGenericType(name: string): GT {
+    return this.declaredGenerics.get(name) as GT;
   }
 }

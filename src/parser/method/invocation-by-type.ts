@@ -22,7 +22,7 @@ export function parseTypeMethodInvokeExpr(
     params: [],
     return: DT.Invalid,
   };
-  const receiverType = new DT(prevExpr.value);
+  const receiverType = prevExpr.typeObject;
 
   tt.next(); // Skip the name of the method
   
@@ -55,8 +55,18 @@ export function parseTypeMethodInvokeExpr(
 
     result.isNotBuiltin = methodPattern.isNotBuiltin;
     result.name = result.isNotBuiltin ? `${receiverType.type}_${methodPattern.name}`  : methodPattern.name;
-    result.return = methodPattern.returnDataType;
+    // result.return = methodPattern.returnDataType;
+    const returnType = methodPattern.returnDataType;
+    if (returnType.hasTypeParameters()) {
+      result.return = returnType.applyTypeParametersFrom(receiverType);
+    } else if (returnType.isGeneric) {
+      result.return = receiverType.typeParameterMap[returnType.type];
+    } else {
+      result.return = returnType;
+    }
   }
+  else
+    ParserError(`Invoking an undeclated method \`${receiverType}.${name}\``);
 
   return result;
 }

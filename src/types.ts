@@ -143,6 +143,7 @@ export interface IdentLiteral extends Expression {
 export interface TypeLiteral extends Expression {
   type: 'TypeLiteral';
   value: string;
+  typeObject: DT;
   return: typeof DT.Void;
 }
 

@@ -35,6 +35,9 @@ export function parse(
     }
   }
 
+  const listGT = globalScope.declareGenericType('List');
+  listGT.declareTypeParameter('element');
+
   setupBuiltinMethods(globalScope);
   setupBuiltinOperators(globalScope);
 

@@ -1,4 +1,5 @@
 export { default as DataType } from './DataType';
+export { default as GenericType } from './GenericType';
 export { default as Parameter } from './Parameter';
 export { default as Scope } from './Scope';
 export { default as ScopeVariable } from './Scope.Variable';

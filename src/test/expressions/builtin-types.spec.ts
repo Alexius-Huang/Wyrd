@@ -24,6 +24,7 @@ describe('Builtin Types', () => {
 
       describe('Invoke Builtin Methods', () => {
         FundamentalCompileTest('builtin-types/list/builtin-methods');
+        FundamentalCompileTest('builtin-types/list/builtin-methods-invoke-by-type');
       });
 
       describe('Invalid Conditions', () => {

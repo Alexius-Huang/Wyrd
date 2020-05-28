@@ -56,7 +56,7 @@ export function parseValueMethodInvokeExpr(
     }
   }
   else
-    ParserError(`Invoking an unexisting function \`${name}\``)
+    ParserError(`Invoking an undeclated method \`${receiverType}.${name}\``);
 
   return result;
 }
