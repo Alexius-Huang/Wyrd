@@ -3,7 +3,7 @@ export { default as GenericType } from './GenericType';
 export { default as Parameter } from './Parameter';
 export { default as Scope } from './Scope';
 export { default as ScopeVariable } from './Scope.Variable';
-export { default as ScopeFunctionObject } from './Scope.FunctionObject';
+export { default as ScopeFunctionObject, FunctionPattern } from './Scope.FunctionObject';
 export { default as ScopeMethodType } from './Scope.MethodType';
 export { default as ScopeMethodObject } from './Scope.MethodObject';
 export { default as ScopeOperatorObject } from './Scope.OperatorObject';

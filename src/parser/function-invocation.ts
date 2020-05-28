@@ -29,10 +29,7 @@ export function parseFunctionInvokeExpr(
     result.params = parseFunctionParameters(tt, parseExpr, scope);
 
   const inputParameter = Parameter.from(result.params.map(expr => expr.return));
-  const patternInfo = scope.getFunctionPattern(name, inputParameter);  
-  if (patternInfo === undefined) {
-    ParserError(`Function \`${name}\` is called with unmatched input pattern \`${inputParameter}\``);
-  }
+  const patternInfo = scope.getFunctionPattern(name, inputParameter);
   result.name = patternInfo.name;
   result.return = patternInfo.returnDataType;
 

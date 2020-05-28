@@ -4,6 +4,7 @@ import {
   GenericType as GT,
   ScopeVariable as Variable,
   ScopeFunctionObject as FunctionObject,
+  FunctionPattern,
   ScopeMethodType as MethodType,
   ScopeMethodObject as MethodObject,
   ScopeOperatorObject as OperatorObject,
@@ -52,15 +53,23 @@ export default class Scope {
   }
 
   public createConstant(name: string, type: DT = DT.Unknown): Variable {
-    const variable: Variable = new Variable(name, type);
+    if (this.variables.has(name)) {
+      const varInfo = this.variables.get(name) as Variable;
+      ParserError(`${varInfo.isConst ? 'Constant' : 'Variable'} \`${varInfo.name}\` is already declared with type \`${varInfo.type}\``);
+    }
 
+    const variable: Variable = new Variable(name, type);
     this.variables.set(name, variable);
     return variable;
   }
 
   public createMutableVariable(name: string, type: DT = DT.Unknown): Variable {
-    const variable: Variable = new Variable(name, type, false);
+    if (this.variables.has(name)) {
+      const varInfo = this.variables.get(name) as Variable;
+      ParserError(`${varInfo.isConst ? 'Constant' : 'Variable'} \`${varInfo.name}\` is already declared with type \`${varInfo.type}\``);
+    }
 
+    const variable: Variable = new Variable(name, type, false);
     this.variables.set(name, variable);
     return variable;
   }
@@ -80,12 +89,17 @@ export default class Scope {
     return functionObj;
   }
 
-  public getFunctionPattern(name: string, parameter: Parameter) {
+  public getFunctionPattern(name: string, parameter: Parameter): FunctionPattern {
     const functionObj = this.getFunction(name);
-    return functionObj.getPatternInfo(parameter);
+    const result = functionObj.getPatternInfo(parameter);
+    if (result === undefined)
+      ParserError(`Function \`${name}\` with input parameter \`${parameter}\` isn't declared throughout scope chain`);
+    return result;
   }
 
   public createFunction(name: string): FunctionObject {
+    if (this.functions.has(name))
+      ParserError(`Function object \`${name}\` has already been created in current scope`);
     const functionObj = new FunctionObject(name);
     this.functions.set(name, functionObj);
     return functionObj;
