@@ -64,7 +64,7 @@ mutable foo = 456
 ParserError: Constant `foo` cannot be redeclared as variable
 ```
 
-## Maybe Types Declaration
+## "maybe" Types Declaration
 
 There are cases where you might need a variable to assign value represents the concept of **empty**. In Wyrd, everything about empty is represented as a primitive type of value `Null`. 
 
@@ -82,5 +82,13 @@ foo = null;
 foo = 456;
 ```
 
+Since mutable variables can also be assigned `Null`, instead of directly assigned with `Null`, we can just omit the assignment and skip to next line, it will automatically assign the `maybe` type with `Null` value.
 
+```text
+mutable foo maybe Num
+```
+
+```javascript
+let foo = null;
+```
 

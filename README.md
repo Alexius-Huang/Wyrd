@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/Maxwell-Alexius/Wyrd-Lang.svg?branch=master)](https://travis-ci.org/Maxwell-Alexius/Wyrd-Lang) [![Coverage Status](https://coveralls.io/repos/github/Maxwell-Alexius/Wyrd/badge.svg?branch=master)](https://coveralls.io/github/Maxwell-Alexius/Wyrd?branch=master)
 
-**Wyrd** is a toy programmming language whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/) and follows the Functional Programming paradigm.
+**Wyrd** is a toy programmming language \(**but it is evolving in high speed**\) whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/) and follows the Functional Programming paradigm.
+
+[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/)
 
 Wyrd programming language compiles its code into JavaScript. The primary goal would be to write Front-End code and Back-End code \(NodeJS\) using Wyrd programming language. I may want to try writing React \(or Vue\) component code using Wyrd lang if possible.
 
@@ -10,130 +12,32 @@ Wyrd programming language compiles its code into JavaScript. The primary goal wo
 
 The cognate term in Old Norse is urðr, with a similar meaning, but also personalized as one of the Norns, Urðr and appearing in the name of the holy well Urðarbrunnr in [Norse mythology](https://en.wikipedia.org/wiki/Norse_mythology).
 
-### Table of Content
+### Table of Content \[WIP\]
 
-* [Supported Syntax Rules](https://github.com/Maxwell-Alexius/Wyrd-Lang#supported-syntax-rules)
-  * Assignment
-    * [Constant Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#constant-declaration)
-    * [Mutable Variable Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#mutable-variable-declaration)
-  * [Builtin Primitives](https://github.com/Maxwell-Alexius/Wyrd-Lang#builtin-primitives)
-  * [Lists](https://github.com/Maxwell-Alexius/Wyrd-Lang#lists)
-  * [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics)
-  * [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression)
-  * [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression)
-  * [Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation)
-  * Functions
-    * [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
-    * [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
-    * [Function Overloading](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-overloading)
-    * [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
-    * [Override Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#override-function-declaration)
-  * [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment)
+* [Variable Declarations](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/variable-declarations)
+  * Constant Declaration
+  * Mutable Variables Declaration
+  * "maybe" Types Declaration
+* [Built-in Types](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/built-in-types)
+  * Primitives
+    * Numbers, Strings and Booleans
+    * Concept of "Empty" - Null
+  * Lists
+    * List Literal
+    * Encourages Homogeneous Typed List
+* [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics) \(Legacy\)
+* [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression) \(Legacy\)
+* [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression) \(Legacy\)
+* [Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation) \(Legacy\)
+* Functions \(Legacy\)
+  * [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
+  * [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
+  * [Function Overloading](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-overloading)
+  * [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
+  * [Override Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#override-function-declaration)
+* [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment) \(Legacy\)
 
 ### Supported Syntax Rules
-
-#### Assignment
-
-**Constant Declaration**
-
-Whenever you declare a new variable, normally it would compiled into constant value of data:
-
-**Wyrd Code**
-
-```text
-foo = 1
-bar = 1 + 2 * 3 + 4
-baz = 1 + (2 - 3) * 4
-```
-
-**Compiled Result**
-
-```javascript
-const foo = 1;
-const bar = 1 + (2 * 3) + 4;
-const baz = 1 + ((2 - 3) * 4);
-```
-
-In other words, redeclaration is forbidden:
-
-**Wyrd Code**
-
-```text
-foo = 123
-foo = 456
-```
-
-**Thrown Error Message**
-
-```text
-ParserError: Constant `foo` cannot be reassigned
-```
-
-#### Mutable Variable Declaration
-
-**Wyrd Code**
-
-```text
-mutable foo = 123
-mutable bar = 456
-foo = 1 + bar * 2 - foo
-```
-
-**Compiled Result**
-
-```javascript
-let foo = 123;
-let bar = 456;
-foo = 1 + (bar * 2) - foo;
-```
-
-#### Builtin Primitives
-
-**Wyrd Code**
-
-```text
-foo = 123
-bar = "Hello world"
-baz = True
-nothing = Null
-```
-
-**Compiled Result**
-
-```javascript
-const foo = 123;
-const bar = 'Hello world';
-const baz = true;
-const nothing = null;
-```
-
-#### Lists
-
-**Wyrd Code**
-
-```text
-[1 2 3 4 5]
-["Hello world" "Wyrd" "Lang" "is" "Awesome"]
-[[1 2 3] [4 5 6] [7 8 9]]
-[1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]
-
-def addition(x: Num, y: Num): Num => x + y
-[1 addition(2, 3 + 4 * 5) 6 addition(7 / 8 - 9, 10)]
-```
-
-**Compiled Result**
-
-```javascript
-[1, 2, 3, 4, 5];
-['Hello world', 'Wyrd', 'Lang', 'is', 'Awesome'];
-[[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-[1, 2 + (3 * 4), 5 / (6 - 7), 8, 9, 10];
-function addition(x, y) {
-  return x + y;
-}
-
-[1, addition(2, 3 + (4 * 5)), 6, addition(7 / 8 - 9, 10)];
-```
 
 #### Arithmetics
 
