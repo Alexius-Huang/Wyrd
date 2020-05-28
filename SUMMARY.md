@@ -1,5 +1,8 @@
 # Table of contents
 
-* [Wyrd README](README.md)
-* [Variable Declarations](variable-declarations.md)
+* [Wyrd](README.md)
+
+## Wyrd Syntax Rules
+
+* [Variable Declarations](wyrd-syntax-rules/variable-declarations.md)
 
