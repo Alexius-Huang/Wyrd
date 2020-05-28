@@ -3,8 +3,8 @@ import { DataType as DT } from '.';
 import { ParserError } from '../error';
 
 export default class Record {
-  public properties: Map<string, RecordProperty> = new Map();
-  public propertySet: Set<string> = new Set();
+  private readonly properties: Map<string, RecordProperty> = new Map();
+  public readonly propertySet: Set<string> = new Set();
 
   constructor(public name: string) {}
 
@@ -12,7 +12,7 @@ export default class Record {
 
   public setProperty(type: DT, name: string): Record {
     if (this.propertySet.has(name))
-      ParserError(`Property ${name} in \`${this.name}\` has already been declared`);
+      ParserError(`Property \`${name}\` in \`${this.name}\` has already been declared`);
 
     this.propertySet.add(name);
     this.properties.set(name, { type, name });

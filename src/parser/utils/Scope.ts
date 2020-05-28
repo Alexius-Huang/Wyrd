@@ -182,10 +182,18 @@ export default class Scope {
   }
 
   public getRecord(name: string): Record {
-    return this.records.get(name) as Record;
+    let result = this.records.get(name);
+    if (result === undefined) {
+      if (this.parent === null)
+        ParserError(`Record \`${name}\` isn't declared throughout scope chain`);
+      return this.parent.getRecord(name);
+    }
+    return result;
   }
 
   public createRecord(name: string): Record {
+    if (this.records.has(name))
+      ParserError(`Record \`${name}\` is already declared in current scope`)
     const r = new Record(name);
     this.records.set(name, r);
     return r;
