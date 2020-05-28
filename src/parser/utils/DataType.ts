@@ -72,6 +72,8 @@ export default class DataType {
   public isAssignableTo(otherDT: DataType) {
     if (this.type !== otherDT.type)
       return (this.type === 'Null' && otherDT.nullable);
+    if (this.type === 'Null' && otherDT.type === 'Null')
+      return true;
 
     return !(
       !otherDT.nullable && (this.nullable || this.type === 'Null')
@@ -98,8 +100,9 @@ export default class DataType {
     return new DataType(this.type, true);
   }
 
-  public newTypeParameter(paramName: string, type?: DataType) {
-    const dt = type ?? DataType.Unknown;
+  public newTypeParameter(paramName: string, dt = DataType.Unknown) {
+    if (this.typeParams.has(paramName))
+      ParserError(`Type parameter \`${paramName}\` has already declared in data type \`${this.type}\``);
 
     const tp: TypeParameter = {
       name: paramName,
@@ -115,7 +118,7 @@ export default class DataType {
   public getTypeParameter(paramName: string): TypeParameter {
     if (this.typeParams.has(paramName))
       return this.typeParams.get(paramName) as TypeParameter;
-    ParserError(`Type \`${this}\` has no type parameter of name \`${paramName}\``);
+    ParserError(`Type \`${this.type}\` has no type parameter of name \`${paramName}\``);
   }
 
   public hasTypeParameters(): boolean {
