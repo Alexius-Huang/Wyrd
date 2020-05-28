@@ -94,7 +94,7 @@ foo.push(6);
 foo.concat([7, 8, 9]);
 `;
 
-const minified = 'ToDO';
+const minified = 'const foo=[1,2,3,4,5];foo.push(6);foo.concat([7,8,9]);';
 
 export {
   program,

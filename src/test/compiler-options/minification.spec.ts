@@ -56,6 +56,8 @@ describe('Compiler Option: Minification', () => {
       perform('multidimensional list', 'builtin-types/list/multidimension');
       perform('list with function invocation', 'builtin-types/list/with-function-invocation');
       perform('list with prioritization expressions', 'builtin-types/list/with-prioritization');
+      perform('builtin-methods invocation', 'builtin-types/list/builtin-methods');
+      perform('builtin-methods invocation by type', 'builtin-types/list/builtin-methods-invoke-by-type');
     });
 
     describe('Record', () => {
