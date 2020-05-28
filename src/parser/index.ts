@@ -13,7 +13,7 @@ import { parseAssignmentExpr } from './assignment';
 import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
-import { parseMethodInvokeExpr } from './method-invocation';
+import { parseMethodInvokeExpr } from './method/invocation';
 import { parseThisLiteral } from './this-literal';
 import { ParserError } from './error';
 import setupBuiltinMethods from './builtin-methods';
@@ -34,6 +34,9 @@ export function parse(
       globalScope = parseOptions.scope();
     }
   }
+
+  const listGT = globalScope.declareGenericType('List');
+  listGT.declareTypeParameter('element');
 
   setupBuiltinMethods(globalScope);
   setupBuiltinOperators(globalScope);

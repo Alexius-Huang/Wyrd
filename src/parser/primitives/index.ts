@@ -4,7 +4,7 @@ import { parseNumberLiteral } from './number';
 import { parseStringLiteral } from './string';
 import { parseBooleanLiteral } from './boolean';
 import { parseNullLiteral } from './null';
-import { parseMethodInvokeExpr } from '../method-invocation';
+import { parseMethodInvokeExpr } from '../method/invocation';
 import { ParserError } from '../error';
 
 const primitiveMapParsingFunctions = new Map([

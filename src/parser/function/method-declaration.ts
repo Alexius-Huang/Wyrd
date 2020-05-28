@@ -61,7 +61,7 @@ export function parseMethodDeclaration(
   /* TODO: Check if method is redeclared with same input pattern */
   if (scope.hasMethod(receiverType, name)) {
     const methodObj = scope.getMethod(receiverType, name);
-    const methodPattern = methodObj.getPatternInfo(parameter);
+    const methodPattern = methodObj.getPatternInfo(receiverType, parameter);
     if (options?.override) {
       if (methodPattern === undefined)
         ParserError(`method \`${invokeFormatName}\` need not to be override since no input pattern \`${parameter}\` declared`);

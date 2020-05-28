@@ -4,7 +4,8 @@ import { parseFunctionInvokeExpr } from './function-invocation';
 import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
-import { parseMethodInvokeExpr } from './method-invocation';
+import { parseMethodInvokeExpr } from './method/invocation';
+import { parseTypeLiteral } from './type-literal';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -52,6 +53,10 @@ export function parseIdentifier(
   /* Handle Identifier as a Record */
   else if (scope.hasRecord(tokenName)) {
     result = parseRecordLiteral(tt, parseExpr, scope, prevExpr);
+  }
+
+  else if (scope.hasGenericType(tokenName)) {
+    result = parseTypeLiteral(tt, parseExpr, scope);
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
