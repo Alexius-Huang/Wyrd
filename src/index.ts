@@ -2,6 +2,8 @@ import { lex } from './lexer';
 import { parse } from './parser';
 import { Scope } from './parser/utils';
 import { generateCode } from './code-generator';
+import * as fs from 'fs';
+import * as path from 'path';
 import setupBuiltinMethods from './parser/builtin-methods';
 import setupBuiltinOperators from './parser/builtin-operators';
 
@@ -13,11 +15,13 @@ type CompileResult = {
 };
 
 export function compile(
-  code: string,
+  // code: string,
   options?: T.CompilerOptions,
 ): CompileResult {
-  const tokens = lex(code);
-  const rootDir = options?.dir ?? __dirname;
+  const content = options?.program ?? fs.readFileSync(options?.entry ?? __dirname, 'utf-8');
+  const tokens = lex(content);
+
+  const rootDir = options?.entry ? path.dirname(options.entry) : __dirname;
 
   let globalScope = new Scope();
 

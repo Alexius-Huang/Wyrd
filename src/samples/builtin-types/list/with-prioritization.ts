@@ -2,10 +2,6 @@ import { Token, AST, Operator as Op } from '../../../types';
 import { NumberLiteral, prioritize, Arithmetic } from '../../helper';
 import { DataType as DT } from '../../../parser/utils';
 
-const program = `\
-[1 (2 + 3 * 4) (5 / (6 - 7)) 8 (9) 10]
-`;
-
 const tokens: Array<Token> = [
   { type: 'lbracket', value: '[' },
   { type: 'number', value: '1' },
@@ -69,7 +65,6 @@ const compiled = `\
 const minified = '[1,2+(3*4),5/(6-7),8,9,10];';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

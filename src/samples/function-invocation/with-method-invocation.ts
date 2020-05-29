@@ -2,11 +2,6 @@ import { Token, AST, CompilerOptions } from '../../types';
 import { DataType as DT, Scope, Parameter } from '../../parser/utils';
 import { StringLiteral } from '../helper';
 
-const program = `\
-funcA("Hello world").concat("Hello world again").upcase()
-(funcA("Hello world").concat("Hello world again")).upcase()
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'funcA' },
   { type: 'lparen', value: '(' },
@@ -104,7 +99,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

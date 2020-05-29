@@ -2,12 +2,6 @@ import { Token, AST } from '../../types';
 import { NumberLiteral, StringLiteral, BooleanLiteral, Var } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-record UserInfo { Str name, Num age, Bool hasPet }
-maxwell = UserInfo { name: "Maxwell", age: 18, hasPet: False }
-maxwell->age
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'record' },
   { type: 'ident', value: 'UserInfo' },
@@ -78,7 +72,6 @@ maxwell.age;
 const minified = 'const maxwell={name:\'Maxwell\',age:18,hasPet:false};maxwell.age;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

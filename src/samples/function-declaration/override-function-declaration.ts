@@ -2,17 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-def addition(x: Num, y: Num): Num => x + y
-addition(1, 2)
-
-override def addition(x: Num, y: Num): Num => (x + y) * 2
-addition(1, 2)
-
-override def addition(x: Num, y: Num): Num => x + y / 2
-addition(1, 2)
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'def' },
   { type: 'ident', value: 'addition' },
@@ -212,7 +201,6 @@ addition$2(1, 2);
 const minified = 'function addition(x,y){return x+y;}addition(1,2);function addition$1(x,y){return (x+y)*2;}addition$1(1,2);function addition$2(x,y){return x+(y/2);}addition$2(1,2);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

@@ -1,13 +1,6 @@
 import { Token, AST } from '../../types';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-123
-"Hello world"
-True
-Null
-`;
-
 const tokens: Array<Token> = [
   { type: 'number', value: '123' },
   { type: 'newline', value: '\n' },
@@ -36,7 +29,6 @@ null;
 const minified = '123;\'Hello world\';true;null;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

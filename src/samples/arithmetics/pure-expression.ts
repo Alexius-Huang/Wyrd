@@ -2,15 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-1 + 2 * 3
-1 * 2 + 3
-1 + 2 * 3 + 4
-1 * 2 + 3 * 4
-1 + 2 * 3 * 4
-1 * 2 + 3 + 4
-`;
-
 const tokens: Array<Token> = [
   { type: 'number', value: '1' },
   { type: 'plus', value: '+' },
@@ -138,7 +129,6 @@ const compiled = `\
 const minified = '1+(2*3);1*2+3;1+(2*3)+4;1*2+(3*4);1+(2*3*4);1*2+3+4;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

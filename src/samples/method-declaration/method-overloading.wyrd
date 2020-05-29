@@ -1,0 +1,7 @@
+def Num.add(x: Num): Num => this + x
+123.add(456)
+Num.add(123, 456)
+
+def Num.add(x: Num, y: Num): Num => this + x + y
+123.add(456, 789)
+Num.add(123, 456, 789)

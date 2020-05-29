@@ -2,11 +2,6 @@ import { Token, AST } from '../../types';
 import { StringLiteral, NumberLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-Str.upcase("Hello world")
-Str.repeat("Hello world", 3)
-`;
-
 const tokens: Array<Token> = [
   { type: 'builtin-type', value: 'Str' },
   { type: 'dot', value: '.' },
@@ -54,7 +49,6 @@ const compiled = `\
 const minified = '(\'Hello world\').toUpperCase();(\'Hello world\').repeat(3);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

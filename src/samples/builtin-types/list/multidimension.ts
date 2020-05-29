@@ -2,11 +2,6 @@ import { Token, AST } from '../../../types';
 import { NumberLiteral } from '../../helper';
 import { DataType as DT } from '../../../parser/utils';
 
-
-const program = `\
-[[1 2 3] [4 5 6] [7 8 9]]
-`;
-
 const tokens: Array<Token> = [
   { type: 'lbracket', value: '[' },
   { type: 'lbracket', value: '[' },
@@ -75,7 +70,6 @@ const compiled = `\
 const minified = '[[1,2,3],[4,5,6],[7,8,9]];';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

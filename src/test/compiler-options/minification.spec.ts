@@ -1,21 +1,21 @@
 import * as T from '../../types'
+import * as Path from 'path';
 import { compile } from '../..';
 
 function perform(name: string, sample: string) {
   const path = `../../samples/${sample}`;
 
-  let program: string;
   let minified: string;
   let compilerOptions: T.CompilerOptions | undefined;
+  const entry = Path.join(__dirname, `../../samples/${sample}.wyrd`);
   beforeAll(async () => {
     const testCase = await import(path);
-    program = testCase.program;
     minified = testCase.minified;
     compilerOptions = testCase.compilerOptions;
   });
 
   it(`minifies and compiles \`${name}\` correctly`, () => {
-    const { result } = compile(program, { minify: true, ...compilerOptions });
+    const { result } = compile({ minify: true, ...compilerOptions, entry });
     expect(result).toBe(minified);
   });
 }

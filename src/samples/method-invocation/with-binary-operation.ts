@@ -2,10 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, StringLiteral, BooleanLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-"123" == 123.toStr() and True.toStr() != "False"
-`;
-
 const tokens: Array<Token> = [
   { type: 'string', value: '123' },
   { type: 'eqeq', value: '==' },
@@ -65,7 +61,6 @@ const compiled = `\
 const minified = '\'123\'===(123).toString()&&(true).toString()!==\'False\';';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

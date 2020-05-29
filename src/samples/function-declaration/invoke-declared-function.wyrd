@@ -1,0 +1,13 @@
+def foo(x: Num): Num do
+  x * 2
+end
+
+def bar(x: Num): Num do
+  foo(x + 2)
+end
+
+def baz(x: Num): Num do
+  bar(x / 2)
+end
+
+baz(123)

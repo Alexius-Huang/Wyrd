@@ -1,0 +1,7 @@
+def Num.add(x: Num): Num => this + x
+123.add(456)
+Num.add(123, 456)
+
+override def Num.add(x: Num): Num => this + x + 1
+123.add(456)
+Num.add(123, 456)

@@ -1,0 +1,1 @@
+not (False or True) and False

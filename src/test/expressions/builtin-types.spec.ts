@@ -31,7 +31,7 @@ describe('Builtin Types', () => {
         it('cannot contain mixed type of elements', () => {
           const program = `\n[1 2 "3" 4 5]`;
           const errorMsg = 'ParserError: Expect List to contain of type `Num`, instead mixed with type `Str`';
-          expect(() => compile(program)).toThrowError(errorMsg);
+          expect(() => compile({ program })).toThrowError(errorMsg);
         });
       });
     });

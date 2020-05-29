@@ -2,26 +2,6 @@ import { Token, AST, CompilerOptions } from '../../types';
 import { NumberLiteral, Var, Arithmetic, StringLiteral } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 
-const program = `\
-example = if cond1 do
-            a = 123
-            b = 456
-            (a + b).toStr()
-          elif cond2 do
-            foo = "Hello"
-            bar = 123
-            foo.concat(bar.toStr())
-          elif cond3 do
-            baz = 666
-            bazz = "Devil Number: "
-            bazz.concat(baz.toStr())
-          else do
-            a = 456
-            b = 789
-            (b - a).toStr()
-          end
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'example' },
   { type: 'eq', value: '=' },
@@ -297,7 +277,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

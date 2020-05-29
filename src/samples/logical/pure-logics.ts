@@ -2,11 +2,6 @@ import { Token, AST } from '../../types';
 import { BooleanLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-True and False or not False
-not False and True
-`;
-
 const tokens: Array<Token> = [
   { type: 'boolean', value: 'True' },
   { type: 'keyword', value: 'and' },
@@ -59,7 +54,6 @@ true && false || !(false);
 const minified = 'true&&false||!(false);!(false)&&true;'
 
 export {
-  program,
   tokens,
   ast,
   compiled,

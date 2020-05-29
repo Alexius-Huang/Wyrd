@@ -1,0 +1,4 @@
+foo = 123 ## This is multiline comment
+bar = 456
+##
+baz = 789

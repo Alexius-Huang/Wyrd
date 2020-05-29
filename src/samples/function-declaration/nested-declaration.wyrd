@@ -1,0 +1,8 @@
+def foo(x: Num): Num do
+  def bar(y: Num): Num do
+    a = y * 2
+    def baz(z: Num): Num => z + 666
+    baz(a)
+  end
+  x + bar(x) * 123
+end

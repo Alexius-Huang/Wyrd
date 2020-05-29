@@ -2,11 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, StringLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-"Hello world".upcase().repeat(3)
-(1 + 2 * 3).toStr().repeat(3)
-`;
-
 const tokens: Array<Token> = [
   { type: 'string', value: 'Hello world' },
   { type: 'dot', value: '.' },
@@ -86,7 +81,6 @@ const compiled = `\
 const minified = '(\'Hello world\').toUpperCase().repeat(3);(1+(2*3)).toString().repeat(3);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

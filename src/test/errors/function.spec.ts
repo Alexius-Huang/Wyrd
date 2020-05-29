@@ -11,7 +11,7 @@ def addition(x: Num, y: Num): Num => (x + y) * 2
 addition(1, 2)
 `;
 
-      expect(() => compile(program))
+      expect(() => compile({ program }))
         .toThrowError('ParserError: Overriding function `addition` with existing input pattern `Num.Num`; to override the function, address it with `override` keyword before `def` token');
     });
   });
@@ -22,7 +22,7 @@ addition(1, 2)
 override def addition(x: Num, y: Num): Num => x + y
 addition(1, 2)
 `;
-      expect(() => compile(program))
+      expect(() => compile({ program }))
         .toThrowError('ParserError: Function `addition` need not to be override since no input pattern `Num.Num` declared');
     });
 
@@ -31,7 +31,7 @@ addition(1, 2)
 def addition(x: Num, y: Num): Num => x + y
 override def addition(x: Num, y: Num, z: Num): Num => x + y + z
 `;
-      expect(() => compile(program))
+      expect(() => compile({ program }))
         .toThrowError('ParserError: Function `addition` need not to be override since no input pattern `Num.Num.Num` declared');
     });
   });
@@ -42,7 +42,7 @@ override def addition(x: Num, y: Num, z: Num): Num => x + y + z
 def foo: Num => True
 `;
 
-      expect(() => compile(program))
+      expect(() => compile({ program }))
         .toThrowError('ParserError: Return type of function `foo` should be `Num`, instead got: `Bool`');
     });
   });

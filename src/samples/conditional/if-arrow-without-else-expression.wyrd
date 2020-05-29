@@ -1,0 +1,5 @@
+if age < 18 => "youngster"
+
+if age < 18 => "youngster"
+elif age < 60 => "adult"
+elif age < 100 => "elder"

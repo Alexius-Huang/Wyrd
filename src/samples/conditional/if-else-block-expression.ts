@@ -2,18 +2,6 @@ import { Token, AST, CompilerOptions } from '../../types';
 import { NumberLiteral, Var, Arithmetic } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 
-const program = `\
-foo = if cond do
-        a = 123
-        b = 456
-        a + b
-      else do
-        a = 456
-        b = 789
-        b - a
-      end
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
@@ -129,7 +117,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

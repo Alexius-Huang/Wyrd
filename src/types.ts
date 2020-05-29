@@ -53,6 +53,12 @@ export type CompilerOptions = {
   /* Minifies the compile result */
   minify?: boolean;
 
+  /* Program, the content itself */
+  program?: string;
+
+  /* Entry file, or so-called the main file */
+  entry?: string;
+
   /* Targeting direcctory */
   dir?: string;
 

@@ -2,10 +2,6 @@ import { Token, AST } from '../../types';
 import { BooleanLiteral, prioritize } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-not (False or True) and False
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'not' },
   { type: 'lparen', value: '(' },
@@ -43,7 +39,6 @@ const compiled = `\
 const minified = '!(false||true)&&false;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

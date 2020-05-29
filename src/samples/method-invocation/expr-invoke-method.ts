@@ -2,10 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-(1 + 2 * 3).toStr()
-`;
-
 const tokens: Array<Token> = [
   { type: 'lparen', value: '(' },
   { type: 'number', value: '1' },
@@ -44,7 +40,6 @@ const compiled = `\
 const minified = '(1+(2*3)).toString();';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

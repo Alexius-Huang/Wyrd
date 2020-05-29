@@ -2,22 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-def Num.isPositive: Bool do
-  this > 0
-end
-
-123.isPositive()
-Num.isPositive(123)
-
-def Num.add(x: Num): Num do
-  this + x
-end
-
-123.add(456)
-Num.add(123, 456)
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'def' },
   { type: 'builtin-type', value: 'Num' },
@@ -178,7 +162,6 @@ Num_add(123, 456);
 const minified = 'function Num_isPositive(_this){return _this>0;}Num_isPositive(123);Num_isPositive(123);function Num_add(_this,x){return _this+x;}Num_add(123,456);Num_add(123,456);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

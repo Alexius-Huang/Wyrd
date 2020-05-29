@@ -2,12 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-foo = 1
-bar = 1 + 2 * 3 + 4
-baz = 1 + (2 - 3) * 4
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
@@ -93,7 +87,6 @@ const baz = 1 + ((2 - 3) * 4);
 const minified = 'const foo=1;const bar=1+(2*3)+4;const baz=1+((2-3)*4);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

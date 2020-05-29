@@ -2,13 +2,6 @@ import { Token, AST } from '../../types';
 import { Var, NumberLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-foo = ## Assignment ## 123
-baz = ##
-  Assignment
-## 789
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
@@ -46,7 +39,6 @@ const baz = 789;
 const minified = 'const foo=123;const baz=789;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

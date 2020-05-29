@@ -1,15 +1,6 @@
-import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
-import { NumberLiteral, Arithmetic, Var } from '../helper';
+import { Token, AST, CompilerOptions } from '../../types';
+import { NumberLiteral, Var } from '../helper';
 import { DataType as DT } from '../../parser/utils';
-
-const program = `\
-import "./example.wyrd"
-import "./example2.wyrd"
-import "./folder/example3.wyrd"
-
-foo = addition(123, 456)
-addition(123, 456, foo.add(789))
-`;
 
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'import' },
@@ -96,7 +87,6 @@ const compilerOptions: CompilerOptions = {
 };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

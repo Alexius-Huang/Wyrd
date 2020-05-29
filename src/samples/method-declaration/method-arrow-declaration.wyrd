@@ -1,0 +1,12 @@
+def Num.isPositive: Bool => this > 0
+123.isPositive()
+Num.isPositive(123)
+
+def Num.add(x: Num): Num => this + x
+123.add(456)
+Num.add(123, 456)
+
+123.add(456).isPositive()
+Num.add(123, 456).isPositive()
+Num.isPositive(123.add(456))
+Num.isPositive(Num.add(123, 456))

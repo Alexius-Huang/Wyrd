@@ -2,13 +2,6 @@ import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { DataType as DT, Scope } from '../../parser/utils';
 import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
 
-const program = `\
-3 + 1 > 2
-5 * 3 < 15 - 6 * 8
-11 >= 7 + 7 or 3 <= (6 + 2) / 3
-8 / (4 * 2) > 3 and not 1 + 2 * 3 == 7 or a + b / c * d != w - x * y
-`;
-
 const tokens: Array<Token> = [
   { type: 'number', value: '3' },
   { type: 'plus', value: '+' },
@@ -213,7 +206,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

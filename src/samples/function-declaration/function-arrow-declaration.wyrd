@@ -1,0 +1,4 @@
+def addition(x: Num, y: Num): Num => x + y
+def devilNumber: Num => 666
+def complexArithmetic(w: Num, x: Num, y: Num, z: Num): Num => (x + y) * (z / w)
+def complexArithmetic2(w: Num, x: Num, y: Num, z: Num): Num => x + y * (z / w)

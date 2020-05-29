@@ -1,0 +1,9 @@
+foo = if cond do
+        a = 123
+        b = 456
+        a + b
+      else do
+        a = 456
+        b = 789
+        b - a
+      end

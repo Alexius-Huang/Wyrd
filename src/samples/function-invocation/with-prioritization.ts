@@ -2,12 +2,6 @@ import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { DataType as DT, Scope, Parameter } from '../../parser/utils';
 import { prioritize, NumberLiteral } from '../helper';
 
-const program = `\
-funcA(1, (funcB(2, 3) + 4) * funcC(5))
-funcD(1 / (funcE(2, 3) - 4), 5)
-funcF((1 - funcG(2) * 3) / 4, funcH(5))
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'funcA' },
   { type: 'lparen', value: '(' },
@@ -213,7 +207,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

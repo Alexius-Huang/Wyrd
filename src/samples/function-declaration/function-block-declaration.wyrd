@@ -1,0 +1,9 @@
+def addition(x: Num, y: Num): Num do
+  x + y
+end
+
+def complexArithmetic(w: Num, x: Num, y: Num, z: Num): Num do
+  a = x + y * z
+  b = w - 2 / a + 1
+  b
+end

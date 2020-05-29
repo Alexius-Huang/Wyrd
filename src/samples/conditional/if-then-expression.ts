@@ -2,18 +2,6 @@ import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { DataType as DT, Scope } from '../../parser/utils';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
 
-const program = `\
-example = if age < 18 then
-            "youngster"
-          elif age <= 60 then
-            "adult"
-          elif age < 100 then
-            "elder"
-          else then
-            "centenarian"
-          end
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'example' },
   { type: 'eq', value: '=' },
@@ -109,7 +97,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

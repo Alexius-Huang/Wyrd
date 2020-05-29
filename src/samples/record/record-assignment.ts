@@ -2,12 +2,6 @@ import { Token, AST, CompilerOptions } from '../../types';
 import { Var } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 
-const program = `\
-age = maxwell->age
-mutable name = maxwell->name
-name = maxwell->name
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'age' },
   { type: 'eq', value: '=' },
@@ -90,7 +84,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

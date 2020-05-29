@@ -1,5 +1,6 @@
 import * as Path from 'path';
 import * as T from '../types';
+import * as fs from 'fs';
 import { Scope } from '../parser/utils';
 import setupBuiltinMethods from '../parser/builtin-methods';
 import setupBuiltinOperators from '../parser/builtin-operators';
@@ -12,10 +13,11 @@ export function FundamentalCompileTest(
     focusedASTIndex?: number;
   },
 ) {
-  const testSamplePath = `../samples/${name}`;
+  const testSamplePath = Path.join(__dirname, `../samples/${name}`);
   const [folder, testCase] = name.split('/');
   const dir = Path.join(__dirname, '..', 'samples', folder);
   const debugParser = options?.debugParser ?? false;
+  const entry = `${testSamplePath}.wyrd`;
 
   let program: string;
   let tokens: Array<T.Token>;
@@ -26,7 +28,7 @@ export function FundamentalCompileTest(
   describe(testCase.split('-').join(' '), () => {
     beforeAll(async () => {
       const testCase = await import(testSamplePath);
-      program = testCase.program;
+      program = fs.readFileSync(entry, 'utf-8');
       tokens = testCase.tokens;
       ast = testCase.ast;
       compiled = testCase.compiled;
@@ -71,7 +73,7 @@ export function FundamentalCompileTest(
   
     if (!debugParser) {
       it('compiles the Wyrd program into JavaScript code correctly', () => {
-        const { result } = compile(program, { ...compilerOptions, dir });
+        const { result } = compile({ ...compilerOptions, dir, entry });
         expect(result).toBe(compiled);
       });
     }  

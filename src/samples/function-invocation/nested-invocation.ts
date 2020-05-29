@@ -2,14 +2,6 @@ import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { DataType as DT, Parameter, Scope } from '../../parser/utils';
 import { NumberLiteral } from '../helper';
 
-const program = `\
-funcA(1, funcB(2, 3, 4, 5))
-funcC(1, 2, funcD(3, 4), 5)
-funcE(1, funcF(2, 3, funcG(4)), 5)
-funcH(funcI(1) + 2 * funcJ(3, 4), funcK(5))
-funcL(funcM(1) * 2 + 3 * funcN(4) - 5)
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'funcA' },
   { type: 'lparen', value: '(' },
@@ -310,7 +302,6 @@ const scope = (s: Scope): Scope => {
 const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,

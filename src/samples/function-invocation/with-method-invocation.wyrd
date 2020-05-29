@@ -1,0 +1,2 @@
+funcA("Hello world").concat("Hello world again").upcase()
+(funcA("Hello world").concat("Hello world again")).upcase()

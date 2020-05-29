@@ -1,22 +1,6 @@
-import { Token, AST, Operator as Op } from '../../types';
+import { Token, AST } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
-
-const program = `\
-def foo(x: Num): Num do
-  x * 2
-end
-
-def bar(x: Num): Num do
-  foo(x + 2)
-end
-
-def baz(x: Num): Num do
-  bar(x / 2)
-end
-
-baz(123)
-`;
 
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'def' },
@@ -169,7 +153,6 @@ baz(123);
 const minified = 'function foo(x){return x*2;}function bar(x){return foo(x+2);}function baz(x){return bar(x/2);}baz(123);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,
