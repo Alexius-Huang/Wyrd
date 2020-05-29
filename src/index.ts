@@ -31,7 +31,11 @@ export function compile(
   if (options?.scopeMiddleware)
     globalScope = options.scopeMiddleware(globalScope);
 
-  const { ast } = parse(tokens, rootDir, globalScope, undefined, options?.mainFileOnly ?? false);
+  const { ast } = parse(tokens, {
+    rootDir,
+    defaultScope: globalScope,
+    mainFileOnly: options?.mainFileOnly ?? false
+  });
 
   if (options?.showAST) {
     console.log('/* AST */');
@@ -43,3 +47,5 @@ export function compile(
 
   return { result, ast };
 }
+
+export { lex, parse, generateCode };

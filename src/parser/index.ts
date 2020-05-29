@@ -21,14 +21,16 @@ import { VoidExpression } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
-  rootDir: string,
-  defaultScope?: Scope,
-  defaultAST?: T.AST,
-  mainFileOnly?: boolean,
+  options: {
+    rootDir: string,
+    defaultScope?: Scope,
+    defaultAST?: T.AST,
+    mainFileOnly?: boolean,
+  },
 ): { ast: T.AST, scope: Scope } {
   const tt = new TokenTracker(tokens);
-  let globalAst: T.AST = Array.from(defaultAST ?? []);
-  let globalScope = defaultScope ?? new Scope();
+  let globalAst: T.AST = Array.from(options.defaultAST ?? []);
+  let globalScope = options.defaultScope ?? new Scope();
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: Scope = meta?.scope ?? globalScope;
@@ -74,9 +76,9 @@ export function parse(
         return parseRecordDeclaration(tt, parseExpr, scope);
 
       if (tt.valueIs('import')) {
-        const { scope: updatedScope, ast: updatedAST } = parseImportExpr(tt, parse, scope, rootDir);
+        const { scope: updatedScope, ast: updatedAST } = parseImportExpr(tt, parse, scope, options.rootDir);
         globalScope = updatedScope;
-        if (!mainFileOnly)
+        if (!options.mainFileOnly)
           globalAst = globalAst.concat(updatedAST);
         return VoidExpression;
       }

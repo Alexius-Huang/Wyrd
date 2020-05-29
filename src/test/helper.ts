@@ -1,12 +1,9 @@
-import { lex } from '../lexer';
-import { parse } from '../parser';
-import { Scope } from '../parser/utils';
 import * as Path from 'path';
+import * as T from '../types';
+import { Scope } from '../parser/utils';
 import setupBuiltinMethods from '../parser/builtin-methods';
 import setupBuiltinOperators from '../parser/builtin-operators';
-import { generateCode } from '../code-generator';
-import { compile } from '..';
-import * as T from '../types';
+import { compile, lex, parse, generateCode } from '..';
 
 export function FundamentalCompileTest(
   name: string,
@@ -54,7 +51,11 @@ export function FundamentalCompileTest(
       setupBuiltinMethods(globalScope);
       setupBuiltinOperators(globalScope);
 
-      const { ast: result } = parse(tokens, dir, globalScope, undefined, compilerOptions?.mainFileOnly ?? false);
+      const { ast: result } = parse(tokens, {
+        rootDir: dir,
+        defaultScope: globalScope,
+        mainFileOnly: compilerOptions?.mainFileOnly ?? false
+      });
       if (debugParser) {
         const index = options?.focusedASTIndex ?? 0;
         console.log(JSON.stringify(result[index], undefined, 2));

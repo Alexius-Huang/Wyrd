@@ -9,9 +9,12 @@ export function parseImportExpr(
   tt: TokenTracker,
   parse: (
     tokens: Array<T.Token>,
-    rootDir: string,
-    defaultScope?: Scope,
-    defaultAST?: T.AST,
+    options: {
+      rootDir: string,
+      defaultScope?: Scope,
+      defaultAST?: T.AST,
+      mainFileOnly?: boolean,
+    },
   ) => { ast: T.AST, scope: Scope },
   scope: Scope,
   rootDir: string,
@@ -28,5 +31,8 @@ export function parseImportExpr(
   const content = fs.readFileSync(filePath, 'utf-8');
   tt.next(); // skip file path represented by 'string'
 
-  return parse(lex(content), path.dirname(filePath), scope);
+  return parse(lex(content), {
+    rootDir: path.dirname(filePath),
+    defaultScope: scope,
+  });
 }
