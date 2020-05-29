@@ -2,4 +2,4 @@
 /test
 /dist
 /coverage
-/src/_compile_sample.ts
+/src/_*.*

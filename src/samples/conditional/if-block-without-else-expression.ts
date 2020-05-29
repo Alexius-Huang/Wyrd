@@ -79,11 +79,9 @@ const foo = cond ? (function () {
 
 const minified = 'const foo=cond?(function(){const a=123;const b=456;return a+b;})():null;';
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('cond', DT.Bool);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('cond', DT.Bool);
+  return s;
 };
 
 const parseOptions: ParseOptions = { scope };

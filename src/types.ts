@@ -51,7 +51,7 @@ export interface Operand {
 
 export type ParseOptions = {
   ast?: AST;
-  scope?: Scope | (() => Scope);
+  scope?: (scope: Scope) => Scope;
 };
 
 export type AST = Array<Expr>;

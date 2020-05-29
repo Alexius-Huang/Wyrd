@@ -294,21 +294,24 @@ funcF(1, 2 + (3 * (4 / 5))) / (6 - 7);
 
 const minified = 'funcA(\'Hello world\');funcB(1,2,3);funcC(1,2+(3*4),5/6-7);funcD(1,2+(3*4),5)/6-7;funcE(1,2+(3*4)+5)-(6/7);funcF(1,2+(3*(4/5)))/(6-7);1+(2*funcG(3*4,5)/6)-7;';
 
-const scope: Scope = new Scope();
-const funcA = scope.createFunction('funcA');
-funcA.createNewPattern(Parameter.of(DT.Str), DT.Null);
-const funcB = scope.createFunction('funcB');
-funcB.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Null);
-const funcC = scope.createFunction('funcC');
-funcC.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Null);
-const funcD = scope.createFunction('funcD');
-funcD.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Num);
-const funcE = scope.createFunction('funcE');
-funcE.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcF = scope.createFunction('funcF');
-funcF.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcG = scope.createFunction('funcG');
-funcG.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+const scope = (s: Scope): Scope => {
+  const funcA = s.createFunction('funcA');
+  funcA.createNewPattern(Parameter.of(DT.Str), DT.Null);
+  const funcB = s.createFunction('funcB');
+  funcB.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Null);
+  const funcC = s.createFunction('funcC');
+  funcC.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Null);
+  const funcD = s.createFunction('funcD');
+  funcD.createNewPattern(Parameter.of(DT.Num, DT.Num, DT.Num), DT.Num);
+  const funcE = s.createFunction('funcE');
+  funcE.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcF = s.createFunction('funcF');
+  funcF.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcG = s.createFunction('funcG');
+  funcG.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+
+  return s;
+};
 
 const parseOptions: ParseOptions = { scope };
 

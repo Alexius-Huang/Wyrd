@@ -95,9 +95,11 @@ funcA('Hello world').concat('Hello world again').toUpperCase();
 
 const minified = '';
 
-const scope: Scope = new Scope();
-const funcA = scope.createFunction('funcA');
-funcA.createNewPattern(Parameter.of(DT.Str), DT.Str);
+const scope = (s: Scope): Scope => {
+  const funcA = s.createFunction('funcA');
+  funcA.createNewPattern(Parameter.of(DT.Str), DT.Str);
+  return s;  
+};
 
 const parseOptions: ParseOptions = { scope };
 

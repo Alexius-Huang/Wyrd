@@ -76,8 +76,7 @@ name = maxwell.name;
 
 const minified = 'const age=maxwell.age;let name=maxwell.name;name=maxwell.name;';
 
-const scope = () => {
-  const s = new Scope();
+const scope = (s: Scope): Scope => {
   const record = s.createRecord('UserInfo');
   record
     .setProperty(DT.Str, 'name')

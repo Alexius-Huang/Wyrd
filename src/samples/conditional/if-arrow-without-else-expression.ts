@@ -104,11 +104,9 @@ age < 18 ? 'youngster' : (age < 60 ? 'adult' : (age < 100 ? 'elder' : null));
 
 const minified = "age<18?'youngster':null;age<18?'youngster':(age<60?'adult':(age<100?'elder':null));";
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('age', DT.Num);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('age', DT.Num);
+  return s;
 };
 
 const parseOptions: ParseOptions = { scope };

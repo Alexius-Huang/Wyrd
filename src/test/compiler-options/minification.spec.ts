@@ -15,7 +15,7 @@ function perform(name: string, sample: string) {
   });
 
   it(`minifies and compiles \`${name}\` correctly`, () => {
-    const result = compile(program, { minify: true, parseOptions });
+    const { result } = compile(program, { minify: true, parseOptions });
     expect(result).toBe(minified);
   });
 }

@@ -199,16 +199,18 @@ const compiled = `\
 
 const minified = '3+1>2;5*3<15-(6*8);11>=7+7||3<=(6+2)/3;8/(4*2)>3&&!(1+(2*3)===7)||a+(b/c*d)!==w-(x*y);';
 
-const scope = new Scope();
-const parseOptions: ParseOptions = { scope };
+const scope = (s: Scope): Scope => {
+  s.createConstant('a', DT.Num);
+  s.createConstant('b', DT.Num);
+  s.createConstant('c', DT.Num);
+  s.createConstant('d', DT.Num);
+  s.createConstant('w', DT.Num);
+  s.createConstant('x', DT.Num);
+  s.createConstant('y', DT.Num);
+  return s;
+};
 
-scope.createConstant('a', DT.Num);
-scope.createConstant('b', DT.Num);
-scope.createConstant('c', DT.Num);
-scope.createConstant('d', DT.Num);
-scope.createConstant('w', DT.Num);
-scope.createConstant('x', DT.Num);
-scope.createConstant('y', DT.Num);
+const parseOptions: ParseOptions = { scope };
 
 export {
   program,

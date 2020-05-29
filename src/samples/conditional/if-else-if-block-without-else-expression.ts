@@ -233,13 +233,11 @@ const example = cond1 ? (function () {
 
 const minified = 'const example=cond1?(function(){const a=123;const b=456;return (a+b).toString();})():(cond2?(function(){const foo=\'Hello\';const bar=123;return foo.concat(bar.toString());})():(cond3?(function(){const baz=666;const bazz=\'Devil Number: \';return bazz.concat(baz.toString());})():null));';
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('cond1', DT.Bool);
-  result.createConstant('cond2', DT.Bool);
-  result.createConstant('cond3', DT.Bool);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('cond1', DT.Bool);
+  s.createConstant('cond2', DT.Bool);
+  s.createConstant('cond3', DT.Bool);
+  return s;
 };
 
 const parseOptions: ParseOptions = { scope };

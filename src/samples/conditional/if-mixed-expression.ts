@@ -178,11 +178,9 @@ const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 
 const minified = 'const mixed1=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));const mixed2=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));';
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('age', DT.Num);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('age', DT.Num);
+  return s;
 };
 
 const parseOptions: ParseOptions = { scope };

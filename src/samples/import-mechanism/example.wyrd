@@ -1,0 +1,3 @@
+def addition(x: Num, y: Num): Num do
+  x + y
+end
