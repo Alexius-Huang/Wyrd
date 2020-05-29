@@ -6,16 +6,16 @@ function perform(name: string, sample: string) {
 
   let program: string;
   let minified: string;
-  let parseOptions: T.ParseOptions | undefined;
+  let compilerOptions: T.CompilerOptions | undefined;
   beforeAll(async () => {
     const testCase = await import(path);
     program = testCase.program;
     minified = testCase.minified;
-    parseOptions = testCase.parseOptions;
+    compilerOptions = testCase.compilerOptions;
   });
 
   it(`minifies and compiles \`${name}\` correctly`, () => {
-    const { result } = compile(program, { minify: true, parseOptions });
+    const { result } = compile(program, { minify: true, ...compilerOptions });
     expect(result).toBe(minified);
   });
 }

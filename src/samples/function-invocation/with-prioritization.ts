@@ -1,4 +1,4 @@
-import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { DataType as DT, Scope, Parameter } from '../../parser/utils';
 import { prioritize, NumberLiteral } from '../helper';
 
@@ -210,13 +210,13 @@ const scope = (s: Scope): Scope => {
   return s;  
 };
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
   program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

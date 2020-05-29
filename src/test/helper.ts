@@ -24,7 +24,7 @@ export function FundamentalCompileTest(
   let tokens: Array<T.Token>;
   let ast: T.AST;
   let compiled: string;
-  let parseOptions: T.ParseOptions | undefined;
+  let compilerOptions: T.CompilerOptions | undefined;
 
   describe(testCase.split('-').join(' '), () => {
     beforeAll(async () => {
@@ -33,7 +33,7 @@ export function FundamentalCompileTest(
       tokens = testCase.tokens;
       ast = testCase.ast;
       compiled = testCase.compiled;
-      parseOptions = testCase.parseOptions;
+      compilerOptions = testCase.compilerOptions;
     });
   
     it('lexes the program into tokens correctly', () => {
@@ -45,8 +45,8 @@ export function FundamentalCompileTest(
     it('parses the tokens into AST correctly', () => {
       let globalScope = new Scope();
 
-      if (parseOptions?.scope)
-        globalScope = parseOptions.scope(globalScope);
+      if (compilerOptions?.scopeMiddleware)
+        globalScope = compilerOptions.scopeMiddleware(globalScope);
 
       const listGT = globalScope.declareGenericType('List');
       listGT.declareTypeParameter('element');
@@ -54,7 +54,7 @@ export function FundamentalCompileTest(
       setupBuiltinMethods(globalScope);
       setupBuiltinOperators(globalScope);
 
-      const { ast: result } = parse(tokens, dir, globalScope);
+      const { ast: result } = parse(tokens, dir, globalScope, undefined, compilerOptions?.mainFileOnly ?? false);
       if (debugParser) {
         const index = options?.focusedASTIndex ?? 0;
         console.log(JSON.stringify(result[index], undefined, 2));
@@ -70,7 +70,7 @@ export function FundamentalCompileTest(
   
     if (!debugParser) {
       it('compiles the Wyrd program into JavaScript code correctly', () => {
-        const { result } = compile(program, { parseOptions, dir });
+        const { result } = compile(program, { ...compilerOptions, dir });
         expect(result).toBe(compiled);
       });
     }  

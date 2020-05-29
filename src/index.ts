@@ -14,15 +14,9 @@ type CompileResult = {
 
 export function compile(
   code: string,
-  options?: {
-    parseOptions?: T.ParseOptions,
-    minify?: boolean,
-    showAST?: boolean,
-    dir?: string,
-  },
+  options?: T.CompilerOptions,
 ): CompileResult {
   const tokens = lex(code);
-  const opt = options?.parseOptions ?? {};
   const rootDir = options?.dir ?? __dirname;
 
   let globalScope = new Scope();
@@ -34,10 +28,10 @@ export function compile(
   setupBuiltinMethods(globalScope);
   setupBuiltinOperators(globalScope);
 
-  if (opt.scope)
-    globalScope = opt.scope(globalScope);
+  if (options?.scopeMiddleware)
+    globalScope = options.scopeMiddleware(globalScope);
 
-  const { ast } = parse(tokens, rootDir, globalScope);
+  const { ast } = parse(tokens, rootDir, globalScope, undefined, options?.mainFileOnly ?? false);
 
   if (options?.showAST) {
     console.log('/* AST */');

@@ -24,6 +24,7 @@ export function parse(
   rootDir: string,
   defaultScope?: Scope,
   defaultAST?: T.AST,
+  mainFileOnly?: boolean,
 ): { ast: T.AST, scope: Scope } {
   const tt = new TokenTracker(tokens);
   let globalAst: T.AST = Array.from(defaultAST ?? []);
@@ -75,7 +76,8 @@ export function parse(
       if (tt.valueIs('import')) {
         const { scope: updatedScope, ast: updatedAST } = parseImportExpr(tt, parse, scope, rootDir);
         globalScope = updatedScope;
-        globalAst = globalAst.concat(updatedAST);
+        if (!mainFileOnly)
+          globalAst = globalAst.concat(updatedAST);
         return VoidExpression;
       }
 
