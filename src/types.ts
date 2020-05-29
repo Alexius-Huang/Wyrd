@@ -53,13 +53,13 @@ export type CompilerOptions = {
   /* Minifies the compile result */
   minify?: boolean;
 
-  /* Program, the content itself */
+  /* Program, the program content itself */
   program?: string;
 
   /* Entry file, or so-called the main file */
   entry?: string;
 
-  /* Targeting direcctory */
+  /* Targeting direcctory, only effective if `program` option is provided */
   dir?: string;
 
   /* Compile only the main file without imported file */
@@ -73,6 +73,11 @@ export type CompilerOptions = {
 
   /* Provide scope middleware to configure scope in advance */
   scopeMiddleware?: (scope: Scope) => Scope;
+};
+
+export type CompileResult = {
+  result: string;
+  ast: AST;
 };
 
 export type AST = Array<Expr>;

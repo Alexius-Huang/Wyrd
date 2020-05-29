@@ -1,31 +1,31 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import { lex } from './lexer';
 import { parse } from './parser';
 import { Scope } from './parser/utils';
 import { generateCode } from './code-generator';
-import * as fs from 'fs';
-import * as path from 'path';
 import setupBuiltinMethods from './parser/builtin-methods';
 import setupBuiltinOperators from './parser/builtin-operators';
 
 import * as T from './types';
 
-type CompileResult = {
-  result: string;
-  ast: T.AST;
-};
+export function compile(options?: T.CompilerOptions): T.CompileResult {
+  let content: string, rootDir: string;
 
-export function compile(
-  // code: string,
-  options?: T.CompilerOptions,
-): CompileResult {
-  const content = options?.program ?? fs.readFileSync(options?.entry ?? __dirname, 'utf-8');
-  const tokens = lex(content);
+  if (options?.program)
+    content = options.program;
+  else if (options?.entry)
+    content = fs.readFileSync(options?.entry, 'utf-8');
+  else
+    throw new Error('CompilerError: Must provide either the `entry` Wyrd file path or Wyrd program as `program` option');
 
-  const rootDir = options?.entry ? path.dirname(options.entry) : __dirname;
-
-  let globalScope = new Scope();
+  if (options?.entry)
+    rootDir = path.dirname(options.entry);
+  else
+    rootDir = options?.dir ?? __dirname;
 
   /* TODO: Load as library */
+  let globalScope = new Scope();
   const listGT = globalScope.declareGenericType('List');
   listGT.declareTypeParameter('element');
 
@@ -35,16 +35,15 @@ export function compile(
   if (options?.scopeMiddleware)
     globalScope = options.scopeMiddleware(globalScope);
 
+  const tokens = lex(content);
   const { ast } = parse(tokens, {
     rootDir,
     defaultScope: globalScope,
     mainFileOnly: options?.mainFileOnly ?? false
   });
 
-  if (options?.showAST) {
-    console.log('/* AST */');
+  if (options?.showAST)
     ast.forEach((n) => console.log(n));
-  }
 
   const minify = options?.minify ?? false;
   const result = generateCode(ast, { minify });
