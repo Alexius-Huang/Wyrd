@@ -13,11 +13,11 @@ export function FundamentalCompileTest(
     focusedASTIndex?: number;
   },
 ) {
+  const [_, testCaseName] = name.split('/');
   const testSamplePath = Path.join(__dirname, `../samples/${name}`);
-  const [folder, testCase] = name.split('/');
-  const dir = Path.join(__dirname, '..', 'samples', folder);
-  const debugParser = options?.debugParser ?? false;
   const entry = `${testSamplePath}.wyrd`;
+  const dir = Path.dirname(testSamplePath);
+  const debugParser = options?.debugParser ?? false;
 
   let program: string;
   let tokens: Array<T.Token>;
@@ -25,7 +25,7 @@ export function FundamentalCompileTest(
   let compiled: string;
   let compilerOptions: T.CompilerOptions | undefined;
 
-  describe(testCase.split('-').join(' '), () => {
+  describe(testCaseName.split('-').join(' '), () => {
     beforeAll(async () => {
       const testCase = await import(testSamplePath);
       program = fs.readFileSync(entry, 'utf-8');
