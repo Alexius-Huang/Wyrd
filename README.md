@@ -25,7 +25,10 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   * Lists
     * List Literal
     * Encourages Homogeneous Typed List
-* [Arithmetics](https://github.com/Maxwell-Alexius/Wyrd-Lang#arithmetics) \(Legacy\)
+* [Arithmetics](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/arithmetics)
+  * Arithmetic Expressions
+  * Precedence
+  * Prioritization
 * [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression) \(Legacy\)
 * [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression) \(Legacy\)
 * [Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation) \(Legacy\)
@@ -38,40 +41,6 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 * [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment) \(Legacy\)
 
 ### Supported Syntax Rules
-
-#### Arithmetics
-
-**Wyrd Code**
-
-```text
-1 + 2 * 3
-1 * 2 + 3
-1 + 2 * 3 + 4
-1 * 2 + 3 * 4
-1 * 2 + 3 - 4
-1 + 2 / 3 * 4
-
-(1 + 2) * 3
-1 * (2 + 3)
-(1 + 2) * (3 + 4)
-(1 + (5 - 3)) * (10 / 5)
-```
-
-**Compiled Result**
-
-```javascript
-1 + (2 * 3);
-1 * 2 + 3;
-1 + (2 * 3) + 4;
-1 * 2 + (3 * 4);
-1 * 2 + 3 - 4;
-1 + (2 / 3 * 4);
-
-(1 + 2) * 3;
-1 * (2 + 3);
-(1 + 2) * (3 + 4);
-(1 + (5 - 3)) * (10 / 5);
-```
 
 #### Logical Comparison and Expression
 

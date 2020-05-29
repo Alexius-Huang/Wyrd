@@ -68,3 +68,11 @@ Notice that the error message expects that the list is declared only contains th
 
 > To Be Done: Solve the condition where `List` is empty
 
+## Tuple
+
+> 🚧Under Construction 🚧
+
+## Maybe Types
+
+> To Be Done: Maybe primitives, lists ... etc
+
