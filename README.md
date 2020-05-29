@@ -4,7 +4,7 @@
 
 **Wyrd** is a toy programming language \(**but it is evolving in high speed**\) whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/) and follows the Functional Programming paradigm.
 
-[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/)
+[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/)  ****🚧Under Construction 🚧
 
 Wyrd programming language compiles its code into JavaScript. The primary goal would be to write Front-End code and Back-End code \(NodeJS\) using Wyrd programming language. I may want to try writing React \(or Vue\) component code using Wyrd lang if possible.
 
@@ -29,7 +29,10 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   * Arithmetic Expressions
   * Precedence
   * Prioritization
-* [Logical Comparison and Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#logical-comparison-and-expression) \(Legacy\)
+* [Logical Expressions](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/logical-expressions)
+  * Comparison Operators
+  * Comparison Operators Accept Identical Types Only
+  * Logical Chaining
 * [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression) \(Legacy\)
 * [Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation) \(Legacy\)
 * Functions \(Legacy\)
@@ -41,34 +44,6 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 * [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment) \(Legacy\)
 
 ### Supported Syntax Rules
-
-#### Logical Comparison and Expression
-
-**Wyrd Code**
-
-```text
-True and False or not False
-not False and True
-not (False or True) and False
-
-3 + 1 > 2
-5 * 3 < 15 - 6 * 8
-11 >= 7 + 7 or 3 <= (6 + 2) / 3
-8 / (4 * 2) > 3 and not 1 + 2 * 3 == 7 or a + b / c * d != w - x * y
-```
-
-**Compiled Result**
-
-```javascript
-true && false || !(false);
-!(false) && true;
-!(false || true) && false;
-
-3 + 1 > 2;
-5 * 3 < 15 - (6 * 8);
-11 >= 7 + 7 || 3 <= (6 + 2) / 3;
-8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
-```
 
 #### Conditional Expression
 
