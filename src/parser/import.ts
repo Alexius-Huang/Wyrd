@@ -23,8 +23,10 @@ export function parseImportExpr(
 
   if (tt.isNot('string'))
     ParserError(`Expect token after \`import\` keyword is \`string\`, instead got token of type: \`${tt.type}\``);
-  const content = fs.readFileSync(path.join(rootDir, tt.value), 'utf-8');
+ 
+  const filePath = path.join(rootDir, tt.value);
+  const content = fs.readFileSync(filePath, 'utf-8');
   tt.next(); // skip file path represented by 'string'
 
-  return parse(lex(content), rootDir, scope);
+  return parse(lex(content), path.dirname(filePath), scope);
 }

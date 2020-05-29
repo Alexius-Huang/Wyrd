@@ -76,6 +76,26 @@ const ast: AST = [
     ],
   },
   {
+    type: 'MethodDeclaration',
+    name: 'Num_add_1',
+    outputType: DT.Num,
+    return: DT.Void,
+    receiverType: DT.Num,
+    arguments: [
+      { ident: 'y', type: DT.Num },
+      { ident: 'z', type: DT.Num },
+    ],
+    body: [
+      {
+        type: 'BinaryOpExpr',
+        operator: Op.Plus,
+        return: DT.Num,
+        expr1: Arithmetic('this', '+', 'y'),
+        expr2: Var('z', DT.Num),
+      }
+    ],
+  },
+  {
     type: 'FunctionDeclaration',
     name: 'addition_1',
     outputType: DT.Num,
@@ -137,6 +157,10 @@ function addition(x, y) {
 
 function Num_add(_this, y) {
   return _this + y;
+}
+
+function Num_add_1(_this, y, z) {
+  return _this + y + z;
 }
 
 function addition_1(x, y, z) {
