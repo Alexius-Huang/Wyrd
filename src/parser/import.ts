@@ -24,6 +24,7 @@ export function parseImportExpr(
   if (tt.isNot('string'))
     ParserError(`Expect token after \`import\` keyword is \`string\`, instead got token of type: \`${tt.type}\``);
   const content = fs.readFileSync(path.join(rootDir, tt.value), 'utf-8');
-  tt.next(); // skip 'string'
+  tt.next(); // skip file path represented by 'string'
+
   return parse(lex(content), rootDir, scope);
 }

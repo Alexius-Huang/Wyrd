@@ -75,7 +75,7 @@ export function parse(
       if (tt.valueIs('import')) {
         const { scope: updatedScope, ast: updatedAST } = parseImportExpr(tt, parse, scope, rootDir);
         globalScope = updatedScope;
-        globalAst = updatedAST.concat(ast);
+        globalAst = globalAst.concat(updatedAST);
         return VoidExpression;
       }
 
