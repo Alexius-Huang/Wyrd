@@ -2,17 +2,6 @@ import { Token, AST } from '../../types';
 import { NumberLiteral, BooleanLiteral, Var, NullLiteral, StringLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-record UserInfo { Str name, Num age, Bool hasPet }
-mutable baz maybe UserInfo = UserInfo { name: "Maxwell", age: 18, hasPet: False }
-baz = Null
-baz = UserInfo { name: "Alexius", age: 20, hasPet: True }
-
-mutable bazz maybe UserInfo
-bazz = UserInfo { age: 23, hasPet: False, name: "Martin" }
-bazz = Null
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'record' },
   { type: 'ident', value: 'UserInfo' },
@@ -178,7 +167,6 @@ bazz = null;
 const minified = 'let baz={name:\'Maxwell\',age:18,hasPet:false};baz=null;baz={name:\'Alexius\',age:20,hasPet:true};let bazz=null;bazz={age:23,hasPet:false,name:\'Martin\'};bazz=null;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

@@ -1,11 +1,6 @@
-import { Token, AST, ParseOptions } from '../../types';
+import { Token, AST, CompilerOptions } from '../../types';
 import { DataType as DT, Scope, Parameter } from '../../parser/utils';
 import { StringLiteral } from '../helper';
-
-const program = `\
-funcA("Hello world").concat("Hello world again").upcase()
-(funcA("Hello world").concat("Hello world again")).upcase()
-`;
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'funcA' },
@@ -95,17 +90,18 @@ funcA('Hello world').concat('Hello world again').toUpperCase();
 
 const minified = '';
 
-const scope: Scope = new Scope();
-const funcA = scope.createFunction('funcA');
-funcA.createNewPattern(Parameter.of(DT.Str), DT.Str);
+const scope = (s: Scope): Scope => {
+  const funcA = s.createFunction('funcA');
+  funcA.createNewPattern(Parameter.of(DT.Str), DT.Str);
+  return s;  
+};
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

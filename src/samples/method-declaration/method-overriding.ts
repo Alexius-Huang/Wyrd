@@ -2,16 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-def Num.add(x: Num): Num => this + x
-123.add(456)
-Num.add(123, 456)
-
-override def Num.add(x: Num): Num => this + x + 1
-123.add(456)
-Num.add(123, 456)
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'def' },
   { type: 'builtin-type', value: 'Num' },
@@ -181,7 +171,6 @@ Num_add$1(123, 456);
 const minified = 'function Num_add(_this,x){return _this+x;}Num_add(123,456);Num_add(123,456);function Num_add$1(_this,x){return _this+x+1;}Num_add$1(123,456);Num_add$1(123,456);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

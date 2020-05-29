@@ -3,11 +3,6 @@ import { Arithmetic } from '../helper';
 import { NumberLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-def addition(x: Num, y: Num): Num => x + y
-addition(1, 2)
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'def' },
   { type: 'ident', value: 'addition' },
@@ -73,7 +68,6 @@ addition(1, 2);
 const minified = 'function addition(x,y){return x+y;}addition(1,2);';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

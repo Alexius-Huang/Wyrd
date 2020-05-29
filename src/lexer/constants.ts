@@ -20,6 +20,7 @@ const keywords = new Set<string>([
   'override',
   'this',
   'record',
+  'import',
 ]);
 
 const regex = {

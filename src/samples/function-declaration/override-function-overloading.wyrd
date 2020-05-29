@@ -1,0 +1,13 @@
+def addition(x: Num, y: Num): Num => x + y
+def addition(x: Num, y: Num, z: Num): Num => x + y + z
+def addition(w: Num, x: Num, y: Num, z: Num): Num => w + x + y + z
+addition(1, 2, 3)
+addition(1, 2)
+addition(1, 2, 3, 4)
+
+override def addition(a: Num, b: Num, c: Num, d: Num): Num => (a + b) + c / d
+override def addition(x: Num, y: Num): Num => (x + y) * 2
+override def addition(x: Num, y: Num, z: Num): Num => (x + y + z) * 2
+addition(1, 2, 3)
+addition(1, 2, 3, 4)
+addition(1, 2)

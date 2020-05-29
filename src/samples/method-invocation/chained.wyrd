@@ -1,0 +1,2 @@
+"Hello world".upcase().repeat(3)
+(1 + 2 * 3).toStr().repeat(3)

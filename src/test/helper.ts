@@ -1,8 +1,10 @@
-import { lex } from '../lexer';
-import { parse } from '../parser';
-import { generateCode } from '../code-generator';
-import { compile } from '..';
+import * as Path from 'path';
 import * as T from '../types';
+import * as fs from 'fs';
+import { Scope } from '../parser/utils';
+import setupBuiltinMethods from '../parser/builtin-methods';
+import setupBuiltinOperators from '../parser/builtin-operators';
+import { compile, lex, parse, generateCode } from '..';
 
 export function FundamentalCompileTest(
   name: string,
@@ -11,24 +13,26 @@ export function FundamentalCompileTest(
     focusedASTIndex?: number;
   },
 ) {
-  const path = `../samples/${name}`;
-  const [_, testCase] = name.split('/');
+  const [_, testCaseName] = name.split('/');
+  const testSamplePath = Path.join(__dirname, `../samples/${name}`);
+  const entry = `${testSamplePath}.wyrd`;
+  const dir = Path.dirname(testSamplePath);
   const debugParser = options?.debugParser ?? false;
 
   let program: string;
   let tokens: Array<T.Token>;
   let ast: T.AST;
   let compiled: string;
-  let parseOptions: T.ParseOptions | undefined;
+  let compilerOptions: T.CompilerOptions | undefined;
 
-  describe(testCase.split('-').join(' '), () => {
+  describe(testCaseName.split('-').join(' '), () => {
     beforeAll(async () => {
-      const testCase = await import(path);
-      program = testCase.program;
+      const testCase = await import(testSamplePath);
+      program = fs.readFileSync(entry, 'utf-8');
       tokens = testCase.tokens;
       ast = testCase.ast;
       compiled = testCase.compiled;
-      parseOptions = testCase.parseOptions;
+      compilerOptions = testCase.compilerOptions;
     });
   
     it('lexes the program into tokens correctly', () => {
@@ -38,7 +42,22 @@ export function FundamentalCompileTest(
     });
   
     it('parses the tokens into AST correctly', () => {
-      const result: T.AST = parse(tokens, parseOptions);
+      let globalScope = new Scope();
+
+      if (compilerOptions?.scopeMiddleware)
+        globalScope = compilerOptions.scopeMiddleware(globalScope);
+
+      const listGT = globalScope.declareGenericType('List');
+      listGT.declareTypeParameter('element');
+    
+      setupBuiltinMethods(globalScope);
+      setupBuiltinOperators(globalScope);
+
+      const { ast: result } = parse(tokens, {
+        rootDir: dir,
+        defaultScope: globalScope,
+        mainFileOnly: compilerOptions?.mainFileOnly ?? false
+      });
       if (debugParser) {
         const index = options?.focusedASTIndex ?? 0;
         console.log(JSON.stringify(result[index], undefined, 2));
@@ -54,7 +73,7 @@ export function FundamentalCompileTest(
   
     if (!debugParser) {
       it('compiles the Wyrd program into JavaScript code correctly', () => {
-        const result = compile(program, { parseOptions });
+        const { result } = compile({ ...compilerOptions, dir, entry });
         expect(result).toBe(compiled);
       });
     }  

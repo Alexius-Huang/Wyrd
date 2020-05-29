@@ -1,0 +1,13 @@
+example = if cond1 do
+            a = 123
+            b = 456
+            (a + b).toStr()
+          elif cond2 do
+            foo = "Hello"
+            bar = 123
+            foo.concat(bar.toStr())
+          elif cond3 do
+            baz = 666
+            bazz = "Devil Number: "
+            bazz.concat(baz.toStr())
+          end

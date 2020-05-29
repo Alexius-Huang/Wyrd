@@ -2,14 +2,6 @@ import { Token, AST } from '../../types';
 import { DataType as DT } from '../../parser/utils';
 import * as helper from '../helper';
 
-const program = `\
-foo = 123
-bar = "Hello world"
-baz = True
-nothing = Null
-list = [1 2 3 4 5]
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
@@ -98,7 +90,6 @@ const list = [1, 2, 3, 4, 5];
 const minified = 'const foo=123;const bar=\'Hello world\';const baz=true;const nothing=null;const list=[1,2,3,4,5];';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

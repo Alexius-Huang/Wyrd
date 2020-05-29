@@ -2,16 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { Arithmetic, Var, NullLiteral, StringLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-mutable foo maybe Num = 123 + 456
-foo = Null
-foo = 1 * 2 - 3 / 4
-
-mutable bar maybe Str
-bar = "Hello world!".concat(" Wyrd-Lang!")
-bar = Null
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'mutable' },
   { type: 'ident', value: 'foo' },
@@ -127,7 +117,6 @@ bar = null;
 const minified = 'let foo=123+456;foo=null;foo=1*2-(3/4);let bar=null;bar=(\'Hello world!\').concat(\' Wyrd-Lang!\');bar=null;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

@@ -49,9 +49,35 @@ export interface Operand {
   return: DT;
 }
 
-export type ParseOptions = {
-  ast?: AST;
-  scope?: Scope | (() => Scope);
+export type CompilerOptions = {
+  /* Minifies the compile result */
+  minify?: boolean;
+
+  /* Program, the program content itself */
+  program?: string;
+
+  /* Entry file, or so-called the main file */
+  entry?: string;
+
+  /* Targeting direcctory, only effective if `program` option is provided */
+  dir?: string;
+
+  /* Compile only the main file without imported file */
+  mainFileOnly?: boolean;
+
+  /* Show the parsed AST result */
+  showAST?: boolean;
+
+  /* Provide default AST */
+  defaultAST?: AST;
+
+  /* Provide scope middleware to configure scope in advance */
+  scopeMiddleware?: (scope: Scope) => Scope;
+};
+
+export type CompileResult = {
+  result: string;
+  ast: AST;
 };
 
 export type AST = Array<Expr>;

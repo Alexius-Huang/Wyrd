@@ -1,0 +1,8 @@
+def addition(x: Num, y: Num): Num => x + y
+addition(1, 2)
+
+override def addition(x: Num, y: Num): Num => (x + y) * 2
+addition(1, 2)
+
+override def addition(x: Num, y: Num): Num => x + y / 2
+addition(1, 2)

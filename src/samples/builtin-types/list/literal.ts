@@ -2,13 +2,6 @@ import { Token, AST } from '../../../types';
 import { DataType as DT } from '../../../parser/utils';
 import * as helper from '../../helper';
 
-const program = `\
-[1 2 3 4 5]
-["Hello world" "Wyrd" "Lang" "is" "Awesome"]
-[True False False True True False True]
-[Null Null Null Null Null]
-`;
-
 const tokens: Array<Token> = [
   { type: 'lbracket', value: '[' },
   { type: 'number', value: '1' },
@@ -112,7 +105,6 @@ const compiled = `\
 const minified = '[1,2,3,4,5];[\'Hello world\',\'Wyrd\',\'Lang\',\'is\',\'Awesome\'];[true,false,false,true,true,false,true];[null,null,null,null,null];';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

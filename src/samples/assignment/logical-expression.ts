@@ -2,10 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Arithmetic, Var } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-isTrue = 3 + 1 > 2
-`;
-
 const tokens: Array<Token> = [
   { type: 'ident', value: 'isTrue' },
   { type: 'eq', value: '=' },
@@ -39,7 +35,6 @@ const isTrue = 3 + 1 > 2;
 const minified = 'const isTrue=3+1>2;';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

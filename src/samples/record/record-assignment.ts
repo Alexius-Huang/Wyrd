@@ -1,12 +1,6 @@
-import { Token, AST, ParseOptions } from '../../types';
+import { Token, AST, CompilerOptions } from '../../types';
 import { Var } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
-
-const program = `\
-age = maxwell->age
-mutable name = maxwell->name
-name = maxwell->name
-`;
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'age' },
@@ -76,8 +70,7 @@ name = maxwell.name;
 
 const minified = 'const age=maxwell.age;let name=maxwell.name;name=maxwell.name;';
 
-const scope = () => {
-  const s = new Scope();
+const scope = (s: Scope): Scope => {
   const record = s.createRecord('UserInfo');
   record
     .setProperty(DT.Str, 'name')
@@ -88,13 +81,12 @@ const scope = () => {
   return s;
 }
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

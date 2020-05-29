@@ -1,0 +1,2 @@
+"Hello world".concat("Wyrd-Lang".concat(" is awesome!"))
+"Hello world".split("L".downcase())

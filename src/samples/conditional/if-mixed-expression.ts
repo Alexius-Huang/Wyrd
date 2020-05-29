@@ -1,23 +1,6 @@
-import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
-
-const program = `\
-mixed1 = if age < 18 then
-           "youngster"
-         elif age <= 60 => "adult"
-         elif age < 100 then
-           "elder"
-         else => "centenarian"
-
-mixed2 = if age < 18 => "youngster"
-         elif age <= 60 then
-           "adult"
-         elif age < 100 => "elder"
-         else then
-           "centenarian"
-         end
-`;
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'mixed1' },
@@ -178,20 +161,17 @@ const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'eld
 
 const minified = 'const mixed1=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));const mixed2=age<18?\'youngster\':(age<=60?\'adult\':(age<100?\'elder\':\'centenarian\'));';
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('age', DT.Num);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('age', DT.Num);
+  return s;
 };
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

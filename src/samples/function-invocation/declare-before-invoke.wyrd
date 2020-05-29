@@ -1,0 +1,2 @@
+def addition(x: Num, y: Num): Num => x + y
+addition(1, 2)

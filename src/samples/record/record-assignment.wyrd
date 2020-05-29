@@ -1,0 +1,3 @@
+age = maxwell->age
+mutable name = maxwell->name
+name = maxwell->name

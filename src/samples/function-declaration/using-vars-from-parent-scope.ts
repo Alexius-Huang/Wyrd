@@ -2,18 +2,6 @@ import { Token, AST, Operator as Op } from '../../types';
 import { NumberLiteral, Var, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-mutable something = 1
-def addSomething(x: Num): Num => x + something
-something = 2
-
-def complexArithmetics(x: Num, y: Num): Num do
-  a = x + y
-  b = a * something + y
-  b
-end
-`;
-
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'mutable' },
   { type: 'ident', value: 'something' },
@@ -153,7 +141,6 @@ function complexArithmetics(x, y) {
 const minified = 'let something=1;function addSomething(x){return x+something;}something=2;function complexArithmetics(x,y){const a=x+y;const b=a*something+y;return b;}';
 
 export {
-  program,
   tokens,
   ast,
   compiled,

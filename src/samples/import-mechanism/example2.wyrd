@@ -1,0 +1,1 @@
+def Num.add(y: Num): Num => this + y

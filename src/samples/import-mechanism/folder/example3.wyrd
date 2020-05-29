@@ -1,0 +1,5 @@
+import "./example4.wyrd"
+
+def addition(x: Num, y: Num, z: Num): Num do
+  x + y + z
+end

@@ -1,15 +1,7 @@
-import { Token, AST, ParseOptions } from '../../types';
+import { Token, AST, CompilerOptions } from '../../types';
 import { NumberLiteral, Var, Arithmetic } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 import { VoidExpression } from '../../parser/constants';
-
-const program = `\
-foo = if cond do
-        a = 123
-        b = 456
-        a + b
-      end
-`;
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'foo' },
@@ -79,20 +71,17 @@ const foo = cond ? (function () {
 
 const minified = 'const foo=cond?(function(){const a=123;const b=456;return a+b;})():null;';
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('cond', DT.Bool);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('cond', DT.Bool);
+  return s;
 };
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

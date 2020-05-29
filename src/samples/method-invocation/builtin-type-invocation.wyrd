@@ -1,0 +1,2 @@
+Str.upcase("Hello world")
+Str.repeat("Hello world", 3)

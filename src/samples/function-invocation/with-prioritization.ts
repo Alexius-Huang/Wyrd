@@ -1,12 +1,6 @@
-import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { DataType as DT, Scope, Parameter } from '../../parser/utils';
 import { prioritize, NumberLiteral } from '../helper';
-
-const program = `\
-funcA(1, (funcB(2, 3) + 4) * funcC(5))
-funcD(1 / (funcE(2, 3) - 4), 5)
-funcF((1 - funcG(2) * 3) / 4, funcH(5))
-`;
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'funcA' },
@@ -190,31 +184,32 @@ funcF((1 - (funcG(2) * 3)) / 4, funcH(5));
 
 const minified = 'funcA(1,(funcB(2,3)+4)*funcC(5));funcD(1/(funcE(2,3)-4),5);funcF((1-(funcG(2)*3))/4,funcH(5));';
 
-const scope: Scope = new Scope();
-const funcA = scope.createFunction('funcA');
-funcA.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcB = scope.createFunction('funcB');
-funcB.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcC = scope.createFunction('funcC');
-funcC.createNewPattern(Parameter.of(DT.Num), DT.Num);
-const funcD = scope.createFunction('funcD');
-funcD.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcE = scope.createFunction('funcE');
-funcE.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcF = scope.createFunction('funcF');
-funcF.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
-const funcG = scope.createFunction('funcG');
-funcG.createNewPattern(Parameter.of(DT.Num), DT.Num);
-const funcH = scope.createFunction('funcH');
-funcH.createNewPattern(Parameter.of(DT.Num), DT.Num);
+const scope = (s: Scope): Scope => {
+  const funcA = s.createFunction('funcA');
+  funcA.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcB = s.createFunction('funcB');
+  funcB.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcC = s.createFunction('funcC');
+  funcC.createNewPattern(Parameter.of(DT.Num), DT.Num);
+  const funcD = s.createFunction('funcD');
+  funcD.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcE = s.createFunction('funcE');
+  funcE.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcF = s.createFunction('funcF');
+  funcF.createNewPattern(Parameter.of(DT.Num, DT.Num), DT.Num);
+  const funcG = s.createFunction('funcG');
+  funcG.createNewPattern(Parameter.of(DT.Num), DT.Num);
+  const funcH = s.createFunction('funcH');
+  funcH.createNewPattern(Parameter.of(DT.Num), DT.Num);
+  return s;  
+};
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

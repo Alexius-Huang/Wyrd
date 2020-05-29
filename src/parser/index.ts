@@ -16,30 +16,21 @@ import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method/invocation';
 import { parseThisLiteral } from './this-literal';
 import { ParserError } from './error';
-import setupBuiltinMethods from './builtin-methods';
-import setupBuiltinOperators from './builtin-operators';
+import { parseImportExpr } from './import';
+import { VoidExpression } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
-  parseOptions?: T.ParseOptions,
-): T.AST {
+  options: {
+    rootDir: string,
+    defaultScope?: Scope,
+    defaultAST?: T.AST,
+    mainFileOnly?: boolean,
+  },
+): { ast: T.AST, scope: Scope } {
   const tt = new TokenTracker(tokens);
-  const globalAst: T.AST = Array.from(parseOptions?.ast ?? []);
-  let globalScope = new Scope();
-  
-  if (parseOptions?.scope) {
-    if (parseOptions.scope instanceof Scope) {
-      globalScope = parseOptions.scope;
-    } else {
-      globalScope = parseOptions.scope();
-    }
-  }
-
-  const listGT = globalScope.declareGenericType('List');
-  listGT.declareTypeParameter('element');
-
-  setupBuiltinMethods(globalScope);
-  setupBuiltinOperators(globalScope);
+  let globalAst: T.AST = Array.from(options.defaultAST ?? []);
+  let globalScope = options.defaultScope ?? new Scope();
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: Scope = meta?.scope ?? globalScope;
@@ -83,6 +74,14 @@ export function parse(
 
       if (tt.valueIs('record'))
         return parseRecordDeclaration(tt, parseExpr, scope);
+
+      if (tt.valueIs('import')) {
+        const { scope: updatedScope, ast: updatedAST } = parseImportExpr(tt, parse, scope, options.rootDir);
+        globalScope = updatedScope;
+        if (!options.mainFileOnly)
+          globalAst = globalAst.concat(updatedAST);
+        return VoidExpression;
+      }
 
       ParserError(`Unhandled keyword token with value \`${tt.value}\``);
     }
@@ -136,5 +135,5 @@ export function parse(
     tt.next();
   }
 
-  return globalAst;
+  return { ast: globalAst, scope: globalScope };
 }

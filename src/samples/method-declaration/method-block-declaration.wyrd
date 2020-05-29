@@ -1,0 +1,13 @@
+def Num.isPositive: Bool do
+  this > 0
+end
+
+123.isPositive()
+Num.isPositive(123)
+
+def Num.add(x: Num): Num do
+  this + x
+end
+
+123.add(456)
+Num.add(123, 456)

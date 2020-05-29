@@ -1,15 +1,7 @@
-import { Token, AST, Operator as Op, ParseOptions } from '../../types';
+import { Token, AST, Operator as Op, CompilerOptions } from '../../types';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 import { VoidExpression } from '../../parser/constants';
-
-const program = `\
-if age < 18 => "youngster"
-
-if age < 18 => "youngster"
-elif age < 60 => "adult"
-elif age < 100 => "elder"
-`;
 
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'if' },
@@ -104,20 +96,17 @@ age < 18 ? 'youngster' : (age < 60 ? 'adult' : (age < 100 ? 'elder' : null));
 
 const minified = "age<18?'youngster':null;age<18?'youngster':(age<60?'adult':(age<100?'elder':null));";
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('age', DT.Num);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('age', DT.Num);
+  return s;
 };
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

@@ -1,23 +1,7 @@
-import { Token, AST, ParseOptions } from '../../types';
+import { Token, AST, CompilerOptions } from '../../types';
 import { NumberLiteral, Var, Arithmetic, StringLiteral } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 import { VoidExpression } from '../../parser/constants';
-
-const program = `\
-example = if cond1 do
-            a = 123
-            b = 456
-            (a + b).toStr()
-          elif cond2 do
-            foo = "Hello"
-            bar = 123
-            foo.concat(bar.toStr())
-          elif cond3 do
-            baz = 666
-            bazz = "Devil Number: "
-            bazz.concat(baz.toStr())
-          end
-`;
 
 const tokens: Array<Token> = [
   { type: 'ident', value: 'example' },
@@ -233,22 +217,19 @@ const example = cond1 ? (function () {
 
 const minified = 'const example=cond1?(function(){const a=123;const b=456;return (a+b).toString();})():(cond2?(function(){const foo=\'Hello\';const bar=123;return foo.concat(bar.toString());})():(cond3?(function(){const baz=666;const bazz=\'Devil Number: \';return bazz.concat(baz.toString());})():null));';
 
-const scope = () => {
-  const result = new Scope();
-  result.createConstant('cond1', DT.Bool);
-  result.createConstant('cond2', DT.Bool);
-  result.createConstant('cond3', DT.Bool);
-
-  return result;
+const scope = (s: Scope): Scope => {
+  s.createConstant('cond1', DT.Bool);
+  s.createConstant('cond2', DT.Bool);
+  s.createConstant('cond3', DT.Bool);
+  return s;
 };
 
-const parseOptions: ParseOptions = { scope };
+const compilerOptions: CompilerOptions = { scopeMiddleware: scope };
 
 export {
-  program,
   tokens,
   ast,
   compiled,
-  parseOptions,
+  compilerOptions,
   minified,
 };

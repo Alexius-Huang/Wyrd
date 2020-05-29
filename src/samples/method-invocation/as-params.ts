@@ -2,11 +2,6 @@ import { Token, AST } from '../../types';
 import { StringLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
-const program = `\
-"Hello world".concat("Wyrd-Lang".concat(" is awesome!"))
-"Hello world".split("L".downcase())
-`;
-
 const tokens: Array<Token> = [
   { type: 'string', value: 'Hello world' },
   { type: 'dot', value: '.' },
@@ -77,7 +72,6 @@ const compiled = `\
 const minified = '(\'Hello world\').concat((\'Wyrd-Lang\').concat(\' is awesome!\'));(\'Hello world\').split((\'L\').toLowerCase());';
 
 export {
-  program,
   tokens,
   ast,
   compiled,
