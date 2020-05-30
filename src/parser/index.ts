@@ -34,6 +34,7 @@ export function parse(
   const tt = new TokenTracker(tokens);
   let globalAst: T.AST = Array.from(options.defaultAST ?? []);
   let globalScope = options.defaultScope ?? new Scope();
+  let isLib = options?.isLib ?? false;
 
   function parseExpr(prevExpr?: T.Expr, meta?: any): T.Expr {
     const scope: Scope = meta?.scope ?? globalScope;
@@ -117,6 +118,9 @@ export function parse(
       return parsePipeOperation(tt, parseExpr, scope, ast.pop() as T.Expr);
 
     if (tt.is('lib-tag')) {
+      if (!isLib)
+        ParserError('Only library files can be parsed with token of type `lib-tag`');
+
       if (tt.valueIs('direct-method-mapping')) {
         globalScope = parseLibDirectMethodMapping(tt, parseExpr, scope);
         return EmptyExpression;

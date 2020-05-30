@@ -56,7 +56,12 @@ export function parseIdentifier(
   }
 
   else if (scope.hasGenericType(tokenName)) {
-    result = parseTypeLiteral(tt, parseExpr, scope);
+    return parseTypeLiteral(tt, parseExpr, scope);
+  }
+
+  else if (scope.hasGenericPlaceholder(tokenName)) {
+    result.return = DT.Void;
+    return result;
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {

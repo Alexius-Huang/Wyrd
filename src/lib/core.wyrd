@@ -12,4 +12,7 @@
   Str.toStr    @maps("toString")
   Num.toStr    @maps("toString") @returns(Str)
   Bool.toStr   @maps("toString") @returns(Str)
+
+  List<element: T>.push   @params(T)       @returns(T)
+  List<element: U>.concat @params(List<U>)
 @end

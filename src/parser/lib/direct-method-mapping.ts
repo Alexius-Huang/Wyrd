@@ -34,10 +34,21 @@ function configureDirectMethodMapping(
   parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ) {
-  if (tt.isNot('builtin-type'))
+  if (tt.isNot('builtin-type') && !scope.hasGenericType(tt.value))
     ParserError(`Expect direct method mapping to declare the type and method name first, instead got token of type \`${tt.type}\``);
   const typeLiteral = parseTypeLiteral(tt, parseExpr, scope);
-  const receiverType = typeLiteral.typeObject;
+  let receiverType = typeLiteral.typeObject;
+
+  const childScope = scope.createChildScope('dmm-declaration');
+  if (receiverType.hasTypeParameters()) {
+    const tps = receiverType.typeParameters;
+    for (let i = 0; i < tps.length; i += 1) {
+      const tp = tps[i];
+      childScope.createGenericPlaceholder(tp.type.type, tp.name);
+      tp.type.type = tp.name;
+    }
+  }
+
   tt.next(); // Skip 'builtin-type'
 
   if (tt.isNot('dot'))
@@ -66,7 +77,7 @@ function configureDirectMethodMapping(
       tt.next(); // Skip `@maps`
       checkLParenTokenExists('maps', tt);
 
-      const params = parseParameters(tt, parseExpr, scope);
+      const params = parseParameters(tt, parseExpr, childScope);
       checkParameterLength('maps', params, 1);
       checkParameterType('maps', params[0], { type: 'StringLiteral', value: 'any', return: DT.Str });
       tt.next(); // Skip `rparen`
@@ -77,13 +88,17 @@ function configureDirectMethodMapping(
       tt.next(); // Skip `@maps`
       checkLParenTokenExists('params', tt);
 
-      const params = parseParameters(tt, parseExpr, scope);
+      const params = parseParameters(tt, parseExpr, childScope);
       tt.next(); // Skip `rparen`
       const typeParameters: Array<DT> = [];
       params.forEach(p => {
-        if (p.type !== 'TypeLiteral')
+        if (p.type === 'IdentLiteral' && childScope.hasGenericPlaceholder(p.value)) {
+          typeParameters.push(childScope.getGenericTypeFromPlaceholder(p.value));
+        } else if (p.type === 'TypeLiteral') {
+          typeParameters.push(p.typeObject);
+        } else {
           ParserError(`Expect library tag \`@params\` to receive type literals, instead got value of type \`${params[0].return}\``);
-        typeParameters.push(p.typeObject);
+        }
       });
       mappedMethodParameter = Parameter.from(typeParameters);
     }
@@ -92,11 +107,17 @@ function configureDirectMethodMapping(
       tt.next(); // Skip `@returns`
       checkLParenTokenExists('returns', tt);
 
-      const params = parseParameters(tt, parseExpr, scope);
+      const params = parseParameters(tt, parseExpr, childScope);
       checkParameterLength('returns', params, 1);
-      checkParameterType('returns', params[0], { type: 'TypeLiteral', typeObject: DT.Unknown, value: 'Unknown', return: DT.Void });
+
+      if (params[0].type === 'IdentLiteral' && childScope.hasGenericPlaceholder(params[0].value)) {
+        mappedMethodReturnType = childScope.getGenericTypeFromPlaceholder(params[0].value);
+      } else if (params[0].type === 'TypeLiteral') {
+        mappedMethodReturnType = params[0].typeObject;
+      } else {
+        ParserError(`Expect library tag \`@returns\` to receive \`type literal\`, instead got value of type \`${params[0].return}\``);
+      }
       tt.next(); // Skip `rparen`
-      mappedMethodReturnType = (params[0] as T.TypeLiteral).typeObject;
     }
   }
 

@@ -53,6 +53,7 @@ export default class DataType {
   private typeParams: Map<string, TypeParameter> = new Map();
   public readonly typeParameterMap: { [key: string]: DataType } = {};
   public readonly typeParameters: Array<TypeParameter> = [];
+  public readonly typeParameterPlaceholderMap: { [key: string]: string } = {};
   public isGeneric = false;
 
   constructor(
@@ -124,6 +125,12 @@ export default class DataType {
       return this.typeParams.get(paramName) as TypeParameter;
     ParserError(`Type \`${this.type}\` has no type parameter of name \`${paramName}\``);
   }
+
+  // public updateTypeParameter(paramName: string, dt: DataType): DataType {
+  //   const tp = this.typeParams.get(paramName) as TypeParameter;
+  //   tp.type = dt;
+  //   return dt;
+  // }
 
   public hasTypeParameters(): boolean {
     return this.typeParams.size !== 0;
