@@ -19,6 +19,7 @@ const tokenMaps = new Map<string, Token>([
   ['->', { type: 'ref', value: '->' }],
   ['&', { type: 'amp', value: '&' }],
   ['|', { type: 'pipe', value: '|' }],
+  ['|>', { type: 'pipe-op', value: '|>' }],
   ['?', { type: 'question', value: '?' }],
   ['!', { type: 'bang', value: '!' }],
   ['!=', { type: 'bangeq', value: '!=' }],

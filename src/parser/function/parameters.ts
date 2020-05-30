@@ -6,6 +6,7 @@ export function parseParameters(
   parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): Array<T.Expr> {
+  if (tt.is('rparen')) return [];
   const params: Array<T.Expr> = [];
 
   while (true) {
@@ -26,14 +27,13 @@ function parseParameter(
   scope: Scope,
 ): T.Expr {
   const parameterExpr: T.AST = [];
-  let expr: T.Expr | undefined;
 
+  let expr: T.Expr | undefined;
   while (tt.isNotOneOf('newline', 'comma', 'rparen')) {
     expr = parseExpr(undefined, { scope, ast: parameterExpr });
     parameterExpr.push(expr);
     tt.next();
   }
 
-  let [result] = parameterExpr;
-  return result;
+  return parameterExpr[0];
 }

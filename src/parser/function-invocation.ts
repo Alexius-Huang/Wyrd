@@ -1,6 +1,7 @@
 import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT, Parameter } from './utils';
-import { ParserErrorIf, ParserError } from './error';
+import { ParserErrorIf } from './error';
+import { parseParameters } from './function/parameters';
 
 export function parseFunctionInvokeExpr(
   tt: TokenTracker,
@@ -26,49 +27,12 @@ export function parseFunctionInvokeExpr(
   ParserErrorIf(tt.is('comma'), `Expect next token is an expression as parameter of function \`${name}\`, instead got \`comma\``);
 
   if (tt.isNot('rparen'))
-    result.params = parseFunctionParameters(tt, parseExpr, scope);
+    result.params = parseParameters(tt, parseExpr, scope);
 
   const inputParameter = Parameter.from(result.params.map(expr => expr.return));
   const patternInfo = scope.getFunctionPattern(name, inputParameter);
   result.name = patternInfo.name;
   result.return = patternInfo.returnDataType;
 
-  return result;
-}
-
-function parseFunctionParameters(
-  tt: TokenTracker,
-  parseExpr: T.ExpressionParsingFunction,
-  scope: Scope,
-): Array<T.Expr> {
-  const params: Array<T.Expr> = [];
-
-  while (true) {
-    let parameterExpr: T.Expr;
-    parameterExpr = parseFunctionParameter(tt, parseExpr, scope);
-    params.push(parameterExpr);
-
-    if (tt.isOneOf('rparen', 'newline')) break;
-    tt.next();
-  }
-
-  return params;
-}
-
-function parseFunctionParameter(
-  tt: TokenTracker,
-  parseExpr: T.ExpressionParsingFunction,
-  scope: Scope,
-): T.Expr {
-  const parameterExpr: T.AST = [];
-  let expr: T.Expr | undefined;
-
-  while (tt.isNotOneOf('newline', 'comma', 'rparen')) {
-    expr = parseExpr(undefined, { scope, ast: parameterExpr });
-    parameterExpr.push(expr);
-    tt.next();
-  }
-
-  let [result] = parameterExpr;
   return result;
 }

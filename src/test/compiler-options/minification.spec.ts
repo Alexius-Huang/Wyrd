@@ -118,4 +118,10 @@ describe('Compiler Option: Minification', () => {
     perform('method invocation mixed binary operation', 'method-invocation/with-binary-operation');
     perform('builtin-type method invocation', 'method-invocation/builtin-type-invocation');
   });
+
+  describe('Pipe Operation', () => {
+    perform('function invocation pipeline', 'pipe-operation/on-function');
+    perform('method invocation pipeline', 'pipe-operation/on-method');
+    perform('function and method invocation mixed pipeline', 'pipe-operation/on-mixed');
+  });
 });
