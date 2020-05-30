@@ -23,7 +23,7 @@ export function parseMethodInvokeExpr(
 
   const receiverType = result.receiver.return;
   if (!scope.hasMethod(receiverType, name))
-    ParserError(`Invoking an undeclated method \`${receiverType}.${name}\``);  
+    ParserError(`Invoking an undeclared method \`${receiverType}.${name}\``);  
 
   const parameter = Parameter.from(result.params.map(expr => expr.return));
   const methodPattern = scope.getMethodPattern(receiverType, name, parameter);

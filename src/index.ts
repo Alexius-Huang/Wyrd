@@ -1,13 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as T from './types';
 import { lex } from './lexer';
 import { parse } from './parser';
+import { includeLibrary } from './include-library';
 import { Scope } from './parser/utils';
 import { generateCode } from './code-generator';
 import setupBuiltinMethods from './parser/builtin-methods';
 import setupBuiltinOperators from './parser/builtin-operators';
-
-import * as T from './types';
 
 export function compile(options?: T.CompilerOptions): T.CompileResult {
   let content: string, rootDir: string;
@@ -28,6 +28,8 @@ export function compile(options?: T.CompilerOptions): T.CompileResult {
   let globalScope = new Scope();
   const listGT = globalScope.declareGenericType('List');
   listGT.declareTypeParameter('element');
+
+  globalScope = includeLibrary('core', globalScope).scope;
 
   setupBuiltinMethods(globalScope);
   setupBuiltinOperators(globalScope);

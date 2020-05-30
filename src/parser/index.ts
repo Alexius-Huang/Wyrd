@@ -16,9 +16,10 @@ import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method/invocation';
 import { parsePipeOperation } from './pipe-operation';
+import { parseLibDirectMethodMapping } from './lib';
 import { ParserError } from './error';
 import { parseImportExpr } from './import';
-import { VoidExpression } from './constants';
+import { VoidExpression, EmptyExpression } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -27,6 +28,7 @@ export function parse(
     defaultScope?: Scope,
     defaultAST?: T.AST,
     mainFileOnly?: boolean,
+    isLib?: boolean,
   },
 ): { ast: T.AST, scope: Scope } {
   const tt = new TokenTracker(tokens);
@@ -113,6 +115,15 @@ export function parse(
 
     if (tt.is('pipe-op'))
       return parsePipeOperation(tt, parseExpr, scope, ast.pop() as T.Expr);
+
+    if (tt.is('lib-tag')) {
+      if (tt.valueIs('direct-method-mapping')) {
+        globalScope = parseLibDirectMethodMapping(tt, parseExpr, scope);
+        return EmptyExpression;
+      }
+
+      ParserError(`Unhandled library tag \`${tt.value}\``);
+    }
 
     if (scope.hasOperator(tt.value)) {
       if (prevExpr?.type === 'PrioritizedExpr')

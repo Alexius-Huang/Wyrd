@@ -1,6 +1,7 @@
 import { Token } from "../types";
 import tokenMap from './tokenMap';
-import { keyvalues, keywords, regex, builtinTypes } from './constants';
+import { keyvalues, keywords, regex, builtinTypes, libTags } from './constants';
+import { ParserError } from "../parser/error";
 
 function LexerError(msg: string): never {
   throw new Error(`Lexer Error: ${msg}`);
@@ -65,6 +66,21 @@ export function lex(code: string): Array<Token> {
 
       // TODO: Add an compiler option for retain comment, which is `skipComment: false`
       // result.push({ type: 'comment', value: parsedComment });
+      continue;
+    }
+
+    /* Library Tag Lexing */
+    if (currentChar === '@' && (peekChar !== ' ' && peekChar !== '\n')) {
+      let tag = '';
+      nextChar();
+      while (/[a-z|\-]+/.test(currentChar)) {
+        tag += currentChar;
+        nextChar();
+      }
+
+      if (!libTags.has(tag))
+        ParserError(`LexerError: Unidentified library tag \`@${tag}\``);
+      result.push({ type: 'lib-tag', value: tag });
       continue;
     }
 
