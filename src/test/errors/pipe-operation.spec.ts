@@ -37,7 +37,7 @@ describe('Error: Pipe Operation', () => {
     });
   });
 
-  describe('Invalid Function or Method Invocation Formate', () => {
+  describe('Invalid Function or Method Invocation Format', () => {
     it('throws error when parameters aren\'t surrounded by parentheses', () => {
       const program1 = 'def add(x: Num, y: Num): Num => x + y\n123 |> add 123';
       expect(() => compile({ program: program1 }))
@@ -66,6 +66,14 @@ describe('Error: Pipe Operation', () => {
       const program2 = '123 |> Num.toStr() |> Num.toStr()';
       expect(() => compile({ program: program2 }))
         .toThrow('Expect receiver in pipe-operation to have type `Num`, instead got type `Str`');  
+    });
+  });
+
+  describe('Invoking Undeclared Method', () => {
+    it('throws error when piping undeclared method', () => {
+      const program = '123 |> Num.undeclared()';
+      expect(() => compile({ program }))
+        .toThrow('ParserError: Invoking an undeclated method `Num.undeclared` during pipe operation');
     });
   });
 });

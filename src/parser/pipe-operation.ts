@@ -53,7 +53,7 @@ export function parsePipeOperation(
     const tokMethodName = tt.value;
     const methodInvokeName = `${receiverType}.${tokMethodName}`;
     if (!scope.hasMethod(receiverType, tokMethodName))
-      ParserError(`Invoking an undeclated method \`${methodInvokeName}\``);  
+      ParserError(`Invoking an undeclated method \`${methodInvokeName}\` during pipe operation`);  
     tt.next(); // Skip `ident`
 
     if (tt.isNot('lparen'))
