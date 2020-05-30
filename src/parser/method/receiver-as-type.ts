@@ -1,7 +1,7 @@
 import * as T from '../../types';
 import { TokenTracker, Scope, DataType as DT } from '../utils';
 import { ParserErrorIf } from '../error';
-import { parseParameters } from './parameter';
+import { parseParameters } from '../function/parameters';
 import { EmptyExpression } from '../constants';
 
 /**
