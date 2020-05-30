@@ -8,4 +8,8 @@ describe('Pipe Operation', () => {
   describe('Method Invocation Piping', () => {
     FundamentalCompileTest('pipe-operation/on-method');
   });
+
+  describe('Mixed Function and Method Invocation Piping', () => {
+    FundamentalCompileTest('pipe-operation/on-mixed');
+  });
 });

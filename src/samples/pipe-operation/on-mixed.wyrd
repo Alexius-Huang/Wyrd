@@ -1,0 +1,4 @@
+def add(x: Num, y: Num): Num => x + y
+def Num.add(y: Num): Num => this + y
+
+result = 123 |> add(321) |> Num.add(456) |> Num.toStr() |> Str.concat("666")
