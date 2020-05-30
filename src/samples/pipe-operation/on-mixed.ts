@@ -151,7 +151,7 @@ function Num_add(_this, y) {
 const result = Num_add(add(123, 321), 456).toString().concat('666');
 `;
 
-const minified = 'function add(x,y){return x+y;}function Num_add(_this,y){return _this+y;}constresult=Num_add(add(123,321),456).toString().concat(\'666\');';
+const minified = 'function add(x,y){return x+y;}function Num_add(_this,y){return _this+y;}const result=Num_add(add(123,321),456).toString().concat(\'666\');';
 
 export {
   tokens,

@@ -45,7 +45,7 @@ export function parsePipeOperation(
     tt.next(); // Skip `type`
 
     if (tt.isNot('dot'))
-      ParserError(`Expect invoking method in pipe-operation token of type \`dot\`, instead got: \`${tt.current}\``);
+      ParserError(`Expect invoking method in pipe-operation token of type \`dot\`, instead got: \`${tt.type}\``);
     tt.next(); // Skip `dot`
 
     if (tt.isNot('ident'))
@@ -57,14 +57,14 @@ export function parsePipeOperation(
     tt.next(); // Skip `ident`
 
     if (tt.isNot('lparen'))
-      ParserError(`Expect methodinvocation's parameter to be nested by parentheses, instead got token of type: \`${tt.type}\``);
+      ParserError(`Expect method invocation's parameter to be nested by parentheses, instead got token of type: \`${tt.type}\``);
     tt.next(); // Skip `lparen`
     const params = parseParameters(tt, parseExpr, scope);
 
     const typeParams = Parameter.from(params.map(p => p.return));
     const methodPattern = scope.getMethodPattern(receiverType, tokMethodName, typeParams);
     if (methodPattern === undefined)
-      ParserError(`Method for ${methodInvokeName} with input pattern \`${typeParams}\` doesn't exist`);
+      ParserError(`Method for \`${methodInvokeName}\` with input pattern \`${typeParams}\` doesn't exist`);
 
     const result: T.MethodInvokeExpr = {
       type: 'MethodInvokeExpr',
@@ -86,5 +86,7 @@ export function parsePipeOperation(
     return result;
   }
 
-  ParserError(`Unhandled token of type \`${tt.type}\` in pipe-operation`);
+  if (tt.is('ident'))
+    ParserError(`Unknown identifier \`${tt.value}\` is used`);
+  ParserError(`Pipe operation do not accept token of type \`${tt.type}\``);
 }
