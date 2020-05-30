@@ -6,7 +6,6 @@ import { parse } from './parser';
 import { includeLibrary } from './include-library';
 import { Scope } from './parser/utils';
 import { generateCode } from './code-generator';
-import setupBuiltinMethods from './parser/builtin-methods';
 import setupBuiltinOperators from './parser/builtin-operators';
 
 export function compile(options?: T.CompilerOptions): T.CompileResult {
@@ -31,7 +30,6 @@ export function compile(options?: T.CompilerOptions): T.CompileResult {
 
   globalScope = includeLibrary('core', globalScope).scope;
 
-  setupBuiltinMethods(globalScope);
   setupBuiltinOperators(globalScope);
 
   if (options?.scopeMiddleware)

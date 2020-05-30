@@ -3,7 +3,6 @@ import * as T from '../types';
 import * as fs from 'fs';
 import { includeLibrary } from '../include-library';
 import { Scope } from '../parser/utils';
-import setupBuiltinMethods from '../parser/builtin-methods';
 import setupBuiltinOperators from '../parser/builtin-operators';
 import { compile, lex, parse, generateCode } from '..';
 
@@ -49,7 +48,6 @@ export function FundamentalCompileTest(
       listGT.declareTypeParameter('element');
       globalScope = includeLibrary('core', globalScope).scope;
 
-      setupBuiltinMethods(globalScope);
       setupBuiltinOperators(globalScope);
 
       if (compilerOptions?.scopeMiddleware)
