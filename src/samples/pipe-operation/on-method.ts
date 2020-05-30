@@ -51,7 +51,7 @@ const compiled = `\
 const foo = ('hello world').toUpperCase().split(' ');
 `;
 
-const minified = '';
+const minified = 'const foo=(\'hello world\').toUpperCase().split(\' \');';
 
 export {
   tokens,

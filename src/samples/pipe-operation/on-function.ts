@@ -121,7 +121,7 @@ function subtract(x, y) {
 const result = subtract(add(123, 321), 666);
 `;
 
-const minified = '';
+const minified = 'function add(x,y){return x+y;}function subtract(x,y){return x-y;}constresult=subtract(add(123,321),666);';
 
 export {
   tokens,
