@@ -5,7 +5,7 @@ describe('Pipe Operation', () => {
     FundamentalCompileTest('pipe-operation/on-function');
   });
 
-  describe.skip('Method Invocation Piping', () => {
+  describe('Method Invocation Piping', () => {
     FundamentalCompileTest('pipe-operation/on-method');
   });
 });

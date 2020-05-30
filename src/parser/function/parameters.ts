@@ -6,6 +6,7 @@ export function parseParameters(
   parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
 ): Array<T.Expr> {
+  if (tt.is('rparen')) return [];
   const params: Array<T.Expr> = [];
 
   while (true) {

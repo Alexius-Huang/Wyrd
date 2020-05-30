@@ -26,7 +26,7 @@ const ast: AST = [
   {
     type: 'AssignmentExpr',
     return: DT.Void,
-    expr1: Var('foo', DT.Str),
+    expr1: Var('foo', DT.ListOf(DT.Str)),
     expr2: {
       type: 'MethodInvokeExpr',
       receiver: {
@@ -35,18 +35,20 @@ const ast: AST = [
         name: 'toUpperCase',
         params: [],
         return: DT.Str,
+        isNotBuiltin: false,
       },
       name: 'split',
       params: [
         StringLiteral(' '),
       ],
-      return: DT.Str,
+      return: DT.ListOf(DT.Str),
+      isNotBuiltin: false,
     },
   },
 ];
 
 const compiled = `\
-const foo = ("hello world").toUpperCase().split(' ');
+const foo = ('hello world').toUpperCase().split(' ');
 `;
 
 const minified = '';
