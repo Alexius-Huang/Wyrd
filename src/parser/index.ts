@@ -4,6 +4,7 @@ import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
+import { parseThisLiteral } from './this-literal';
 import { parseRecordDeclaration } from './record/declaration';
 import { parseRecordReferenceExpr } from './record/reference';
 import { parseVarDeclaration } from './variable-declaration';
@@ -14,7 +15,7 @@ import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
 import { parseMethodInvokeExpr } from './method/invocation';
-import { parseThisLiteral } from './this-literal';
+import { parsePipeOperation } from './pipe-operation';
 import { ParserError } from './error';
 import { parseImportExpr } from './import';
 import { VoidExpression } from './constants';
@@ -109,6 +110,9 @@ export function parse(
 
     if (tt.is('ref'))
       return parseRecordReferenceExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
+
+    if (tt.is('pipe-op'))
+      return parsePipeOperation(tt, parseExpr, scope, ast.pop() as T.Expr);
 
     if (scope.hasOperator(tt.value)) {
       if (prevExpr?.type === 'PrioritizedExpr')

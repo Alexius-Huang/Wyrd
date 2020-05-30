@@ -107,6 +107,12 @@ export function lex(code: string): Array<Token> {
         continue;
       }
 
+      if (currentChar === '|' && peekChar === '>') {
+        result.push(tokenMap.get('|>') as Token);
+        nextChar(2);
+        continue;
+      }
+
       result.push(tokenMap.get(currentChar) as Token);
       nextChar();
       continue;
