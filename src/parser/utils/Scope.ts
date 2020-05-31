@@ -11,6 +11,7 @@ import {
   ScopeRecord as Record
 } from '.';
 import { ParserError } from '../error';
+import { GenericPlacholder } from '../../types';
 
 export default class Scope {
   public parent: null | Scope = null;
@@ -21,6 +22,7 @@ export default class Scope {
   public operators: Map<string, OperatorObject> = new Map();
   public records: Map<string, Record> = new Map();
   public declaredGenerics: Map<string, GT> = new Map();
+  public genericPlacholders: Map<string, GenericPlacholder> = new Map();
 
   public createChildScope(name: string): Scope {
     const scope = new Scope();
@@ -210,6 +212,31 @@ export default class Scope {
   }
 
   public getGenericType(name: string): GT {
-    return this.declaredGenerics.get(name) as GT;
+    const result = this.declaredGenerics.get(name);
+    if (result === undefined)
+      if (this.parent !== null)
+        return this.parent.getGenericType(name)
+      else 
+        ParserError(`\`${name}\` isn't found as generic type throughout scope`);
+    return result;
+  }
+
+  public createGenericPlaceholder(placeholder: string, name: string): GenericPlacholder {
+    const gp = { placeholder, generic: name };
+    this.genericPlacholders.set(placeholder, gp);
+    return gp;
+  }
+
+  public hasGenericPlaceholder(placeholder: string): boolean {
+    return this.genericPlacholders.has(placeholder) || (this.parent !== null ? this.parent.hasGenericPlaceholder(placeholder) : false);
+  }
+
+  public getGenericPlaceholder(placeholder: string): GenericPlacholder {
+    return this.genericPlacholders.get(placeholder) as GenericPlacholder;
+  }
+
+  public getGenericTypeFromPlaceholder(placeholder: string): DT {
+    const gp = this.getGenericPlaceholder(placeholder);
+    return DT.Generic(gp.generic);
   }
 }

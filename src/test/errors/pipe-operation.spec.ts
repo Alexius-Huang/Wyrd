@@ -73,7 +73,7 @@ describe('Error: Pipe Operation', () => {
     it('throws error when piping undeclared method', () => {
       const program = '123 |> Num.undeclared()';
       expect(() => compile({ program }))
-        .toThrow('ParserError: Invoking an undeclated method `Num.undeclared` during pipe operation');
+        .toThrow('ParserError: Invoking an undeclared method `Num.undeclared` during pipe operation');
     });
   });
 });

@@ -14,6 +14,8 @@ const tokens: Array<Token> = [
   { type: 'rbracket', value: ']' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'result1' },
+  { type: 'eq', value: '=' },
   { type: 'ident', value: 'foo' },
   { type: 'dot', value: '.' },
   { type: 'ident', value: 'push' },
@@ -22,6 +24,8 @@ const tokens: Array<Token> = [
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'result2' },
+  { type: 'eq', value: '=' },
   { type: 'ident', value: 'foo' },
   { type: 'dot', value: '.' },
   { type: 'ident', value: 'concat' },
@@ -54,41 +58,51 @@ const ast: AST = [
     },
   },
   {
-    type: 'MethodInvokeExpr',
-    name: 'push',
-    receiver: Var('foo', DT.ListOf(DT.Num)),
-    params: [
-      NumberLiteral(6),
-    ],
-    return: DT.Num
+    type: 'AssignmentExpr',
+    return: DT.Void,
+    expr1: Var('result1', DT.Num),
+    expr2: {
+      type: 'MethodInvokeExpr',
+      name: 'push',
+      receiver: Var('foo', DT.ListOf(DT.Num)),
+      params: [
+        NumberLiteral(6),
+      ],
+      return: DT.Num
+    },
   },
   {
-    type: 'MethodInvokeExpr',
-    name: 'concat',
-    receiver: Var('foo', DT.ListOf(DT.Num)),
-    params: [
-      {
-        type: 'ListLiteral',
-        values: [
-          NumberLiteral(7),
-          NumberLiteral(8),
-          NumberLiteral(9),
-        ],
-        elementType: DT.Num,
-        return: DT.ListOf(DT.Num),
-      }
-    ],
-    return: DT.ListOf(DT.Num),
+    type: 'AssignmentExpr',
+    return: DT.Void,
+    expr1: Var('result2', DT.ListOf(DT.Num)),
+    expr2: {
+      type: 'MethodInvokeExpr',
+      name: 'concat',
+      receiver: Var('foo', DT.ListOf(DT.Num)),
+      params: [
+        {
+          type: 'ListLiteral',
+          values: [
+            NumberLiteral(7),
+            NumberLiteral(8),
+            NumberLiteral(9),
+          ],
+          elementType: DT.Num,
+          return: DT.ListOf(DT.Num),
+        }
+      ],
+      return: DT.ListOf(DT.Num),
+    },
   },
 ];
 
 const compiled = `\
 const foo = [1, 2, 3, 4, 5];
-foo.push(6);
-foo.concat([7, 8, 9]);
+const result1 = foo.push(6);
+const result2 = foo.concat([7, 8, 9]);
 `;
 
-const minified = 'const foo=[1,2,3,4,5];foo.push(6);foo.concat([7,8,9]);';
+const minified = 'const foo=[1,2,3,4,5];const result1=foo.push(6);const result2=foo.concat([7,8,9]);';
 
 export {
   tokens,

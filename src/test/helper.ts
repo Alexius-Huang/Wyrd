@@ -1,8 +1,8 @@
 import * as Path from 'path';
 import * as T from '../types';
 import * as fs from 'fs';
+import { includeLibrary } from '../include-library';
 import { Scope } from '../parser/utils';
-import setupBuiltinMethods from '../parser/builtin-methods';
 import setupBuiltinOperators from '../parser/builtin-operators';
 import { compile, lex, parse, generateCode } from '..';
 
@@ -44,14 +44,14 @@ export function FundamentalCompileTest(
     it('parses the tokens into AST correctly', () => {
       let globalScope = new Scope();
 
-      if (compilerOptions?.scopeMiddleware)
-        globalScope = compilerOptions.scopeMiddleware(globalScope);
-
       const listGT = globalScope.declareGenericType('List');
       listGT.declareTypeParameter('element');
-    
-      setupBuiltinMethods(globalScope);
+      globalScope = includeLibrary('Core', globalScope).scope;
+
       setupBuiltinOperators(globalScope);
+
+      if (compilerOptions?.scopeMiddleware)
+        globalScope = compilerOptions.scopeMiddleware(globalScope);
 
       const { ast: result } = parse(tokens, {
         rootDir: dir,

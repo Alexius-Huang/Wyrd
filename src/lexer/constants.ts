@@ -23,6 +23,14 @@ const keywords = new Set<string>([
   'import',
 ]);
 
+const libTags = new Set<string>([
+  'direct-method-mapping',
+  'maps',
+  'params',
+  'returns',
+  'end',
+]);
+
 const regex = {
   number: /[0-9]/,
   letter: /[a-zA-Z]/,
@@ -41,6 +49,7 @@ const builtinTypes = new Set<string>([
 export {
   keyvalues,
   keywords,
+  libTags,
   regex,
   builtinTypes,
 };

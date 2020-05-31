@@ -53,6 +53,7 @@ export default class DataType {
   private typeParams: Map<string, TypeParameter> = new Map();
   public readonly typeParameterMap: { [key: string]: DataType } = {};
   public readonly typeParameters: Array<TypeParameter> = [];
+  public readonly typeParameterPlaceholderMap: { [key: string]: string } = {};
   public isGeneric = false;
 
   constructor(

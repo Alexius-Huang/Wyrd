@@ -80,6 +80,11 @@ export type CompileResult = {
   ast: AST;
 };
 
+export type GenericPlacholder = {
+  generic: string;
+  placeholder: string;
+};
+
 export type AST = Array<Expr>;
 
 interface Expression {

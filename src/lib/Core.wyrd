@@ -1,0 +1,18 @@
+@direct-method-mapping
+  Str.upcase   @maps("toUpperCase") @returns(Str)
+  Str.downcase @maps("toLowerCase")
+  Str.repeat   @params(Num)
+  Str.at       @maps("charAt") @params(Num)
+  Str.concat   @params(Str)
+  Str.indexOf  @params(Str) @returns(Num)
+  Str.split    @params(Str) @returns(List<Str>)
+  Str.rest     @maps("slice") @params(Num)
+  Str.between  @maps("slice") @params(Num, Num)
+
+  Str.toStr    @maps("toString")
+  Num.toStr    @maps("toString") @returns(Str)
+  Bool.toStr   @maps("toString") @returns(Str)
+
+  List<element: T>.push   @params(T)       @returns(T)
+  List<element: U>.concat @params(List<U>)
+@end

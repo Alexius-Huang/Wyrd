@@ -28,9 +28,25 @@ export function parseTypeLiteral(
       if (tt.isNotOneOf('ident', 'builtin-type'))
         ParserError(`Expect type parameters in generic type \`${gt.name}\` has ${tps.length} type parameter(s), instead got: ${i}`);
 
-      const typeLit = parseTypeLiteral(tt, parseExpr, scope);
-      result.typeObject.newTypeParameter(tp.name, typeLit.typeObject);
-      tt.next();
+      if (tt.is('ident') && tp.name === tt.value) {
+        tt.next(); // Skip `ident`
+        if (tt.isNot('colon'))
+          ParserError(`Expect to have \`colon\` after generic type parameter name when declaring generic type parameter, instead got token of type: \`${tt.type}\``);
+        tt.next(); // Skip `colon`
+
+        if (tt.isNot('ident'))
+          ParserError(`Expect to name the generic type parameter, instead got token of type: \`${tt.type}\``);
+        result.typeObject.newTypeParameter(tp.name, DT.Generic(tt.value));
+        tt.next(); // Skip `ident`
+      } else if (scope.hasGenericPlaceholder(tt.value)) {
+        const gt = scope.getGenericTypeFromPlaceholder(tt.value);
+        result.typeObject.newTypeParameter(gt.type, gt);
+        tt.next(); // Skip `ident`
+      } else {
+        const typeLit = parseTypeLiteral(tt, parseExpr, scope);
+        result.typeObject.newTypeParameter(tp.name, typeLit.typeObject);
+        tt.next(); // Skip `type`
+      }
 
       if (tt.is('comma')) tt.next();
     }
