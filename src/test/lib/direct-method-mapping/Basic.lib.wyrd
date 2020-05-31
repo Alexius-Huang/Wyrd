@@ -1,0 +1,6 @@
+@direct-method-mapping
+  Num.ex1
+  Num.ex2 @maps("changedFromEx2")
+  Num.ex3 @params(Str, Bool)
+  Num.ex4 @returns(Str)
+@end

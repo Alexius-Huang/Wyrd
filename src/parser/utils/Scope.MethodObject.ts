@@ -14,12 +14,13 @@ export default class MethodObject {
 
   public createNewPattern(parameter: Parameter, outputType: DT, options?: MethodObjectInitialzeOptions): Pattern {
     const mappedName = options?.directMapping ?? this.name;
-    const referenceName = this.patternIndex === 0 ? mappedName : `${mappedName}_${this.patternIndex}`;
+    const isNotBuiltin = options?.isNotBuiltin ?? true;
+    const referenceName = this.patternIndex === 0 || !isNotBuiltin ? mappedName : `${mappedName}_${this.patternIndex}`;
     const pattern = new Pattern(referenceName, parameter, outputType);
     this.patterns.push(pattern);
     this.patternIndex++;
 
-    pattern.isNotBuiltin = options?.isNotBuiltin ?? true;
+    pattern.isNotBuiltin = isNotBuiltin;
     return pattern;
   }
 

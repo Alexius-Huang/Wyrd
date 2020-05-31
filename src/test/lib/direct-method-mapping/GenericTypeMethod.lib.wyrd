@@ -1,0 +1,6 @@
+@direct-method-mapping
+  List<T>.ex1   @params(T)   @returns(T)
+  List<T>.ex2   @params(Num) @returns(T)
+  List<T>.ex3   @params(T)   @returns(Num)
+  List<Num>.ex4 @params(Num)
+@end
