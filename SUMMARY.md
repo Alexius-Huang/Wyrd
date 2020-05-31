@@ -8,4 +8,5 @@
 * [Built-in Types](wyrd-syntax-rules/built-in-types.md)
 * [Arithmetics](wyrd-syntax-rules/arithmetics.md)
 * [Logical Expressions](wyrd-syntax-rules/logical-expressions.md)
+* [Conditional Expressions](wyrd-syntax-rules/conditional-expressions.md)
 

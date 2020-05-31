@@ -4,7 +4,7 @@
 
 **Wyrd** is a toy programming language \(**but it is evolving in high speed**\) whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/) and follows the Functional Programming paradigm.
 
-[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/)  ****🚧Under Construction 🚧
+[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/) ****🚧Under Construction 🚧
 
 Wyrd programming language compiles its code into JavaScript. The primary goal would be to write Front-End code and Back-End code \(NodeJS\) using Wyrd programming language. I may want to try writing React \(or Vue\) component code using Wyrd lang if possible.
 
@@ -33,7 +33,15 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   * Comparison Operators
   * Comparison Operators Accept Identical Types Only
   * Logical Chaining
-* [Conditional Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#conditional-expression) \(Legacy\)
+* [Conditional Expressions](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/conditional-expressions)
+  * Basic Syntax
+    * "One-Liner" If-Arrow Expression
+    * "Single-Line-Block" If-Then Expression
+    * "Multi-Line-Block" If-Do Expression
+  * Conditional Expression Returns Value
+  * If-Condition Must Receive Boolean Type
+  * Return Type of Each Branch Must Be Identical
+  * Conditional Expression Without Else Part Returns "Maybe" Types
 * [Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation) \(Legacy\)
 * Functions \(Legacy\)
   * [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
