@@ -5,6 +5,7 @@ import { lex } from '../lexer';
 import { includeLibrary } from '../include-library';
 import { TokenTracker, Scope } from './utils';
 import { ParserError } from './error';
+import { BuiltinLibs } from './constants';
 
 export function parseImportExpr(
   tt: TokenTracker,
@@ -15,6 +16,7 @@ export function parseImportExpr(
       defaultScope?: Scope,
       defaultAST?: T.AST,
       mainFileOnly?: boolean,
+      isLib?: boolean,
     },
   ) => { ast: T.AST, scope: Scope },
   scope: Scope,
@@ -25,21 +27,23 @@ export function parseImportExpr(
 } {
   tt.next(); // skip 'import'
 
-  if (tt.isNotOneOf('string', 'ident'))
-    ParserError(`Expect token after \`import\` keyword is \`file path string\` or \`library name identifier\`, instead got token of type: \`${tt.type}\``);
+  if (tt.isNot('string'))
+    ParserError(`Expect token after \`import\` keyword is \`file path\` or \`library name\`, instead got token of type: \`${tt.type}\``);
 
-  if (tt.is('ident')) {
+  if (BuiltinLibs.has(tt.value)) {
     const libName = tt.value;
     tt.next();
     return includeLibrary(libName, scope);
   }
 
   const filePath = path.join(rootDir, tt.value);
+  const isLib = /\.lib\.wyrd/.test(filePath);
   const content = fs.readFileSync(filePath, 'utf-8');
   tt.next(); // skip file path represented by 'string'
 
   return parse(lex(content), {
     rootDir: path.dirname(filePath),
     defaultScope: scope,
+    isLib,
   });
 }

@@ -7,6 +7,7 @@ describe('Import Expression', () => {
 
   describe('Importing Library', () => {
     FundamentalCompileTest('import-mechanism/import-builtin-lib');
+    FundamentalCompileTest('import-mechanism/import-user-defined-lib');
   });
 
   describe('Compiler Option: mainFileOnly', () => {

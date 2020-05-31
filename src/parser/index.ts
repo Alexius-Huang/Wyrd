@@ -19,7 +19,7 @@ import { parsePipeOperation } from './pipe-operation';
 import { parseLibDirectMethodMapping } from './lib';
 import { ParserError } from './error';
 import { parseImportExpr } from './import';
-import { VoidExpression, EmptyExpression } from './constants';
+import { VoidExpression } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -123,7 +123,7 @@ export function parse(
 
       if (tt.valueIs('direct-method-mapping')) {
         globalScope = parseLibDirectMethodMapping(tt, parseExpr, scope);
-        return EmptyExpression;
+        return VoidExpression;
       }
 
       ParserError(`Unhandled library tag \`${tt.value}\``);

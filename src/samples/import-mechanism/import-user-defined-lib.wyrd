@@ -1,0 +1,3 @@
+import "./Example.lib.wyrd"
+
+foo = 666.exampleMethod(666, "Hello world!")

@@ -1,10 +1,10 @@
 import { Token, AST } from '../../types';
-import { NumberLiteral, Arithmetic, Var } from '../helper';
+import { NumberLiteral, Var, StringLiteral } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'import' },
-  { type: 'string', value: 'Math' },
+  { type: 'string', value: './Example.lib.wyrd' },
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
@@ -12,45 +12,36 @@ const tokens: Array<Token> = [
   { type: 'eq', value: '=' },
   { type: 'number', value: '666' },
   { type: 'dot', value: '.' },
-  { type: 'ident', value: 'square' },
+  { type: 'ident', value: 'exampleMethod' },
   { type: 'lparen', value: '(' },
+  { type: 'number', value: '666' },
+  { type: 'comma', value: ',' },
+  { type: 'string', value: 'Hello world!' },  
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
   {
-    type: 'MethodDeclaration',
-    name: 'Num_square',
-    receiverType: DT.Num,
-    outputType: DT.Num,
-    return: DT.Void,
-    arguments: [],
-    body: [
-      Arithmetic('this', '*', 'this'),
-    ],
-  },
-  {
     type: 'AssignmentExpr',
     return: DT.Void,
-    expr1: Var('foo', DT.Num),
+    expr1: Var('foo', DT.Bool),
     expr2: {
       type: 'MethodInvokeExpr', 
-      name: 'Num_square',
+      name: 'compiledMethod',
       receiver: NumberLiteral(666),
-      return: DT.Num,
-      params: [],
-      isNotBuiltin: true,
+      return: DT.Bool,
+      params: [
+        NumberLiteral(666),
+        StringLiteral('Hello world!'),
+      ],
+      isNotBuiltin: false,
     },
   },
 ];
 
 const compiled = `\
-function Num_square(_this) {
-  return _this * _this;
-}
-
-const foo = Num_square(666);
+const foo = (666).compiledMethod(666, 'Hello world!');
 `;
 
 const minified = '';
