@@ -224,12 +224,12 @@ Hence, the return type of the conditional expression without `else` expression w
 
 ```text
 age = 20
-type = if age < 18 => "youngster"
+mutable type maybe Str = if age < 18 => "youngster"
 ```
 
 ```javascript
 const age = 20;
-const type = age < 18 ? 'youngster' : null;
+let type = age < 18 ? 'youngster' : null;
 ```
 
 

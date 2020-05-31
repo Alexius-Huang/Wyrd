@@ -53,62 +53,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 
 ### Supported Syntax Rules
 
-#### Conditional Expression
-
-**Wyrd Code**
-
-```text
-if age < 18 => "youngster"
-else        => "adult"
-
-example1 = if age < 18 => "youngster"
-           else        => "adult"
-
-example2 = if age < 18    => "youngster"
-           elif age <= 60 => "adult"
-           elif age < 100 => "elder"
-           else           => "centenarian"
-
-example3 = if age < 18 then
-             "youngster"
-           elif age <= 60 then
-             "adult"
-           elif age < 100 then
-             "elder"
-           else then
-             "centenarian"
-           end
-
-mixed1 = if age < 18 then
-           "youngster"
-         elif age <= 60 => "adult"
-         elif age < 100 then
-           "elder"
-         else => "centenarian"
-
-mixed2 = if age < 18 => "youngster"
-         elif age <= 60 then
-           "adult"
-         elif age < 100 => "elder"
-         else then
-           "centenarian"
-         end
-```
-
-**Compiled Result**
-
-```javascript
-age < 18 ? 'youngster' : 'adult';
-const example1 = age < 18 ? 'youngster' : 'adult';
-const example2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
-const example3 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
-const mixed1 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
-const mixed2 = age < 18 ? 'youngster' : (age <= 60 ? 'adult' : (age < 100 ? 'elder' : 'centenarian'));
-```
-
 #### Method Invocation
-
-**\[WIP\]**
 
 **Wyrd Code**
 
