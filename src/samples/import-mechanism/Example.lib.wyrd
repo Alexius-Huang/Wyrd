@@ -1,0 +1,3 @@
+@direct-method-mapping
+  Num.exampleMethod @maps("compiledMethod") @params(Num, Str) @returns(Bool)
+@end

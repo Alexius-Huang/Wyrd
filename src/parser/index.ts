@@ -19,7 +19,7 @@ import { parsePipeOperation } from './pipe-operation';
 import { parseLibDirectMethodMapping } from './lib';
 import { ParserError } from './error';
 import { parseImportExpr } from './import';
-import { VoidExpression, EmptyExpression } from './constants';
+import { VoidExpression } from './constants';
 
 export function parse(
   tokens: Array<T.Token>,
@@ -119,11 +119,11 @@ export function parse(
 
     if (tt.is('lib-tag')) {
       if (!isLib)
-        ParserError('Only library files can be parsed with token of type `lib-tag`');
+        ParserError('Only library files can be parsed with token of type `lib-tag`, name your Wyrd file with extension `.lib.wyrd` to use lib tags');
 
       if (tt.valueIs('direct-method-mapping')) {
         globalScope = parseLibDirectMethodMapping(tt, parseExpr, scope);
-        return EmptyExpression;
+        return VoidExpression;
       }
 
       ParserError(`Unhandled library tag \`${tt.value}\``);

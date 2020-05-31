@@ -1,0 +1,5 @@
+@direct-method-mapping
+  Num.example @maps("result1") @params(Num)
+  Num.example @maps("result2") @params(Num, Num)
+  Num.example @maps("result3") @params(Str)
+@end
