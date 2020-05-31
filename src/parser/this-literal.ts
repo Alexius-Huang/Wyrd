@@ -18,10 +18,22 @@ export function parseThisLiteral(
     ParserError('Unhandled using `this` keyword token');
   }
 
+  // TODO: The following code handling binary operation and prioritization is duplicated
+  //       with primitive type parsing, find a way to refactor them
   if (prevExpr?.type === 'BinaryOpExpr') {
     prevExpr.expr2 = result;
+    const operator = prevExpr.operator;
+    const opLeft = prevExpr.expr1.return;
+    const opRight = result.return;
+    const operatorObj = scope.getOperatorPattern(operator, opLeft, opRight);
+
+    if (operatorObj === undefined)
+      ParserError(`Invalid operation for operator \`${prevExpr.operator}\` with operands of type \`${opLeft}\` and \`${opRight}\``);
+
+    prevExpr.return = operatorObj.returnDataType;
     return prevExpr;
   }
+
   if (prevExpr?.type === 'PrioritizedExpr') {
     prevExpr.expr = result;
     prevExpr.return = result.return;

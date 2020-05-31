@@ -5,6 +5,10 @@ describe('Import Expression', () => {
     FundamentalCompileTest('import-mechanism/import-wyrd-program');
   });
 
+  describe('Importing Library', () => {
+    FundamentalCompileTest('import-mechanism/import-builtin-lib');
+  });
+
   describe('Compiler Option: mainFileOnly', () => {
     FundamentalCompileTest('import-mechanism/compile-main-file-only');
   });

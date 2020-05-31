@@ -1,0 +1,3 @@
+import Math
+
+foo = 666.square()
