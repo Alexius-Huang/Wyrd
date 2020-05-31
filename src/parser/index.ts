@@ -119,7 +119,7 @@ export function parse(
 
     if (tt.is('lib-tag')) {
       if (!isLib)
-        ParserError('Only library files can be parsed with token of type `lib-tag`');
+        ParserError('Only library files can be parsed with token of type `lib-tag`, name your Wyrd file with extension `.lib.wyrd` to use lib tags');
 
       if (tt.valueIs('direct-method-mapping')) {
         globalScope = parseLibDirectMethodMapping(tt, parseExpr, scope);

@@ -1,0 +1,5 @@
+# Cannot use lib tags in non-lib files, every lib files should have extension of name ".lib.wyrd"
+
+@direct-method-mapping
+  Num.exampleMethod @maps("compiledMethod") @params(Num, Str) @returns(Bool)
+@end

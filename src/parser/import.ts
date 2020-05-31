@@ -37,6 +37,8 @@ export function parseImportExpr(
   }
 
   const filePath = path.join(rootDir, tt.value);
+  if (!fs.existsSync(filePath))
+    ParserError(`Importing unexisted file \`${filePath}\``);
   const isLib = /\.lib\.wyrd/.test(filePath);
   const content = fs.readFileSync(filePath, 'utf-8');
   tt.next(); // skip file path represented by 'string'
