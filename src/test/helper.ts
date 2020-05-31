@@ -46,7 +46,7 @@ export function FundamentalCompileTest(
 
       const listGT = globalScope.declareGenericType('List');
       listGT.declareTypeParameter('element');
-      globalScope = includeLibrary('core', globalScope).scope;
+      globalScope = includeLibrary('Core', globalScope).scope;
 
       setupBuiltinOperators(globalScope);
 

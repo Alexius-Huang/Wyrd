@@ -126,12 +126,6 @@ export default class DataType {
     ParserError(`Type \`${this.type}\` has no type parameter of name \`${paramName}\``);
   }
 
-  // public updateTypeParameter(paramName: string, dt: DataType): DataType {
-  //   const tp = this.typeParams.get(paramName) as TypeParameter;
-  //   tp.type = dt;
-  //   return dt;
-  // }
-
   public hasTypeParameters(): boolean {
     return this.typeParams.size !== 0;
   }
