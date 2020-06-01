@@ -8,6 +8,7 @@ import {
   ScopeMethodType as MethodType,
   ScopeMethodObject as MethodObject,
   ScopeOperatorObject as OperatorObject,
+  OperatorPattern,
   ScopeRecord as Record
 } from '.';
 import { ParserError } from '../error';
@@ -168,7 +169,7 @@ export default class Scope {
     return operatorObj;
   }
 
-  public getOperatorPattern(op: string, opType1: DT, opType2: DT) {
+  public getOperatorPattern(op: string, opType1: DT, opType2: DT): OperatorPattern | undefined {
     const operatorObj = this.getOperator(op);
     return operatorObj.getPatternInfo(opType1, opType2);
   }

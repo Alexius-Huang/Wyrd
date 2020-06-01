@@ -7,16 +7,16 @@ type MethodObjectInitialzeOptions = {
 }
 
 export default class MethodObject {
-  public patterns: Pattern[] = [];
+  public patterns: MethodPattern[] = [];
   public patternIndex: number = 0;
 
   constructor(public name: string) {}
 
-  public createNewPattern(parameter: Parameter, outputType: DT, options?: MethodObjectInitialzeOptions): Pattern {
+  public createNewPattern(parameter: Parameter, outputType: DT, options?: MethodObjectInitialzeOptions): MethodPattern {
     const mappedName = options?.directMapping ?? this.name;
     const isNotBuiltin = options?.isNotBuiltin ?? true;
     const referenceName = this.patternIndex === 0 || !isNotBuiltin ? mappedName : `${mappedName}_${this.patternIndex}`;
-    const pattern = new Pattern(referenceName, parameter, outputType);
+    const pattern = new MethodPattern(referenceName, parameter, outputType);
     this.patterns.push(pattern);
     this.patternIndex++;
 
@@ -24,7 +24,7 @@ export default class MethodObject {
     return pattern;
   }
 
-  public getPatternInfo(receiver: DT, parameter: Parameter): Pattern | undefined {
+  public getPatternInfo(receiver: DT, parameter: Parameter): MethodPattern | undefined {
     for (let i = 0; i < this.patterns.length; i += 1) {
       const p = this.patterns[i].parameter;
       if (p.matches(parameter, receiver)) return this.patterns[i];
@@ -34,7 +34,7 @@ export default class MethodObject {
   }
 }
 
-class Pattern {
+export class MethodPattern {
   public overridenIndex = 0;
   public isNotBuiltin = true;
 
