@@ -24,13 +24,6 @@ elif age < 60 => "adult"
 else          => "elder"
 ```
 
-```javascript
-const age = 20;
-age < 18 ? 'youngster' : null;
-age < 18 ? 'youngster' : 'adult';
-age < 18 ? 'youngster' : (age < 60 ? 'adult' : 'elder');
-```
-
 Notice that the `if <condition> ... else if ...` part, the keyword to chain the expression is simplified into `elif` keyword.
 
 ### "Single-Line-Block" If-Then Expression
@@ -106,40 +99,6 @@ else do
   b = 789
   a * b    # <-- returns this result if cond1 and cond2 are False
 end
-```
-
-```javascript
-const cond1 = true;
-const cond2 = false;
-cond1 ? (function() {
-  const a = 123;
-  const b = 456;
-  return a + b;
-})() : null;
-
-cond1 ? (function() {
-  const a = 123;
-  const b = 456;
-  return a + b;
-})() : (function() {
-  const a = 789;
-  const b = 987;
-  return b - a;
-})();
-
-cond1 ? (function() {
-  const a = 123;
-  const b = 456;
-  return a + b;
-})() : (cond2 ? (function() {
-  const a = 789;
-  const b = 987;
-  return b - a;
-})() : (function() {
-  const a = 123;
-  const b = 789;
-  return a * b;
-})());
 ```
 
 By inspecting the Wyrd compilation result, we can see that Wyrd automatically compiles the `do` block conditional expression using JavaScript IIFE \(Immediately Invoked Function Expression\). 

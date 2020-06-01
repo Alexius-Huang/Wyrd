@@ -49,12 +49,6 @@ not False and True
 not (False or True) and False
 ```
 
-```javascript
-true && false || !(false);
-!(false) && true;
-!(false || true) && false;
-```
-
 And of course, you can chain not only `Bool` type values, you can chain multiple comparison operations:
 
 ```text
@@ -62,13 +56,6 @@ And of course, you can chain not only `Bool` type values, you can chain multiple
 5 * 3 < 15 - 6 * 8
 11 >= 7 + 7 or 3 <= (6 + 2) / 3
 8 / (4 * 2) > 3 and not 1 + 2 * 3 == 7 or a + b / c * d != w - x * y
-```
-
-```javascript
-3 + 1 > 2;
-5 * 3 < 15 - (6 * 8);
-11 >= 7 + 7 || 3 <= (6 + 2) / 3;
-8 / (4 * 2) > 3 && !(1 + (2 * 3) === 7) || a + (b / c * d) !== w - (x * y);
 ```
 
 > TODO: [Handle Logical Expressions Where AND/OR and NOT Operation Should Only Accept Boolean Values](https://github.com/Maxwell-Alexius/Wyrd/issues/96)
