@@ -2,15 +2,76 @@
 
 [![Build Status](https://travis-ci.org/Maxwell-Alexius/Wyrd-Lang.svg?branch=master)](https://travis-ci.org/Maxwell-Alexius/Wyrd-Lang) [![Coverage Status](https://coveralls.io/repos/github/Maxwell-Alexius/Wyrd/badge.svg?branch=master)](https://coveralls.io/github/Maxwell-Alexius/Wyrd?branch=master)
 
-**Wyrd** is a toy programming language \(**but it is evolving in high speed**\) whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/) and follows the Functional Programming paradigm.
+**Wyrd** is a strongly-typed toy programming language whose syntax is partially inspired by [Ruby lang](https://www.ruby-lang.org/en/).
 
-[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/) ****🚧Under Construction 🚧
+Although it may be a personal project, **it is evolving in high speed**. 🔥
+
+[**Check out new released Wryd documentation here!**](https://maxwell-alexius.gitbook.io/wyrd/) 🚧Under Construction 🚧
 
 Wyrd programming language compiles its code into JavaScript. The primary goal would be to write Front-End code and Back-End code \(NodeJS\) using Wyrd programming language. I may want to try writing React \(or Vue\) component code using Wyrd lang if possible.
+
+### Why the "Wyrd" Name?
+
+Wyrd although officially pronounced as "weird", but sometimes I accidentally pronounce it as "w-ei-rid". However, personally I think both of them are okay.
 
 [**Wyrd**](https://en.wikipedia.org/wiki/Wyrd) is a concept in Anglo-Saxon culture roughly corresponding to _fate or personal destiny_. The word is ancestral to Modern English weird, which retains its original meaning only dialectically.
 
 The cognate term in Old Norse is urðr, with a similar meaning, but also personalized as one of the Norns, Urðr and appearing in the name of the holy well Urðarbrunnr in [Norse mythology](https://en.wikipedia.org/wiki/Norse_mythology).
+
+### Install CLI
+
+Install the CLI globally:
+
+```text
+npm install -g @wyrd-cli
+```
+
+Check if the CLI is installed successfully:
+
+```text
+which wyrd
+```
+
+Create a simple "Hello world!" program and the file name will be `hello.wyrd`:
+
+```text
+# hello.wyrd
+
+def greet(msg: Str): Str => msg
+def greet(prefix: Str, msg: Str): Str do
+  prefix.concat("! ").concat(msg)
+end
+
+greet("Hello", "Wyrd is awesome!")
+greet("Wyrd is created by Alexius!")
+```
+
+Run the program:
+
+```text
+wyrd -e hello.wyrd
+```
+
+It should compile into `hello.js` file with the following content:
+
+```javascript
+function greet(msg) {
+  return msg;
+}
+
+function greet_1(prefix, msg) {
+  return prefix.concat('! ').concat(msg);
+}
+
+greet_1('Hello', 'Wyrd is awesome!');
+greet('Wyrd is created by Alexius!');
+```
+
+Congratulations! You've just compiled your first Wyrd program!
+
+You can also view the [wyrd-cli repository](https://github.com/Maxwell-Alexius/wyrd-cli) for more information about the usage of CLI.
+
+> @wyrd/cli is in early development, there will be more features released such as more compilation options. \(e.g. the `minify` option which compiles the minified version of the program\)
 
 ### Table of Content \[WIP\]
 
