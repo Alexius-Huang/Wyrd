@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "test:coverage": "jest --coverage",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "prepublish": "tsc"
   },
   "keywords": [],
   "author": "",
