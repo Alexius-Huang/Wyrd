@@ -1,13 +1,13 @@
 {
-  "name": "wyrd",
-  "version": "1.0.0",
+  "name": "@wyrd/compiler",
+  "version": "0.0.1-alpha",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "test:coverage": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "prepublish": "tsc"
+    "prepare": "tsc; node ./copy-lib.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "@types/jest": "^25.2.1",
     "coveralls": "^3.1.0",
     "jest": "^26.0.1",
+    "shelljs": "^0.8.4",
     "ts-jest": "^25.5.1",
     "typescript": "^3.8.3"
   }
