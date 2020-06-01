@@ -42,13 +42,24 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
   * If-Condition Must Receive Boolean Type
   * Return Type of Each Branch Must Be Identical
   * Conditional Expression Without Else Part Returns "Maybe" Types
+* [Function Declaration](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/function-declaration)
+  * Components of Function's Declaration
+  * Declaration Syntax
+    * "Do-Block" Declaration
+    * "One-Liner Arrow" Declaration
+    * Functions Without Arguments
+    * Returned Result Type Checking
+  * Function Overriding
+    * Function Redeclaration is Prohibited
+    * Overriding Function
+    * Before and After Override Function
+    * Allows Change of Output Types
+  * Function Overloading
+    * Identical Function Name with Different Arguments Pattern
+    * Overriding Overloaded Function
 * [Method Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#method-invocation) \(Legacy\)
 * Functions \(Legacy\)
-  * [Function Declaration as Expression](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration-as-expression)
-  * [Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-declaration)
-  * [Function Overloading](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-overloading)
   * [Function Invocation](https://github.com/Maxwell-Alexius/Wyrd-Lang#function-invocation)
-  * [Override Function Declaration](https://github.com/Maxwell-Alexius/Wyrd-Lang#override-function-declaration)
 * [Comment](https://github.com/Maxwell-Alexius/Wyrd-Lang#comment) \(Legacy\)
 
 ### Supported Syntax Rules
@@ -80,95 +91,6 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 ('Hello').concat((' world').concat(' , Wyrd-Lang!'));
 ```
 
-#### Function Declaration as Expression
-
-To declare one-liner function, we can use the `def ... => <Expression>` syntax:
-
-**Wyrd Code**
-
-```text
-def addition(x: Num, y: Num): Num => x + y
-def devilNumber: Num => 666
-def complexArithmetic(w: Num, x: Num, y: Num, z: Num): Num => (x + y) * (z / w)
-```
-
-**Compiled Result**
-
-```javascript
-function addition(x, y) {
-  return x + y;
-}
-
-function devilNumber() {
-  return 666;
-}
-
-function complexArithmetic(w, x, y, z) {
-  return (x + y) * (z / w);
-}
-```
-
-#### Function Declaration
-
-You can also declare block-level function using the `do` block:
-
-**Wyrd Code**
-
-```text
-def addition(x: Num, y: Num): Num do
-  x + y
-end
-
-def complexArithmetic(w: Num, x: Num, y: Num, z: Num): Num do
-  a = x + y * z
-  b = w - 2 / a + 1
-  b
-end
-```
-
-**Compiled Result**
-
-```javascript
-function addition(x, y) {
-  return x + y;
-}
-
-function complexArithmetic(w, x, y, z) {
-  const a = x + (y * z);
-  const b = w - (2 / a) + 1;
-  return b;
-}
-```
-
-#### Function Overloading
-
-Different from JavaScript, in Wyrd-Lang, you can declare function with same name but different input parameter pattern. It is so-called **Function Overloading**:
-
-**Wyrd Code**
-
-```text
-def addition(x: Num, y: Num): Num => x + y
-def addition(x: Num, y: Num, z: Num): Num => x + y + z
-
-addition(1, 2, 3)
-addition(1, 2)
-```
-
-**Compiled Result**
-
-```javascript
-function addition(x, y) {
-  return x + y;
-}
-
-function addition_1(x, y, z) {
-  return x + y + z;
-}
-
-addition_1(1, 2, 3);
-addition(1, 2);
-```
-
 #### Function Invocation
 
 **Wyrd Code**
@@ -193,35 +115,6 @@ funcE(1, funcF(2, 3, funcG(4)), 5);
 funcI(1, (funcJ(2, 3) + 4) * funcK(5));
 funcL(1 / (funcM(2, 3) - 4), 5);
 funcN((1 - (funcO(2) * 3)) / 4, funcP(5));
-```
-
-#### Override Function Declaration
-
-Whenever you need to override **previously declared function with specific input type**, you must add `override` keyword before function declaration:
-
-**Wyrd Code**
-
-```text
-def randomCalc(x: Num, y: Num): Num => x + y
-randomCalc(1, 2)
-
-override def randomCalc(x: Num, y: Num): Num => (x + y) * 2
-randomCalc(1, 2)
-```
-
-**Compiled Result**
-
-```javascript
-function randomCalc(x, y) {
-  return x + y;
-}
-
-randomCalc(1, 2);
-function randomCalc$1(x, y) {
-  return (x + y) * 2;
-}
-
-randomCalc$1(1, 2);
 ```
 
 #### Comment

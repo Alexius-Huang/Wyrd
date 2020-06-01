@@ -9,5 +9,5 @@
 * [Arithmetics](wyrd-syntax-rules/arithmetics.md)
 * [Logical Expressions](wyrd-syntax-rules/logical-expressions.md)
 * [Conditional Expressions](wyrd-syntax-rules/conditional-expressions.md)
-* [Function Declaration](wyrd-syntax-rules/function.md)
+* [Function Declaration](wyrd-syntax-rules/function-declaration.md)
 
