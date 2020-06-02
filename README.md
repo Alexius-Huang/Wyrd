@@ -23,7 +23,7 @@ The cognate term in Old Norse is urðr, with a similar meaning, but also persona
 Install the CLI globally:
 
 ```text
-npm install -g @wyrd-cli
+npm install -g @wyrd/cli
 ```
 
 Check if the CLI is installed successfully:
