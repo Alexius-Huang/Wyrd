@@ -21,7 +21,7 @@ export function compile(options?: T.CompilerOptions): T.CompileResult {
   if (options?.entry)
     rootDir = path.dirname(options.entry);
   else
-    rootDir = options?.dir ?? __dirname;
+    rootDir = options?.dir ?? process.cwd();
 
   /* TODO: Load as library */
   let globalScope = new Scope();
