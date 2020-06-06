@@ -67,4 +67,10 @@ export default class TokenTracker {
   public hasNext(): boolean {
     return this.index !== this.tokens.length - 1;
   }
+
+  public skipNewlines() {
+    while (this.type === 'newline' && this.hasNext())
+      this.next();
+    return;
+  }
 }
