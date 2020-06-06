@@ -1,0 +1,37 @@
+record UserInfo {
+  Str name,
+  Num age,
+  Bool hasPet
+}
+
+record UserAccount {
+  Str email,
+  Str password,
+  UserInfo info
+}
+
+maxwell = UserInfo {
+  name: "Maxwell",
+  age: 18,
+  hasPet: False
+}
+
+user1 = UserAccount {
+  email: "example@email.com",
+  password: "HA$H3D",
+  info: maxwell
+}
+
+user2 = UserAccount {
+  email: "example@email.com",
+  password: "HA$H3D",
+  info: UserInfo {
+    name: "Maxwell",
+    age: 18,
+    hasPet: False
+  }
+}
+
+info = user1->info
+age = info->age
+name = user1->info->name
