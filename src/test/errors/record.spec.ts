@@ -59,6 +59,32 @@ describe('Error: Record', () => {
       expect(() => compile({ program: program2 }))
         .toThrow('ParserError: Cannot declare record `UserInfo`, since the name has already been used');
     });
+
+    it('throws error when multiline record declaration missing comma', () => {
+      const program = `\
+      record UserInfo {
+        Str name
+        Num age,
+        Bool hasPet
+      }
+      `;
+
+      expect(() => compile({ program }))
+        .toThrow('ParserError: Expect more definition of record `UserInfo` to dilimited by comma, instead got token of type `builtin-type`');
+    });
+
+    it('throws error when multiline record declaration\'s last property ends with comma', () => {
+      const program = `\
+      record UserInfo {
+        Str name,
+        Num age,
+        Bool hasPet,
+      }
+      `;
+
+      expect(() => compile({ program }))
+        .toThrow('ParserError: Expect record `UserInfo` to declare the type of the property first, instead got token of type `rcurly`');
+    });
   });
 
   describe('Literal', () => {
@@ -110,8 +136,34 @@ describe('Error: Record', () => {
 
     it('throws error when key-value pair is not delimited by `colon`', () => {
       const program = '\nUserInfo { name "Maxwell", age: 18, hasPet: True }';
-      expect(() => compile({ program: program, ...compilerOptions }))
+      expect(() => compile({ program, ...compilerOptions }))
         .toThrow('ParserError: Expect key-value pairs of record `UserInfo` to dilimited by `colon`, instead got token of type `string`');
+    });
+
+    it('throws error when comma is missing in multiline record literal', () => {
+      const program = `
+      UserInfo {
+        name: "Maxwell",
+        age: 18
+        hasPet: False
+      }
+      `;
+
+      expect(() => compile({ program, ...compilerOptions }))
+        .toThrow('ParserError: Expect record to closed with `rcurly` or contain new properties delimited by `comma`, instead got token of type: `ident`');
+    });
+
+    it('throws error when last property ends with a comma', () => {
+      const program = `
+      UserInfo {
+        name: "Maxwell",
+        age: 18,
+        hasPet: False,
+      }
+      `;
+
+      expect(() => compile({ program, ...compilerOptions }))
+        .toThrow('ParserError: Expect to have property name of record `UserInfo`, instead got token of type `rcurly`');
     });
   });
 

@@ -273,5 +273,43 @@ describe('Token Tracker', () => {
         expect(tt.hasNext()).toBe(false);
       });
     });
+
+    describe('TokenTracker#skipNewlines', () => {
+      it('skips the continuous newline tokens', () => {
+        const tokens: Array<T.Token> = [
+          { type: 'ident', value: 'foo' },
+          { type: 'eq', value: '=' },
+          { type: 'newline', value: '\n' },
+          { type: 'newline', value: '\n' },
+          { type: 'newline', value: '\n' },
+          { type: 'newline', value: '\n' },
+          { type: 'number', value: '1' },
+          { type: 'plus', value: '+' },
+          { type: 'number', value: '2' },
+          { type: 'newline', value: '\n' },
+          { type: 'newline', value: '\n' },
+          { type: 'newline', value: '\n' },
+        ];
+      
+        let tt: TokenTracker = new TokenTracker(tokens);
+        expect(tt.is('ident')).toBeTruthy();
+        tt.next();
+        tt.skipNewlines();
+        expect(tt.is('eq')).toBeTruthy();
+        tt.next();
+        tt.skipNewlines();
+        expect(tt.is('number')).toBeTruthy();
+        tt.next();
+        tt.skipNewlines();
+        expect(tt.is('plus')).toBeTruthy();
+        tt.next();
+        tt.skipNewlines();
+        expect(tt.is('number')).toBeTruthy();
+        tt.next();
+        tt.skipNewlines();
+        expect(tt.is('newline')).toBeTruthy();
+        expect(tt.hasNext()).toBeFalsy();
+      });
+    });
   });
 });
