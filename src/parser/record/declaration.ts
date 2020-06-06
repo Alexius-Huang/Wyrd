@@ -37,6 +37,8 @@ function parseRecordDefinition(
     ParserError(`Expect record declaration \`${record.name}\` is not blank`);
 
   while (true) {
+    tt.skipNewlines();
+
     // TODO: Support type other than builtin-type
     if (tt.isNot('builtin-type'))
       ParserError(`Expect record \`${record.name}\` to declare the type of the property first, instead got token of type \`${tt.type}\``);
@@ -51,6 +53,7 @@ function parseRecordDefinition(
     record.setProperty(t, v);
 
     if (tt.isNot('comma')) {
+      tt.skipNewlines();
       if (tt.is('rcurly')) break;
       ParserError(`Expect more definition of record \`${record.name}\` to dilimited by comma, instead got token of type \`${tt.type}\``);
     }

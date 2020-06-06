@@ -25,6 +25,8 @@ export function parseRecordLiteral(
   const recordDef = scope.getRecord(recordName);
   const requiredPropertySet = new Set(recordDef.propertySet);
   while (true) {
+    tt.skipNewlines();
+
     if (tt.isNot('ident'))
       ParserError(`Expect to have property name of record \`${recordName}\`, instead got token of type \`${tt.type}\``);
     const propName = tt.value;
@@ -34,37 +36,42 @@ export function parseRecordLiteral(
       ParserError(`Expect key-value pairs of record \`${recordName}\` to dilimited by \`colon\`, instead got token of type \`${tt.type}\``);
     tt.next(); // Skip `colon`
 
-    if (requiredPropertySet.has(propName)) {
-      requiredPropertySet.delete(propName);
-      const propDef = recordDef.getProperty(propName);
-      const propValue: T.RecordPropertyValue = {
-        name: propName,
-        type: propDef.type,
-        value: EmptyExpression,
-      };
-
-      let propValueExpr: T.Expr = EmptyExpression;
-      while (true) {
-        propValueExpr = parseExpr();
-        tt.next();
-        if (tt.is('comma') || tt.is('rcurly')) break;
-      }
-
-      if (propValueExpr.return.isNotEqualTo(propValue.type))
-        ParserError(`Expect property \`${propName}\` in record \`${recordDef.name}\` to receive value of type \`${propDef.type}\`, instead got value of type \`${propValueExpr.return}\``);
-
-      propValue.value = propValueExpr;
-      result.properties.push(propValue);
-    } else {
+    if (!requiredPropertySet.has(propName))
       ParserError(`Property \`${propName}\` isn't exist in definition of record \`${recordName}\``);
+    requiredPropertySet.delete(propName);
+    const propDef = recordDef.getProperty(propName);
+    const propValue: T.RecordPropertyValue = {
+      name: propName,
+      type: propDef.type,
+      value: EmptyExpression,
+    };
+
+    let propValueExpr: T.Expr = EmptyExpression;
+    const propValueAST: T.AST = [];
+    while (true) {
+      propValueExpr = parseExpr(undefined, { scope, ast: propValueAST });
+      propValueAST.push(propValueExpr);
+      tt.next();
+      if (tt.is('comma') || tt.is('rcurly')) break;
+      if (tt.is('newline')) {
+        tt.skipNewlines();
+        if (tt.is('rcurly')) break;
+        ParserError(`Expect record to closed with \`rcurly\` or contain new properties delimited by \`comma\`, instead got token of type: \`${tt.type}\``);
+      }
     }
+
+    if (propValueExpr.return.isNotEqualTo(propValue.type))
+      ParserError(`Expect property \`${propName}\` in record \`${recordDef.name}\` to receive value of type \`${propDef.type}\`, instead got value of type \`${propValueExpr.return}\``);
+
+    propValue.value = propValueExpr;
+    result.properties.push(propValue);
 
     if (tt.isNot('comma') && tt.is('rcurly')) break;
     tt.next(); // Skip comma
   }
 
   if (requiredPropertySet.size !== 0) {
-    const formattedStr = Array.from(requiredPropertySet).map(v => `\`${v}\``).join(', ')
+    const formattedStr = Array.from(requiredPropertySet).map(v => `\`${v}\``).join(', ');
     ParserError(`Property of record \`${recordName}\` is missing: ${formattedStr}`);
   }
 

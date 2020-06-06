@@ -1,0 +1,11 @@
+record UserInfo {
+  Str name,
+  Num age,
+  Bool hasPet
+}
+
+maxwell = UserInfo {
+  name: "Maxwell",
+  age: 18,
+  hasPet: False
+}
