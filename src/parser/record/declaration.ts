@@ -23,7 +23,7 @@ export function parseRecordDeclaration(
   tt.next(); // Skip `{`
 
   const record = scope.createRecord(name);
-  parseRecordDefinition(tt, parseExpr, record);
+  parseRecordDefinition(tt, parseExpr, scope, record);
 
   return VoidExpression;
 }
@@ -31,6 +31,7 @@ export function parseRecordDeclaration(
 function parseRecordDefinition(
   tt: TokenTracker,
   parseExpr: T.ExpressionParsingFunction,
+  scope: Scope,
   record: Record,
 ): Record {
   if (tt.is('rcurly'))
@@ -38,12 +39,18 @@ function parseRecordDefinition(
 
   while (true) {
     tt.skipNewlines();
+    if (tt.is('rcurly'))
+      ParserError('Expect to declare new property-value pair, instead got token of typr `rcurly`');
 
-    // TODO: Support type other than builtin-type
-    if (tt.isNot('builtin-type'))
+    if (tt.is('ident')) {
+      if (!scope.hasRecord(tt.value))
+        ParserError(`Unidentified token of value \`${tt.value}\``);
+    }
+    else if (tt.isNot('builtin-type'))
       ParserError(`Expect record \`${record.name}\` to declare the type of the property first, instead got token of type \`${tt.type}\``);
+
     const t = new DT(tt.value);
-    tt.next(); // Skip `type` declaration
+    tt.next(); // Skip `type` or `ident` declaration
 
     if (tt.isNot('ident'))
       ParserError(`Expect record \`${record.name}\` to declare the name of the property after type declaration, instead got token of type \`${tt.type}\``);

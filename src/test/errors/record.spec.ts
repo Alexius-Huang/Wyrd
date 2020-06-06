@@ -31,7 +31,7 @@ describe('Error: Record', () => {
 
       const program2 = '\nrecord UserInfo { name Str }\n';
       expect(() => compile({ program: program2 }))
-        .toThrow('ParserError: Expect record `UserInfo` to declare the type of the property first, instead got token of type `ident`');
+        .toThrow('ParserError: Unidentified token of value `name`');
 
       const program3 = '\nrecord UserInfo { Str name Num age }\n';
       expect(() => compile({ program: program3 }))
@@ -83,7 +83,7 @@ describe('Error: Record', () => {
       `;
 
       expect(() => compile({ program }))
-        .toThrow('ParserError: Expect record `UserInfo` to declare the type of the property first, instead got token of type `rcurly`');
+        .toThrow('Expect to declare new property-value pair, instead got token of typr `rcurly`');
     });
   });
 
