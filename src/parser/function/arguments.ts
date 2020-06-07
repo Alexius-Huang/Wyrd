@@ -2,11 +2,11 @@ import * as T from '../../types';
 import { TokenTracker, DataType as DT, Scope } from '../utils';
 import { ParserError } from '../error';
 
-export function parseFunctionArguments(
+export function parseArguments(
   tt: TokenTracker,
   scope: Scope,
 ): Array<T.Argument> {
-  tt.next();
+  tt.next(); // Skip 'lparen'
   const result: Array<T.Argument> = [];
 
   while (true) {
