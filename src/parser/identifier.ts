@@ -1,10 +1,10 @@
 import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
-import { parseFunctionInvokeExpr } from './function-invocation';
+import { parseFunctionInvokeExpr } from './function';
+import { parseMethodInvokeExpr } from './method';
 import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
-import { parseMethodInvokeExpr } from './method/invocation';
 import { parseTypeLiteral } from './type-literal';
 
 export function parseIdentifier(

@@ -1,7 +1,6 @@
 import * as T from '../../types';
 import { TokenTracker, DataType as DT, Scope, Parameter } from '../utils';
-import { parseArguments } from './arguments';
-import { parseBlock } from './block';
+import { parseArguments, parseBlock } from '../function';
 import { ParserError, ParserErrorIf } from '../error';
 
 export function parseMethodDeclaration(
