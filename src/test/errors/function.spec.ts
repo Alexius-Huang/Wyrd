@@ -15,7 +15,15 @@ addition(1, 2)
         .toThrowError('ParserError: Overriding function `addition` with existing input pattern `Num.Num`; to override the function, address it with `override` keyword before `def` token');
     });
   });
-  
+
+  describe('No Argument Declaration', () => {
+    it('throws error when no argument is declared with empty parentheses exist', () => {
+      const program = `def hello(): Str => "World"\n`;
+      expect(() => compile({ program }))
+        .toThrow('ParserError: Expect function `hello` must declare at least one argument if parentheses exists, else remove the parenthese if no argument declared');
+    });
+  });
+
   describe('No Override Function Declaration Needed', () => {
     it('throws error when function do not need any override declaration where function doesn\'t exist', () => {
       const program = `\

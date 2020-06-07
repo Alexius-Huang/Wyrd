@@ -1,2 +1,5 @@
 export { parseFunctionDeclaration } from './declaration';
-export { parseMethodDeclaration } from './method-declaration';
+export { parseFunctionInvokeExpr } from './invocation';
+export { parseBlock } from './block';
+export { parseArguments } from './arguments';
+export { parseParameters } from './parameters';

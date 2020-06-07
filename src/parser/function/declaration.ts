@@ -1,6 +1,6 @@
 import * as T from '../../types';
 import { TokenTracker, DataType as DT, Scope, Parameter } from '../utils';
-import { parseFunctionArguments } from './arguments';
+import { parseArguments } from './arguments';
 import { parseBlock } from './block';
 import { ParserError, ParserErrorIf } from '../error';
 
@@ -30,7 +30,10 @@ export function parseFunctionDeclaration(
 
   /* Arguemnt and parameter parsing */
   if (tt.is('lparen'))
-    result.arguments = parseFunctionArguments(tt, functionalScope);
+    if (tt.peekIs('rparen'))
+      ParserError(`Expect function \`${result.name}\` must declare at least one argument if parentheses exists, else remove the parenthese if no argument declared`);
+    else
+      result.arguments = parseArguments(tt, functionalScope);
   const parameter = Parameter.from(result.arguments.map(arg => arg.type));
 
   if (tt.isNot('colon'))

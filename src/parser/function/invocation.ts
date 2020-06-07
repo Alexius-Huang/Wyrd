@@ -1,7 +1,7 @@
-import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT, Parameter } from './utils';
-import { ParserErrorIf } from './error';
-import { parseParameters } from './function/parameters';
+import * as T from '../../types';
+import { TokenTracker, Scope, DataType as DT, Parameter } from '../utils';
+import { parseParameters } from './parameters';
+import { ParserErrorIf } from '../error';
 
 export function parseFunctionInvokeExpr(
   tt: TokenTracker,
