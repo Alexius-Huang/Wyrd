@@ -1,11 +1,12 @@
 import * as T from '../../types';
-import { TokenTracker, Scope } from '../utils';
+import { TokenTracker, Scope, DataType as DT } from '../utils';
 import { parseNumberLiteral } from './number';
 import { parseStringLiteral } from './string';
 import { parseBooleanLiteral } from './boolean';
 import { parseNullLiteral } from './null';
 import { parseMethodInvokeExpr } from '../method/invocation';
 import { ParserError } from '../error';
+import { parseConstantDeclaration } from '../assignment/constant-declaration';
 
 const primitiveMapParsingFunctions = new Map([
   ['number', parseNumberLiteral],
@@ -20,9 +21,24 @@ export function parsePrimitive(
   scope: Scope,
   prevExpr?: T.Expr,
 ): T.Expr {
-  const func = primitiveMapParsingFunctions.get(tt.type) as
+  const parseSpecificPrimitive = primitiveMapParsingFunctions.get(tt.type) as
     (tt: TokenTracker, scope: Scope, prevExpr?: T.Expr) => T.Expr;
-  let result = func(tt, scope, prevExpr);
+  let result = parseSpecificPrimitive(tt, scope, prevExpr);
+
+  if (result.type === 'NullLiteral') {
+    /* Null type of constant declaration */
+    if (tt.peekIs('ident')) {
+      tt.next();
+      if (tt.peekIs('eq'))
+        return parseConstantDeclaration(tt, parseExpr, scope, {
+          type: 'TypeLiteral',
+          value: 'Null',
+          typeObject: DT.Null,
+          return: DT.Void
+        });
+      ParserError(`Unhandled token of type \`${tt.type}\``);
+    }
+  }
 
   /* Parse wuth method invocation if value chained directly with dot token */
   while (tt.peekIs('dot')) {

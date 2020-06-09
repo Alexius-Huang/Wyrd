@@ -3,6 +3,7 @@ import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseFunctionInvokeExpr } from './function';
 import { parseMethodInvokeExpr } from './method';
 import { parseAssignmentExpr } from './assignment';
+import { parseConstantDeclaration } from './assignment/constant-declaration';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
 import { parseTypeLiteral } from './type-literal';
 import { ParserError } from './error';
@@ -56,7 +57,16 @@ export function parseIdentifier(
   }
 
   else if (scope.hasGenericType(tokenName)) {
-    return parseTypeLiteral(tt, parseExpr, scope);
+    const typeLiteral = parseTypeLiteral(tt, parseExpr, scope);
+
+    if (tt.peekIs('ident')) {
+      tt.next();
+
+      if (tt.peekIs('eq'))
+        return parseConstantDeclaration(tt, parseExpr, scope, typeLiteral);
+      ParserError(`Unhandled token of type \`${tt.type}\``);
+    }
+    return typeLiteral;
   }
 
   else if (scope.hasGenericPlaceholder(tokenName)) {
