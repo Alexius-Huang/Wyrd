@@ -4,17 +4,17 @@ import { DataType as DT, Scope } from '../../parser/utils';
 import { VoidExpression } from '../../parser/constants';
 
 const tokens: Array<Token> = [
-  { type: 'ident', value: 'foo' },
-  { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
   { type: 'ident', value: 'cond' },
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'a' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'b' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '456' },
@@ -30,46 +30,41 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
-    return: DT.Void,
-    expr1: Var('foo', DT.Maybe.Num),
-    expr2: {
-      type: 'ConditionalExpr',
-      return: DT.Maybe.Num,
-      condition: Var('cond', DT.Bool),
-      expr1: {
-        type: 'DoBlockExpr',
-        body: [
-          {
-            type: 'AssignmentExpr',
-            return: DT.Void,
-            expr1: Var('a', DT.Num),
-            expr2: NumberLiteral(123),
-          },
-          {
-            type: 'AssignmentExpr',
-            return: DT.Void,
-            expr1: Var('b', DT.Num),
-            expr2: NumberLiteral(456),
-          },
-          Arithmetic('a', '+', 'b')
-        ],
-        return: DT.Num,
-      },
-      expr2: VoidExpression,
+    type: 'ConditionalExpr',
+    return: DT.Maybe.Num,
+    condition: Var('cond', DT.Bool),
+    expr1: {
+      type: 'DoBlockExpr',
+      body: [
+        {
+          type: 'ConstDeclaration',
+          return: DT.Void,
+          expr1: Var('a', DT.Num),
+          expr2: NumberLiteral(123),
+        },
+        {
+          type: 'ConstDeclaration',
+          return: DT.Void,
+          expr1: Var('b', DT.Num),
+          expr2: NumberLiteral(456),
+        },
+        Arithmetic('a', '+', 'b')
+      ],
+      return: DT.Num,
     },
-  },
+    expr2: VoidExpression,
+  }
 ];
 
 const compiled = `\
-const foo = cond ? (function () {
+cond ? (function () {
   const a = 123;
   const b = 456;
   return a + b;
 })() : null;
 `;
 
-const minified = 'const foo=cond?(function(){const a=123;const b=456;return a+b;})():null;';
+const minified = 'cond?(function(){const a=123;const b=456;return a+b;})():null;';
 
 const scope = (s: Scope): Scope => {
   s.createConstant('cond', DT.Bool);

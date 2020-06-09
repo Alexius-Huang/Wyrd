@@ -79,3 +79,51 @@ export function FundamentalCompileTest(
     }  
   });
 }
+
+FundamentalCompileTest.todo = function(name: string, option?: object) {
+  it.todo(`performs fundamental compile test for \`${name}\``);
+}
+
+FundamentalCompileTest.parser = function (name: string,
+  options?: {
+    debugParser?: boolean;
+    focusedASTIndex?: number;
+  },
+) {
+  const [_, testCaseName] = name.split('/');
+  const testSamplePath = Path.join(__dirname, `../samples/${name}`);
+  const dir = Path.dirname(testSamplePath);
+  const debugParser = options?.debugParser ?? false;
+
+  describe(testCaseName.split('-').join(' '), () => {
+    it('parses the tokens into AST correctly', async () => {
+      const testCase = await import(testSamplePath);
+      const tokens = testCase.tokens;
+      const ast = testCase.ast;
+      const compilerOptions = testCase.compilerOptions;
+
+      let globalScope = new Scope();
+
+      const listGT = globalScope.declareGenericType('List');
+      listGT.declareTypeParameter('element');
+      globalScope = includeLibrary('Core', globalScope).scope;
+
+      setupBuiltinOperators(globalScope);
+
+      if (compilerOptions?.scopeMiddleware)
+        globalScope = compilerOptions.scopeMiddleware(globalScope);
+
+      const { ast: result } = parse(tokens, {
+        rootDir: dir,
+        defaultScope: globalScope,
+        mainFileOnly: compilerOptions?.mainFileOnly ?? false
+      });
+      if (debugParser) {
+        const index = options?.focusedASTIndex ?? 0;
+        console.log(JSON.stringify(result[index], undefined, 2));
+      }
+      expect(result.length).toBe(ast.length);
+      expect(result).toMatchObject(ast);
+    });
+  });
+}

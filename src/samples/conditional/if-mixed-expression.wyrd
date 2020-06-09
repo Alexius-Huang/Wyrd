@@ -1,14 +1,14 @@
-mixed1 = if age < 18 then
-           "youngster"
-         elif age <= 60 => "adult"
-         elif age < 100 then
-           "elder"
-         else => "centenarian"
+Str mixed1 = if age < 18 then
+               "youngster"
+             elif age <= 60 => "adult"
+             elif age < 100 then
+               "elder"
+             else => "centenarian"
 
-mixed2 = if age < 18 => "youngster"
-         elif age <= 60 then
-           "adult"
-         elif age < 100 => "elder"
-         else then
-           "centenarian"
-         end
+Str mixed2 = if age < 18 => "youngster"
+             elif age <= 60 then
+               "adult"
+             elif age < 100 => "elder"
+             else then
+               "centenarian"
+             end

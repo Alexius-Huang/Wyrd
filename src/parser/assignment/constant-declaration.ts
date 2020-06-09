@@ -37,7 +37,7 @@ export function parseConstantDeclaration(
   do {
     const expr = parseExpr(undefined, { scope, ast: tempAST });
     tt.next();
-    tempAST.push(expr);
+    tempAST.push(expr);    
   } while (tt.isNot('newline'));
 
   result.expr2 = tempAST[0];

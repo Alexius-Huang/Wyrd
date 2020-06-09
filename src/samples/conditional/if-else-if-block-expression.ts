@@ -3,6 +3,7 @@ import { NumberLiteral, Var, Arithmetic, StringLiteral } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'example' },
   { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
@@ -10,10 +11,12 @@ const tokens: Array<Token> = [
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'a' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'b' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '456' },
@@ -34,10 +37,12 @@ const tokens: Array<Token> = [
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
   { type: 'string', value: 'Hello' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'bar' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
@@ -59,10 +64,12 @@ const tokens: Array<Token> = [
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'baz' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '666' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'bazz' },
   { type: 'eq', value: '=' },
   { type: 'string', value: 'Devil Number: ' },
@@ -83,10 +90,12 @@ const tokens: Array<Token> = [
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'a' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '456' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'b' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '789' },
@@ -108,7 +117,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('example', DT.Str),
     expr2: {
@@ -119,13 +128,13 @@ const ast: AST = [
         type: 'DoBlockExpr',
         body: [
           {
-            type: 'AssignmentExpr',
+            type: 'ConstDeclaration',
             return: DT.Void,
             expr1: Var('a', DT.Num),
             expr2: NumberLiteral(123),
           },
           {
-            type: 'AssignmentExpr',
+            type: 'ConstDeclaration',
             return: DT.Void,
             expr1: Var('b', DT.Num),
             expr2: NumberLiteral(456),
@@ -148,13 +157,13 @@ const ast: AST = [
           type: 'DoBlockExpr',
           body: [
             {
-              type: 'AssignmentExpr',
+              type: 'ConstDeclaration',
               return: DT.Void,
               expr1: Var('foo', DT.Str),
               expr2: StringLiteral('Hello')
             },
             {
-              type: 'AssignmentExpr',
+              type: 'ConstDeclaration',
               return: DT.Void,
               expr1: Var('bar', DT.Num),
               expr2: NumberLiteral(123),
@@ -185,13 +194,13 @@ const ast: AST = [
             type: 'DoBlockExpr',
             body: [
               {
-                type: 'AssignmentExpr',
+                type: 'ConstDeclaration',
                 return: DT.Void,
                 expr1: Var('baz', DT.Num),
                 expr2: NumberLiteral(666)
               },
               {
-                type: 'AssignmentExpr',
+                type: 'ConstDeclaration',
                 return: DT.Void,
                 expr1: Var('bazz', DT.Str),
                 expr2: StringLiteral('Devil Number: '),
@@ -218,13 +227,13 @@ const ast: AST = [
             type: 'DoBlockExpr',
             body: [
               {
-                type: 'AssignmentExpr',
+                type: 'ConstDeclaration',
                 return: DT.Void,
                 expr1: Var('a', DT.Num),
                 expr2: NumberLiteral(456),
               },
               {
-                type: 'AssignmentExpr',
+                type: 'ConstDeclaration',
                 return: DT.Void,
                 expr1: Var('b', DT.Num),
                 expr2: NumberLiteral(789),

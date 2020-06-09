@@ -4,8 +4,6 @@ import { DataType as DT, Scope } from '../../parser/utils';
 import { VoidExpression } from '../../parser/constants';
 
 const tokens: Array<Token> = [
-  { type: 'ident', value: 'example' },
-  { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
   { type: 'ident', value: 'cond1' },
   { type: 'keyword', value: 'do' },
@@ -86,121 +84,116 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
-    return: DT.Void,
-    expr1: Var('example', DT.Maybe.Str),
+    type: 'ConditionalExpr',
+    return: DT.Maybe.Str,
+    condition: Var('cond1', DT.Bool),
+    expr1: {
+      type: 'DoBlockExpr',
+      body: [
+        {
+          type: 'AssignmentExpr',
+          return: DT.Void,
+          expr1: Var('a', DT.Num),
+          expr2: NumberLiteral(123),
+        },
+        {
+          type: 'AssignmentExpr',
+          return: DT.Void,
+          expr1: Var('b', DT.Num),
+          expr2: NumberLiteral(456),
+        },
+        {
+          type: 'MethodInvokeExpr',
+          name: 'toString',
+          receiver: Arithmetic('a', '+', 'b'),
+          params: [],
+          return: DT.Str,
+        },
+      ],
+      return: DT.Str,
+    },
     expr2: {
       type: 'ConditionalExpr',
       return: DT.Maybe.Str,
-      condition: Var('cond1', DT.Bool),
+      condition: Var('cond2', DT.Bool),
       expr1: {
         type: 'DoBlockExpr',
         body: [
           {
             type: 'AssignmentExpr',
             return: DT.Void,
-            expr1: Var('a', DT.Num),
-            expr2: NumberLiteral(123),
+            expr1: Var('foo', DT.Str),
+            expr2: StringLiteral('Hello')
           },
           {
             type: 'AssignmentExpr',
             return: DT.Void,
-            expr1: Var('b', DT.Num),
-            expr2: NumberLiteral(456),
+            expr1: Var('bar', DT.Num),
+            expr2: NumberLiteral(123),
           },
           {
             type: 'MethodInvokeExpr',
-            name: 'toString',
-            receiver: Arithmetic('a', '+', 'b'),
-            params: [],
+            name: 'concat',
+            receiver: Var('foo', DT.Str),
+            params: [
+              {
+                type: 'MethodInvokeExpr',
+                name: 'toString',
+                receiver: Var('bar', DT.Num),
+                params: [],
+                return: DT.Str,
+              },
+            ],
             return: DT.Str,
           },
         ],
-        return: DT.Str,
+        return: DT.Str
       },
       expr2: {
         type: 'ConditionalExpr',
         return: DT.Maybe.Str,
-        condition: Var('cond2', DT.Bool),
+        condition: Var('cond3', DT.Bool),
         expr1: {
           type: 'DoBlockExpr',
           body: [
             {
               type: 'AssignmentExpr',
               return: DT.Void,
-              expr1: Var('foo', DT.Str),
-              expr2: StringLiteral('Hello')
+              expr1: Var('baz', DT.Num),
+              expr2: NumberLiteral(666)
             },
             {
               type: 'AssignmentExpr',
               return: DT.Void,
-              expr1: Var('bar', DT.Num),
-              expr2: NumberLiteral(123),
+              expr1: Var('bazz', DT.Str),
+              expr2: StringLiteral('Devil Number: '),
             },
             {
               type: 'MethodInvokeExpr',
               name: 'concat',
-              receiver: Var('foo', DT.Str),
+              receiver: Var('bazz', DT.Str),
               params: [
                 {
                   type: 'MethodInvokeExpr',
                   name: 'toString',
-                  receiver: Var('bar', DT.Num),
+                  receiver: Var('baz', DT.Num),
                   params: [],
                   return: DT.Str,
                 },
               ],
               return: DT.Str,
-            },
+            },  
           ],
           return: DT.Str
         },
-        expr2: {
-          type: 'ConditionalExpr',
-          return: DT.Maybe.Str,
-          condition: Var('cond3', DT.Bool),
-          expr1: {
-            type: 'DoBlockExpr',
-            body: [
-              {
-                type: 'AssignmentExpr',
-                return: DT.Void,
-                expr1: Var('baz', DT.Num),
-                expr2: NumberLiteral(666)
-              },
-              {
-                type: 'AssignmentExpr',
-                return: DT.Void,
-                expr1: Var('bazz', DT.Str),
-                expr2: StringLiteral('Devil Number: '),
-              },
-              {
-                type: 'MethodInvokeExpr',
-                name: 'concat',
-                receiver: Var('bazz', DT.Str),
-                params: [
-                  {
-                    type: 'MethodInvokeExpr',
-                    name: 'toString',
-                    receiver: Var('baz', DT.Num),
-                    params: [],
-                    return: DT.Str,
-                  },
-                ],
-                return: DT.Str,
-              },  
-            ],
-            return: DT.Str
-          },
-          expr2: VoidExpression,
-        },
+        expr2: VoidExpression,
       },
     },
-  },
+  }
 ];
 
 const compiled = `\
-const example = cond1 ? (function () {
+cond1 ? (function () {
   const a = 123;
   const b = 456;
   return (a + b).toString();
@@ -215,7 +208,7 @@ const example = cond1 ? (function () {
 })() : null));
 `;
 
-const minified = 'const example=cond1?(function(){const a=123;const b=456;return (a+b).toString();})():(cond2?(function(){const foo=\'Hello\';const bar=123;return foo.concat(bar.toString());})():(cond3?(function(){const baz=666;const bazz=\'Devil Number: \';return bazz.concat(baz.toString());})():null));';
+const minified = 'cond1?(function(){const a=123;const b=456;return (a+b).toString();})():(cond2?(function(){const foo=\'Hello\';const bar=123;return foo.concat(bar.toString());})():(cond3?(function(){const baz=666;const bazz=\'Devil Number: \';return bazz.concat(baz.toString());})():null));';
 
 const scope = (s: Scope): Scope => {
   s.createConstant('cond1', DT.Bool);

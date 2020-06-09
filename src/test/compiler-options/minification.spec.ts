@@ -20,6 +20,10 @@ function perform(name: string, sample: string) {
   });
 }
 
+perform.todo = function (name: string, sample?: string) {
+  it.todo(`minifies and compiles \`${name}\` correctly`);
+}
+
 function todo(name: string) {
   it.todo(`minifies and compiles \`${name}\` correctly`);
 }

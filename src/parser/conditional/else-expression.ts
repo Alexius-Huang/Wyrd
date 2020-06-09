@@ -33,8 +33,13 @@ function parseElseArrowExpr(
 
   tt.next(); // Skip 'arrow' keyword
 
-  while (tt.isNot('newline')) {
+  if (tt.is('newline'))
+    ParserError('Expect non-empty expression after \`arrow\` token');
+
+  while (true) {
     result.expr2 = parseExpr(result, { target: 'expr2', scope });
+
+    if (tt.peekIs('newline')) break;
     tt.next();
   }
 
@@ -62,10 +67,7 @@ function parseElseThenExpr(
 
   tt.next(); // Skip 'newline' token
   ParserErrorIf(tt.valueIsNot('end'), 'Expect `else then` expression to followed by an `end` keyword');
-
-  tt.next(); // Skip 'end' token
-  ParserErrorIf(tt.isNot('newline'), 'Expect no tokens after `end` keyword');
-
+  ParserErrorIf(!tt.peekIs('newline'), 'Expect no tokens after `end` keyword');
   return result;
 }
 
