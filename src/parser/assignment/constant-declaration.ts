@@ -35,11 +35,13 @@ export function parseConstantDeclaration(
     ParserError(`Expect constant \`${constName}\`'s declaration should have value, instead got \`newline\``);
 
   do {
-    const expr = parseExpr(tempAST.pop(), { ast: tempAST });
+    const expr = parseExpr(undefined, { scope, ast: tempAST });
     tt.next();
     tempAST.push(expr);
   } while (tt.isNot('newline'));
 
   result.expr2 = tempAST[0];
+  if (result.expr2.return.isNotAssignableTo(result.expr1.return))
+    ParserError(`Expect constant \`${constName}\` to assign value of type \`${result.expr1.return}\`, instead got: \`${result.expr2.return}\``);
   return result;
 }

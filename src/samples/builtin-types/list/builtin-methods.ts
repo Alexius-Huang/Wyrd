@@ -3,6 +3,10 @@ import { DataType as DT } from '../../../parser/utils';
 import { NumberLiteral, Var } from '../../helper';
 
 const tokens: Array<Token> = [
+  { type: 'ident', value: 'List' },
+  { type: 'lt', value: '<' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'gt', value: '>' },
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
   { type: 'lbracket', value: '[' },
@@ -14,6 +18,7 @@ const tokens: Array<Token> = [
   { type: 'rbracket', value: ']' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'result1' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'foo' },
@@ -24,6 +29,10 @@ const tokens: Array<Token> = [
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'List' },
+  { type: 'lt', value: '<' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'gt', value: '>' },
   { type: 'ident', value: 'result2' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'foo' },
@@ -41,7 +50,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('foo', DT.ListOf(DT.Num)),
     expr2: {
@@ -58,7 +67,7 @@ const ast: AST = [
     },
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('result1', DT.Num),
     expr2: {
@@ -72,7 +81,7 @@ const ast: AST = [
     },
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('result2', DT.ListOf(DT.Num)),
     expr2: {

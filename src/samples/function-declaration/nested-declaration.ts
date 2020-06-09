@@ -27,6 +27,7 @@ const tokens: Array<Token> = [
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'a' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'y' },
@@ -92,7 +93,7 @@ const ast: AST = [
         outputType: DT.Num,
         body: [
           {
-            type: 'AssignmentExpr',
+            type: 'ConstDeclaration',
             return: DT.Void,
             expr1: Var('a', DT.Num),
             expr2: Arithmetic('y', '*',  2)

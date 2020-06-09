@@ -3,7 +3,7 @@ def addition(x: Num, y: Num): Num do
 end
 
 def complexArithmetic(w: Num, x: Num, y: Num, z: Num): Num do
-  a = x + y * z
-  b = w - 2 / a + 1
+  Num a = x + y * z
+  Num b = w - 2 / a + 1
   b
 end

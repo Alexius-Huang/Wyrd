@@ -95,7 +95,7 @@ const nothing = null;
 const list = [1, 2, 3, 4, 5];
 `;
 
-const minified = '';// 'const foo=123;const bar=\'Hello world\';const baz=true;const nothing=null;const list=[1,2,3,4,5];';
+const minified = 'const foo=123;const bar=\'Hello world\';const baz=true;const nothing=null;const list=[1,2,3,4,5];';
 
 export {
   tokens,

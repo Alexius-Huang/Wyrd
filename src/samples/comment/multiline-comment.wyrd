@@ -1,4 +1,4 @@
-foo = 123 ## This is multiline comment
-bar = 456
+Num foo = 123 ## This is multiline comment
+Num bar = 456
 ##
-baz = 789
+Num baz = 789

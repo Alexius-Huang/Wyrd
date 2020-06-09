@@ -3,11 +3,13 @@ import { NumberLiteral, prioritize, Arithmetic, Var } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '1' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'bar' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '1' },
@@ -19,6 +21,7 @@ const tokens: Array<Token> = [
   { type: 'number', value: '4' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'baz' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '1' },
@@ -35,13 +38,13 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('foo', DT.Num),
     expr2: NumberLiteral(1),
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('bar', DT.Num),
     expr2: {
@@ -59,7 +62,7 @@ const ast: AST = [
     },
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('baz', DT.Num),
     expr2: {

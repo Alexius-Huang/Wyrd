@@ -23,7 +23,8 @@ export function parseBlock(
         continue;
       }
 
-      prevExpr.body.push(parseExpr(undefined, { scope, ast: prevExpr.body }));
+      const expr = parseExpr(undefined, { scope, ast: prevExpr.body });
+      prevExpr.body.push(expr);
       tt.next();
     }
 

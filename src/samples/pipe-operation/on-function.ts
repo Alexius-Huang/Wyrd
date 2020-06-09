@@ -42,6 +42,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'result' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
@@ -86,7 +87,7 @@ const ast: AST = [
     outputType: DT.Num,
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('result', DT.Num),
     expr2: {

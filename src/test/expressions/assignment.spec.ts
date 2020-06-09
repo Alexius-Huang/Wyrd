@@ -6,8 +6,6 @@ describe('Assignment Expressions', () => {
   });
 
   describe('Basic Assignment', () => {
-    FundamentalCompileTest('assignment/basic');
-
     describe('Arithmetic Expression', () => {
       FundamentalCompileTest('assignment/arithmetic-expression');
     });

@@ -3,6 +3,7 @@ import { StringLiteral, Var, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
   { type: 'lparen', value: '(' },
@@ -65,7 +66,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('foo', DT.Str),
     expr2: {

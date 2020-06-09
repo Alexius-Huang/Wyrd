@@ -49,6 +49,7 @@ const tokens: Array<Token> = [
   { type: 'builtin-type', value: 'Num' },
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'a' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'x' },
@@ -57,6 +58,7 @@ const tokens: Array<Token> = [
   { type: 'asterisk', value: '*' },
   { type: 'ident', value: 'z' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'b' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'w' },
@@ -100,7 +102,7 @@ const ast: AST = [
     outputType: DT.Num,
     body: [
       {
-        type: 'AssignmentExpr',
+        type: 'ConstDeclaration',
         return: DT.Void,
         expr1: { type: 'IdentLiteral', value: 'a', return: DT.Num },
         expr2: {
@@ -112,7 +114,7 @@ const ast: AST = [
         },
       },
       {
-        type: 'AssignmentExpr',
+        type: 'ConstDeclaration',
         return: DT.Void,
         expr1: { type: 'IdentLiteral', value: 'b', return: DT.Num },
         expr2: {

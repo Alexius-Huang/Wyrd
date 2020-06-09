@@ -37,7 +37,7 @@ describe('Compiler Option: Minification', () => {
   });
 
   describe('Assignment', () => {
-    perform('basic assignment', 'assignment/basic');
+    perform('constant declaration', 'assignment/constant-declaration');
     perform('assignment with arithmetic expressions', 'assignment/arithmetic-expression');
     perform('assignment with logical expressions', 'assignment/logical-expression');
     perform('assignment with method invocation', 'assignment/method-invocation');

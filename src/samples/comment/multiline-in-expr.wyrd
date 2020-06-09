@@ -1,4 +1,4 @@
-foo = ## Assignment ## 123
-baz = ##
+Num foo = ## Assignment ## 123
+Num baz = ##
   Assignment
 ## 789
