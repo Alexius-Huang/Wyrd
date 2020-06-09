@@ -100,6 +100,7 @@ export type Expr =
 | OrExpr
 | AndExpr
 | AssignmentExpr
+| ConstDeclaration
 | VarDeclaration
 | VarAssignmentExpr
 | PrioritizedExpr
@@ -181,6 +182,13 @@ export interface TypeLiteral extends Expression {
 export interface ThisLiteral extends Expression {
   type: 'ThisLiteral';
   return: DT;
+}
+
+export interface ConstDeclaration extends Expression {
+  type: 'ConstDeclaration';
+  expr1: IdentLiteral;
+  expr2: Expr;
+  return: typeof DT.Void;
 }
 
 export interface VarDeclaration extends Expression {

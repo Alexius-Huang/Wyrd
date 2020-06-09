@@ -46,6 +46,8 @@ export function generateCode(
         return codeGenRecordReferenceExpr(expr);
       case 'AssignmentExpr':
         return codeGenAssignmentExpr(expr);
+      case 'ConstDeclaration':
+        return codeGenConstDeclaration(expr);
       case 'VarDeclaration':
         return codeGenVarDeclaration(expr);
       case 'VarAssignmentExpr':
@@ -144,6 +146,14 @@ export function generateCode(
     if (minify)
       return { result: `const ${genExpr(expr.expr1).result}=${genExpr(expr.expr2).result}`, type: 'AssignmentExpr' };
     return { result: `const ${genExpr(expr.expr1).result} = ${genExpr(expr.expr2).result}`, type: 'AssignmentExpr' };
+  }
+
+  function codeGenConstDeclaration(expr: T.ConstDeclaration): CodeGenerationResult {
+    if (expr.expr2 === undefined)
+      CodeGenerateError('Expect constant declaration to have expression to evaluate');
+    if (minify)
+      return { result: `const ${expr.expr1.value}=${genExpr(expr.expr2).result}`, type: 'ConstDeclaration' };
+    return { result: `const ${expr.expr1.value} = ${genExpr(expr.expr2).result}`, type: 'ConstDeclaration' };
   }
 
   function codeGenVarDeclaration(expr: T.VarDeclaration): CodeGenerationResult {

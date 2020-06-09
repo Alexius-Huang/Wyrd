@@ -11,6 +11,7 @@ import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
 import { parseAssignmentExpr } from './assignment';
+import { parseConstantDeclaration } from './assignment/constant-declaration';
 import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
@@ -93,8 +94,18 @@ export function parse(
     if (tt.isOneOf('number', 'string', 'boolean', 'null'))
       return parsePrimitive(tt, parseExpr, scope, prevExpr);
 
-    if (tt.is('builtin-type'))
-      return parseTypeLiteral(tt, parseExpr, scope);
+    if (tt.is('builtin-type')) {
+      const typeLiteral = parseTypeLiteral(tt, parseExpr, scope);
+      if (tt.peekIs('ident')) {
+        tt.next();
+
+        if (tt.peekIs('eq'))
+          return parseConstantDeclaration(tt, parseExpr, scope, typeLiteral);
+        ParserError(`Unhandled token of type \`${tt.type}\``);
+      }
+
+      return typeLiteral;
+    }
 
     if (tt.is('ident'))
       return parseIdentifier(tt, parseExpr, scope, prevExpr);

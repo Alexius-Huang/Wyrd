@@ -1,0 +1,3 @@
+Num foo = 123
+Str bar = "Hello world"
+Bool baz = True

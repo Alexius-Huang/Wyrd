@@ -1,6 +1,10 @@
 import { FundamentalCompileTest } from '../helper';
 
 describe('Assignment Expressions', () => {
+  describe('Constant Declaration', () => {
+    FundamentalCompileTest('assignment/constant-declaration');
+  });
+
   describe('Basic Assignment', () => {
     FundamentalCompileTest('assignment/basic');
 

@@ -2,10 +2,10 @@ import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseFunctionInvokeExpr } from './function';
 import { parseMethodInvokeExpr } from './method';
-import { ParserErrorIf, ParserError } from './error';
 import { parseAssignmentExpr } from './assignment';
 import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
 import { parseTypeLiteral } from './type-literal';
+import { ParserError } from './error';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -52,7 +52,7 @@ export function parseIdentifier(
 
   /* Handle Identifier as a Record */
   else if (scope.hasRecord(tokenName)) {
-    result = parseRecordLiteral(tt, parseExpr, scope, prevExpr);
+    return parseRecordLiteral(tt, parseExpr, scope, prevExpr);
   }
 
   else if (scope.hasGenericType(tokenName)) {
@@ -65,10 +65,8 @@ export function parseIdentifier(
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
-    ParserErrorIf(
-      DT.isInvalid(result.return),
-      `Using the unidentified token \`${tokenName}\``
-    );
+    if(DT.isInvalid(result.return))
+      ParserError(`Using the unidentified token \`${tokenName}\``);
     prevExpr.expr2 = result;
     const operator = prevExpr.operator;
     const opLeft = prevExpr.expr1.return;
@@ -87,7 +85,7 @@ export function parseIdentifier(
     prevExpr.return = result.return;
   }
 
-  if (result.type === 'IdentLiteral' && result.return.isEqualTo(DT.Invalid)) {
+  if (result.type === 'IdentLiteral' && DT.isInvalid(result.return)) {
     tt.next(); // Skip the current identifier
 
     /* Handle Assignment Expression when identifier is unknown */
