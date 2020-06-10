@@ -22,6 +22,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'UserInfo' },
   { type: 'ident', value: 'maxwell' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'UserInfo' },
@@ -47,7 +48,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('maxwell', new DT('UserInfo')),
     expr2: {
       type: 'RecordLiteral',

@@ -1,3 +1,3 @@
-foo = [1 2 3 4 5]
-result1 = foo.push(6)
-result2 = foo.concat([7 8 9])
+List<Num> foo = [1 2 3 4 5]
+Num result1 = foo.push(6)
+List<Num> result2 = foo.concat([7 8 9])

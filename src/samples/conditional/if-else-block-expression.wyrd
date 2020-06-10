@@ -1,9 +1,9 @@
-foo = if cond do
-        a = 123
-        b = 456
-        a + b
-      else do
-        a = 456
-        b = 789
-        b - a
-      end
+Num foo = if cond do
+            Num a = 123
+            Num b = 456
+            a + b
+          else do
+            Num a = 456
+            Num b = 789
+            b - a
+          end

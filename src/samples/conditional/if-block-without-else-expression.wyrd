@@ -1,5 +1,5 @@
-foo = if cond do
-        a = 123
-        b = 456
-        a + b
-      end
+if cond do
+  Num a = 123
+  Num b = 456
+  a + b
+end

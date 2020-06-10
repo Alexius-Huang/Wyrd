@@ -1,10 +1,10 @@
 if age < 18 => "youngster"
 else        => "adult"
 
-example1 = if age < 18 => "youngster"
-           else        => "adult"
+Str example1 = if age < 18 => "youngster"
+               else        => "adult"
 
-example2 = if age < 18    => "youngster"
-           elif age <= 60 => "adult"
-           elif age < 100 => "elder"
-           else           => "centenarian"
+Str example2 = if age < 18    => "youngster"
+               elif age <= 60 => "adult"
+               elif age < 100 => "elder"
+               else           => "centenarian"

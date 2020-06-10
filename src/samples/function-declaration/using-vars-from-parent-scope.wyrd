@@ -3,7 +3,7 @@ def addSomething(x: Num): Num => x + something
 something = 2
 
 def complexArithmetics(x: Num, y: Num): Num do
-  a = x + y
-  b = a * something + y
+  Num a = x + y
+  Num b = a * something + y
   b
 end

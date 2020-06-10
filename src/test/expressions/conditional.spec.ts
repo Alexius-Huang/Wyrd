@@ -1,7 +1,7 @@
 import { FundamentalCompileTest } from '../helper';
 
 describe('Conditional Expressions', () => {
-  describe('If-Arrow Expression', () => {
+  describe('onlyIf-Arrow Expression', () => {
     FundamentalCompileTest('conditional/if-arrow-expression');
   });
 

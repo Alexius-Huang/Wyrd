@@ -3,6 +3,7 @@ import { NumberLiteral, Arithmetic, Var } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'Bool' },
   { type: 'ident', value: 'isTrue' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '3' },
@@ -15,7 +16,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('isTrue', DT.Bool),
     expr2: {

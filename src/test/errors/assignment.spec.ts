@@ -1,12 +1,19 @@
 import { compile } from '../..';
 
 describe('Error: Assignment', () => {
-  describe('Reassignment', () => {
+  describe('Redeclaration', () => {
     it('throws error when reassigning new value to a constant', () => {
-      const program = `\nfoo = 123\nfoo = 456\n`;
+      const program = `\nNum foo = 123\nNum foo = 456\n`;
 
       expect(() => compile({ program }))
-        .toThrow('ParserError: Constant `foo` cannot be reassigned');      
+        .toThrow('ParserError: `foo` has already been declared as a constant');
+    });
+
+    it('throws error when reassigning new value to a variable', () => {
+      const program = `\nmutable foo = 123\nNum foo = 456\n`;
+
+      expect(() => compile({ program }))
+        .toThrow('ParserError: `foo` has already been declared as a variable');
     });
   });
 
@@ -21,7 +28,7 @@ describe('Error: Assignment', () => {
 
   describe('Mutable Variable Redeclaration', () => {
     it('throws error when constant redeclaring as mutable variable', () => {
-      const program = `\nfoo = 123\nmutable foo = 456`;
+      const program = `\nNum foo = 123\nmutable foo = 456`;
 
       expect(() => compile({ program }))
         .toThrow('ParserError: Constant `foo` cannot be redeclared as variable');

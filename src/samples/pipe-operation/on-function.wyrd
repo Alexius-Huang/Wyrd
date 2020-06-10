@@ -1,4 +1,4 @@
 def add(x: Num, y: Num): Num => x + y
 def subtract(x: Num, y: Num): Num => x - y
 
-result = 123 |> add(321) |> subtract(666)
+Num result = 123 |> add(321) |> subtract(666)

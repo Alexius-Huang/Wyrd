@@ -41,6 +41,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'UserInfo' },
   { type: 'ident', value: 'maxwell' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'UserInfo' },
@@ -64,6 +65,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'UserAccount' },
   { type: 'ident', value: 'user1' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'UserAccount' },
@@ -87,6 +89,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'UserAccount' },
   { type: 'ident', value: 'user2' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'UserAccount' },
@@ -127,6 +130,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'ident', value: 'UserInfo' },
   { type: 'ident', value: 'info' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'user1' },
@@ -134,6 +138,7 @@ const tokens: Array<Token> = [
   { type: 'ident', value: 'info' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'age' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'info' },
@@ -141,6 +146,7 @@ const tokens: Array<Token> = [
   { type: 'ident', value: 'age' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'name' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'user1' },
@@ -153,7 +159,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('maxwell', new DT('UserInfo')),
     expr2: {
       type: 'RecordLiteral',
@@ -167,7 +173,7 @@ const ast: AST = [
     return: DT.Void,
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('user1', new DT('UserAccount')),
     expr2: {
       type: 'RecordLiteral',
@@ -181,7 +187,7 @@ const ast: AST = [
     return: DT.Void,
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('user2', new DT('UserAccount')),
     expr2: {
       type: 'RecordLiteral',
@@ -207,7 +213,7 @@ const ast: AST = [
     return: DT.Void,
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('info', new DT('UserInfo')),
     expr2: {
       type: 'RecordReferenceExpr',
@@ -218,7 +224,7 @@ const ast: AST = [
     return: DT.Void,
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('age', DT.Num),
     expr2: {
       type: 'RecordReferenceExpr',
@@ -229,7 +235,7 @@ const ast: AST = [
     return: DT.Void,
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     expr1: Var('name', DT.Str),
     expr2: {
       type: 'RecordReferenceExpr',

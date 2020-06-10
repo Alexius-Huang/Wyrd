@@ -8,6 +8,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Bool' },
   { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '666' },
@@ -23,7 +24,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('foo', DT.Bool),
     expr2: {

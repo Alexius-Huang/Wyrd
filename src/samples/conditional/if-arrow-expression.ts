@@ -16,6 +16,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'example1' },
   { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
@@ -31,6 +32,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'example2' },
   { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
@@ -75,7 +77,7 @@ const ast: AST = [
     expr2: StringLiteral('adult'),
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('example1', DT.Str),
     expr2: {
@@ -93,7 +95,7 @@ const ast: AST = [
     },
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('example2', DT.Str),
     expr2: {

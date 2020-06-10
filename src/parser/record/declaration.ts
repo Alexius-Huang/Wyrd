@@ -14,7 +14,7 @@ export function parseRecordDeclaration(
     ParserError(`Expect to give the name of the record, instead got token of type: \`${tt.type}\``);
 
   const name = tt.value;
-  if (scope.canBeNamedAs(name))
+  if (scope.isNameOccupied(name))
     ParserError(`Cannot declare record \`${name}\`, since the name has already been used`);
   tt.next(); // Skip `ident`
 

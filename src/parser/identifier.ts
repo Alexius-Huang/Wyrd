@@ -2,10 +2,11 @@ import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseFunctionInvokeExpr } from './function';
 import { parseMethodInvokeExpr } from './method';
-import { ParserErrorIf, ParserError } from './error';
-import { parseAssignmentExpr } from './assignment';
-import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
+import { parseVarAssignmentExpr } from './assignment';
+import { parseConstantDeclaration } from './assignment/constant-declaration';
+import { parseRecordReferenceExpr } from './record';
 import { parseTypeLiteral } from './type-literal';
+import { ParserError } from './error';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -22,7 +23,21 @@ export function parseIdentifier(
 
   /* Handle Identifier as a Variable */
   if (scope.hasVariable(tokenName)) {
-    result.return = scope.getVariable(tokenName).type;
+    const varInfo = scope.getVariable(tokenName);
+    result.return = varInfo.type;
+
+    if (tt.peekIs('eq')) {
+      tt.next();
+      if (!varInfo.isConst)
+        return parseVarAssignmentExpr(tt, parseExpr, scope, result);
+      else
+        ParserError(`\`${varInfo.name}\` is declared as constant, not a variable`);
+    }
+
+    else if (tt.peekIs('ref')) {
+      tt.next();
+      return parseRecordReferenceExpr(tt, parseExpr, scope, result);
+    }
 
     while (tt.peekIs('dot') || tt.peekIs('ref')) {
       tt.next();
@@ -50,13 +65,17 @@ export function parseIdentifier(
     }
   }
 
-  /* Handle Identifier as a Record */
-  else if (scope.hasRecord(tokenName)) {
-    result = parseRecordLiteral(tt, parseExpr, scope, prevExpr);
-  }
-
   else if (scope.hasGenericType(tokenName)) {
-    return parseTypeLiteral(tt, parseExpr, scope);
+    const typeLiteral = parseTypeLiteral(tt, parseExpr, scope);
+
+    if (tt.peekIs('ident')) {
+      tt.next();
+
+      if (tt.peekIs('eq'))
+        return parseConstantDeclaration(tt, parseExpr, scope, typeLiteral);
+      ParserError(`Unhandled token of type \`${tt.type}\``);
+    }
+    return typeLiteral;
   }
 
   else if (scope.hasGenericPlaceholder(tokenName)) {
@@ -65,10 +84,8 @@ export function parseIdentifier(
   }
 
   if (prevExpr?.type === 'BinaryOpExpr') {
-    ParserErrorIf(
-      DT.isInvalid(result.return),
-      `Using the unidentified token \`${tokenName}\``
-    );
+    if(DT.isInvalid(result.return))
+      ParserError(`Using the unidentified token \`${tokenName}\``);
     prevExpr.expr2 = result;
     const operator = prevExpr.operator;
     const opLeft = prevExpr.expr1.return;
@@ -87,15 +104,8 @@ export function parseIdentifier(
     prevExpr.return = result.return;
   }
 
-  if (result.type === 'IdentLiteral' && result.return.isEqualTo(DT.Invalid)) {
-    tt.next(); // Skip the current identifier
-
-    /* Handle Assignment Expression when identifier is unknown */
-    if (tt.is('eq'))
-      return parseAssignmentExpr(tt, parseExpr, scope, result);
-
-    ParserError(`Using the unidentified token \`${result.value}\``)
-  }
+  if (result.type === 'IdentLiteral' && DT.isInvalid(result.return))
+    ParserError(`Using the unidentified token \`${result.value}\``);
 
   return result;
 }

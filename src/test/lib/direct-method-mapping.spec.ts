@@ -82,9 +82,9 @@ import "./direct-method-mapping/MethodOverloading.lib.wyrd"
     it('supports generic receiver method mapping with generic input pattern and output', () => {
       const program = `\
 import "./direct-method-mapping/GenericTypeMethod.lib.wyrd"
-nums = [1 2 3]
-strs = ["Hello" "World" "Wyrd"]
-bools = [True False True]
+List<Num> nums = [1 2 3]
+List<Str> strs = ["Hello" "World" "Wyrd"]
+List<Bool> bools = [True False True]
 
 nums.ex1(1)
 strs.ex1("Programming")
@@ -104,7 +104,7 @@ bools.ex1(false);
     it('targets specific type on generic receiver method mapping', () => {
       const program = `\
 import "./direct-method-mapping/GenericTypeMethod.lib.wyrd"
-nums = [1 2 3]
+List<Num> nums = [1 2 3]
 nums.ex4(123)
 `;
       const expected = `\
@@ -115,7 +115,7 @@ nums.ex4(123);
 
       const errorProgram = `\
 import "./direct-method-mapping/GenericTypeMethod.lib.wyrd"
-strs = ["Hello" "World" "Wyrd"]
+List<Str> strs = ["Hello" "World" "Wyrd"]
 strs.ex4("Programming")
 `;
       expect(() => compile({ program: errorProgram, dir: __dirname }))

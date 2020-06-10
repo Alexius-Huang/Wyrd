@@ -49,16 +49,17 @@ export function parseConditionalExpr(
     return result;
   }
 
-  tt.next(); // Skip `newline`
-
-  if (tt.is('keyword') && tt.valueIs('elif'))
+  if (tt.peekIs('keyword') && tt.peekValueIs('elif')) {
+    tt.next(); // Skip `newline`
     return parseElseIfExpression(tt, parseExpr, scope, result);
+  }
 
-  if (tt.is('keyword') && tt.valueIs('else'))
+  if (tt.peekIs('keyword') && tt.peekValueIs('else')) {
+    tt.next(); // Skip `newline`
     result = parseElseExpression(tt, parseExpr, scope, result);
+  }
 
   if (result.expr2.return.isNotEqualTo(result.return))
     ParserError(`Expect values returned from different condition branch to be the same`);
-
   return result;
 }

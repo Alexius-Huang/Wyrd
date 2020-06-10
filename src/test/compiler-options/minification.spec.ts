@@ -20,6 +20,10 @@ function perform(name: string, sample: string) {
   });
 }
 
+perform.todo = function (name: string, sample?: string) {
+  it.todo(`minifies and compiles \`${name}\` correctly`);
+}
+
 function todo(name: string) {
   it.todo(`minifies and compiles \`${name}\` correctly`);
 }
@@ -37,7 +41,7 @@ describe('Compiler Option: Minification', () => {
   });
 
   describe('Assignment', () => {
-    perform('basic assignment', 'assignment/basic');
+    perform('constant declaration', 'assignment/constant-declaration');
     perform('assignment with arithmetic expressions', 'assignment/arithmetic-expression');
     perform('assignment with logical expressions', 'assignment/logical-expression');
     perform('assignment with method invocation', 'assignment/method-invocation');

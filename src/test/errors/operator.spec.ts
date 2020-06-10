@@ -35,11 +35,11 @@ describe('Error: Operator', () => {
       expect(() => compile({ program: program8 }))
         .toThrow('ParserError: Invalid operation for operator `+` with operands of type `Str` and `Num`');  
 
-      const program9 = `\nfoo = 1\nfoo + "2"`;
+      const program9 = `\nNum foo = 1\nfoo + "2"`;
       expect(() => compile({ program: program9 }))
         .toThrow('ParserError: Invalid operation for operator `+` with operands of type `Num` and `Str`');    
 
-      const program10 = `\nfoo = 1\n"2" + foo`;
+      const program10 = `\nNum foo = 1\n"2" + foo`;
       expect(() => compile({ program: program10 }))
         .toThrow('ParserError: Invalid operation for operator `+` with operands of type `Str` and `Num`');    
 

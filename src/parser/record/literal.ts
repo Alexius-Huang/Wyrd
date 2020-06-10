@@ -11,16 +11,13 @@ export function parseRecordLiteral(
 ): T.RecordLiteral {
   const recordName = tt.value;
   tt.next(); // Skip `ident`
+  tt.next(); // Skip `{`
 
   const result: T.RecordLiteral = {
     type: 'RecordLiteral',
     properties: [],
     return: new DT(recordName),
   };
-
-  if (tt.isNot('lcurly'))
-    ParserError(`Expect left curly brace after record type, instead got token of type \`${tt.type}\``);
-  tt.next(); // Skip `{`
 
   const recordDef = scope.getRecord(recordName);
   const requiredPropertySet = new Set(recordDef.propertySet);

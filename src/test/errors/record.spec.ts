@@ -51,7 +51,7 @@ describe('Error: Record', () => {
     });
 
     it('throws error when the name of the record conflict other entity', () => {
-      const program1 = `\nUserInfo = "Maxwell"\nrecord UserInfo { Str name, Num age, Bool hasPet }`;
+      const program1 = `\nStr UserInfo = "Maxwell"\nrecord UserInfo { Str name, Num age, Bool hasPet }`;
       expect(() => compile({ program: program1 }))
         .toThrow('ParserError: Cannot declare record `UserInfo`, since the name has already been used');
 
@@ -169,7 +169,7 @@ describe('Error: Record', () => {
 
   describe('Reference', () => {
     it('throws error when referencing property of non-record identity', () => {
-      const program = `\nfoo = 123\nfoo->property`;
+      const program = `\nNum foo = 123\nfoo->property`;
       expect(() => compile({ program }))
         .toThrow('ParserError: Type `Num` is not a kind of record');
     });

@@ -1,1 +1,1 @@
-foo = "hello world" |> Str.upcase() |> Str.split(" ")
+List<Str> foo = "hello world" |> Str.upcase() |> Str.split(" ")

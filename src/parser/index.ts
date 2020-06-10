@@ -1,16 +1,15 @@
 import * as T from '../types';
-import { TokenTracker, Scope } from './utils';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseThisLiteral } from './this-literal';
-import { parseRecordDeclaration } from './record/declaration';
-import { parseRecordReferenceExpr } from './record/reference';
+import { parseRecordLiteral, parseRecordDeclaration, parseRecordReferenceExpr } from './record';
 import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
-import { parseAssignmentExpr } from './assignment';
+import { parseConstantDeclaration } from './assignment';
 import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
@@ -93,20 +92,47 @@ export function parse(
     if (tt.isOneOf('number', 'string', 'boolean', 'null'))
       return parsePrimitive(tt, parseExpr, scope, prevExpr);
 
-    if (tt.is('builtin-type'))
-      return parseTypeLiteral(tt, parseExpr, scope);
+    if (tt.is('builtin-type')) {
+      const typeLiteral = parseTypeLiteral(tt, parseExpr, scope);
+      if (tt.peekIs('ident')) {
+        tt.next();
 
-    if (tt.is('ident'))
+        if (tt.peekIs('eq'))
+          return parseConstantDeclaration(tt, parseExpr, scope, typeLiteral);
+        ParserError(`Unhandled token of type \`${tt.type}\``);
+      }
+
+      return typeLiteral;
+    }
+
+    if (tt.is('ident')) {
+      if (scope.hasRecord(tt.value)) {
+        const recordName = tt.value;
+        if (tt.peekIs('lcurly')) {
+          return parseRecordLiteral(tt, parseExpr, scope, prevExpr);
+        } else if (tt.peekIs('ident')) {
+          tt.next();
+
+          if (tt.peekIs('eq'))
+            return parseConstantDeclaration(tt, parseExpr, scope, {
+              type: 'TypeLiteral',
+              typeObject: new DT(recordName),
+              value: recordName,
+              return: DT.Void,
+            });
+        }
+
+        ParserError(`Unhandled token of type \`${tt.type}\``);
+      }
+
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
+    }
 
     if (tt.is('lbracket'))
       return parseListLiteral(tt, parseExpr, scope, prevExpr);
 
     if (tt.is('lparen'))
       return parsePrioritizedExpr(tt, parseExpr, scope, prevExpr);
-
-    if (tt.is('eq'))
-      return parseAssignmentExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
 
     if (tt.is('dot'))
       return parseMethodInvokeExpr(tt, parseExpr, scope, ast.pop() as T.Expr);

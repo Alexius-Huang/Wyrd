@@ -3,6 +3,7 @@ import { DataType as DT, Scope } from '../../parser/utils';
 import { NumberLiteral, StringLiteral, Var } from '../helper';
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'example' },
   { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
@@ -40,7 +41,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: Var('example', DT.Str),
     expr2: {

@@ -3,6 +3,7 @@ import { NumberLiteral, StringLiteral, Var } from '../helper';
 import { DataType as DT, Scope } from '../../parser/utils';
 
 const tokens: Array<Token> = [
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'mixed1' },
   { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
@@ -34,6 +35,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'mixed2' },
   { type: 'eq', value: '=' },
   { type: 'keyword', value: 'if' },
@@ -69,7 +71,7 @@ const tokens: Array<Token> = [
 
 const ast: AST = [
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: { type: 'IdentLiteral', value: 'mixed1', return: DT.Str },
     expr2: {
@@ -111,7 +113,7 @@ const ast: AST = [
     },
   },
   {
-    type: 'AssignmentExpr',
+    type: 'ConstDeclaration',
     return: DT.Void,
     expr1: { type: 'IdentLiteral', value: 'mixed2', return: DT.Str },
     expr2: {

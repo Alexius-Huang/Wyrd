@@ -2,5 +2,5 @@ import "./example.wyrd"
 import "./example2.wyrd"
 import "./folder/example3.wyrd"
 
-foo = addition(123, 456)
+Num foo = addition(123, 456)
 addition(123, 456, foo.add(789))

@@ -45,12 +45,14 @@ const tokens: Array<Token> = [
   { type: 'builtin-type', value: 'Num' },
   { type: 'keyword', value: 'do' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'a' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'x' },
   { type: 'plus', value: '+' },
   { type: 'ident', value: 'y' },
   { type: 'newline', value: '\n' },
+  { type: 'builtin-type', value: 'Num' },
   { type: 'ident', value: 'b' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'a' },
@@ -100,13 +102,13 @@ const ast: AST = [
     outputType: DT.Num,
     body: [
       {
-        type: 'AssignmentExpr',
+        type: 'ConstDeclaration',
         return: DT.Void,
         expr1: Var('a', DT.Num),
         expr2: Arithmetic('x', '+', 'y'),
       },
       {
-        type: 'AssignmentExpr',
+        type: 'ConstDeclaration',
         return: DT.Void,
         expr1: Var('b', DT.Num),
         expr2: {

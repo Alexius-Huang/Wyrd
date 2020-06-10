@@ -32,7 +32,7 @@ export default class Scope {
     return scope;
   }
 
-  public canBeNamedAs(name: string): boolean {
+  public isNameOccupied(name: string): boolean {
     return (
       this.hasVariable(name) ||
       this.hasFunction(name) ||
