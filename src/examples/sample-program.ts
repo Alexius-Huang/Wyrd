@@ -1,10 +1,10 @@
 const program = `\
 mutable age = 1 + 2 * 3 + 4
-adultBound = 18
-elderBound = 60
-centenarianBound = 100
+Num adultBound = 18
+Num elderBound = 60
+Num centenarianBound = 100
 
-stage = if age <= adultBound => "Teenager"
+Str stage = if age <= adultBound => "Teenager"
         elif age < elderBound then
           "Adult"
         elif age < centenarianBound => "Elder"
@@ -14,8 +14,8 @@ stage = if age <= adultBound => "Teenager"
 
 def funcA(x: Num, y: Num): Num => x + y
 def funcB(x: Num, y: Num, z: Num): Num do
-  foo = x + y
-  bar = foo * z - x
+  Num foo = x + y
+  Num bar = foo * z - x
   bar
 end
 

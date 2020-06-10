@@ -1,12 +1,11 @@
 import * as T from '../types';
-import { TokenTracker, Scope } from './utils';
+import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseThisLiteral } from './this-literal';
-import { parseRecordDeclaration } from './record/declaration';
-import { parseRecordReferenceExpr } from './record/reference';
+import { parseRecordLiteral, parseRecordDeclaration, parseRecordReferenceExpr } from './record';
 import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
@@ -107,8 +106,28 @@ export function parse(
       return typeLiteral;
     }
 
-    if (tt.is('ident'))
+    if (tt.is('ident')) {
+      if (scope.hasRecord(tt.value)) {
+        const recordName = tt.value;
+        if (tt.peekIs('lcurly')) {
+          return parseRecordLiteral(tt, parseExpr, scope, prevExpr);
+        } else if (tt.peekIs('ident')) {
+          tt.next();
+
+          if (tt.peekIs('eq'))
+            return parseConstantDeclaration(tt, parseExpr, scope, {
+              type: 'TypeLiteral',
+              typeObject: new DT(recordName),
+              value: recordName,
+              return: DT.Void,
+            });
+        }
+
+        ParserError(`Unhandled token of type \`${tt.type}\``);
+      }
+
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
+    }
 
     if (tt.is('lbracket'))
       return parseListLiteral(tt, parseExpr, scope, prevExpr);

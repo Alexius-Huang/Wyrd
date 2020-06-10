@@ -45,30 +45,30 @@ export function parseAssignmentExpr(
     }
 
     // Constant Declaration
-    const result: T.AssignmentExpr = {
-      type: 'AssignmentExpr',
-      expr1: prevExpr,
-      expr2: EmptyExpression,
-      return: DT.Void,
-    };
+    // const result: T.AssignmentExpr = {
+    //   type: 'AssignmentExpr',
+    //   expr1: prevExpr,
+    //   expr2: EmptyExpression,
+    //   return: DT.Void,
+    // };
 
-    const varInfo = scope.createConstant(varName);
+    // const varInfo = scope.createConstant(varName);
 
-    const subAST: T.AST = [];
-    while (tt.isNot('newline')) {
-      const expr = parseExpr(undefined, { scope, ast: subAST });
-      subAST.push(expr);
-      if (tt.is('newline') || !tt.hasNext()) break;
-      tt.next();
-    }
-    result.expr2 = subAST.pop() as T.Expr;
-    const isInvalid = DT.isInvalid(result.expr2.return);
-    const isVoid = DT.isVoid(result.expr2.return);
-    ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    
+    // const subAST: T.AST = [];
+    // while (tt.isNot('newline')) {
+    //   const expr = parseExpr(undefined, { scope, ast: subAST });
+    //   subAST.push(expr);
+    //   if (tt.is('newline') || !tt.hasNext()) break;
+    //   tt.next();
+    // }
+    // result.expr2 = subAST.pop() as T.Expr;
+    // const isInvalid = DT.isInvalid(result.expr2.return);
+    // const isVoid = DT.isVoid(result.expr2.return);
+    // ParserErrorIf(isInvalid || isVoid, `Expect variable \`${varName}\` not declared as type 'Invalid' or 'Void'`);    
 
-    prevExpr.return = result.expr2.return;
-    varInfo.type = prevExpr.return;
-    return result;
+    // prevExpr.return = result.expr2.return;
+    // varInfo.type = prevExpr.return;
+    // return result;
   }
 
   ParserError(`Unhandled expression of type \`${prevExpr.type}\``)

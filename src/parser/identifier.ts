@@ -4,7 +4,7 @@ import { parseFunctionInvokeExpr } from './function';
 import { parseMethodInvokeExpr } from './method';
 import { parseAssignmentExpr } from './assignment';
 import { parseConstantDeclaration } from './assignment/constant-declaration';
-import { parseRecordLiteral, parseRecordReferenceExpr } from './record';
+import { parseRecordReferenceExpr } from './record';
 import { parseTypeLiteral } from './type-literal';
 import { ParserError } from './error';
 
@@ -49,11 +49,6 @@ export function parseIdentifier(
         result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
       }
     }
-  }
-
-  /* Handle Identifier as a Record */
-  else if (scope.hasRecord(tokenName)) {
-    return parseRecordLiteral(tt, parseExpr, scope, prevExpr);
   }
 
   else if (scope.hasGenericType(tokenName)) {

@@ -10,19 +10,19 @@ record UserAccount {
   UserInfo info
 }
 
-maxwell = UserInfo {
+UserInfo maxwell = UserInfo {
   name: "Maxwell",
   age: 18,
   hasPet: False
 }
 
-user1 = UserAccount {
+UserAccount user1 = UserAccount {
   email: "example@email.com",
   password: "HA$H3D",
   info: maxwell
 }
 
-user2 = UserAccount {
+UserAccount user2 = UserAccount {
   email: "example@email.com",
   password: "HA$H3D",
   info: UserInfo {
@@ -32,6 +32,6 @@ user2 = UserAccount {
   }
 }
 
-info = user1->info
-age = info->age
-name = user1->info->name
+UserInfo info = user1->info
+Num age = info->age
+Str name = user1->info->name

@@ -1,13 +1,13 @@
 if cond1 do
-  a = 123
-  b = 456
+  Num a = 123
+  Num b = 456
   (a + b).toStr()
 elif cond2 do
-  foo = "Hello"
-  bar = 123
+  Str foo = "Hello"
+  Num bar = 123
   foo.concat(bar.toStr())
 elif cond3 do
-  baz = 666
-  bazz = "Devil Number: "
+  Num baz = 666
+  Str bazz = "Devil Number: "
   bazz.concat(baz.toStr())
 end

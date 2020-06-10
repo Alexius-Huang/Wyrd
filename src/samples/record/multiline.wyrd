@@ -4,7 +4,7 @@ record UserInfo {
   Bool hasPet
 }
 
-maxwell = UserInfo {
+UserInfo maxwell = UserInfo {
   name: "Maxwell",
   age: 18,
   hasPet: False
