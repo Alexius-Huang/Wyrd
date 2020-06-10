@@ -2,7 +2,7 @@ import * as T from '../types';
 import { TokenTracker, Scope, DataType as DT } from './utils';
 import { parseFunctionInvokeExpr } from './function';
 import { parseMethodInvokeExpr } from './method';
-import { parseAssignmentExpr } from './assignment';
+import { parseVarAssignmentExpr } from './assignment';
 import { parseConstantDeclaration } from './assignment/constant-declaration';
 import { parseRecordReferenceExpr } from './record';
 import { parseTypeLiteral } from './type-literal';
@@ -23,7 +23,21 @@ export function parseIdentifier(
 
   /* Handle Identifier as a Variable */
   if (scope.hasVariable(tokenName)) {
-    result.return = scope.getVariable(tokenName).type;
+    const varInfo = scope.getVariable(tokenName);
+    result.return = varInfo.type;
+
+    if (tt.peekIs('eq')) {
+      tt.next();
+      if (!varInfo.isConst)
+        return parseVarAssignmentExpr(tt, parseExpr, scope, result);
+      else
+        ParserError(`\`${varInfo.name}\` is declared as constant, not a variable`);
+    }
+
+    else if (tt.peekIs('ref')) {
+      tt.next();
+      return parseRecordReferenceExpr(tt, parseExpr, scope, result);
+    }
 
     while (tt.peekIs('dot') || tt.peekIs('ref')) {
       tt.next();
@@ -90,15 +104,8 @@ export function parseIdentifier(
     prevExpr.return = result.return;
   }
 
-  if (result.type === 'IdentLiteral' && DT.isInvalid(result.return)) {
-    tt.next(); // Skip the current identifier
-
-    /* Handle Assignment Expression when identifier is unknown */
-    if (tt.is('eq'))
-      return parseAssignmentExpr(tt, parseExpr, scope, result);
-
-    ParserError(`Using the unidentified token \`${result.value}\``)
-  }
+  if (result.type === 'IdentLiteral' && DT.isInvalid(result.return))
+    ParserError(`Using the unidentified token \`${result.value}\``);
 
   return result;
 }

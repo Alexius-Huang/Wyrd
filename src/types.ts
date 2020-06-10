@@ -99,7 +99,6 @@ export type Expr =
 | NotExpr
 | OrExpr
 | AndExpr
-| AssignmentExpr
 | ConstDeclaration
 | VarDeclaration
 | VarAssignmentExpr
@@ -200,13 +199,6 @@ export interface VarDeclaration extends Expression {
 
 export interface VarAssignmentExpr extends Expression {
   type: 'VarAssignmentExpr';
-  expr1: IdentLiteral;
-  expr2: Expr;
-  return: typeof DT.Void;
-}
-
-export interface AssignmentExpr extends Expression {
-  type: 'AssignmentExpr';
   expr1: IdentLiteral;
   expr2: Expr;
   return: typeof DT.Void;

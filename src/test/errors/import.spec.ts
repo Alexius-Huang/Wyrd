@@ -3,7 +3,7 @@ import { compile } from '../..';
 describe('Error: Import', () => {
   describe('Forbidden Use of Lib Tags in Non-Lib Files', () => {
     it('throws error when using lib tags on non-lib files', () => {
-      const program = 'import "./error-import-samples/NonLibFile.wyrd"\n\nfoo = 666.exampleMethod(666, "Hello world!")\n';
+      const program = 'import "./error-import-samples/NonLibFile.wyrd"\n\nBool foo = 666.exampleMethod(666, "Hello world!")\n';
       expect(() => compile({ program, dir: __dirname }))
         .toThrow('ParserError: Only library files can be parsed with token of type `lib-tag`, name your Wyrd file with extension `.lib.wyrd` to use lib tags');
     });

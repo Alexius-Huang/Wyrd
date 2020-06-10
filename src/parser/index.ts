@@ -9,8 +9,7 @@ import { parseRecordLiteral, parseRecordDeclaration, parseRecordReferenceExpr } 
 import { parseVarDeclaration } from './variable-declaration';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
-import { parseAssignmentExpr } from './assignment';
-import { parseConstantDeclaration } from './assignment/constant-declaration';
+import { parseConstantDeclaration } from './assignment';
 import { parseLogicalNotExpr, parseLogicalAndOrExpr } from './logical';
 import { parsePrioritizedExpr } from './prioritized';
 import { parseBinaryOpExpr } from './operation';
@@ -134,9 +133,6 @@ export function parse(
 
     if (tt.is('lparen'))
       return parsePrioritizedExpr(tt, parseExpr, scope, prevExpr);
-
-    if (tt.is('eq'))
-      return parseAssignmentExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
 
     if (tt.is('dot'))
       return parseMethodInvokeExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
