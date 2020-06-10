@@ -44,8 +44,6 @@ export function generateCode(
         return codeGenRecordLiteral(expr);
       case 'RecordReferenceExpr':
         return codeGenRecordReferenceExpr(expr);
-      case 'AssignmentExpr':
-        return codeGenAssignmentExpr(expr);
       case 'ConstDeclaration':
         return codeGenConstDeclaration(expr);
       case 'VarDeclaration':
@@ -138,14 +136,6 @@ export function generateCode(
   function codeGenRecordReferenceExpr(expr: T.RecordReferenceExpr): CodeGenerationResult {
     const { recordExpr, property } = expr;
     return { result: `${genExpr(recordExpr).result}.${property}`, type: 'RecordReferenceExpr' };
-  }
-
-  function codeGenAssignmentExpr(expr: T.AssignmentExpr): CodeGenerationResult {
-    if (expr.expr2 === undefined)
-      CodeGenerateError('Expect assignment to have expression to evaluate');
-    if (minify)
-      return { result: `const ${genExpr(expr.expr1).result}=${genExpr(expr.expr2).result}`, type: 'AssignmentExpr' };
-    return { result: `const ${genExpr(expr.expr1).result} = ${genExpr(expr.expr2).result}`, type: 'AssignmentExpr' };
   }
 
   function codeGenConstDeclaration(expr: T.ConstDeclaration): CodeGenerationResult {
