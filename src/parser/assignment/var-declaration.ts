@@ -21,9 +21,11 @@ export function parseVarDeclaration(
   if (tt.is('builtin-type') || (tt.is('ident') && scope.hasRecord(tt.value))) {
     varType = new DT(tt.value);
   } else if (tt.is('ident')) {
+    if (!(scope.hasRecord(tt.value) || scope.hasGenericType(tt.value)))
+      ParserError(`Unrecognized type: \`${tt.value}\``);    
     varType = parseTypeLiteral(tt, parseExpr, scope).typeObject;
   } else {
-    ParserError(`Expect variable declaration should declare its type first, instead got token of type \`${tt.type}\``);
+    ParserError(`Expect to type literal in mutable variable declaration, instead got token of type: \`${tt.type}\``);
   }
   tt.next(); // Skip `type`
 
@@ -31,7 +33,7 @@ export function parseVarDeclaration(
     varType = varType.toNullable();
 
   if (tt.isNot('ident'))
-    ParserError(`Expect next token to be an \`ident\` to represent the mutable variable's name, got ${tt.type}`);
+    ParserError(`Expect to declare mutable variable's name, instead got token of type: \`${tt.type}\``);
 
   const varName = tt.value;
   checkIfVariableIsAlreadyDeclared(scope, varName);
