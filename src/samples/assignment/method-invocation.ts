@@ -20,6 +20,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'bar' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
@@ -66,6 +67,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'bazz' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'baz' },

@@ -1,7 +1,7 @@
-mutable foo maybe Num = 123 + 456
+mutable maybe Num foo = 123 + 456
 foo = Null
 foo = 1 * 2 - 3 / 4
 
-mutable bar maybe Str
+mutable maybe Str bar
 bar = "Hello world!".concat(" Wyrd-Lang!")
 bar = Null

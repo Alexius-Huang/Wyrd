@@ -4,9 +4,9 @@ import { DataType as DT } from '../../parser/utils';
 
 const tokens: Array<Token> = [
   { type: 'keyword', value: 'mutable' },
-  { type: 'ident', value: 'foo' },
   { type: 'keyword', value: 'maybe' },
   { type: 'builtin-type', value: 'Num' },
+  { type: 'ident', value: 'foo' },
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
   { type: 'plus', value: '+' },
@@ -31,9 +31,9 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
-  { type: 'ident', value: 'bar' },
   { type: 'keyword', value: 'maybe' },
   { type: 'builtin-type', value: 'Str' },
+  { type: 'ident', value: 'bar' },
   { type: 'newline', value: '\n' },
 
   { type: 'ident', value: 'bar' },
