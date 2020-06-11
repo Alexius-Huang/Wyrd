@@ -1,6 +1,22 @@
 import { compile } from '../..';
 
 describe('Error: Assignment', () => {
+  describe('Use of Undeclared Variable', () => {
+    it('throws error when using undeclared variable', () => {
+      const program = 'foo = 123';
+      expect(() => compile({ program }))
+        .toThrow('ParserError: Using the unidentified token `foo`');
+    });
+  });
+
+  describe('Assign to Constant', () => {
+    it('throws error when trying to mutate a constant', () => {
+      const program = 'Num foo = 123\nfoo = 456';
+      expect(() => compile({ program }))
+        .toThrow('ParserError: `foo` is declared as constant, not a variable');
+    });
+  });
+
   describe('Redeclaration', () => {
     it('throws error when reassigning new value to a constant', () => {
       const program = `Num foo = 123\nNum foo = 456\n`;
