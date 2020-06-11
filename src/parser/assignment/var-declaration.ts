@@ -56,14 +56,17 @@ export function parseVarDeclaration(
   ParserErrorIf(tt.isNot('eq'), `Expect next token to be \`eq\`, instead got \`${tt.type}\``);
   tt.next(); // Skip the `eq` token
 
-  const subAST: T.AST = [];
-  while (tt.isNot('newline')) {
-    const expr = parseExpr(undefined, { scope, ast: subAST });
-    subAST.push(expr);
-    if (tt.is('newline') || !tt.hasNext()) break;
+  const varDeclarationAST: T.AST = [];
+  if (tt.is('newline'))
+    ParserError(`Expect variable \`${varName}\`'s declaration should have value, instead got \`newline\``);
+
+  do {
+    const expr = parseExpr(undefined, { scope, ast: varDeclarationAST });
     tt.next();
-  }
-  result.expr2 = subAST.pop() as T.Expr;
+    varDeclarationAST.push(expr);    
+  } while (tt.isNot('newline'));
+
+  result.expr2 = varDeclarationAST.pop() as T.Expr;
   const assignedType = result.expr2.return;
   const isInvalid = DT.isInvalid(assignedType);
   const isVoid = DT.isVoid(assignedType);

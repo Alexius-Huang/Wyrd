@@ -35,19 +35,24 @@ export function parseConstantDeclaration(
     return: DT.Void,
   };
 
-  const tempAST: T.AST = [];
+  const constDeclarationAST: T.AST = [];
   if (tt.is('newline'))
     ParserError(`Expect constant \`${constName}\`'s declaration should have value, instead got \`newline\``);
 
   do {
-    const expr = parseExpr(undefined, { scope, ast: tempAST });
+    const expr = parseExpr(undefined, { scope, ast: constDeclarationAST });
     tt.next();
-    tempAST.push(expr);    
+    constDeclarationAST.push(expr);    
   } while (tt.isNot('newline'));
 
-  result.expr2 = tempAST[0];
-  if (result.expr2.return.isNotAssignableTo(result.expr1.return))
-    ParserError(`Expect constant \`${constName}\` to assign value of type \`${result.expr1.return}\`, instead got: \`${result.expr2.return}\``);
+  result.expr2 = constDeclarationAST.pop() as T.Expr;
+  const assignedType = result.expr2.return;
+  const isInvalid = DT.isInvalid(assignedType);
+  const isVoid = DT.isVoid(assignedType);
+  const isNotAssignable = assignedType.isNotAssignableTo(dt);
+  if(isInvalid || isVoid || isNotAssignable)
+    ParserError(`Expect constant \`${constName}\` to assign value of type \`${dt}\`, instead got: \`${assignedType}\``);
+
   scope.createConstant(constName, dt);
   return result;
 }

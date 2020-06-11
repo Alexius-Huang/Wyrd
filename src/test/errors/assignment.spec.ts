@@ -89,7 +89,7 @@ describe('Error: Assignment', () => {
     });
 
     it('throws error when maybe-types assigned with invalid type', () => {
-      const program = 'mutable maybe Num foo = "Hello world"';
+      const program = 'mutable maybe Num foo = "Hello world"\n';
 
       expect(() => compile({ program }))
         .toThrow('ParserError: Expect variable `foo` to assign value of type `maybe Num`, instead got: `Str`');
