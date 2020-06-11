@@ -69,7 +69,7 @@ export function parseVarDeclaration(
   const isVoid = DT.isVoid(assignedType);
   const isNotAssignable = assignedType.isNotAssignableTo(varType);
   if(isInvalid || isVoid || isNotAssignable)
-    ParserError(`Expect variable \`${varName}\` to assigned with type \`${varType}\`, instead got: \`${assignedType}\``);
+    ParserError(`Expect variable \`${varName}\` to assign value of type \`${varType}\`, instead got: \`${assignedType}\``);
 
   scope.createMutableVariable(varName, varType);
   return result;

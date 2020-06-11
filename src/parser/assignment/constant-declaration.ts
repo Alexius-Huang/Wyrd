@@ -22,8 +22,6 @@ export function parseConstantDeclaration(
   }
 
   const dt = typeLiteral.typeObject;
-  scope.createConstant(constName, dt);
-
   tt.next(); // Skip `ident`
   tt.next(); // Skip `eq`
   const result: T.ConstDeclaration = {
@@ -50,5 +48,6 @@ export function parseConstantDeclaration(
   result.expr2 = tempAST[0];
   if (result.expr2.return.isNotAssignableTo(result.expr1.return))
     ParserError(`Expect constant \`${constName}\` to assign value of type \`${result.expr1.return}\`, instead got: \`${result.expr2.return}\``);
+  scope.createConstant(constName, dt);
   return result;
 }
