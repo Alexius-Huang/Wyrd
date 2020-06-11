@@ -1,4 +1,4 @@
-mutable something = 1
+mutable Num something = 1
 def addSomething(x: Num): Num => x + something
 something = 2
 

@@ -23,6 +23,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'bar' },
   { type: 'eq', value: '=' },
   { type: 'lparen', value: '(' },

@@ -1,7 +1,7 @@
 Str foo = "Hello world".concat("Wyrd-Lang").concat(" is awesome!")
-mutable bar = 123.toStr().concat("666")
+mutable Str bar = 123.toStr().concat("666")
 bar = 666.toStr().upcase()
 
 Str baz = foo.downcase().between(1, 2)
-mutable bazz = baz.concat("Wyrd-Lang").repeat(123)
+mutable Str bazz = baz.concat("Wyrd-Lang").repeat(123)
 bar = bazz.concat("hello").toStr()

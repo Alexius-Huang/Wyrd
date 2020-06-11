@@ -28,10 +28,9 @@ export function parseIdentifier(
 
     if (tt.peekIs('eq')) {
       tt.next();
-      if (!varInfo.isConst)
-        return parseVarAssignmentExpr(tt, parseExpr, scope, result);
-      else
+      if (varInfo.isConst)
         ParserError(`\`${varInfo.name}\` is declared as constant, not a variable`);
+      return parseVarAssignmentExpr(tt, parseExpr, scope, result);
     }
 
     else if (tt.peekIs('ref')) {

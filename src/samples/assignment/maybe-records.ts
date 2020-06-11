@@ -18,9 +18,9 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
-  { type: 'ident', value: 'baz' },
   { type: 'keyword', value: 'maybe' },
   { type: 'ident', value: 'UserInfo' },
+  { type: 'ident', value: 'baz' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'UserInfo' },
   { type: 'lcurly', value: '{' },
@@ -63,9 +63,9 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
-  { type: 'ident', value: 'bazz' },
   { type: 'keyword', value: 'maybe' },
   { type: 'ident', value: 'UserInfo' },
+  { type: 'ident', value: 'bazz' },
   { type: 'newline', value: '\n' },
 
   { type: 'ident', value: 'bazz' },

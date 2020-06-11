@@ -12,6 +12,7 @@ const tokens: Array<Token> = [
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'mutable' },
+  { type: 'builtin-type', value: 'Str' },
   { type: 'ident', value: 'name' },
   { type: 'eq', value: '=' },
   { type: 'ident', value: 'maxwell' },

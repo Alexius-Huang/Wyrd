@@ -6,7 +6,7 @@ import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseThisLiteral } from './this-literal';
 import { parseRecordLiteral, parseRecordDeclaration, parseRecordReferenceExpr } from './record';
-import { parseVarDeclaration } from './variable-declaration';
+import { parseVarDeclaration } from './assignment';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
 import { parseConstantDeclaration } from './assignment';

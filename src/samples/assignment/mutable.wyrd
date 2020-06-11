@@ -1,6 +1,9 @@
-mutable foo = 123
+mutable Num foo = 123
 foo = 456
 foo = 1 * 2 - 3 / 4
 
-mutable bar = 1 + 2 * 3 - 4
+mutable Num bar = 1 + 2 * 3 - 4
 bar = 1 * foo + bar / 2
+
+mutable List<Num> baz = [1 2 3]
+baz = [4 5 6]
