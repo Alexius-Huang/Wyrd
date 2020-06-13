@@ -12,6 +12,7 @@ describe('Conditional Expressions', () => {
   });
 
   describe('If-Block Expression', () => {
+    FundamentalCompileTest('conditional/if-block-complex');
     FundamentalCompileTest('conditional/if-else-block-expression');
     FundamentalCompileTest('conditional/if-else-if-block-expression');
   });
