@@ -12,10 +12,15 @@ export function parseIfArrowExpr(
 
   tt.next(); // Skip '=>' inline-control operator
 
-  while (tt.isNot('newline')) {
-    result.expr1 = parseExpr(result.expr1, { target: 'expr1', scope });
+  const ifBodyScope: Scope = scope.createChildScope('if-body');
+  const ifBodyAST: T.AST = [];
+  do {
+    const expr = parseExpr(undefined, { scope: ifBodyScope, ast: ifBodyAST });
+    ifBodyAST.push(expr);
     tt.next();
-  }
+  } while (tt.isNot('newline'));
+
+  result.expr1 = ifBodyAST.pop() as T.Expr;
   result.return = result.expr1.return;
   return result;
 }
@@ -33,10 +38,15 @@ export function parseIfThenExpr(
 
   tt.next(); // Skip `newline`
 
-  while (tt.isNot('newline')) {
-    result.expr1 = parseExpr(result.expr1, { target: 'expr1', scope });
+  const ifBodyScope: Scope = scope.createChildScope('if-body');
+  const ifBodyAST: T.AST = [];
+  do {
+    const expr = parseExpr(undefined, { scope: ifBodyScope, ast: ifBodyAST });
+    ifBodyAST.push(expr);
     tt.next();
-  }
+  } while (tt.isNot('newline'));
+
+  result.expr1 = ifBodyAST.pop() as T.Expr;
   result.return = result.expr1.return;
   return result;
 }

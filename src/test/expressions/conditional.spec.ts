@@ -1,8 +1,9 @@
 import { FundamentalCompileTest } from '../helper';
 
 describe('Conditional Expressions', () => {
-  describe('onlyIf-Arrow Expression', () => {
+  describe('Arrow Expression', () => {
     FundamentalCompileTest('conditional/if-arrow-expression');
+    FundamentalCompileTest('conditional/if-arrow-complex');
   });
 
   describe('If-Then Expression', () => {

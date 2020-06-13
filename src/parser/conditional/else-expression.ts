@@ -36,13 +36,16 @@ function parseElseArrowExpr(
   if (tt.is('newline'))
     ParserError('Expect non-empty expression after \`arrow\` token');
 
+  const elseBodyScope: Scope = scope.createChildScope('else-body');
+  const elseBodyAST: T.AST = [];
   while (true) {
-    result.expr2 = parseExpr(result, { target: 'expr2', scope });
-
-    if (tt.peekIs('newline')) break;
+    const expr = parseExpr(undefined, { scope: elseBodyScope, ast: elseBodyAST });
+    elseBodyAST.push(expr);
+    if (tt.peekIs('newline') || !tt.hasNext()) break;
     tt.next();
   }
 
+  result.expr2 = elseBodyAST.pop() as T.Expr;
   return result;
 }
 
@@ -60,10 +63,15 @@ function parseElseThenExpr(
 
   tt.next(); // Skip 'newline' token
 
-  while (tt.isNot('newline')) {
-    result.expr2 = parseExpr(result, { target: 'expr2', scope });
+  const elseBodyScope: Scope = scope.createChildScope('else-body');
+  const elseBodyAST: T.AST = [];
+  do {
+    const expr = parseExpr(undefined, { scope: elseBodyScope, ast: elseBodyAST });
+    elseBodyAST.push(expr);
     tt.next();
-  }
+  } while (tt.isNot('newline'));
+
+  result.expr2 = elseBodyAST.pop() as T.Expr;
 
   tt.next(); // Skip 'newline' token
   ParserErrorIf(tt.valueIsNot('end'), 'Expect `else then` expression to followed by an `end` keyword');
