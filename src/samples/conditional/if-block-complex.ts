@@ -159,7 +159,7 @@ const result = condition ? (function () {
 })();
 `;
 
-const minified = '';
+const minified = 'const condition=true;const result=condition?(function(){const msg=\'Result is: \';return msg.concat((123+(456*789)).toString());})():(function(){const devilNumStr=(666).toString();return (\'Devil number is: \').concat(devilNumStr);})();';
 
 export {
   tokens,

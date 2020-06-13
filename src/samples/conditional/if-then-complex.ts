@@ -118,7 +118,7 @@ const condition = true;
 const result = condition ? ('Result is: ').concat((123 + (456 * 789)).toString()) : ('Devil number is: ').concat((666).toString());
 `;
 
-const minified = '';
+const minified = 'const condition=true;const result=condition?(\'Result is: \').concat((123+(456*789)).toString()):(\'Devil number is: \').concat((666).toString());';
 
 export {
   tokens,
