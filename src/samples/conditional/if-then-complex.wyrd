@@ -1,0 +1,7 @@
+Bool condition = True
+
+Str result = if condition then
+               "Result is: ".concat(Num.toStr(123 + 456 * 789))
+             else then
+               Str.concat("Devil number is: ", 666.toStr())
+             end
