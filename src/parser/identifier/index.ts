@@ -1,12 +1,13 @@
-import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT } from './utils';
-import { parseFunctionInvokeExpr } from './function';
-import { parseMethodInvokeExpr } from './method';
-import { parseVarAssignmentExpr } from './assignment';
-import { parseConstantDeclaration } from './assignment/constant-declaration';
-import { parseRecordReferenceExpr } from './record';
-import { parseTypeLiteral } from './type-literal';
-import { ParserError } from './error';
+import * as T from '../../types';
+import { TokenTracker, Scope, DataType as DT } from '../utils';
+import { parseFunctionInvokeExpr } from '../function';
+import { parseMethodInvokeExpr } from '../method';
+import { parseVarAssignmentExpr } from '../assignment';
+import { parseConstantDeclaration } from '../assignment/constant-declaration';
+import { parseRecordReferenceExpr } from '../record';
+import { parseTypeLiteral } from '../type-literal';
+import { ParserError } from '../error';
+import { handleRecordIdentifier } from './record';
 
 export function parseIdentifier(
   tt: TokenTracker,
@@ -46,6 +47,10 @@ export function parseIdentifier(
         result = parseRecordReferenceExpr(tt, parseExpr, scope, result);
       }
     }
+  }
+
+  else if (scope.hasRecord(tt.value)) {
+    return handleRecordIdentifier(tt, parseExpr, scope, prevExpr);
   }
 
   /* Handle Identifier as a Function*/

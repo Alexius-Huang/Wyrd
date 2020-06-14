@@ -180,7 +180,6 @@ export interface TypeLiteral extends Expression {
 
 export interface ThisLiteral extends Expression {
   type: 'ThisLiteral';
-  return: DT;
 }
 
 export interface ConstDeclaration extends Expression {

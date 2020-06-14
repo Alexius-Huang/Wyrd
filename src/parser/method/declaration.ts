@@ -11,11 +11,6 @@ export function parseMethodDeclaration(
 ): T.MethodDeclaration {
   tt.next(); // Skip 'def' keyword
 
-  ParserErrorIf(
-    tt.isNot('builtin-type'),
-    `Expect method declaration to have token of type \`type\`, got: ${tt.type}`
-  );
-
   const receiverType = new DT(tt.value);
   tt.next();
 

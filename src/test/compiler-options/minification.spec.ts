@@ -70,6 +70,9 @@ describe('Compiler Option: Minification', () => {
       perform('multiline record declaration', 'record/multiline');
       perform('record assignment', 'record/record-assignment');
       perform('nested record', 'record/nested');
+      perform('record method declaration', 'record/method-declaration');
+      perform('record method overloading', 'record/method-overloading');
+      perform('record method overriding', 'record/method-overriding');
     });
   });
 

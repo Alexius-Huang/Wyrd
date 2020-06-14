@@ -11,4 +11,10 @@ describe('Record', () => {
   describe('Assignment', () => {
     FundamentalCompileTest('record/record-assignment');
   });
+
+  describe('Record Method', () => {
+    FundamentalCompileTest('record/method-declaration');
+    FundamentalCompileTest('record/method-overloading');
+    FundamentalCompileTest('record/method-overriding');
+  });
 });

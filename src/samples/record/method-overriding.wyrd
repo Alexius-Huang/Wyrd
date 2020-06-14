@@ -1,0 +1,7 @@
+def UserInfo.isAdult: Bool => this->age > 20
+maxwell.isAdult()
+UserInfo.isAdult(maxwell)
+
+override def UserInfo.isAdult: Bool => this->age >= 18
+maxwell.isAdult()
+UserInfo.isAdult(maxwell)
