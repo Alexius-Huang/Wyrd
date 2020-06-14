@@ -80,10 +80,16 @@ describe('Compiler Option: Minification', () => {
 
   describe('Conditional Expression', () => {
     perform('If-Arrow expression', 'conditional/if-arrow-expression');
+    perform('If-Arrow complex expression', 'conditional/if-arrow-complex');
+    perform('If-Arrow-Else-If complex expression', 'conditional/if-arrow-else-if-complex');
     perform('If-Arrow without Else expression', 'conditional/if-arrow-without-else-expression');
     perform('If-Then expression', 'conditional/if-then-expression');
+    perform('If-Then complex expression', 'conditional/if-then-complex');
+    perform('If-Then-Else-If complex expression', 'conditional/if-then-else-if-complex');
     perform('If-Then without Else expression', 'conditional/if-then-without-else-expression');
     perform('If-Block expression', 'conditional/if-else-block-expression');
+    perform('If-Block complex expression', 'conditional/if-block-complex');
+    perform('If-Block-Else-If complex expression', 'conditional/if-block-else-if-complex');
     perform('If-Else-If-Block expression', 'conditional/if-else-if-block-expression');
     perform('If-Block without Else expression', 'conditional/if-block-without-else-expression');
     perform('If-Else-If-Block without Else expression', 'conditional/if-else-if-block-without-else-expression');
