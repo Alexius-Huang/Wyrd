@@ -21,6 +21,10 @@ export function NullLiteral(): T.NullLiteral {
   return { type: 'NullLiteral', value: 'Null', return: DT.Null };
 }
 
+export function ThisLiteral(returnType: DT): T.ThisLiteral {
+  return { type: 'ThisLiteral', return: returnType };
+}
+
 export function prioritize(expr: T.Expr): T.PrioritizedExpr {
   return {
     type: 'PrioritizedExpr',

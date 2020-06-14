@@ -54,7 +54,13 @@ export function parse(
       if (tt.valueIs('def')) {
         if (tt.peekIs('builtin-type'))
           return parseMethodDeclaration(tt, parseExpr, scope);
-        return parseFunctionDeclaration(tt, parseExpr, scope);
+
+        if (tt.peekIs('ident')) {
+          if (scope.hasRecord(tt.peek!.value))
+            return parseMethodDeclaration(tt, parseExpr, scope);
+          return parseFunctionDeclaration(tt, parseExpr, scope);
+        }
+        ParserError('Hfdafds');
       }
 
       if (tt.valueIs('if'))

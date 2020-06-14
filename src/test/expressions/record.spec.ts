@@ -11,4 +11,8 @@ describe('Record', () => {
   describe('Assignment', () => {
     FundamentalCompileTest('record/record-assignment');
   });
+
+  describe('Method Declaration', () => {
+    FundamentalCompileTest('record/method-declaration');
+  });
 });
