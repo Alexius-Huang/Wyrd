@@ -159,11 +159,6 @@ export function parse(
       if (prevExpr?.type === 'PrioritizedExpr')
         return parseBinaryOpExpr(tt, parseExpr, scope, prevExpr.expr);
 
-      if (prevExpr?.type === 'ConditionalExpr') {
-        const targetExpr = meta.target as ('condition' | 'expr1' | 'expr2');
-        return parseBinaryOpExpr(tt, parseExpr, scope, prevExpr[targetExpr]);
-      }
-
       return parseBinaryOpExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
     }
 
