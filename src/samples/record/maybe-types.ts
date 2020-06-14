@@ -151,7 +151,7 @@ const telsa = { age: 88, name: 'Telsa', hasPet: null };
 const irene = { name: 'Irene', age: null, hasPet: null };
 `;
 
-const minified = 'const maxwell={name:\'Maxwell\',age:18,hasPet:false};maxwell.age;';
+const minified = 'const maxwell={name:\'Maxwell\',age:18,hasPet:false};const alice={name:\'Alice\',hasPet:true,age:null};const telsa={age:88,name:\'Telsa\',hasPet:null};const irene={name:\'Irene\',age:null,hasPet:null};';
 
 export {
   tokens,
