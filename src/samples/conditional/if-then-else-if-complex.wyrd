@@ -1,0 +1,10 @@
+Bool condition1 = False
+Bool condition2 = True
+
+Str result = if condition1 then
+               "Result is: ".concat(Num.toStr(123 + 456 * 789))
+             elif condition2 then
+               ((1 + 2) * 4 + 2).toStr().concat(" is my lucky number")
+             else then
+               Str.concat("Devil number is: ", 666.toStr())
+             end
