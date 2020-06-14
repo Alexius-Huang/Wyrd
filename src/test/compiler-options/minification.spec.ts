@@ -66,6 +66,7 @@ describe('Compiler Option: Minification', () => {
 
     describe('Record', () => {
       perform('record declaration', 'record/basic-declaration');
+      perform('record maybe types value declaration', 'record/maybe-types');
       perform('multiline record declaration', 'record/multiline');
       perform('record assignment', 'record/record-assignment');
       perform('nested record', 'record/nested');

@@ -5,6 +5,7 @@ describe('Record', () => {
     FundamentalCompileTest('record/basic-declaration');
     FundamentalCompileTest('record/multiline');
     FundamentalCompileTest('record/nested');
+    FundamentalCompileTest('record/maybe-types');
   });
 
   describe('Assignment', () => {

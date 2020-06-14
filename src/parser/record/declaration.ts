@@ -42,6 +42,12 @@ function parseRecordDefinition(
     if (tt.is('rcurly'))
       ParserError('Expect to declare new property-value pair, instead got token of typr `rcurly`');
 
+    let nullable = false;
+    if (tt.is('keyword') && tt.valueIs('maybe')) {
+      nullable = true;
+      tt.next();
+    }
+
     if (tt.is('ident')) {
       if (!scope.hasRecord(tt.value))
         ParserError(`Unidentified token of value \`${tt.value}\``);
@@ -49,7 +55,7 @@ function parseRecordDefinition(
     else if (tt.isNot('builtin-type'))
       ParserError(`Expect record \`${record.name}\` to declare the type of the property first, instead got token of type \`${tt.type}\``);
 
-    const t = new DT(tt.value);
+    const t = new DT(tt.value, nullable);
     tt.next(); // Skip `type` or `ident` declaration
 
     if (tt.isNot('ident'))
