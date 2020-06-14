@@ -234,7 +234,7 @@ UserInfo_isAdult(maxwell);
 UserInfo_greetWith(maxwell, 'Hello! ');
 `;
 
-const minified = '';
+const minified = 'function UserInfo_isAdult(_this){return _this.age>20;}function UserInfo_greetWith(_this,msg){return msg.concat(_this.name);}const maxwell={name:\'Maxwell\',age:18,hasPet:false};UserInfo_isAdult(maxwell);UserInfo_greetWith(maxwell,\'Hello! \');UserInfo_isAdult(maxwell);UserInfo_greetWith(maxwell,\'Hello! \');';
 
 export {
   tokens,

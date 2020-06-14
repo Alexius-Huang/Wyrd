@@ -169,7 +169,7 @@ UserInfo_isAdult_1(maxwell, 18);
 UserInfo_isAdult(maxwell);
 `;
 
-const minified = '';
+const minified = 'function UserInfo_isAdult(_this){return _this.age>20;}function UserInfo_isAdult_1(_this,threshold){return _this.age>=threshold;}UserInfo_isAdult(maxwell);UserInfo_isAdult_1(maxwell,18);UserInfo_isAdult_1(maxwell,18);UserInfo_isAdult(maxwell);';
 
 const scope = (s: Scope): Scope => {
   const userInfo = s.createRecord('UserInfo');

@@ -156,7 +156,7 @@ UserInfo_isAdult$1(maxwell);
 UserInfo_isAdult$1(maxwell);
 `;
 
-const minified = '';
+const minified = 'function UserInfo_isAdult(_this){return _this.age>20;}UserInfo_isAdult(maxwell);UserInfo_isAdult(maxwell);function UserInfo_isAdult$1(_this){return _this.age>=18;}UserInfo_isAdult$1(maxwell);UserInfo_isAdult$1(maxwell);';
 
 const scope = (s: Scope): Scope => {
   const userInfo = s.createRecord('UserInfo');
