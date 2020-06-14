@@ -40,27 +40,24 @@ export function parse(
     const ast: T.AST = meta?.ast ?? globalAst;
 
     if (tt.is('keyword')) {
+      let hasOverrideKeyword = false;
       if (tt.valueIs('override')) {
+        hasOverrideKeyword = true;
         tt.next();
-
-        if (tt.valueIs('def'))
-          if (tt.peekIs('builtin-type'))
-            return parseMethodDeclaration(tt, parseExpr, scope, { override: true });
-          else
-            return parseFunctionDeclaration(tt, parseExpr, scope, { override: true });
-        ParserError('Keyword `override` should used with `def` to override an existing function declaration');
+        if (tt.isNot('keyword') || tt.valueIsNot('def'))
+          ParserError('Keyword `override` should used with `def` to override an existing function declaration');
       }
 
       if (tt.valueIs('def')) {
         if (tt.peekIs('builtin-type'))
-          return parseMethodDeclaration(tt, parseExpr, scope);
+          return parseMethodDeclaration(tt, parseExpr, scope, { override: hasOverrideKeyword });
 
         if (tt.peekIs('ident')) {
           if (scope.hasRecord(tt.peek!.value))
-            return parseMethodDeclaration(tt, parseExpr, scope);
-          return parseFunctionDeclaration(tt, parseExpr, scope);
+            return parseMethodDeclaration(tt, parseExpr, scope, { override: hasOverrideKeyword });
+          return parseFunctionDeclaration(tt, parseExpr, scope, { override: hasOverrideKeyword });
         }
-        ParserError('Hfdafds');
+        ParserError(`Unhandled token of type \`${tt.type}\` when ready to parse function or method declaration`);
       }
 
       if (tt.valueIs('if'))
