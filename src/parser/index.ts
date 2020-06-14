@@ -45,7 +45,7 @@ export function parse(
         hasOverrideKeyword = true;
         tt.next();
         if (tt.isNot('keyword') || tt.valueIsNot('def'))
-          ParserError('Keyword `override` should used with `def` to override an existing function declaration');
+          ParserError(`Keyword \`override\` should used with \`def\` to override an existing function declaration, instead got token of type \`${tt.type}\``);
       }
 
       if (tt.valueIs('def')) {
@@ -57,7 +57,7 @@ export function parse(
             return parseMethodDeclaration(tt, parseExpr, scope, { override: hasOverrideKeyword });
           return parseFunctionDeclaration(tt, parseExpr, scope, { override: hasOverrideKeyword });
         }
-        ParserError(`Unhandled token of type \`${tt.type}\` when ready to parse function or method declaration`);
+        ParserError(`Unhandled token of type \`${tt.peek!.type}\` when ready to parse function or method declaration`);
       }
 
       if (tt.valueIs('if'))

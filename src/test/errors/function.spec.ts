@@ -54,4 +54,18 @@ def foo: Num => True
         .toThrowError('ParserError: Return type of function `foo` should be `Num`, instead got: `Bool`');
     });
   });
+
+  describe('Misuse Keyword', () => {
+    it('throws error if `def` keyword is not used with token which represents function or method name', () => {
+      const program = 'def 123';
+      expect(() => compile({ program }))
+        .toThrowError('ParserError: Unhandled token of type `number` when ready to parse function or method declaration');
+    });
+
+    it('throws error if `override` keyword is not used with `def` keyword', () => {
+      const program = 'override 123';
+      expect(() => compile({ program }))
+        .toThrowError('ParserError: Keyword `override` should used with `def` to override an existing function declaration, instead got token of type `number`');
+    });
+  });
 });
