@@ -5,7 +5,7 @@ import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseThisLiteral } from './this-literal';
-import { parseRecordLiteral, parseRecordDeclaration, parseRecordReferenceExpr } from './record';
+import { parseRecordDeclaration, parseRecordReferenceExpr } from './record';
 import { parseVarDeclaration } from './assignment';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
@@ -112,25 +112,6 @@ export function parse(
     }
 
     if (tt.is('ident')) {
-      if (scope.hasRecord(tt.value)) {
-        const recordName = tt.value;
-        if (tt.peekIs('lcurly')) {
-          return parseRecordLiteral(tt, parseExpr, scope, prevExpr);
-        } else if (tt.peekIs('ident')) {
-          tt.next();
-
-          if (tt.peekIs('eq'))
-            return parseConstantDeclaration(tt, parseExpr, scope, {
-              type: 'TypeLiteral',
-              typeObject: new DT(recordName),
-              value: recordName,
-              return: DT.Void,
-            });
-        }
-
-        ParserError(`Unhandled token of type \`${tt.type}\``);
-      }
-
       return parseIdentifier(tt, parseExpr, scope, prevExpr);
     }
 

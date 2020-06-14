@@ -96,6 +96,24 @@ const tokens: Array<Token> = [
   { type: 'string', value: 'Hello! ' },
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'UserInfo' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'isAdult' },
+  { type: 'lparen', value: '(' },
+  { type: 'ident', value: 'maxwell' },
+  { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
+
+  { type: 'ident', value: 'UserInfo' },
+  { type: 'dot', value: '.' },
+  { type: 'ident', value: 'greetWith' },
+  { type: 'lparen', value: '(' },
+  { type: 'ident', value: 'maxwell' },
+  { type: 'comma', value: ',' },
+  { type: 'string', value: 'Hello! ' },
+  { type: 'rparen', value: ')' },
+  { type: 'newline', value: '\n' },
 ];
 
 const ast: AST = [
@@ -180,6 +198,24 @@ const ast: AST = [
     ],
     return: DT.Str,
   },
+  {
+    type: 'MethodInvokeExpr',
+    name: 'UserInfo_isAdult',
+    isNotBuiltin: true,
+    receiver: Var('maxwell', new DT('UserInfo')),
+    params: [],
+    return: DT.Bool,
+  },
+  {
+    type: 'MethodInvokeExpr',
+    name: 'UserInfo_greetWith',
+    isNotBuiltin: true,
+    receiver: Var('maxwell', new DT('UserInfo')),
+    params: [
+      StringLiteral('Hello! '),
+    ],
+    return: DT.Str,
+  },
 ];
 
 const compiled = `\
@@ -192,6 +228,8 @@ function UserInfo_greetWith(_this, msg) {
 }
 
 const maxwell = { name: 'Maxwell', age: 18, hasPet: false };
+UserInfo_isAdult(maxwell);
+UserInfo_greetWith(maxwell, 'Hello! ');
 UserInfo_isAdult(maxwell);
 UserInfo_greetWith(maxwell, 'Hello! ');
 `;

@@ -15,3 +15,5 @@ UserInfo maxwell = UserInfo {
 
 maxwell.isAdult()
 maxwell.greetWith("Hello! ")
+UserInfo.isAdult(maxwell)
+UserInfo.greetWith(maxwell, "Hello! ")
