@@ -1,0 +1,7 @@
+def UserInfo.isAdult: Bool => this->age > 20
+def UserInfo.isAdult(threshold: Num): Bool => this->age >= threshold
+
+maxwell.isAdult()
+maxwell.isAdult(18)
+UserInfo.isAdult(maxwell, 18)
+UserInfo.isAdult(maxwell)
