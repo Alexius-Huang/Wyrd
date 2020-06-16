@@ -10,10 +10,10 @@ In Wyrd, you can do simple calculations using operators:
 * `/` for division
 
 ```text
-sum        = 123 + 456
-difference = 321 - 123
-product    = 123 * 456
-quotient   = 456 / 123
+Num sum        = 123 + 456
+Num difference = 321 - 123
+Num product    = 123 * 456
+Num quotient   = 456 / 123
 ```
 
 ```javascript
@@ -30,9 +30,9 @@ const quotient = 456 / 123;
 When there are chained arithmetics operators, there will be evaluation precedence which follows common mathematic rule: **multiplications and divisions have higher precedence than additions and subtractions**.
 
 ```text
-ex1 = 1 * 2 + 3 + 4
-ex2 = 1 + 2 * 3 + 4
-ex3 = 1 + 2 + 3 * 4
+Num ex1 = 1 * 2 + 3 + 4
+Num ex2 = 1 + 2 * 3 + 4
+Num ex3 = 1 + 2 + 3 * 4
 ```
 
 ```javascript
@@ -46,9 +46,9 @@ const ex3 = 1 + 2 + (3 * 4);
 You can also use parentheses to override the precedence of the operators.
 
 ```text
-ex1 = 1 * (2 + 3) + 4
-ex2 = (1 + 2) * (3 + 4)
-ex3 = (1 + 2 + 3) * 4
+Num ex1 = 1 * (2 + 3) + 4
+Num ex2 = (1 + 2) * (3 + 4)
+Num ex3 = (1 + 2 + 3) * 4
 ```
 
 ```javascript

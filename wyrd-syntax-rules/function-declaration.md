@@ -30,7 +30,7 @@ If the body of the function is a `do` block, you should always end it with the k
 
 ```text
 def example(x: Num, y: Num): Num do
-  foo = x + y
+  Num foo = x + y
   foo * 2
 end
 ```

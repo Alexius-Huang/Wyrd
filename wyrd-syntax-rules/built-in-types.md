@@ -7,9 +7,9 @@
 Primitive types are the basic data unit in Wyrd. These are numbers `Num`, strings `Str`, booleans `Bool`.
 
 ```text
-luckyNumber = 14
-greetings   = "Hello world!"
-isSexy      = True
+Num luckyNumber = 14
+Str greetings   = "Hello world!"
+Bool isSexy     = True
 ```
 
 ```javascript
@@ -25,7 +25,7 @@ Notice that, Wyrd's **string must be surrounded by double-quotes**; on the other
 Special primitive type is `Null` which represents the concept of "empty".
 
 ```text
-empty = Null
+Null empty = Null
 ```
 
 ```javascript
@@ -40,8 +40,10 @@ Differs from JavaScript, Wyrd's only use `Null` value to represent the concept o
 
 `List` is a built-in type in Wyrd. It is represented as an **ordered** collection of data.
 
+`List<element>` is a kind of generic type which is an advanced concept that will presented in other document section. However, in order to specify which kind of type of the element are stored into list, you need to specify inside the `<>` brackets.
+
 ```text
-fibSeries = [1 1 2 3 5 8 13 21]
+List<Num> fibSeries = [1 1 2 3 5 8 13 21]
 ```
 
 ```javascript
@@ -57,7 +59,7 @@ List often can be either homogeneous \(which means a list can contain single typ
 In Wyrd, it is a default behavior in which `List` literal will throw error if that list contains two or more data type.
 
 ```text
-heterogeneous = [123 "Hello world" True Null]
+[123 "Hello world" True Null]
 ```
 
 ```text
@@ -65,8 +67,6 @@ ParserError: Expect List to contain of type `Num`, instead mixed with type `Str`
 ```
 
 Notice that the error message expects that the list is declared only contains the type `Num`. In other words, **the contained type of the list will be determined by the type of the first element**.
-
-> To Be Done: Solve the condition where `List` is empty
 
 ## Tuple
 

@@ -75,9 +75,9 @@ You can also view the [wyrd-cli repository](https://github.com/Maxwell-Alexius/w
 
 ### Table of Content \[WIP\]
 
-* [Variable Declarations](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/variable-declarations)
+* [Variable and Constant Declarations](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/variable-and-constant-declarations)
   * Constant Declaration
-  * Mutable Variables Declaration
+  * Variable Declaration
   * "maybe" Types Declaration
 * [Built-in Types](https://maxwell-alexius.gitbook.io/wyrd/wyrd-syntax-rules/built-in-types)
   * Primitives
