@@ -1,0 +1,8 @@
+Num foo = 123
+
+def fooInsideFunction: Num do
+  Num foo = 456
+  foo
+end
+
+fooInsideFunction()

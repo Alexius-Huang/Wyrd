@@ -2,16 +2,15 @@ import { FundamentalCompileTest } from '../helper';
 
 describe('Functions', () => {
   describe('Function Declaration', () => {
-    describe('Function-Arrow Declaration', () => {
-      FundamentalCompileTest('function-declaration/function-arrow-declaration');
-    });
-  
-    describe('Function-Block Declaration', () => {
-      FundamentalCompileTest('function-declaration/function-block-declaration');
-    });
+    FundamentalCompileTest('function-declaration/function-arrow-declaration');
+    FundamentalCompileTest('function-declaration/function-block-declaration');
 
     describe('Function Declaration Using Variables in Parent Level Scope', () => {
       FundamentalCompileTest('function-declaration/using-vars-from-parent-scope');
+    });
+
+    describe('Declaring Constant in Function Scope', () => {
+      FundamentalCompileTest('function-declaration/function-scope');
     });
 
     describe('Invoking Other Declared Function', () => {

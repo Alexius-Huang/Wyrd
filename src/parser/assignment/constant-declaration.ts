@@ -11,15 +11,15 @@ export function parseConstantDeclaration(
 ): T.ConstDeclaration {
   const constName = tt.value;
 
-  if (scope.isNameOccupied(constName)) {
-    if (scope.hasVariable(tt.value)) {
-      const varInfo = scope.getVariable(tt.value);
-      if (varInfo.isConst)
-        ParserError(`\`${constName}\` has already been declared as a constant`);
-      ParserError(`\`${constName}\` has already been declared as a variable`);
-    }
-    ParserError(`\`${constName}\` already been used in this scope`);
+  if (scope.hasVariableInCurrentScope(tt.value)) {
+    const varInfo = scope.getVariable(tt.value);
+    if (varInfo.isConst)
+      ParserError(`\`${constName}\` has already been declared as a constant`);
+    ParserError(`\`${constName}\` has already been declared as a variable`);
   }
+
+  // TODO: Throw error if declaring variable of name that occupies function or record name
+  // ParserError(`\`${constName}\` already been used in this scope`);
 
   const dt = typeLiteral.typeObject;
   tt.next(); // Skip `ident`
