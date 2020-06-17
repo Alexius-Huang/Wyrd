@@ -79,7 +79,7 @@ export function parseVarDeclaration(
 }
 
 function checkIfVariableIsAlreadyDeclared(scope: Scope, varName: string): void {
-  if (scope.hasVariable(varName)) {
+  if (scope.hasVariableInCurrentScope(varName)) {
     const varInfo = scope.getVariable(varName);
 
     if (varInfo.isConst) {

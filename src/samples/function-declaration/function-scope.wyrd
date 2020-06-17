@@ -1,8 +1,10 @@
 Num foo = 123
+mutable Num bar = 456
 
-def fooInsideFunction: Num do
+def varInsideFunction: Num do
   Num foo = 456
-  foo
+  mutable Num bar = 789
+  foo + bar
 end
 
-fooInsideFunction()
+varInsideFunction()

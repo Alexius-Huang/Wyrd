@@ -1,5 +1,5 @@
 import { Token, AST } from '../../types';
-import { NumberLiteral, Var } from '../helper';
+import { NumberLiteral, Var, Arithmetic } from '../helper';
 import { DataType as DT } from '../../parser/utils';
 
 const tokens: Array<Token> = [
@@ -8,10 +8,17 @@ const tokens: Array<Token> = [
   { type: 'eq', value: '=' },
   { type: 'number', value: '123' },
   { type: 'newline', value: '\n' },
+
+  { type: 'keyword', value: 'mutable' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'ident', value: 'bar' },
+  { type: 'eq', value: '=' },
+  { type: 'number', value: '456' },
+  { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
   { type: 'keyword', value: 'def' },
-  { type: 'ident', value: 'fooInsideFunction' },
+  { type: 'ident', value: 'varInsideFunction' },
   { type: 'colon', value: ':' },
   { type: 'builtin-type', value: 'Num' },
   { type: 'keyword', value: 'do' },
@@ -22,13 +29,21 @@ const tokens: Array<Token> = [
   { type: 'eq', value: '=' },
   { type: 'number', value: '456' },
   { type: 'newline', value: '\n' },
+  { type: 'keyword', value: 'mutable' },
+  { type: 'builtin-type', value: 'Num' },
+  { type: 'ident', value: 'bar' },
+  { type: 'eq', value: '=' },
+  { type: 'number', value: '789' },
+  { type: 'newline', value: '\n' },
   { type: 'ident', value: 'foo' },
+  { type: 'plus', value: '+' },
+  { type: 'ident', value: 'bar' },
   { type: 'newline', value: '\n' },
   { type: 'keyword', value: 'end' },
   { type: 'newline', value: '\n' },
   { type: 'newline', value: '\n' },
 
-  { type: 'ident', value: 'fooInsideFunction' },
+  { type: 'ident', value: 'varInsideFunction' },
   { type: 'lparen', value: '(' },
   { type: 'rparen', value: ')' },
   { type: 'newline', value: '\n' },
@@ -42,8 +57,14 @@ const ast: AST = [
     expr2: NumberLiteral(123),
   },
   {
+    type: 'VarDeclaration',
+    return: DT.Void,
+    expr1: Var('bar', DT.Num),
+    expr2: NumberLiteral(456),
+  },
+  {
     type: 'FunctionDeclaration',
-    name: 'fooInsideFunction',
+    name: 'varInsideFunction',
     return: DT.Void,
     arguments: [],
     outputType: DT.Num,
@@ -54,12 +75,18 @@ const ast: AST = [
         expr1: Var('foo', DT.Num),
         expr2: NumberLiteral(456),
       },
-      Var('foo', DT.Num),
+      {
+        type: 'VarDeclaration',
+        return: DT.Void,
+        expr1: Var('bar', DT.Num),
+        expr2: NumberLiteral(789),
+      },
+      Arithmetic('foo', '+', 'bar'),
     ],
   },
   {
     type: 'FunctionInvokeExpr',
-    name: 'fooInsideFunction',
+    name: 'varInsideFunction',
     return: DT.Num,
     params: [],
   }
@@ -67,12 +94,14 @@ const ast: AST = [
 
 const compiled = `\
 const foo = 123;
-function fooInsideFunction() {
+let bar = 456;
+function varInsideFunction() {
   const foo = 456;
-  return foo;
+  let bar = 789;
+  return foo + bar;
 }
 
-fooInsideFunction();
+varInsideFunction();
 `;
 
 const minified = '';
