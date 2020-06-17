@@ -28,4 +28,8 @@ describe('Conditional Expressions', () => {
     FundamentalCompileTest('conditional/if-mixed-expression');
     FundamentalCompileTest('conditional/if-mixed-without-else-expression');
   });
+
+  describe('Conditional Scope', () => {
+    FundamentalCompileTest('conditional/conditional-scope');
+  });
 });

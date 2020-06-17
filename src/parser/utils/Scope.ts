@@ -44,6 +44,10 @@ export default class Scope {
     return this.variables.has(name) || (this.parent ? this.parent.hasVariable(name) : false);
   }
 
+  public hasVariableInCurrentScope(name: string): boolean {
+    return this.variables.has(name);
+  }
+
   public getVariable(name: string): Variable {
     const varInfo = this.variables.get(name);
 

@@ -59,6 +59,8 @@ export function parseConditionalExpr(
     result = parseElseExpression(tt, parseExpr, scope, result);
   }
 
+  // console.log(result)
+  // console.log(result.expr2)
   if (result.expr2.return.isNotEqualTo(result.return))
     ParserError(`Expect values returned from different condition branch to be the same`);
   return result;

@@ -74,6 +74,29 @@ describe('Scope Variable', () => {
       });
     });
 
+    describe('Scope#hasVariableInCurrentScope', () => {
+      const s = new Scope();
+      s.createConstant('foo', DT.Num);
+      s.createMutableVariable('bar', DT.Str);
+      const childScope = s.createChildScope('child-scope');
+      childScope.createConstant('baz', DT.Bool);
+      childScope.createMutableVariable('bazz', DT.ListOf(DT.Num));
+
+      it('returns `true` if variable or constant is contained in current scope', () => {
+        expect(s.hasVariableInCurrentScope('foo')).toBeTruthy();
+        expect(s.hasVariableInCurrentScope('bar')).toBeTruthy();
+        expect(s.hasVariableInCurrentScope('baz')).toBeFalsy();
+        expect(s.hasVariableInCurrentScope('bazz')).toBeFalsy();
+        expect(childScope.hasVariableInCurrentScope('baz')).toBeTruthy();
+        expect(childScope.hasVariableInCurrentScope('bazz')).toBeTruthy();
+      });
+
+      it('returns `false` if variable or constant is contained in parent scope', () => {
+        expect(childScope.hasVariableInCurrentScope('foo')).toBeFalsy();
+        expect(childScope.hasVariableInCurrentScope('bar')).toBeFalsy();
+      });
+    });
+
     describe('Scope#getVariable', () => {
       const s = new Scope();
       s.createConstant('foo', DT.Num);
