@@ -1,0 +1,16 @@
+Num foo = 123
+mutable Num bar = 456
+
+if cond1 do
+  Num foo = 456
+  mutable Num bar = 789
+  foo + bar
+elif cond2 do
+  Num foo = 321
+  mutable Num bar = 123
+  foo + bar
+else do
+  Num foo = 333
+  mutable Num bar = 666
+  foo + bar
+end

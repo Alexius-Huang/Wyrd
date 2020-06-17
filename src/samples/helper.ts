@@ -5,6 +5,24 @@ export function Var(name: string, type: DT): T.IdentLiteral {
   return { type: 'IdentLiteral', value: name, return: type };
 }
 
+export function DeclareVar(name: string, expr: T.Expr, dt?: DT): T.VarDeclaration {
+  return {
+    type: 'VarDeclaration',
+    return: DT.Void,
+    expr1: Var(name, dt ?? expr.return),
+    expr2: expr
+  };
+}
+
+export function DeclareConst(name: string, expr: T.Expr, dt?: DT): T.ConstDeclaration {
+  return {
+    type: 'ConstDeclaration',
+    return: DT.Void,
+    expr1: Var(name, dt ?? expr.return),
+    expr2: expr
+  };
+}
+
 export function NumberLiteral(value: number): T.NumberLiteral {
   return { type: 'NumberLiteral', value: value.toString(), return: DT.Num };
 }

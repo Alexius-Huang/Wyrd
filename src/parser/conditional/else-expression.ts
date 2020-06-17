@@ -100,17 +100,17 @@ function parseElseBlockExpr(
   };
 
   const doBlockScope = scope.createChildScope('if-conditional-block');
-  while (tt.isNot('keyword') && tt.valueIsNot('end')) {
+  while (!(tt.is('keyword') && tt.valueIs('end'))) {
     if (tt.isNot('newline')) {
       const expr = parseExpr(undefined, { ast: blockExpr.body, scope: doBlockScope });
-      expr.type !== 'VoidExpr' && blockExpr.body.push(expr);  
+      expr.type !== 'VoidExpr' && blockExpr.body.push(expr);
     }
 
     tt.next();
   }
 
   if (blockExpr.body.length === 0)
-    ParserError(`Do-Block Expression cannot be blank`);
+    ParserError('Do-Block Expression cannot be blank');
   blockExpr.return = blockExpr.body[blockExpr.body.length - 1].return;
   result.expr2 = blockExpr;
   return result;
