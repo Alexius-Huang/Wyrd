@@ -50,6 +50,8 @@ export function generateCode(
         return codeGenVarDeclaration(expr);
       case 'VarAssignmentExpr':
         return codeGenVarAssignmentExpr(expr);
+      case 'RecordValueAssignmentExpr':
+        return codeGenRecordValueAssignmentExpr(expr);
       case 'BinaryOpExpr':
         return codeGenBinaryOpExpr(expr);
       case 'PrioritizedExpr':
@@ -160,6 +162,14 @@ export function generateCode(
     if (minify)
       return { result: `${expr.expr1.value}=${genExpr(expr.expr2).result}`, type: 'VarAssignmentExpr' };
     return { result: `${expr.expr1.value} = ${genExpr(expr.expr2).result}`, type: 'VarAssignmentExpr' };
+  }
+
+  function codeGenRecordValueAssignmentExpr(expr: T.RecordValueAssignmentExpr): CodeGenerationResult {
+    if (expr.expr2 === undefined)
+      CodeGenerateError('Expect mutable variable assignment expression to have expression to evaluate');
+    if (minify)
+      return { result: `${codeGenRecordReferenceExpr(expr.expr1).result}=${genExpr(expr.expr2).result}`, type: 'RecordValueAssignmentExpr' };
+    return { result: `${codeGenRecordReferenceExpr(expr.expr1).result} = ${genExpr(expr.expr2).result}`, type: 'RecordValueAssignmentExpr' };
   }
 
   function codeGenPrioritizedExpr(expr: T.PrioritizedExpr): CodeGenerationResult {

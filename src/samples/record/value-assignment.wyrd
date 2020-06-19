@@ -1,0 +1,2 @@
+maxwell->name = maxwell->name.upcase()
+account->info->hasPet = True

@@ -102,6 +102,7 @@ export type Expr =
 | ConstDeclaration
 | VarDeclaration
 | VarAssignmentExpr
+| RecordValueAssignmentExpr
 | PrioritizedExpr
 | ConditionalExpr
 | FunctionDeclaration
@@ -182,25 +183,26 @@ export interface ThisLiteral extends Expression {
   type: 'ThisLiteral';
 }
 
-export interface ConstDeclaration extends Expression {
+export interface AssignmentExpr<Ttarget = IdentLiteral> extends Expression {
+  return: typeof DT.Void;
+  expr1: Ttarget;
+  expr2: Expr;
+};
+
+export interface ConstDeclaration extends AssignmentExpr {
   type: 'ConstDeclaration';
-  expr1: IdentLiteral;
-  expr2: Expr;
-  return: typeof DT.Void;
 }
 
-export interface VarDeclaration extends Expression {
+export interface VarDeclaration extends AssignmentExpr {
   type: 'VarDeclaration';
-  expr1: IdentLiteral;
-  expr2: Expr;
-  return: typeof DT.Void;
 }
 
-export interface VarAssignmentExpr extends Expression {
+export interface VarAssignmentExpr extends AssignmentExpr {
   type: 'VarAssignmentExpr';
-  expr1: IdentLiteral;
-  expr2: Expr;
-  return: typeof DT.Void;
+}
+
+export interface RecordValueAssignmentExpr extends AssignmentExpr<RecordReferenceExpr> {
+  type: 'RecordValueAssignmentExpr';
 }
 
 export interface PrioritizedExpr extends Expression {
