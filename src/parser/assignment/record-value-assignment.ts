@@ -11,15 +11,6 @@ export function parseRecordValueAssignmentExpr(
 ): T.Expr {
   tt.next(); // Skip the `eq` token
 
-  // Check if variable is constant and redeclared in the same scope
-  // const varName = prevExpr.value;
-  // if (!scope.hasVariable(varName))
-  //   ParserError(`\`${varName}\` is undeclared throughout scope`);
-
-  // const varInfo = scope.getVariable(varName);
-  // ParserErrorIf(varInfo.isConst, `Constant \`${varName}\` cannot be reassigned`);
-
-  // Mutable Variable Assignment
   const result: T.RecordValueAssignmentExpr = {
     type: 'RecordValueAssignmentExpr',
     expr1: prevExpr,
