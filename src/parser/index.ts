@@ -1,12 +1,12 @@
 import * as T from '../types';
-import { TokenTracker, Scope, DataType as DT } from './utils';
+import { TokenTracker, Scope } from './utils';
 import { parseIdentifier } from './identifier';
 import { parsePrimitive } from './primitives';
 import { parseTypeLiteral } from './type-literal';
 import { parseListLiteral } from './composite-literals';
 import { parseThisLiteral } from './this-literal';
 import { parseRecordDeclaration, parseRecordReferenceExpr } from './record';
-import { parseVarDeclaration } from './assignment';
+import { parseVarDeclaration, parseRecordValueAssignmentExpr } from './assignment';
 import { parseFunctionDeclaration } from './function';
 import { parseConditionalExpr } from './conditional';
 import { parseConstantDeclaration } from './assignment';
@@ -123,6 +123,15 @@ export function parse(
 
     if (tt.is('ref'))
       return parseRecordReferenceExpr(tt, parseExpr, scope, ast.pop() as T.Expr);
+
+    if (tt.is('eq')) {
+      const prevExpr = ast.pop() as T.Expr;
+      if (prevExpr.type === 'RecordReferenceExpr') {
+        return parseRecordValueAssignmentExpr(tt, parseExpr, scope, prevExpr);
+      }
+
+      ParserError('Unhandled token type of `eq`');
+    }
 
     if (tt.is('pipe-op'))
       return parsePipeOperation(tt, parseExpr, scope, ast.pop() as T.Expr);

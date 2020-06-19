@@ -7,7 +7,7 @@ export function parseRecordReferenceExpr(
   parseExpr: T.ExpressionParsingFunction,
   scope: Scope,
   prevExpr: T.Expr
-): T.Expr {
+): T.RecordReferenceExpr {
   tt.next(); // Skip `->`
 
   /* Check if the prevExpr returns record */
@@ -30,5 +30,5 @@ export function parseRecordReferenceExpr(
     recordExpr: prevExpr,
     property: recordProp.name,
     return: recordProp.type,
-  } as T.RecordReferenceExpr;
+  };
 }

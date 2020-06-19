@@ -176,8 +176,16 @@ describe('Error: Record', () => {
 
     it('throws error when referenced record property isn\'t declared in record', () => {
       const program = `\nmaxwell->nonExistingProperty`;
-      expect(() => compile({ program: program, ...compilerOptions }))
+      expect(() => compile({ program, ...compilerOptions }))
         .toThrow('ParserError: Property `nonExistingProperty` isn\'t declared in record `UserInfo`');
+    });
+  });
+
+  describe('Reference Assignment', () => {
+    it('throws error if assigned wrong type of value in record reference', () => {
+      const program = 'maxwell->name = 123\n';
+      expect(() => compile({ program, ...compilerOptions }))
+        .toThrow('ParserError: Expect record value to assign value of type `Str`, instead got: `Num`');
     });
   });
 });
